@@ -13,5 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "UniUnboxd"
+rootProject.name = "app"
 include(":app")
+ 
