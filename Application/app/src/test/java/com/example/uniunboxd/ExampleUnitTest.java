@@ -1,4 +1,4 @@
-package com.example.app;
+package com.example.uniunboxd;
 
 import org.junit.Test;
 
