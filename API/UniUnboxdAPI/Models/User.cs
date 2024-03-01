@@ -7,3 +7,9 @@ public class User : IdentityUser<int>, IBase
     public DateTime CreationTime { get; set; }
     public DateTime LastModificationTime { get; set; }
 }
+
+public enum UserType
+{
+    Student,
+    University
+}

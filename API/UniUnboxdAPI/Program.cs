@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using UniUnboxdAPI.Data;
+using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,22 @@ builder.Services.AddDbContext<UniUnboxdDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+
+builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
+{
+    options.Password.RequiredLength = 1;
+    options.Password.RequiredUniqueChars = 0;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Lockout.AllowedForNewUsers = false;
+})
+    .AddEntityFrameworkStores<UniUnboxdDbContext>()
+    .AddDefaultTokenProviders();
+
+//Services
+builder.Services.AddTransient<RegistrationService>();
 
 var app = builder.Build();
 
