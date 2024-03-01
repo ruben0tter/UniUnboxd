@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.widget.FrameLayout;
 
 import com.example.uniunboxd.databinding.ActivityMainBinding;
 
@@ -30,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (itemId == R.id.profile) {
                 replaceFragment(new ProfileFragment());
             }
-
             return true;
         });
+
+
     }
 
     private void replaceFragment(Fragment fragment) {
