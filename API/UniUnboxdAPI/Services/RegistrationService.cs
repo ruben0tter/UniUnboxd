@@ -83,7 +83,9 @@ namespace UniUnboxdAPI.Services
                 Email = model.Email,
                 UserName = CreateUserName(model.Email),
                 CreationTime = DateTime.Now,
-                LastModificationTime = DateTime.Now
+                LastModificationTime = DateTime.Now,
+                UserType = model.Type,
+                SecurityStamp = Guid.NewGuid().ToString()
             };
 
         /// <summary>
