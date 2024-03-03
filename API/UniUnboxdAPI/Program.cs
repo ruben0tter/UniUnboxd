@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
 
@@ -83,9 +84,15 @@ builder.Services.AddAuthentication(x => {
 // JWT Configuration
 JWTConfiguration.Init(builder.Configuration);
 
-//Services
+// Services
 builder.Services.AddTransient<RegistrationService>();
 builder.Services.AddTransient<AuthenticationService>();
+builder.Services.AddTransient<ReviewService>();
+
+// Repositories
+builder.Services.AddTransient<ReviewRepository>();
+builder.Services.AddTransient<CourseRepository>();
+builder.Services.AddTransient<UserRepository>();
 
 var app = builder.Build();
 
