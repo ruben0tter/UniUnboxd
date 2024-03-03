@@ -16,7 +16,6 @@ namespace UniUnboxdAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().Ignore(i => i.SecurityStamp);
             modelBuilder.Entity<User>().Ignore(i => i.EmailConfirmed);
             modelBuilder.Entity<User>().Ignore(i => i.ConcurrencyStamp);
             modelBuilder.Entity<User>().Ignore(i => i.PhoneNumber);
