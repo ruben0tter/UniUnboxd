@@ -25,6 +25,7 @@ namespace UniUnboxdAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostReview([FromBody] ReviewModel model)
         {
+            System.Console.WriteLine("I am here!");
             if (ModelState.IsValid)
             {
                 if (!reviewService.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.StudentId))
@@ -37,7 +38,7 @@ namespace UniUnboxdAPI.Controllers
                     return BadRequest("Given course does not exist.");
 
                 if (await reviewService.HasStudentAlreadyReviewedCourse(model.StudentId, model.CourseId))
-                    return BadRequest("Student has already reviewed course.");
+                    return BadRequest("StudentModel has already reviewed course.");
 
                 Review review = await reviewService.CreateReview(model);
 
