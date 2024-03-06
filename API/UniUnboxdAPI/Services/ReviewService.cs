@@ -86,14 +86,19 @@ namespace UniUnboxdAPI.Services
 
         /// <summary>
         /// Posts the provided review.
-        /// Updates the average rating of the course with the newly added rating.
         /// </summary>
         /// <param name="review">Provided review.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task PostReview(Review review)
-        {
-            await reviewRepository.PostReview(review);
-            await courseRepository.UpdateAverageRating(review.Course.Id, review.Rating);
-        }
+            => await reviewRepository.PostReview(review);
+
+        /// <summary>
+        /// Updates the average rating of the course with the newly added rating.
+        /// </summary>
+        /// <param name="courseId">Provided course id.</param>
+        /// <param name="rating">Provided new rating.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task UpdateAverageRating(int courseId, double rating)
+            => await courseRepository.UpdateAverageRating(courseId, rating);
     }
 }
