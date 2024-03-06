@@ -5,15 +5,22 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System.Text;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(o =>
+{
+    o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+});
+
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
@@ -83,9 +90,15 @@ builder.Services.AddAuthentication(x => {
 // JWT Configuration
 JWTConfiguration.Init(builder.Configuration);
 
-//Services
+// Services
 builder.Services.AddTransient<RegistrationService>();
 builder.Services.AddTransient<AuthenticationService>();
+builder.Services.AddTransient<ReviewService>();
+
+// Repositories
+builder.Services.AddTransient<ReviewRepository>();
+builder.Services.AddTransient<CourseRepository>();
+builder.Services.AddTransient<UserRepository>();
 
 var app = builder.Build();
 
@@ -96,7 +109,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+#if !DEBUG
 app.UseHttpsRedirection();
+#endif
 
 app.UseAuthentication();
 
