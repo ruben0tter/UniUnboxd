@@ -87,6 +87,7 @@ builder.Services.AddAuthentication(x => {
 JWTConfiguration.Init(builder.Configuration);
 
 // Services
+builder.Services.AddTransient<VerificationService>();
 builder.Services.AddTransient<RegistrationService>();
 builder.Services.AddTransient<AuthenticationService>();
 builder.Services.AddTransient<ReviewService>();

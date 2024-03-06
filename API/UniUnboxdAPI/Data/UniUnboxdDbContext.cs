@@ -13,6 +13,7 @@ namespace UniUnboxdAPI.Data
         public DbSet<University> Universities { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<VerificationApplication> Applications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
