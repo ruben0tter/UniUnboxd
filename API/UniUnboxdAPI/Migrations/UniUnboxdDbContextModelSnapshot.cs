@@ -151,7 +151,7 @@ namespace UniUnboxdAPI.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
+            modelBuilder.Entity("UniUnboxdAPI.Models.StudentModel", b =>
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
 
@@ -198,7 +198,7 @@ namespace UniUnboxdAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniUnboxdAPI.Models.Student", "Student")
+                    b.HasOne("UniUnboxdAPI.Models.StudentModel", "StudentModel")
                         .WithMany("Reviews")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -206,14 +206,14 @@ namespace UniUnboxdAPI.Migrations
 
                     b.Navigation("Course");
 
-                    b.Navigation("Student");
+                    b.Navigation("StudentModel");
                 });
 
-            modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
+            modelBuilder.Entity("UniUnboxdAPI.Models.StudentModel", b =>
                 {
                     b.HasOne("UniUnboxdAPI.Models.User", null)
                         .WithOne()
-                        .HasForeignKey("UniUnboxdAPI.Models.Student", "Id")
+                        .HasForeignKey("UniUnboxdAPI.Models.StudentModel", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -238,7 +238,7 @@ namespace UniUnboxdAPI.Migrations
                     b.Navigation("Reviews");
                 });
 
-            modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
+            modelBuilder.Entity("UniUnboxdAPI.Models.StudentModel", b =>
                 {
                     b.Navigation("Reviews");
                 });
