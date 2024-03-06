@@ -21,20 +21,18 @@ namespace UniUnboxdAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticationModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (!await authenticationService.DoesEmailExist(model.Email))
-                    return BadRequest("User not found.");
+            if (!ModelState.IsValid)
+                return BadRequest("Not all required fields have been filled in.");
 
-                var token = await authenticationService.Authenticate(model);
+            if (!await authenticationService.DoesEmailExist(model.Email))
+                return BadRequest("User not found.");
 
-                if (token == null)
-                    return BadRequest("The email and password do not align.");
+            var token = await authenticationService.Authenticate(model);
 
-                return Ok(new { Token = token });
-            }
+            if (token == null)
+                return BadRequest("The email and password do not align.");
 
-            return BadRequest("Not all required fields have been filled in.");
+            return Ok(new { Token = token });
         }
     }
 }
