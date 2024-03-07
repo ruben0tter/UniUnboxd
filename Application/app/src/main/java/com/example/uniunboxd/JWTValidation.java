@@ -13,7 +13,7 @@ import java.nio.charset.Charset;
 public class JWTValidation {
     public static String getToken(Context c) {
         SharedPreferences prefs = c.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        return prefs.getString("token","");
+        return prefs.getString("token", null);
     }
 
     public static String getTokenProperty(Context c, String key) {
