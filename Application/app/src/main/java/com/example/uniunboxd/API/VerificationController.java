@@ -34,14 +34,7 @@ public class VerificationController {
 
         JSONArray json = new JSONArray(body.toString());
         for (int i = 0; i < json.length(); i++) {
-//            JSONObject oneObject = json.getJSONObject(i);
-//            String oneObjectsItem = oneObject.getString("STRINGNAMEinTHEarray");
-//            String oneObjectsItem2 = oneObject.getString("anotherSTRINGNAMEINtheARRAY");
-//
-//            Application app = new Application();
-//            res.add(app);
-
-            throw new Exception("check what the fucking API is sending me first");
+            throw new Exception("TODO: need a functioning server first");
         }
 
         return res;

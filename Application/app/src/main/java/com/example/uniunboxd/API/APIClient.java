@@ -46,6 +46,6 @@ public class APIClient {
     }
 
     public static HttpURLConnection delete(String url) throws IOException {
-        return fetch("GET", url);
+        return fetch("DELETE", url);
     }
 }

@@ -1,22 +1,24 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
+using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
-    public class VerificationService(UniUnboxdDbContext context)
+    public class VerificationService(VerificationRepository verificationRepository, UserRepository userRepository)
     {
         public async Task<VerificationApplication?> RequestVerification(VerificationModel request, int userId)
         {
-            Student? user = await context.Students.FindAsync(userId);
+            Student? user = await userRepository.GetStudent(userId);
             if (user == null)
             {
                 return null;
             }
-            
+
             var verificationApplication = new VerificationApplication
             {
                 CreationTime = DateTime.Now,
@@ -25,14 +27,12 @@ namespace UniUnboxdAPI.Services
                 UserToBeVerified = user,
                 TargetUniversity = request.TargetUniversity
             };
-            context.Applications.Add(verificationApplication);
-            await context.SaveChangesAsync();
-            return verificationApplication;
+            return await verificationRepository.AddApplication(verificationApplication);
         }
 
         public async Task<VerificationStatus?> GetVerificationStatus(int userId)
         {
-            var user = await context.Users.FindAsync(userId);
+            var user = await userRepository.GetUser(userId);
             if (user == null)
             {
                 return null;
@@ -42,32 +42,32 @@ namespace UniUnboxdAPI.Services
 
         public async Task<VerificationApplication[]> GetPendingVerificationRequests(int userId, int startID)
         {
-            University? user = await context.Universities.FindAsync(userId);
+            University? user = await userRepository.GetUniversity(userId);
             if (user == null)
             {
                 return [];
             }
-        
-            return context.Applications.Where(a => a.TargetUniversity == user && a.Id > startID).Take(10).ToArray();
+
+            return await verificationRepository.GetNextApplications(user, startID, 10);
         }
 
         private async Task<bool> ResolveApplication(AcceptReject request, VerificationStatus status)
         {
-            var user = await context.Users.FindAsync(request.UserId);
+            var user = await userRepository.GetUser(request.UserId);
             if (user == null)
             {
                 return false;
             }
-            user.VerificationStatus = status;
-            context.SaveChanges();
-            return true;
+            return await verificationRepository.SetVerificationStatus(user, status);
         }
 
-        public async Task<bool> AcceptApplication(AcceptReject request) {
+        public async Task<bool> AcceptApplication(AcceptReject request)
+        {
             return await ResolveApplication(request, VerificationStatus.Verified);
         }
 
-        public async Task<bool> RejectApplication(AcceptReject request) {
+        public async Task<bool> RejectApplication(AcceptReject request)
+        {
             return await ResolveApplication(request, VerificationStatus.Unverified);
         }
     }
