@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 public class AuthenticationFragment extends Fragment implements View.OnClickListener {
 
@@ -78,12 +79,15 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
             public void run() {
                 try {
                     HttpURLConnection response = AuthenticationController.authenticate(model);
-                    //TODO: Fix notification system.
-                    //sendNotification(readMessage(response.getErrorStream()));
                     if (response.getResponseCode() == 200) {
                         String json = readMessage(response.getInputStream());
                         String token = getToken(json);
                         placeToken(token);
+                        redirectToHomePage();
+                    } else {
+                        //TODO: Fix notification system.
+                        //sendNotification(readMessage(response.getErrorStream()));
+                        Log.e("JWT", readMessage(response.getErrorStream()));
                     }
                 } catch (Exception e) {
                     Log.e("APP", "Failed to register user: " + e.toString());
@@ -97,26 +101,6 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         return new AuthenticationModel(
                 email.getText().toString(),
                 password.getText().toString());
-    }
-
-    private void placeToken(String token) throws NullPointerException {
-        SharedPreferences prefs;
-        SharedPreferences.Editor edit;
-        prefs=getActivity().getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        edit=prefs.edit();
-        edit.putString("token", token);
-        edit.apply();
-    }
-
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
-
-    private void sendNotification(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     private String readMessage(InputStream content) throws IOException {
@@ -135,5 +119,36 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
     private String getToken(String json) {
         json = json.substring(json.indexOf(":") + 1);
         return json.substring(0, json.indexOf("}"));
+    }
+
+    private void placeToken(String token) throws NullPointerException {
+        SharedPreferences prefs = getActivity()
+                .getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("token", token);
+        edit.apply();
+    }
+
+    private void sendNotification(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
+
+    private void redirectToHomePage() {
+        String userType = JWTValidation.getTokenProperty(getActivity(),"typ");
+
+        if (Objects.equals(userType, "Student")) {
+            //TODO: Redirect to Student Home Page.
+        } else if (Objects.equals(userType, "University")) {
+            //TODO: Redirect to University Home Page.
+        } else {
+            //TODO: Redirect to Professor Home Page.
+        }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
