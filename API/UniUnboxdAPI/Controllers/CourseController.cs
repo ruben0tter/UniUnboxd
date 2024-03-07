@@ -39,10 +39,19 @@ namespace UniUnboxdAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}")]
+        [HttpGet("GetCourse/{id:int}")]
         public async Task<IActionResult> GetCourse([FromRoute] int id)
         {
             var model = await courseService.GetCourseRetrievalModelById(id);
+            return Ok(model);
+        }
+
+        [Authorize]
+        [HttpGet("getTenCoursesFromId/{id:int}")]
+
+    public async Task<IActionResult> GetTenCoursesFromId([FromRoute] int id)
+        {
+            var model = await courseService.GetTenCoursesFromId(id);
             return Ok(model);
         }
     }

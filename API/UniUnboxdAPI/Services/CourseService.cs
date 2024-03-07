@@ -95,23 +95,38 @@ namespace UniUnboxdAPI.Services
             
             foreach (var review in course.Reviews)
             {
-                courseRetrievalModel.Reviews.Add(new()
-                {
-                    Id = review.Id,
-                    CourseId = course.Id,
-                    Comment = review.Comment,
-                    IsAnonymous = review.IsAnonymous,
-                    Rating = review.Rating,
-                    Poster = review.IsAnonymous ? null : new ReviewPosterStudentModel()
-                    {
-                        Id = review.Student.Id,
-                        Image = review.Student.Image,
-                        Username = review.Student.UserName
-                    }
-                });
+                courseRetrievalModel.Reviews.Add(MakeCourseReviewModel(review, course.Id));
             }
 
             return courseRetrievalModel;
+        }
+        
+        private CourseReviewModel MakeCourseReviewModel(Review review, int courseId) => new ()
+        {
+            Id = review.Id,
+            CourseId = courseId,
+            Comment = review.Comment,
+            IsAnonymous = review.IsAnonymous,
+            Rating = review.Rating,
+            Poster = MakeReviewPosterStudentModel(review)
+        };
+
+        private ReviewPosterStudentModel? MakeReviewPosterStudentModel(Review review)
+        {
+            return review.IsAnonymous
+                ? null
+                : new ReviewPosterStudentModel()
+                {
+                    Id = review.Student.Id,
+                    Image = review.Student.Image,
+                    UserName = review.Student.UserName
+                };
+        }
+
+        public async Task<IEnumerable<CourseGridModel>> GetTenCoursesFromId(int id)
+        {
+            
+            throw new NotImplementedException();
         }
     }
 }

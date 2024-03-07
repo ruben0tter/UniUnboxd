@@ -4,6 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -55,6 +59,32 @@ public class CourseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_course, container, false);
+        View view = inflater.inflate(R.layout.fragment_course_univerisity, container, false);
+        TextView name = view.findViewById(R.id.courseName);
+        //TODO: Make API Call and set properties of course
+
+        LinearLayout linearLayout = view.findViewById(R.id.reviewList);
+        //TODO: Base the number of calls on the API Call
+        for(int i = 0; i < 10; ++i) {
+            //TODO: API Call to get this entity:
+            ReviewListItem reviewListItem = new ReviewListItem(i,3, "yappa", "yapper");
+            linearLayout.addView(reviewListItemView(inflater, container, savedInstanceState, reviewListItem));
+        }
+        return view;
+    }
+
+    private View reviewListItemView(LayoutInflater inflater, ViewGroup container,
+                                Bundle savedInstanceState, ReviewListItem reviewListItem) {
+        View view = inflater.inflate(R.layout.review_list_item, container, false);
+        TextView comment = view.findViewById(R.id.ReviewListItem_Comment);
+        RatingBar ratingBar = view.findViewById(R.id.ReviewListItem_RatingBar);
+        TextView posterName = view.findViewById(R.id.ReviewListItem_PosterName);
+        ImageView posterIcon = view.findViewById(R.id.ReviewListItem_PosterIcon);
+        //TODO: set up the id
+
+        comment.setText(reviewListItem.Comment);
+        posterName.setText(reviewListItem.PosterName);
+        ratingBar.setRating(reviewListItem.Rating);
+        return view;
     }
 }
