@@ -32,8 +32,8 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.141"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/course_name"
         app:layout_constraintTop_toBottomOf="@+id/course_name"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -50,10 +50,10 @@
 
     <View
         android:id="@+id/separation_line"
-        android:layout_width="350dp"
-        android:layout_height="2dp"
+        android:layout_width="330dp"
+        android:layout_height="1dp"
         android:textColor="#000000"
-        android:background="@android:color/darker_gray"
+        android:background="#C82424"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
@@ -71,22 +71,24 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.127"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/separation_line"
-        app:layout_constraintVertical_bias="0.048" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <RatingBar
         android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:theme="@style/RatingBar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.397"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toEndOf="@+id/rating_text"
         app:layout_constraintTop_toBottomOf="@+id/separation_line"
-        app:layout_constraintVertical_bias="0.029"
-        android:theme="@style/RatingBar"/>
+        app:layout_constraintVertical_bias="0.04" />
 
     <EditText
         android:id="@+id/comment_box"
@@ -104,26 +106,31 @@
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/k2d"
         android:button="@null"
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+        android:fontFamily="@font/k2d"
         android:text="Post Anonymously"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.213"
+        app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comment_box"
-        app:layout_constraintVertical_bias="0.081" />
+        app:layout_constraintVertical_bias="0.094" />
 
     <Button
         android:id="@+id/post_button"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:background="@drawable/button_red"
         android:fontFamily="@font/k2d"
-        android:layout_marginStart="60dp"
-        android:textAllCaps="false"
-        android:background="#C82424"
+        android:padding="5dp"
         android:text="Post Review"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkBox"
@@ -131,16 +138,20 @@
 
     <Button
         android:id="@+id/delete_button"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:background="@drawable/button_red"
         android:fontFamily="@font/k2d"
-        android:layout_marginEnd="28dp"
-        android:textAllCaps="false"
-        android:background="#C82424"
+        android:padding="5dp"
         android:text="Delete Review"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.582"
+        app:layout_constraintHorizontal_bias="0.441"
         app:layout_constraintStart_toEndOf="@+id/post_button"
         app:layout_constraintTop_toBottomOf="@+id/checkBox"
         app:layout_constraintVertical_bias="0.402" />
