@@ -110,13 +110,15 @@
         android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
         android:fontFamily="@font/k2d"
         android:text="Post Anonymously"
+        android:theme="@style/MyCheckBox"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comment_box"
-        app:layout_constraintVertical_bias="0.094" />
+        app:layout_constraintVertical_bias="0.094"
+        android:buttonTint="@color/light_grey"/>
 
     <Button
         android:id="@+id/post_button"
