@@ -7,7 +7,7 @@
     android:background="#FFFFFF">
 
     <TextView
-        android:id="@+id/course_name"
+        android:id="@+id/courseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -17,13 +17,13 @@
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/course_picture"
-        app:layout_constraintHorizontal_bias="0.127"
+        app:layout_constraintHorizontal_bias="0.133"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.125" />
 
     <TextView
-        android:id="@+id/course_code"
+        android:id="@+id/courseCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/k2d"
@@ -33,12 +33,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/course_name"
-        app:layout_constraintTop_toBottomOf="@+id/course_name"
+        app:layout_constraintStart_toStartOf="@+id/courseName"
+        app:layout_constraintTop_toBottomOf="@+id/courseName"
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/course_picture"
+        android:id="@+id/courseImage"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginEnd="28dp"
@@ -49,7 +49,7 @@
         app:layout_constraintVertical_bias="0.081" />
 
     <View
-        android:id="@+id/separation_line"
+        android:id="@+id/line"
         android:layout_width="330dp"
         android:layout_height="1dp"
         android:textColor="#000000"
@@ -58,11 +58,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/course_picture"
+        app:layout_constraintTop_toBottomOf="@+id/courseImage"
         app:layout_constraintVertical_bias="0.034" />
 
     <TextView
-        android:id="@+id/rating_text"
+        android:id="@+id/ratingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/k2d"
@@ -73,11 +73,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/separation_line"
+        app:layout_constraintTop_toBottomOf="@+id/line"
         app:layout_constraintVertical_bias="0.05" />
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/rating"
         android:layout_width="235dp"
         android:layout_height="50dp"
         android:scaleX="0.8"
@@ -86,12 +86,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.45"
-        app:layout_constraintStart_toEndOf="@+id/rating_text"
-        app:layout_constraintTop_toBottomOf="@+id/separation_line"
+        app:layout_constraintStart_toEndOf="@+id/ratingText"
+        app:layout_constraintTop_toBottomOf="@+id/line"
         app:layout_constraintVertical_bias="0.04" />
 
     <EditText
-        android:id="@+id/comment_box"
+        android:id="@+id/comment"
         android:layout_width="300dp"
         android:layout_height="250dp"
         android:background="@drawable/edit_text_field"
@@ -99,11 +99,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        app:layout_constraintTop_toBottomOf="@+id/rating"
         app:layout_constraintVertical_bias="0.075" />
 
     <CheckBox
-        android:id="@+id/checkBox"
+        android:id="@+id/isAnonymous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:button="@null"
@@ -116,12 +116,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/comment_box"
-        app:layout_constraintVertical_bias="0.094"
-        android:buttonTint="@color/light_grey"/>
+        android:buttonTint="@color/light_grey"
+        app:layout_constraintTop_toBottomOf="@+id/comment"
+        app:layout_constraintVertical_bias="0.094" />
 
     <Button
-        android:id="@+id/post_button"
+        android:id="@+id/postButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -135,11 +135,11 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox"
+        app:layout_constraintTop_toBottomOf="@+id/isAnonymous"
         app:layout_constraintVertical_bias="0.402" />
 
     <Button
-        android:id="@+id/delete_button"
+        android:id="@+id/deleteButton"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
@@ -154,8 +154,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.441"
-        app:layout_constraintStart_toEndOf="@+id/post_button"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox"
+        app:layout_constraintStart_toEndOf="@+id/postButton"
+        app:layout_constraintTop_toBottomOf="@+id/isAnonymous"
         app:layout_constraintVertical_bias="0.402" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
