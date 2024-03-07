@@ -16,6 +16,9 @@ namespace UniUnboxdAPI.Repositories
             this.dbContext = dbContext;
         }
 
+        public async Task<User> GetUser(int id)
+            => await dbContext.Users.Where(i => i.Id == id).FirstAsync();
+
         public async Task<bool> DoesStudentExist(int id)
             => await dbContext.Students.AnyAsync(c => c.Id == id);
 
