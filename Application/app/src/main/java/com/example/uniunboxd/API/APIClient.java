@@ -12,7 +12,6 @@ public class APIClient {
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
         con.setRequestMethod(method);
         con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
 
         return con;
     }
@@ -23,6 +22,7 @@ public class APIClient {
 
     public static HttpURLConnection post(String url, String body) throws IOException {
         HttpURLConnection con = fetch("POST", url);
+        con.setDoOutput(true);
         con.setRequestProperty("Content-Type", "application/json");
 
         try (OutputStream os = con.getOutputStream()) {
@@ -35,6 +35,7 @@ public class APIClient {
 
     public static HttpURLConnection put(String url, String body) throws IOException {
         HttpURLConnection con = fetch("PUT", url);
+        con.setDoOutput(true);
         con.setRequestProperty("Content-Type", "application/json");
 
         try (OutputStream os = con.getOutputStream()) {
