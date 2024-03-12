@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="main_red">#C82424</color>
+    <color name="secondary_red">#AA0202</color>
+    <color name="yellow">#FFD700</color>
+    <color name="TUeRed">#C82424</color>
+    <color name="green">#30C62D</color>
 </resources>

@@ -144,11 +144,47 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<int>("UserType")
                         .HasColumnType("int");
 
+                    b.Property<int>("VerificationStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.VerificationApplication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("TargetUniversityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserToBeVerifiedId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("VerificationData")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TargetUniversityId");
+
+                    b.HasIndex("UserToBeVerifiedId");
+
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
@@ -207,6 +243,23 @@ namespace UniUnboxdAPI.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.VerificationApplication", b =>
+                {
+                    b.HasOne("UniUnboxdAPI.Models.University", "TargetUniversity")
+                        .WithMany()
+                        .HasForeignKey("TargetUniversityId");
+
+                    b.HasOne("UniUnboxdAPI.Models.User", "UserToBeVerified")
+                        .WithMany()
+                        .HasForeignKey("UserToBeVerifiedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TargetUniversity");
+
+                    b.Navigation("UserToBeVerified");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
