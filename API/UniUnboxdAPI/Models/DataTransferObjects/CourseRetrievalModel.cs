@@ -10,5 +10,6 @@ public class CourseRetrievalModel
     public string? Image { get; set; }
     public string? Banner { get; set; } 
     public required int UniversityId { get; set; }
+    public string? UniversityName { get; set; }
     public ICollection<CourseReviewModel> Reviews { get; set; }
 }

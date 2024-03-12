@@ -9,7 +9,7 @@ namespace UniUnboxdAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    // [Authorize]
     public class CourseController : ControllerBase
     {
         private readonly CourseService courseService;
@@ -19,15 +19,16 @@ namespace UniUnboxdAPI.Controllers
             this.courseService = courseService;
         }
 
-        [Authorize(Roles = "University")]
+        // [Authorize(Roles = "University")]
         [HttpPost]
+        [Route("create")]
         public async Task<IActionResult> PostCourse([FromBody] CourseCreationModel creationModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Model state is invalid.");
 
-            if (!courseService.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, creationModel.UniversityId))
-                return BadRequest("Invalid user.");
+            // if (!courseService.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, creationModel.UniversityId))
+            //     return BadRequest("Invalid user.");
 
             if (!await courseService.DoesUniversityExist(creationModel.UniversityId))
                 return BadRequest("University does not exist.");
@@ -38,18 +39,18 @@ namespace UniUnboxdAPI.Controllers
             return Ok("Course was created successfully.");
         }
 
-        [Authorize]
-        [HttpGet("GetCourse/{id:int}")]
-        public async Task<IActionResult> GetCourse([FromRoute] int id)
+        // [Authorize]
+        [HttpGet]
+        [Route("get")]
+        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id)
         {
             var model = await courseService.GetCourseRetrievalModelById(id);
             return Ok(model);
         }
 
-        [Authorize]
-        [HttpGet("getTenCoursesFromId/{id:int}")]
-
-    public async Task<IActionResult> GetTenCoursesFromId([FromRoute] int id)
+        // [Authorize]
+        [HttpGet("get-multiple")] 
+        public async Task<IActionResult> GetTenCoursesFromId([FromQuery(Name="startId")] int id)
         {
             var model = await courseService.GetTenCoursesFromId(id);
             return Ok(model);

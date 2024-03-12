@@ -89,7 +89,8 @@ namespace UniUnboxdAPI.Services
                 Name = course.Name,
                 Professor = course.Professor,
                 Reviews = new List<CourseReviewModel>(),
-                UniversityId = course.University.Id
+                UniversityId = course.University.Id,
+                UniversityName = course.University.UserName
             };
             if (course.Reviews == null) return courseRetrievalModel;
             
