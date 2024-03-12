@@ -23,23 +23,21 @@ namespace UniUnboxdAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Registrate([FromBody] RegisterModel model)
         {
-            if (ModelState.IsValid)
-            {
-                if (!registrationService.IsEmailValid(model.Email))
-                    return BadRequest("A non-valid email was submitted.");
+            if (!ModelState.IsValid)
+                return BadRequest("Not all required fields have been filled in.");
+            
+            if (!registrationService.IsEmailValid(model.Email))
+                return BadRequest("A non-valid email was submitted.");
 
-                User user = registrationService.CreateUser(model);
+            if (await registrationService.DoesEmailExist(model.Email))
+                return BadRequest("An account with the same email already exists.");
 
-                if (await registrationService.DoesEmailExist(user.Email))
-                    return BadRequest("An account with the same email already exists.");
+            User user = registrationService.CreateUser(model);
 
-                if(await registrationService.CreateAccount(user, model.Password))
-                    return Ok("Account created succesfully.");
+            if(await registrationService.CreateAccount(user, model.Password))
+                return Ok("Account created succesfully.");
 
-                return BadRequest("Failed to create user. Please try again later.");
-            }
-
-            return BadRequest("Not all required fields have been filled in.");
+            return BadRequest("Failed to create user. Please try again later.");
         }
     }
 }
