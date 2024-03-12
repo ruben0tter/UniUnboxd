@@ -6,6 +6,5 @@
         public string? Image { get; set; }
         public University? University { get; set; }
         public ICollection<Review>? Reviews { get; set; }
-
     }
 }

@@ -22,11 +22,23 @@ namespace UniUnboxdAPI.Repositories
         public async Task<Course> GetCourse(int id)
             => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
 
+        public async Task<Course> GetCourseAndConnectedData(int id)
+            => await dbContext.Courses.Where(i => i.Id == id).Include(i => i.University).
+                                    Include(i => i.Reviews)!.
+                                    ThenInclude(i => i.Student).
+                                    FirstAsync(); 
+
         public async Task UpdateAverageRating(int id, double addedRating)
         {
             var course = await GetCourse(id);
             var reviewCount = await dbContext.Reviews.Where(i => i.Course.Id == id).CountAsync();
             course.AverageRating = ((reviewCount - 1) * course.AverageRating + addedRating) / reviewCount;
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task CreateCourse(Course course)
+        {
+            await dbContext.Courses.AddAsync(course);
             await dbContext.SaveChangesAsync();
         }
     }
