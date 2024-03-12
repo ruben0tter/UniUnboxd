@@ -22,6 +22,19 @@ public class MainActivity extends AppCompatActivity {
         UserState state = new UserState("userToken");
         replaceFragment(state.getHomeFragment());
         setUserState(state);
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.home) {
+                replaceFragment(new HomeFragment());
+            } else if (itemId == R.id.search) {
+                replaceFragment(new SearchFragment());
+            } else if (itemId == R.id.profile) {
+                replaceFragment(new ProfileFragment());
+            }
+            return true;
+        });
+
     }
     
     
