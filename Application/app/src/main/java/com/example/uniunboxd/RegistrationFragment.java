@@ -120,8 +120,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     private void redirectToSignIn() {
-        //TODO: Redirect to AuthenticationFragment
-        replaceFragment(new RegistrationFragment());
+        replaceFragment(new AuthenticationFragment());
     }
 
     private boolean arePasswordsEqual() {
