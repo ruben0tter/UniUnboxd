@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 
 public class APIClient {
     public static HttpURLConnection fetch(String method, String url) throws IOException {
-        URL urlObj = new URL("http://10.0.2.2:5148/api/" + url);
+        URL urlObj = new URL("https://uniunboxd.com/api/" + url);
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
         con.setRequestMethod(method);
         con.setRequestProperty("Accept", "application/json");

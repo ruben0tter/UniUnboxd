@@ -3,6 +3,12 @@
     <style name="Base.Theme.UniUnboxd" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.Colored</item>
+    </style>
+
+    <style name="bottomNavigationStyle" parent="Base.Theme.UniUnboxd">
+        <item name="colorPrimary">@color/main_red</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
     <style name="Theme.UniUnboxd" parent="Base.Theme.UniUnboxd" />
