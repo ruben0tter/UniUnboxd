@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,6 +7,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.example.uniunboxd.HomeFragment;
+import com.example.uniunboxd.ProfileFragment;
+import com.example.uniunboxd.R;
+import com.example.uniunboxd.SearchFragment;
+import com.example.uniunboxd.UserState;
 import com.example.uniunboxd.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {

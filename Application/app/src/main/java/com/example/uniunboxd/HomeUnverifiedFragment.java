@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.uniunboxd.API.VerificationController;
+import com.example.uniunboxd.activities.MainActivity;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
