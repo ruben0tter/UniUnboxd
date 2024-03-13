@@ -1,14 +1,16 @@
 package com.example.uniunboxd.API;
 
-import com.example.uniunboxd.DTO.RegisterModel;
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.uniunboxd.DTO.ReviewModel;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 import org.json.JSONObject;
 
 import java.net.HttpURLConnection;
 
 public class ReviewController {
-    public static HttpURLConnection postReview(ReviewModel model) throws Exception {
+    public static HttpURLConnection postReview(ReviewModel model, FragmentActivity f) throws Exception {
         JSONObject json = new JSONObject();
         json.put("rating", model.rating);
         json.put("comment", model.comment);
@@ -16,6 +18,6 @@ public class ReviewController {
         json.put("courseId", model.courseId);
         json.put("studentId", model.studentId);
 
-        return APIClient.post("Review", json.toString());
+        return APIClient.post("Review", json.toString(), JWTValidation.getToken(f));
     }
 }

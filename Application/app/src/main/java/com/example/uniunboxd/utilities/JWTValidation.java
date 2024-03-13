@@ -2,15 +2,19 @@ package com.example.uniunboxd.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.util.Log;
 import android.util.Base64;
+import android.util.Log;
 
 import org.json.JSONObject;
 
 import java.nio.charset.Charset;
 
 public class JWTValidation {
+    public static boolean isUserLoggedIn(Context c) {
+        String token = getToken(c);
+        return token != null;
+    }
+
     public static String getToken(Context c) {
         SharedPreferences prefs = c.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         return prefs.getString("token", null);

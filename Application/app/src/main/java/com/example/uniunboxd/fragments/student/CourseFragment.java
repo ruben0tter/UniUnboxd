@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.models.CourseRetrievalModel;
@@ -54,7 +55,7 @@ public class CourseFragment extends Fragment {
         View view = null;
         AsyncGetTask asyncGetTask = new AsyncGetTask();
         try {
-            Course = asyncGetTask.execute().get();
+            Course = asyncGetTask.execute(getActivity()).get();
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -68,13 +69,13 @@ public class CourseFragment extends Fragment {
     }
 }
 
-class AsyncGetTask extends AsyncTask<Void, Void, CourseRetrievalModel>{
+class AsyncGetTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
 
     @Override
-    protected CourseRetrievalModel doInBackground(Void... voids) {
+    protected CourseRetrievalModel doInBackground(FragmentActivity... fragmentActivities) {
         CourseRetrievalModel course = null;
         try{
-            course = CourseController.getCourseById(1);
+            course = CourseController.getCourseById(1, fragmentActivities[0]);
         } catch(Exception ioe) {
             Log.e("ERR", "Couldn't get course" + ioe.toString());
         }

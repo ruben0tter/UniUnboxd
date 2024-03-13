@@ -46,7 +46,7 @@ public class ProfileUniversityFragment extends ProfileFragment {
                     lastID = applications.get(applications.size() - 1).ID;
                 }
                 try {
-                    List<Application> newApplications = VerificationController.getPendingApplications(lastID);
+                    List<Application> newApplications = VerificationController.getPendingApplications(lastID, getActivity());
                     applications.addAll(newApplications);
                     for (Application app : newApplications) {
                         getActivity().runOnUiThread(new Runnable() {

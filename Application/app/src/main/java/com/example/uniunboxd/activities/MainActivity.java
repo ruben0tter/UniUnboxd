@@ -1,18 +1,16 @@
 package com.example.uniunboxd.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.os.Bundle;
 
-import com.example.uniunboxd.fragments.student.HomeFragment;
-import com.example.uniunboxd.fragments.student.ProfileFragment;
-import com.example.uniunboxd.R;
-import com.example.uniunboxd.fragments.student.SearchFragment;
-import com.example.uniunboxd.utilities.UserState;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import com.example.uniunboxd.databinding.ActivityMainBinding;
+import com.example.uniunboxd.fragments.main.AuthenticationFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.utilities.Redirection;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -24,43 +22,30 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        UserState state = new UserState("userToken");
-        replaceFragment(state.getHomeFragment());
-        setUserState(state);
-
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(new HomeFragment());
-            } else if (itemId == R.id.search) {
-                replaceFragment(new SearchFragment());
-            } else if (itemId == R.id.profile) {
-                replaceFragment(new ProfileFragment());
-            }
-            return true;
-        });
-
-    }
-    
-    
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
+        setupInitialFragment();
     }
 
-    public void setUserState(UserState strategy) {
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(strategy.getHomeFragment());
-            } else if (itemId == R.id.search) {
-                replaceFragment(strategy.getSearchFragment());
-            } else if (itemId == R.id.profile) {
-                replaceFragment(strategy.getProfileFragment());
+    private void setupInitialFragment() {
+        if (JWTValidation.isUserLoggedIn(this)) {
+            String type = JWTValidation.getTokenProperty(this, "typ");
+
+            if (Objects.equals(type, "Student")) {
+                replaceActivity(StudentActivity.class);
+            } else if (Objects.equals(type, "University")) {
+                // TODO: Add University Activity
+            } else if (Objects.equals(type, "Professor")) {
+                // TODO: Add Professor Activity
             }
-            return true;
-        });
+        } else {
+            replaceFragment(new AuthenticationFragment());
+        }
+    }
+
+    public void replaceActivity(Class<? extends AppCompatActivity> activity) {
+        Redirection.replaceActivity(this, activity);
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        Redirection.replaceFragment(this, fragment);
     }
 }

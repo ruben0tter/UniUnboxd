@@ -81,7 +81,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                 @Override
                 public void run() {
                     try {
-                        HttpURLConnection response = ReviewController.postReview(model);
+                        HttpURLConnection response = ReviewController.postReview(model, getActivity());
                         if (response.getResponseCode() == 200) {
                             // TODO: Show notification with "Review succesfully created."
                             // TODO: Redirect to CourseFragment.

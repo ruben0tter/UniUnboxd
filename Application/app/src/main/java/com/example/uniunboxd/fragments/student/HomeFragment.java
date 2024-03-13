@@ -1,6 +1,7 @@
 package com.example.uniunboxd.fragments.student;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.fragments.university.CreateCourseFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
     public HomeFragment() {
@@ -26,6 +28,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("HOME", "ey I got created maaannnnnnn!");
+        Log.i("HOME JWT", JWTValidation.getToken(getActivity()));
     }
 
     @Override

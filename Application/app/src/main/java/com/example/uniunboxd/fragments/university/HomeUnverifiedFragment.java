@@ -13,8 +13,6 @@ import android.widget.Button;
 
 import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.utilities.UserState;
-import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -51,7 +49,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
                     @Override
                     public void run() {
                         try {
-                            VerificationController.sendApplication(verificationFileContents);
+                            VerificationController.sendApplication(verificationFileContents, getActivity());
                             reload();
                         } catch (Exception e) {
                             Log.e("APP", "Failed to upload documents: " + e.toString());
@@ -123,7 +121,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
     private void reload() {
         try {
             replaceFragment(new HomeSubmittedFragment());
-            ((MainActivity) getActivity()).setUserState(new UserState("submitted"));
+            //((StudentActivity) getActivity()).setUserState(new UserState("submitted"));
         } catch (Exception e) {
             Log.d("ERR", "i dunno");
         }

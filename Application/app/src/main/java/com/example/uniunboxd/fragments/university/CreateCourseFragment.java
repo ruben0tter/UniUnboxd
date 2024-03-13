@@ -56,7 +56,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                             code.getText().toString(), description.getText().toString(),
                             professor.getText().toString(), null, null, 1);
                     try{
-                        HttpURLConnection con = CourseController.postCourse(course);
+                        HttpURLConnection con = CourseController.postCourse(course, getActivity());
                         if(con.getResponseCode() == 200){
                             replaceFragment(new HomeFragment());
                         }
