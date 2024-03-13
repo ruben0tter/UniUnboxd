@@ -10,8 +10,11 @@
     <Button
         android:id="@+id/selectApplicationData1"
         android:layout_width="123dp"
-        android:layout_height="41dp"
-        android:backgroundTint="@color/secondary_red"
+        android:layout_height="35dp"
+        android:background="@drawable/button_red"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/k2d"
         android:text="Upload File"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,8 +26,11 @@
     <Button
         android:id="@+id/selectApplicationData2"
         android:layout_width="123dp"
-        android:layout_height="41dp"
-        android:backgroundTint="@color/secondary_red"
+        android:layout_height="35dp"
+        android:background="@drawable/button_red"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/k2d"
         android:text="Upload File"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,9 +42,12 @@
     <Button
         android:id="@+id/submitApplication"
         android:layout_width="150dp"
-        android:layout_height="64dp"
-        android:backgroundTint="@color/secondary_red"
+        android:layout_height="40dp"
         android:text="GET VERIFIED"
+        android:background="@drawable/button_red"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:fontFamily="@font/k2d"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.508"
@@ -80,5 +89,21 @@
         app:layout_constraintBottom_toBottomOf="@+id/selectApplicationData2"
         app:layout_constraintEnd_toStartOf="@+id/selectApplicationData2"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/signOut"
+        android:layout_width="100dp"
+        android:layout_height="35dp"
+        android:background="@drawable/button_red"
+        android:fontFamily="@font/k2d"
+        android:text="Sign Out"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submitApplication"
+        app:layout_constraintVertical_bias="0.75" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

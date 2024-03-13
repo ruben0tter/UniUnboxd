@@ -18,7 +18,7 @@ import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-public class HomeFragment extends Fragment implements View.OnClickListener{
+public class HomeFragment extends Fragment implements View.OnClickListener {
     public HomeFragment() {
         // Required empty public constructor
     }

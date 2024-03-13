@@ -13,7 +13,10 @@ import android.widget.Button;
 
 import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.fragments.student.HomeFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
@@ -40,6 +43,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
         btnUpload1 = (Button) view.findViewById(R.id.selectApplicationData1);
         btnUpload2 = (Button) view.findViewById(R.id.selectApplicationData2);
         btnApply = (Button) view.findViewById(R.id.submitApplication);
+        Button signOut = (Button) view.findViewById(R.id.signOut);
         btnApply.setEnabled(false);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +87,14 @@ public class HomeUnverifiedFragment extends HomeFragment {
                         Intent.createChooser(chooseFile, "Choose a file"),
                         PICKFILE_RESULT_CODE
                 );
+            }
+        });
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JWTValidation.deleteToken(getActivity());
+                ((IActivity) getActivity()).replaceActivity(MainActivity.class);
             }
         });
 

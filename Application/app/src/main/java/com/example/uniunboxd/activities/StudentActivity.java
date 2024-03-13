@@ -36,13 +36,6 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
         */
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
-
     public void setNavigationMenu() {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -59,6 +52,13 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
 
     public void replaceActivity(Class<? extends AppCompatActivity> activity) {
         Redirection.replaceActivity(this, activity);
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 
     /*

@@ -1,6 +1,7 @@
 package com.example.uniunboxd.activities;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -30,8 +31,6 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         binding = ActivityUniversityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setNavigationMenu();
-
         replaceFragment(getCorrectHomeFragment());
 
         /*
@@ -45,26 +44,18 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         String state = JWTValidation.getTokenProperty(this, "verified");
 
         if (Objects.equals(state, "Unverified")) {
+            binding.bottomNavigationView.setVisibility(View.GONE);
             return new HomeUnverifiedFragment();
-        } else if (Objects.equals(state, "Submitted")) {
+        } else if (Objects.equals(state, "Pending")) {
+            binding.bottomNavigationView.setVisibility(View.GONE);
             return new HomeSubmittedFragment();
         } else if (Objects.equals(state, "Verified")) {
             // TODO: Add the University Home Fragment
+            setNavigationMenu();
             return new HomeFragment();
         }
 
         return null;
-    }
-
-    public void replaceActivity(Class<? extends AppCompatActivity> activity) {
-        Redirection.replaceActivity(this, activity);
-    }
-
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
     }
 
     public void setNavigationMenu() {
@@ -80,6 +71,17 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
             }
             return true;
         });
+    }
+
+    public void replaceActivity(Class<? extends AppCompatActivity> activity) {
+        Redirection.replaceActivity(this, activity);
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 
     /*
