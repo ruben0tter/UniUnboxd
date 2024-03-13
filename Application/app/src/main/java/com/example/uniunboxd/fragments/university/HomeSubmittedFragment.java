@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.uniunboxd.fragments.student.HomeFragment;
+
 public class HomeSubmittedFragment extends HomeFragment {
     public HomeSubmittedFragment() {
         // Empty constructor.
