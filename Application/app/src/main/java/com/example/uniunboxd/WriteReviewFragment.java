@@ -15,10 +15,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.uniunboxd.API.RegistrationController;
 import com.example.uniunboxd.API.ReviewController;
 import com.example.uniunboxd.DTO.CourseModel;
+import com.example.uniunboxd.DTO.RegisterModel;
 import com.example.uniunboxd.DTO.ReviewModel;
-import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.net.HttpURLConnection;
 

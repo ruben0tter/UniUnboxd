@@ -18,7 +18,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.AuthenticationController;
 import com.example.uniunboxd.DTO.AuthenticationModel;
-import com.example.uniunboxd.utilities.JWTValidation;
+
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

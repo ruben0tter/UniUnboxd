@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.CourseController;
-import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.models.CourseCreationModel;
 
 import java.net.HttpURLConnection;
