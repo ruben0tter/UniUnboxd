@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace UniUnboxdAPI.Models;
 
 public class Course : Base

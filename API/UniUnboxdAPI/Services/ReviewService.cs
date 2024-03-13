@@ -71,8 +71,9 @@ namespace UniUnboxdAPI.Services
         /// Creates a Review object with the given ReviewModel.
         /// </summary>
         /// <param name="model">Review information.</param>
+        /// <param name="model">Id of attached student.</param>
         /// <returns>Created Review object.</returns>
-        public async Task<Review> CreateReview(ReviewModel model)
+        public async Task<Review> CreateReview(ReviewModel model, int studentId)
             => new()
             {
                 CreationTime = DateTime.Now,
@@ -81,7 +82,7 @@ namespace UniUnboxdAPI.Services
                 Comment = model.Comment,
                 IsAnonymous = model.IsAnonymous,
                 Course = await courseRepository.GetCourse(model.CourseId),
-                Student = await userRepository.GetStudent(model.StudentId)
+                Student = await userRepository.GetStudent(studentId)
             };
 
         /// <summary>
