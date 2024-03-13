@@ -42,9 +42,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         int id = view.getId();
         if (id == R.id.button) {
             replaceFragment(new CourseFragment());
-        }
-        else if (id == R.id.createCourse) {
+        } else if (id == R.id.createCourse) {
             replaceFragment(new CreateCourseFragment());
+        } else if (id == R.id.button2) {
+            replaceFragment(new StudentHomePageFragment());
         }
     }
 

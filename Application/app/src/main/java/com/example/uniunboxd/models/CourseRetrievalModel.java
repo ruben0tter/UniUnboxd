@@ -19,10 +19,8 @@ public class CourseRetrievalModel {
     public final String Code;
     public final String Description;
     public final String Professor;
-
     public final String Image;
     public final String Banner;
-
     public final int UniversityId;
     public final String UniversityName;
     public final Collection<ReviewListItem> Reviews;

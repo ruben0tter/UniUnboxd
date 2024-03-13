@@ -69,7 +69,6 @@ public class CourseFragment extends Fragment {
 }
 
 class AsyncGetTask extends AsyncTask<Void, Void, CourseRetrievalModel>{
-
     @Override
     protected CourseRetrievalModel doInBackground(Void... voids) {
         CourseRetrievalModel course = null;
