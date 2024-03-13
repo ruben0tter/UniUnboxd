@@ -17,28 +17,10 @@ import java.util.concurrent.ExecutionException;
 
 public class CourseFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private CourseRetrievalModel Course = null;
 
-    public CourseFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static CourseFragment newInstance(String param1, String param2) {
-        CourseFragment fragment = new CourseFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+    public CourseFragment(int id) {
+        // TODO: Get course information
     }
 
     @Override

@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.button) {
-            replaceFragment(new CourseFragment());
+            replaceFragment(new CourseFragment(1));
         } else if (id == R.id.createCourse) {
             replaceFragment(new CreateCourseFragment());
         } else if (id == R.id.signOut) {
