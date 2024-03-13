@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.models;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.example.uniunboxd.R;
 
 public class Application {
     public final int ID;

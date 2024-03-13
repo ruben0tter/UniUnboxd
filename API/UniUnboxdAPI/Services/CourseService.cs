@@ -1,7 +1,9 @@
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
+using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Services
 {
@@ -23,17 +25,7 @@ namespace UniUnboxdAPI.Services
         /// <param name="id">Provided id</param>
         /// <returns>Whether the id contained in the JWT is equal to the provided id.</returns>
         public bool IsUserValidated(ClaimsIdentity? identity, int id)
-        {
-            if (identity == null) return false;
-
-            var claim = identity.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (claim == null) return false;
-
-            var userId = claim.Value;
-
-            return userId.Equals(id.ToString());
-        }
+            => JWTValidation.IsUserValidated(identity, id);
         
         /// <summary>
         /// Check whether there exists a student with the provided id.
@@ -42,6 +34,15 @@ namespace UniUnboxdAPI.Services
         /// <returns>Whether there exists a student with the provided id.</returns>
         public async Task<bool> DoesUniversityExist(int universityId)
             => await userRepository.DoesUniversityExist(universityId);
+
+        /// <summary>
+        /// Add a course to the database.
+        /// </summary>
+        /// <param name="course"> The course to be added.</param>
+        public async Task PostCourse(Course course)
+        {
+            await courseRepository.PostCourse(course);
+        }
 
         /// <summary>
         /// Creates a Course object from the given CourseCreationModel creationModel.
@@ -62,24 +63,26 @@ namespace UniUnboxdAPI.Services
             };
 
         /// <summary>
-        /// Add a course to the database.
-        /// </summary>
-        /// <param name="course"> The course to be added.</param>
-        public async Task PostCourse(Course course)
-        {
-            await courseRepository.CreateCourse(course);
-        }
-
-        /// <summary>
         /// Get a CourseRetrievalModel by id of a course. It has (partially) the data connected to it. 
         /// </summary>
         /// <param name="id"> The id of the course to be adapted and returned.</param>
         /// <returns>An adapted object, corresponding to the course id provided.</returns>
         public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id)
         {
-            //TODO: Functional decomposition would be nice here.
             var course = await courseRepository.GetCourseAndConnectedData(id);
-            CourseRetrievalModel courseRetrievalModel = new()
+
+            var courseRetrievalModel = CreateCourseRetrievalModel(course);
+
+            if (course.Reviews.IsNullOrEmpty()) return courseRetrievalModel;
+            
+            foreach (var review in course.Reviews)
+                courseRetrievalModel.Reviews.Add(CreateCourseReviewModel(review, course.Id));
+
+            return courseRetrievalModel;
+        }
+
+        private static CourseRetrievalModel CreateCourseRetrievalModel(Course course)
+            => new ()
             {
                 Id = course.Id,
                 Code = course.Code,
@@ -92,29 +95,20 @@ namespace UniUnboxdAPI.Services
                 UniversityId = course.University.Id,
                 UniversityName = course.University.UserName
             };
-            if (course.Reviews == null) return courseRetrievalModel;
-            
-            foreach (var review in course.Reviews)
-            {
-                courseRetrievalModel.Reviews.Add(MakeCourseReviewModel(review, course.Id));
-            }
-
-            return courseRetrievalModel;
-        }
         
-        private CourseReviewModel MakeCourseReviewModel(Review review, int courseId) => new ()
-        {
-            Id = review.Id,
-            CourseId = courseId,
-            Comment = review.Comment,
-            IsAnonymous = review.IsAnonymous,
-            Rating = review.Rating,
-            Poster = MakeReviewPosterStudentModel(review)
-        };
+        private static CourseReviewModel CreateCourseReviewModel(Review review, int courseId) 
+            => new ()
+            {
+                Id = review.Id,
+                CourseId = courseId,
+                Comment = review.Comment,
+                IsAnonymous = review.IsAnonymous,
+                Rating = review.Rating,
+                Poster = CreateReviewPosterStudentModel(review)
+            };
 
-        private ReviewPosterStudentModel? MakeReviewPosterStudentModel(Review review)
-        {
-            return review.IsAnonymous
+        private static ReviewPosterStudentModel? CreateReviewPosterStudentModel(Review review)
+            => review.IsAnonymous
                 ? null
                 : new ReviewPosterStudentModel()
                 {
@@ -122,12 +116,5 @@ namespace UniUnboxdAPI.Services
                     Image = review.Student.Image,
                     UserName = review.Student.UserName
                 };
-        }
-
-        public async Task<IEnumerable<CourseGridModel>> GetTenCoursesFromId(int id)
-        {
-            
-            throw new NotImplementedException();
-        }
     }
 }

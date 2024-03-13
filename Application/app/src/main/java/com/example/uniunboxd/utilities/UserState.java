@@ -1,4 +1,8 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.utilities;
+
+import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 
 public class UserState {
     private final boolean SUBMITTED;
@@ -10,6 +14,7 @@ public class UserState {
         return new SearchFragment();
     }
 
+    /*
     public HomeFragment getHomeFragment() {
         if(SUBMITTED) {
             return new HomeSubmittedFragment();
@@ -17,8 +22,9 @@ public class UserState {
             return new HomeUnverifiedFragment();
         }
     }
+    */
 
     public ProfileFragment getProfileFragment() {
-        return new ProfileUniversityFragment();
+        return new ApplicationsFragment();
     }
 }

@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Identity;
+namespace UniUnboxdAPI.Models.DataTransferObjects;
 
-namespace UniUnboxdAPI.Models;
-
-public class AcceptReject
+public class AcceptRejectModel
 {
     public required int UserId { get; set; }
     public required bool AcceptedOrRejected { get; set; }

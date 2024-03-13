@@ -1,53 +1,50 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
+using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ReviewController : ControllerBase
+    public class ReviewController(ReviewService reviewService) : ControllerBase
     {
-        private readonly ReviewService reviewService;
-
-        public ReviewController(ReviewService reviewService)
-        {
-            this.reviewService = reviewService;
-        }
-
-
-        [Authorize(Roles = "Student")]
         [HttpPost]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> PostReview([FromBody] ReviewModel model)
         {
-            System.Console.WriteLine("I am here!");
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest("Not all required fields have been filled in.");
+
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesStudentExist(studentId))
+                return BadRequest("Given student does not exist.");
+
+            if (!await reviewService.DoesCourseExist(model.CourseId))
+                return BadRequest("Given course does not exist.");
+
+            if (await reviewService.HasStudentAlreadyReviewedCourse(studentId, model.CourseId))
+                return BadRequest("Student has already reviewed course.");
+
+            try
             {
-                if (!reviewService.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.StudentId))
-                    return BadRequest("Invalid user.");
-
-                if (!await reviewService.DoesStudentExist(model.StudentId))
-                    return BadRequest("Given student does not exist.");
-
-                if (!await reviewService.DoesCourseExist(model.CourseId))
-                    return BadRequest("Given course does not exist.");
-
-                if (await reviewService.HasStudentAlreadyReviewedCourse(model.StudentId, model.CourseId))
-                    return BadRequest("StudentModel has already reviewed course.");
-
-                Review review = await reviewService.CreateReview(model);
+                Review review = await reviewService.CreateReview(model, studentId);
 
                 await reviewService.PostReview(review);
 
-                return Ok("Succesfully created review.");
-            }
+                await reviewService.UpdateAverageRating(review.Course.Id, review.Rating);
 
-            return BadRequest("Not all required fields have been filled in.");
+                return Ok("Succesfully created review.");
+            } 
+            catch (Exception ex) 
+            {
+                return BadRequest("Something went wrong when creating a review.\nThe following exception was thrown:\n" + ex.Message);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
@@ -9,15 +8,8 @@ namespace UniUnboxdAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController(AuthenticationService authenticationService) : ControllerBase
     {
-        private readonly AuthenticationService authenticationService;
-
-        public AuthenticationController(AuthenticationService authenticationService)
-        {
-            this.authenticationService = authenticationService;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticationModel model)
         {
