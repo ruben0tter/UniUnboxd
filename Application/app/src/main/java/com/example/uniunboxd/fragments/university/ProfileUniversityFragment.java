@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.university;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.uniunboxd.API.VerificationController;
+import com.example.uniunboxd.R;
+import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.models.Application;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,8 +18,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.AuthenticationController;
 import com.example.uniunboxd.DTO.AuthenticationModel;
-
-import org.json.JSONException;
+import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;

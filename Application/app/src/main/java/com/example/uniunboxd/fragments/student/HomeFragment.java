@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.student;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.example.uniunboxd.R;
+import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
     public HomeFragment() {

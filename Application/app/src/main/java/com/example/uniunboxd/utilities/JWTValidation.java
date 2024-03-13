@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;

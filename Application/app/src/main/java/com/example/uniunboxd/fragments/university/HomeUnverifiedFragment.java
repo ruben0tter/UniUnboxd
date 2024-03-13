@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.university;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.uniunboxd.API.VerificationController;
+import com.example.uniunboxd.R;
+import com.example.uniunboxd.utilities.UserState;
 import com.example.uniunboxd.activities.MainActivity;
+import com.example.uniunboxd.fragments.student.HomeFragment;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 

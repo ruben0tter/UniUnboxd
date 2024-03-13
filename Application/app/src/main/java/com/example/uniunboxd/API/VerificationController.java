@@ -3,7 +3,7 @@ package com.example.uniunboxd.API;
 import android.util.Base64;
 import android.util.Log;
 
-import com.example.uniunboxd.Application;
+import com.example.uniunboxd.models.Application;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

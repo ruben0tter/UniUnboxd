@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.student;
 
 import android.os.AsyncTask;
 import android.os.Bundle;

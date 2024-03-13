@@ -1,4 +1,11 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.utilities;
+
+import com.example.uniunboxd.fragments.student.HomeFragment;
+import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
+import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
+import com.example.uniunboxd.fragments.university.ProfileUniversityFragment;
 
 public class UserState {
     private final boolean SUBMITTED;
