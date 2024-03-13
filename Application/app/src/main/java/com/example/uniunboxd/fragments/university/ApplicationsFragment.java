@@ -17,7 +17,7 @@ import com.example.uniunboxd.models.Application;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileUniversityFragment extends ProfileFragment {
+public class ApplicationsFragment extends ProfileFragment {
     private final List<Application> applications = new ArrayList<>();
 
     @Override

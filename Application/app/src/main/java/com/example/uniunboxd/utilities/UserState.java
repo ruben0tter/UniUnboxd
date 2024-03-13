@@ -2,7 +2,7 @@ package com.example.uniunboxd.utilities;
 
 import com.example.uniunboxd.fragments.student.ProfileFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
-import com.example.uniunboxd.fragments.university.ProfileUniversityFragment;
+import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 
 public class UserState {
     private final boolean SUBMITTED;
@@ -25,6 +25,6 @@ public class UserState {
     */
 
     public ProfileFragment getProfileFragment() {
-        return new ProfileUniversityFragment();
+        return new ApplicationsFragment();
     }
 }
