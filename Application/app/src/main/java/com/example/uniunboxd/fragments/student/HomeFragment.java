@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 
@@ -36,10 +38,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
         Button btn = (Button) view.findViewById(R.id.button);
         btn.setOnClickListener(this);
         ImageButton courseCreate = (ImageButton) view.findViewById(R.id.createCourse);
         courseCreate.setOnClickListener(this);
+        Button signOut = (Button) view.findViewById(R.id.signOut);
+        signOut.setOnClickListener(this);
+
         // Inflate the layout for this fragment
         return view;
 
@@ -49,9 +55,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         int id = view.getId();
         if (id == R.id.button) {
             replaceFragment(new CourseFragment());
-        }
-        else if (id == R.id.createCourse) {
+        } else if (id == R.id.createCourse) {
             replaceFragment(new CreateCourseFragment());
+        } else if (id == R.id.signOut) {
+            JWTValidation.deleteToken(getActivity());
+            ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         }
     }
 

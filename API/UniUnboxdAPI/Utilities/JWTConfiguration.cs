@@ -51,7 +51,8 @@ namespace UniUnboxdAPI.Utilities
                 new Claim(JwtRegisteredClaimNames.Name, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Typ, user.UserType.ToString()),
-                new Claim(ClaimTypes.Role, user.UserType.ToString())
+                new Claim(ClaimTypes.Role, user.UserType.ToString()),
+                new Claim("verified", user.VerificationStatus.ToString())
                ];
         
         /// <summary>

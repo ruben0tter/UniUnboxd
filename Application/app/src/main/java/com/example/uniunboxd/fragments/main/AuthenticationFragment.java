@@ -18,10 +18,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.AuthenticationController;
 import com.example.uniunboxd.DTO.AuthenticationModel;
-import com.example.uniunboxd.activities.MainActivity;
-import com.example.uniunboxd.activities.StudentActivity;
-import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.StudentActivity;
+import com.example.uniunboxd.activities.UniversityActivity;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -140,9 +141,9 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         String userType = JWTValidation.getTokenProperty(getActivity(),"typ");
 
         if (Objects.equals(userType, "Student")) {
-            ((MainActivity) getActivity()).replaceActivity(StudentActivity.class);
+            ((IActivity) getActivity()).replaceActivity(StudentActivity.class);
         } else if (Objects.equals(userType, "University")) {
-            //TODO: Redirect to University Home Page.
+            ((IActivity) getActivity()).replaceActivity(UniversityActivity.class);
         } else if (Objects.equals(userType, "Professor")) {
             //TODO: Redirect to Professor Home Page.
         }

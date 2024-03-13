@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.StudentActivity"
+    tools:context=".activities.UniversityActivity"
     tools:ignore="ExtraText">
 
     <FrameLayout
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:itemIconSize="24dp"
-        app:menu="@menu/bottom_nav_menu_student"
+        app:menu="@menu/bottom_nav_menu_university"
         android:theme="@style/bottomNavigationStyle"
         />
 

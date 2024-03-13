@@ -12,7 +12,7 @@ import com.example.uniunboxd.utilities.Redirection;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IActivity {
     ActivityMainBinding binding;
 
     @Override
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             if (Objects.equals(type, "Student")) {
                 replaceActivity(StudentActivity.class);
             } else if (Objects.equals(type, "University")) {
-                // TODO: Add University Activity
+                replaceActivity(UniversityActivity.class);
             } else if (Objects.equals(type, "Professor")) {
                 // TODO: Add Professor Activity
             }
