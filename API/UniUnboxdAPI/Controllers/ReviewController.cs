@@ -13,6 +13,22 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class ReviewController(ReviewService reviewService) : ControllerBase
     {
+        [HttpGet]
+        [Authorize(Roles = "Student, Professor")]
+        public async Task<IActionResult> GetReview([FromQuery(Name = "id")] int id)
+        {
+            if (!await reviewService.DoesReviewExist(id))
+                return BadRequest("Given review does nto exist.");
+
+            var review = await reviewService.GetReview(id);
+
+            if (review == null)
+                return BadRequest("Something went wrong.");
+
+            return Ok(review);
+        }
+
+
         [HttpPost]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> PostReview([FromBody] ReviewModel model)
