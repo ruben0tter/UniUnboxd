@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 public class CourseController {
     public static CourseRetrievalModel getCourseById(int id, FragmentActivity f) throws IOException {
-        HttpURLConnection con = APIClient.get("Course/get?id=" + id, JWTValidation.getToken(f));
+        HttpURLConnection con = APIClient.get("Course/?id=" + id, JWTValidation.getToken(f));
 
         Log.i("APP", "Code: " + con.getResponseCode());
 

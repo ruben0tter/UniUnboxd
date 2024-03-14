@@ -69,7 +69,7 @@ namespace UniUnboxdAPI.Services
         /// <returns>An adapted object, corresponding to the course id provided.</returns>
         public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id)
         {
-            var course = await courseRepository.GetCourseAndConnectedData(id);
+            var course = await courseRepository.GetCourseAndConnectedData(id, 1);
 
             var courseRetrievalModel = CreateCourseRetrievalModel(course);
 
@@ -116,5 +116,8 @@ namespace UniUnboxdAPI.Services
                     Image = review.Student.Image,
                     UserName = review.Student.UserName
                 };
+
+        public async Task<bool> DoesCourseExist(int id)
+            => await courseRepository.DoesCourseExist(id);
     }
 }

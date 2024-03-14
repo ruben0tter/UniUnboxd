@@ -12,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
+import java.util.List;
 
 public class CourseRetrievalModel {
     public final int Id;
@@ -25,14 +26,14 @@ public class CourseRetrievalModel {
 
     public final int UniversityId;
     public final String UniversityName;
-    public final Collection<ReviewListItem> Reviews;
+    public final List<ReviewListItem> Reviews;
 
     @JsonCreator
     public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name")String name,
                                 @JsonProperty("code") String code, @JsonProperty("description") String description,
                                 @JsonProperty("professor") String professor, @JsonProperty("image") String image,
                                 @JsonProperty("banner") String banner, @JsonProperty("universityId") int universityId,
-                                @JsonProperty("reviews") Collection<ReviewListItem> reviews, @JsonProperty("universityName") String universityName) {
+                                @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName) {
         Id = id;
         Name = name;
         Code = code;
@@ -63,7 +64,7 @@ public class CourseRetrievalModel {
         LinearLayout linearLayout = view.findViewById(R.id.reviewList);
 
         for(ReviewListItem i : Reviews) {
-            linearLayout.addView(i.createView(inflater, container, savedInstanceState, i));
+            linearLayout.addView(i.createView(inflater, container, savedInstanceState));
         }
 
         return view;

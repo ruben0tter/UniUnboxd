@@ -32,7 +32,7 @@ public class ReviewListItem {
         Poster = poster;
     }
     public View createView(LayoutInflater inflater, ViewGroup container,
-                                    Bundle savedInstanceState, ReviewListItem reviewListItem) {
+                                    Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.review_list_item, container, false);
         TextView comment = view.findViewById(R.id.ReviewListItem_Comment);
         RatingBar ratingBar = view.findViewById(R.id.ReviewListItem_RatingBar);
@@ -40,9 +40,9 @@ public class ReviewListItem {
         ImageView posterIcon = view.findViewById(R.id.ReviewListItem_PosterIcon);
         //TODO: set up the id
 
-        comment.setText(reviewListItem.Comment);
-        if(Poster != null) posterName.setText(reviewListItem.Poster.UserName);
-        ratingBar.setRating(reviewListItem.Rating);
+        comment.setText(Comment);
+        if(Poster != null) posterName.setText(Poster.UserName);
+        ratingBar.setRating(Rating);
         return view;
     }
 
