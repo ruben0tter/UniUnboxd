@@ -22,6 +22,9 @@ namespace UniUnboxdAPI.Repositories
         public async Task<Course> GetCourse(int id)
             => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
 
+        public async Task<IEnumerable<Course>> GetFirst10Courses(int id)
+            => await dbContext.Courses.Where(i => i.Id > id).Take(10).ToListAsync();
+
         public async Task<Course> GetCourseAndConnectedData(int id)
             => await dbContext.Courses.Where(i => i.Id == id).Include(i => i.University).
                                     Include(i => i.Reviews)!.

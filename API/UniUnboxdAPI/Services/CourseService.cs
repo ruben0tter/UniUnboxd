@@ -2,6 +2,7 @@ using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
+using System.Collections.Generic;
 
 namespace UniUnboxdAPI.Services
 {
@@ -15,7 +16,7 @@ namespace UniUnboxdAPI.Services
             this.courseRepository = courseRepository;
             this.userRepository = userRepository;
         }
-        
+
         /// <summary>
         /// Checks whether the id contained in the JWT ligns up with the provided id.
         /// </summary>
@@ -34,7 +35,7 @@ namespace UniUnboxdAPI.Services
 
             return userId.Equals(id.ToString());
         }
-        
+
         /// <summary>
         /// Check whether there exists a student with the provided id.
         /// </summary>
@@ -93,7 +94,7 @@ namespace UniUnboxdAPI.Services
                 UniversityName = course.University.UserName
             };
             if (course.Reviews == null) return courseRetrievalModel;
-            
+
             foreach (var review in course.Reviews)
             {
                 courseRetrievalModel.Reviews.Add(MakeCourseReviewModel(review, course.Id));
@@ -101,8 +102,8 @@ namespace UniUnboxdAPI.Services
 
             return courseRetrievalModel;
         }
-        
-        private CourseReviewModel MakeCourseReviewModel(Review review, int courseId) => new ()
+
+        private CourseReviewModel MakeCourseReviewModel(Review review, int courseId) => new()
         {
             Id = review.Id,
             CourseId = courseId,
@@ -126,8 +127,20 @@ namespace UniUnboxdAPI.Services
 
         public async Task<IEnumerable<CourseGridModel>> GetTenCoursesFromId(int id)
         {
-            
-            throw new NotImplementedException();
+            IEnumerable<Course> courses = await courseRepository.GetFirst10Courses(id);
+            IList<CourseGridModel> courseGridModels = new List<CourseGridModel>();
+            foreach (var item in courses)
+            {
+                CourseGridModel final = new CourseGridModel()
+                {
+                    Id = item.Id,
+                    Rating = item.AverageRating,
+                    Name = item.Name,
+                    Image = item.Image
+                };
+                courseGridModels.Add(final);
+            }
+            return courseGridModels;
         }
     }
 }
