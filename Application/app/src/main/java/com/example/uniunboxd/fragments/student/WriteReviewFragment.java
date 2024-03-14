@@ -29,7 +29,7 @@ import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.net.HttpURLConnection;
 
-public class WriteReviewFragment extends Fragment implements View.OnClickListener{
+public class WriteReviewFragment extends Fragment implements View.OnClickListener {
     private EditText comment;
     private RatingBar rating;
     private CheckBox isAnonymous;
@@ -80,6 +80,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
 
         return view;
     }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.postButton) {
