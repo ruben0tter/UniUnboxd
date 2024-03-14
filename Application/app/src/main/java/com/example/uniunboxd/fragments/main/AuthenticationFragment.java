@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.main;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,8 +18,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.AuthenticationController;
 import com.example.uniunboxd.DTO.AuthenticationModel;
-
-import org.json.JSONException;
+import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.StudentActivity;
+import com.example.uniunboxd.activities.UniversityActivity;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,6 +86,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
                         String json = readMessage(response.getInputStream());
                         String token = getToken(json);
                         placeToken(token);
+                        Log.i("JWT", token);
                         redirectToHomePage();
                     } else {
                         //TODO: Fix notification system.
@@ -90,7 +94,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
                         Log.e("JWT", readMessage(response.getErrorStream()));
                     }
                 } catch (Exception e) {
-                    Log.e("APP", "Failed to register user: " + e.toString());
+                    Log.e("APP", "Failed to authenticate user: " + e.toString());
                 }
 
             }
@@ -137,10 +141,10 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         String userType = JWTValidation.getTokenProperty(getActivity(),"typ");
 
         if (Objects.equals(userType, "Student")) {
-            //TODO: Redirect to Student Home Page.
+            ((IActivity) getActivity()).replaceActivity(StudentActivity.class);
         } else if (Objects.equals(userType, "University")) {
-            //TODO: Redirect to University Home Page.
-        } else {
+            ((IActivity) getActivity()).replaceActivity(UniversityActivity.class);
+        } else if (Objects.equals(userType, "Professor")) {
             //TODO: Redirect to Professor Home Page.
         }
     }

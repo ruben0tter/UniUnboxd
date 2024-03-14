@@ -3,7 +3,10 @@ package com.example.uniunboxd.API;
 import android.util.Base64;
 import android.util.Log;
 
-import com.example.uniunboxd.Application;
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.uniunboxd.models.Application;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VerificationController {
-    public static List<Application> getPendingApplications(int startID) throws Exception {
-        HttpURLConnection con = APIClient.get("verify/pending?startID=" + startID);
+    public static List<Application> getPendingApplications(int startID, FragmentActivity f) throws Exception {
+        HttpURLConnection con = APIClient.get("verify/pending?startID=" + startID, JWTValidation.getToken(f));
 
         StringBuilder body = new StringBuilder();
 
@@ -40,7 +43,7 @@ public class VerificationController {
         return res;
     }
 
-    public static void sendApplication(List<byte[]> files) throws Exception {
+    public static void sendApplication(List<byte[]> files, FragmentActivity f) throws Exception {
         JSONObject json = new JSONObject();
         JSONArray jsonData = new JSONArray();
         for (byte[] file : files) {
@@ -50,6 +53,6 @@ public class VerificationController {
         json.put("VerificationData", jsonData);
         json.put("TargetUniversity", 69);
 
-        HttpURLConnection con = APIClient.post("verify/request", json.toString());
+        HttpURLConnection con = APIClient.post("verify/request", json.toString(), JWTValidation.getToken(f));
     }
 }

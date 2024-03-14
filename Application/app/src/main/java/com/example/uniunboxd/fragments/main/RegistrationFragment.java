@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.main;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,17 +18,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.RegistrationController;
 import com.example.uniunboxd.DTO.RegisterModel;
-
-import org.json.JSONObject;
+import com.example.uniunboxd.R;
+import com.example.uniunboxd.fragments.main.AuthenticationFragment;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;

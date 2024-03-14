@@ -5,7 +5,7 @@ using UniUnboxdAPI.Models;
 namespace UniUnboxdAPI.Repositories
 {
     /// <summary>
-    /// Handles all calls to database in regard to Review model.
+    /// Handles all calls to database in regard to VerificationApplication model.
     /// </summary>
     public class VerificationRepository
     {

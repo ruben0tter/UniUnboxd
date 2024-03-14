@@ -1,11 +1,9 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace UniUnboxdAPI.Models.DataTransferObjects
 {
     public abstract class VerificationModel
     {
-        public required string[] VerificationData { get; set; }
+        public string[] VerificationData { get; set; }
 
-        public University? TargetUniversity { get; set; }
+        public int TargetUniversityId { get; set; }
     }
 }

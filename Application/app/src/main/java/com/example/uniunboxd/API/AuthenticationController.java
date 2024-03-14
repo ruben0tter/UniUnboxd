@@ -1,9 +1,6 @@
 package com.example.uniunboxd.API;
 
-import android.util.Log;
-
 import com.example.uniunboxd.DTO.AuthenticationModel;
-import com.example.uniunboxd.DTO.RegisterModel;
 
 import org.json.JSONObject;
 
@@ -15,6 +12,6 @@ public class AuthenticationController {
         json.put("email", model.email);
         json.put("password", model.password);
 
-        return APIClient.post("Authentication", json.toString());
+        return APIClient.post("Authentication", json.toString(), null);
     }
 }

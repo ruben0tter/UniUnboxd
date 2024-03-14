@@ -2,8 +2,11 @@ package com.example.uniunboxd.API;
 
 import android.util.Log;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.uniunboxd.models.CourseCreationModel;
 import com.example.uniunboxd.models.CourseRetrievalModel;
+import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONObject;
@@ -17,8 +20,8 @@ import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 
 public class CourseController {
-    public static CourseRetrievalModel getCourseById(int id) throws IOException {
-        HttpURLConnection con = APIClient.get("Course/get?id=" + id);
+    public static CourseRetrievalModel getCourseById(int id, FragmentActivity f) throws IOException {
+        HttpURLConnection con = APIClient.get("Course/get?id=" + id, JWTValidation.getToken(f));
 
         Log.i("APP", "Code: " + con.getResponseCode());
 
@@ -46,7 +49,7 @@ public class CourseController {
         return objectMapper.readValue(body.toString(), CourseRetrievalModel.class);
     }
 
-    public static HttpURLConnection postCourse(CourseCreationModel model) throws Exception{
+    public static HttpURLConnection postCourse(CourseCreationModel model, FragmentActivity f) throws Exception{
         JSONObject json = new JSONObject();
         json.put("name", model.Name);
         json.put("code", model.Code);
@@ -56,7 +59,7 @@ public class CourseController {
         json.put("banner", model.Banner);
         json.put("universityId", model.UniversityID);
 
-        return APIClient.post("Course/create", json.toString());
+        return APIClient.post("Course/create", json.toString(), JWTValidation.getToken(f));
     }
 
     private static String readMessage(InputStream content) throws IOException{

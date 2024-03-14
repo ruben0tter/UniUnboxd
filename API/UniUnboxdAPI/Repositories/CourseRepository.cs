@@ -23,10 +23,11 @@ namespace UniUnboxdAPI.Repositories
             => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
 
         public async Task<Course> GetCourseAndConnectedData(int id)
-            => await dbContext.Courses.Where(i => i.Id == id).Include(i => i.University).
-                                    Include(i => i.Reviews)!.
-                                    ThenInclude(i => i.Student).
-                                    FirstAsync(); 
+            => await dbContext.Courses.Where(i => i.Id == id)
+                                    .Include(i => i.University)
+                                    .Include(i => i.Reviews)!
+                                    .ThenInclude(i => i.Student)
+                                    .FirstAsync(); 
 
         public async Task UpdateAverageRating(int id, double addedRating)
         {
@@ -36,7 +37,7 @@ namespace UniUnboxdAPI.Repositories
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task CreateCourse(Course course)
+        public async Task PostCourse(Course course)
         {
             await dbContext.Courses.AddAsync(course);
             await dbContext.SaveChangesAsync();
