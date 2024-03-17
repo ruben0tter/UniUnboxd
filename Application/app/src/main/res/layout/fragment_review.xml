@@ -171,11 +171,11 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/courseImage"
-            app:layout_constraintHorizontal_bias="0.108"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profileName"
-            app:layout_constraintVertical_bias="0.019" />
+            app:layout_constraintEnd_toEndOf="@+id/profileName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/profileImage"
+            app:layout_constraintTop_toBottomOf="@+id/courseBanner"
+            app:layout_constraintVertical_bias="0.0" />
 
         <RatingBar
             android:id="@+id/rating"
@@ -188,11 +188,11 @@
             android:stepSize="0.1"
             android:theme="@style/RatingBar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/courseImage"
-            app:layout_constraintHorizontal_bias="0.086"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/courseName"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/courseName"
             app:layout_constraintTop_toBottomOf="@+id/courseName"
-            app:layout_constraintVertical_bias="0.025" />
+            app:layout_constraintVertical_bias="0.024" />
 
         <TextView
             android:id="@+id/reviewDate"
@@ -204,15 +204,15 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/courseImage"
-            app:layout_constraintHorizontal_bias="0.313"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/rating"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/rating"
             app:layout_constraintTop_toBottomOf="@+id/rating"
             app:layout_constraintVertical_bias="0.028" />
 
         <TextView
             android:id="@+id/reviewComment"
-            android:layout_width="375dp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/k2d"
             android:text="[Comment] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since."
@@ -220,8 +220,8 @@
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.444"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/reviewDate"
             app:layout_constraintTop_toBottomOf="@+id/reviewDate"
             app:layout_constraintVertical_bias="0.053" />
 

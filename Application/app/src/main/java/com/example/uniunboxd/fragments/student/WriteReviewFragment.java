@@ -94,9 +94,11 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         name.setText(course.name);
         code.setText(course.code);
 
-        byte[] decodedString = Base64.decode(course.image, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        image.setImageBitmap(decodedByte);
+        if (course.image != null) {
+            byte[] decodedString = Base64.decode(course.image, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            image.setImageBitmap(decodedByte);
+        }
     }
 
     private void setReviewInfo() {
@@ -118,7 +120,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                         HttpURLConnection response = ReviewController.postReview(model, getActivity());
                         if (response.getResponseCode() == 200) {
                             // TODO: Show notification with "Review succesfully created."
-                            // TODO: Redirect to CourseFragment.
+                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
                         } else {
                             // TODO: Show notification with error message.
                         }
