@@ -53,7 +53,7 @@ namespace UniUnboxdAPI.Controllers
 
                 await reviewService.PostReview(review);
 
-                await reviewService.UpdateAverageRating(review.Course.Id, review.Rating);
+                await reviewService.UpdateAverageRatingAfterPost(review.Course.Id, review.Rating);
 
                 return Ok("Succesfully created review.");
             } 
@@ -88,9 +88,13 @@ namespace UniUnboxdAPI.Controllers
 
             try
             {
+                double oldRating = review.Rating;
+
                 reviewService.UpdateReview(review, model);
 
                 await reviewService.PutReview(review);
+
+                await reviewService.UpdateAverageRatingAfterPut(review.Course.Id, review.Rating, oldRating);
 
                 return Ok("Succesfully updated review.");
             }
@@ -120,6 +124,8 @@ namespace UniUnboxdAPI.Controllers
             try
             {
                 await reviewService.DeleteReview(review);
+
+                await reviewService.UpdateAverageRatingAfterDelete(review.Course.Id, review.Rating);
 
                 return Ok("Succesfully deleted review.");
             }
