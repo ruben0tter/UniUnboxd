@@ -20,7 +20,7 @@ namespace UniUnboxdAPI.Controllers
             if (!await reviewService.DoesReviewExist(id))
                 return BadRequest("Given review does nto exist.");
 
-            var review = await reviewService.GetReview(id);
+            var review = await reviewService.GetReviewPageModel(id);
 
             if (review == null)
                 return BadRequest("Something went wrong.");
@@ -45,7 +45,7 @@ namespace UniUnboxdAPI.Controllers
                 return BadRequest("Given course does not exist.");
 
             if (await reviewService.HasStudentAlreadyReviewedCourse(studentId, model.CourseId))
-                return BadRequest("Student has already reviewed course.");
+                return BadRequest("Student has already reviewed provided course.");
 
             try
             {
@@ -60,6 +60,43 @@ namespace UniUnboxdAPI.Controllers
             catch (Exception ex) 
             {
                 return BadRequest("Something went wrong when creating a review.\nThe following exception was thrown:\n" + ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> PutReview([FromQuery(Name = "id")] int id, [FromBody] ReviewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Not all required fields have been filled in.");
+
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesStudentExist(studentId))
+                return BadRequest("Given student does not exist.");
+
+            if (!await reviewService.DoesCourseExist(model.CourseId))
+                return BadRequest("Given course does not exist.");
+
+            Review? review = await reviewService.GetReview(id);
+
+            if (review == null)
+                return BadRequest("No review exists with provided id.");
+
+            if (studentId != review.Student.Id)
+                return BadRequest("Review was not written by user.");
+
+            try
+            {
+                reviewService.UpdateReview(review, model);
+
+                await reviewService.PutReview(review);
+
+                return Ok("Succesfully updated review.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went wrong when updating a review.\nThe following exception was thrown:\n" + ex.Message);
             }
         }
     }

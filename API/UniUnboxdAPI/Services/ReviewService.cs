@@ -36,7 +36,7 @@ namespace UniUnboxdAPI.Services
         /// </summary>
         /// <param name="id">Provided review id.</param>
         /// <returns>The review</returns>
-        public async Task<ReviewPageModel?> GetReview(int id)
+        public async Task<ReviewPageModel?> GetReviewPageModel(int id)
         {
             var review = await reviewRepository.GetReviewAndConnectedData(id);
 
@@ -147,5 +147,33 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task UpdateAverageRating(int courseId, double rating)
             => await courseRepository.UpdateAverageRating(courseId, rating);
+
+        /// <summary>
+        /// Gets a Review object that is attached to the provided id.
+        /// </summary>
+        /// <param name="id">Provided review id.</param>
+        /// <returns>The review</returns>
+        public async Task<Review?> GetReview(int id)
+            => await reviewRepository.GetReviewAndConnectedData(id);
+
+        /// <summary>
+        /// Updates the given Review object with the provided data in the ReviewModel object.
+        /// </summary>
+        /// <param name="review">Provided Review.</param>
+        /// <param name="model">Provided ReviewModel.</param>
+        public void UpdateReview(Review review, ReviewModel model)
+        {
+            review.Rating = model.Rating;
+            review.Comment = model.Comment;
+            review.IsAnonymous = model.IsAnonymous;
+        }
+
+        /// <summary>
+        /// Puts the provided review.
+        /// </summary>
+        /// <param name="review">Provided review.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task PutReview(Review review)
+            => await reviewRepository.PutReview(review);
     }
 }

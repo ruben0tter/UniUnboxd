@@ -38,5 +38,11 @@ namespace UniUnboxdAPI.Repositories
             await dbContext.Reviews.AddAsync(review);
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task PutReview(Review review)
+        {
+            dbContext.Reviews.Update(review);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
