@@ -99,5 +99,34 @@ namespace UniUnboxdAPI.Controllers
                 return BadRequest("Something went wrong when updating a review.\nThe following exception was thrown:\n" + ex.Message);
             }
         }
+
+        [HttpDelete]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> DeleteReview([FromQuery(Name = "id")] int id)
+        {
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesStudentExist(studentId))
+                return BadRequest("Given student does not exist.");
+
+            Review? review = await reviewService.GetReview(id);
+
+            if (review == null)
+                return BadRequest("No review exists with provided id.");
+
+            if (studentId != review.Student.Id)
+                return BadRequest("Review was not written by user.");
+
+            try
+            {
+                await reviewService.DeleteReview(review);
+
+                return Ok("Succesfully deleted review.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went wrong when deleting a review.\nThe following exception was thrown:\n" + ex.Message);
+            }
+        }
     }
 }

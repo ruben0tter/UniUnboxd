@@ -175,5 +175,13 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task PutReview(Review review)
             => await reviewRepository.PutReview(review);
+
+        /// <summary>
+        /// Deletes the provided review.
+        /// </summary>
+        /// <param name="review">Provided review.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task DeleteReview(Review review)
+            => await reviewRepository.DeleteReview(review);
     }
 }
