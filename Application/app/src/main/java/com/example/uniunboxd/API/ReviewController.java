@@ -72,7 +72,7 @@ public class ReviewController {
         json.put("isAnonymous", model.isAnonymous);
         json.put("courseId", model.courseId);
 
-        return APIClient.put("Review", json.toString(), JWTValidation.getToken(f));
+        return APIClient.put("Review?id=" + model.id, json.toString(), JWTValidation.getToken(f));
     }
 
     public static HttpURLConnection deleteReview(int id, FragmentActivity f) throws Exception {
