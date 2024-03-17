@@ -3,6 +3,6 @@
     public class ReviewReplyModel
     {
         public required string Text { get; set; }
-        public required StudentHeaderModel StudentHeader { get; set; }
+        public required UserHeaderModel UserHeader { get; set; }
     }
 }

@@ -1,10 +1,7 @@
 package com.example.uniunboxd.fragments.student;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +22,7 @@ import com.example.uniunboxd.DTO.CourseModel;
 import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.utilities.ImageHandler;
 
 import java.net.HttpURLConnection;
 
@@ -95,9 +92,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         code.setText(course.code);
 
         if (course.image != null) {
-            byte[] decodedString = Base64.decode(course.image, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            image.setImageBitmap(decodedByte);
+            image.setImageBitmap(ImageHandler.decodeImageString(course.image));
         }
     }
 
@@ -109,9 +104,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
 
     private void postReview() {
         if (review == null) {
-            int studentId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-
-            ReviewModel model = createReviewModel(studentId);
+            ReviewModel model = createReviewModel();
 
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -147,13 +140,12 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    private ReviewModel createReviewModel(int studentId) {
+    private ReviewModel createReviewModel() {
         return new ReviewModel(
                 rating.getRating(),
                 comment.getText().toString(),
                 isAnonymous.isChecked(),
-                course.id,
-                studentId);
+                course.id);
     }
 
     public void replaceFragment(Fragment fragment) {

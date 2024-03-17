@@ -58,5 +58,24 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task PostReply(Reply reply)
             => await replyRepository.PostReply(reply);
+
+
+        /// <summary>
+        /// Creates a ReviewReplyModel object with the given Reply.
+        /// </summary>
+        /// <param name="model">Reply information.</param>
+        /// <returns>Created Reply object.</returns>
+        public ReviewReplyModel CreateReviewReplyModel(Reply model)
+            => new()
+            {
+                Text = model.Text,
+                UserHeader = new UserHeaderModel()
+                {
+                    Id = model.User.Id,
+                    Name = model.User.UserName,
+                    Image = model.User is Student ? (model.User as Student).Image :
+                            (model.User as Professor).Image
+                }
+            };
     }
 }

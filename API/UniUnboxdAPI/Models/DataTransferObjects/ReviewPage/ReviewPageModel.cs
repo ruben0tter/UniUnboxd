@@ -8,7 +8,7 @@
         public required string Comment { get; set; }
         public required bool IsAnonymous { get; set; }
         public required CourseHeaderModel CourseHeader { get; set; }
-        public StudentHeaderModel? StudentHeader { get; set; }
+        public UserHeaderModel? StudentHeader { get; set; }
         public required ICollection<ReviewReplyModel> Replies { get; set; }
     }
 }

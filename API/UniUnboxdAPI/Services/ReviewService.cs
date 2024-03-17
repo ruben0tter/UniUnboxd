@@ -63,11 +63,11 @@ namespace UniUnboxdAPI.Services
                 {
                     Id = model.Course.Id,
                     Name = model.Course.Name,
+                    Code = model.Course.Code,
                     Image = model.Course.Image,
                     Banner = model.Course.Banner
                 },
-                StudentHeader = model.IsAnonymous ? null :
-                                new()
+                StudentHeader = new()
                                 {
                                     Id = model.Student.Id,
                                     Name = model.Student.UserName,
@@ -76,7 +76,7 @@ namespace UniUnboxdAPI.Services
                 Replies = model.Replies.Select(i => new ReviewReplyModel()
                 {
                     Text = i.Text,
-                    StudentHeader = new StudentHeaderModel()
+                    UserHeader = new UserHeaderModel()
                     {
                         Id = i.User.Id,
                         Name = i.User.UserName,

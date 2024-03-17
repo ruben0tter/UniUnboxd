@@ -1,6 +1,6 @@
 ﻿namespace UniUnboxdAPI.Models.DataTransferObjects.ReviewPage
 {
-    public class StudentHeaderModel
+    public class UserHeaderModel
     {
         public required int Id { get; set; }
         public required string Name { get; set; }
