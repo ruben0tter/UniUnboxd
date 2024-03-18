@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.models.home.PopularCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
 
@@ -41,6 +44,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         newFromFriendsLayout = view.findViewById(R.id.newFromFriends);
         popularCoursesWithFriendsLayout = view.findViewById(R.id.popularCoursesWithFriends);
 
+        // Button
+        TextView signOut = view.findViewById(R.id.signOut);
+        signOut.setOnClickListener(this);
+
         PopularCoursesInformation popularCoursesInformation;
 
         String attachedUniversityId = JWTValidation.getTokenProperty(getActivity(), "university");
@@ -67,6 +74,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
     @Override
     public void onClick(View view) {
+        JWTValidation.deleteToken(getActivity());
+        ((IActivity) getActivity()).replaceActivity(MainActivity.class);
     }
 }
 
