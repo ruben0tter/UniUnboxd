@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniUnboxdAPI.Data;
 
@@ -11,9 +12,11 @@ using UniUnboxdAPI.Data;
 namespace UniUnboxdAPI.Migrations
 {
     [DbContext(typeof(UniUnboxdDbContext))]
-    partial class UniUnboxdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240314140444_Add-Professor-and-Reply")]
+    partial class AddProfessorandReply
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,7 +292,7 @@ namespace UniUnboxdAPI.Migrations
                         .HasForeignKey("ProfessorId");
 
                     b.HasOne("UniUnboxdAPI.Models.Review", "Review")
-                        .WithMany("Replies")
+                        .WithMany()
                         .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -381,11 +384,6 @@ namespace UniUnboxdAPI.Migrations
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
                 {
                     b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("UniUnboxdAPI.Models.Review", b =>
-                {
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Professor", b =>
