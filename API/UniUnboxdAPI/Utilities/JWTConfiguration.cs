@@ -52,9 +52,10 @@ namespace UniUnboxdAPI.Utilities
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Typ, user.UserType.ToString()),
                 new Claim(ClaimTypes.Role, user.UserType.ToString()),
-                new Claim("verified", user.VerificationStatus.ToString())
-               ];
-        
+                new Claim("verified", user.VerificationStatus.ToString()),
+                user.UniversityId != 0 ? new Claim("university", user.UniversityId.ToString()) : null
+            ];
+
         /// <summary>
         /// Generate JTI.
         /// </summary>
