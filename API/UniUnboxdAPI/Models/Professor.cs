@@ -1,10 +1,9 @@
 ﻿namespace UniUnboxdAPI.Models
 {
-    public class Student : User
+    public class Professor : User
     {
         public string? Image { get; set; }
-        public University? University { get; set; }
-        public ICollection<Review>? Reviews { get; set; }
+        public ICollection<Course>? AssignedCourses { get; set; }
         public ICollection<Reply>? Replies { get; set; }
     }
 }

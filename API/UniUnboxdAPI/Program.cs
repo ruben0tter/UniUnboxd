@@ -93,12 +93,14 @@ builder.Services.AddTransient<RegistrationService>();
 builder.Services.AddTransient<AuthenticationService>();
 builder.Services.AddTransient<ReviewService>();
 builder.Services.AddTransient<CourseService>();
+builder.Services.AddTransient<ReplyService>();
 
 // Repositories
 builder.Services.AddTransient<VerificationRepository>();
 builder.Services.AddTransient<ReviewRepository>();
 builder.Services.AddTransient<CourseRepository>();
 builder.Services.AddTransient<UserRepository>();
+builder.Services.AddTransient<ReplyRepository>();
 
 var app = builder.Build();
 

@@ -6,13 +6,19 @@ public class ReviewModel {
     public String comment;
     public boolean isAnonymous;
     public int courseId;
-    public int studentId;
 
-    public ReviewModel(double rating, String comment, boolean isAnonymous, int courseId, int studentId) {
+    public ReviewModel(double rating, String comment, boolean isAnonymous, int courseId) {
         this.rating = rating;
         this.comment = comment;
         this.isAnonymous = isAnonymous;
         this.courseId = courseId;
-        this.studentId = studentId;
+    }
+
+    public ReviewModel(int id, double rating, String comment, boolean isAnonymous, int courseId) {
+        this.id = id;
+        this.rating = rating;
+        this.comment = comment;
+        this.isAnonymous = isAnonymous;
+        this.courseId = courseId;
     }
 }
