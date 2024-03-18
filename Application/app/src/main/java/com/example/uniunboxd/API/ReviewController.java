@@ -64,6 +64,21 @@ public class ReviewController {
         return APIClient.post("Review", json.toString(), JWTValidation.getToken(f));
     }
 
+    public static HttpURLConnection putReview(ReviewModel model, FragmentActivity f) throws Exception {
+        JSONObject json = new JSONObject();
+        json.put("id", model.id);
+        json.put("rating", model.rating);
+        json.put("comment", model.comment);
+        json.put("isAnonymous", model.isAnonymous);
+        json.put("courseId", model.courseId);
+
+        return APIClient.put("Review?id=" + model.id, json.toString(), JWTValidation.getToken(f));
+    }
+
+    public static HttpURLConnection deleteReview(int id, FragmentActivity f) throws Exception {
+        return APIClient.delete("Review?id=" + id, JWTValidation.getToken(f));
+    }
+
     private static String readMessage(InputStream content) throws IOException {
         StringBuilder textBuilder = new StringBuilder();
         try (Reader reader = new BufferedReader(new InputStreamReader

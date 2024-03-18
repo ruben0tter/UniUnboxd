@@ -36,7 +36,7 @@ namespace UniUnboxdAPI.Services
         /// </summary>
         /// <param name="id">Provided review id.</param>
         /// <returns>The review</returns>
-        public async Task<ReviewPageModel?> GetReview(int id)
+        public async Task<ReviewPageModel?> GetReviewPageModel(int id)
         {
             var review = await reviewRepository.GetReviewAndConnectedData(id);
 
@@ -145,7 +145,62 @@ namespace UniUnboxdAPI.Services
         /// <param name="courseId">Provided course id.</param>
         /// <param name="rating">Provided new rating.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
-        public async Task UpdateAverageRating(int courseId, double rating)
-            => await courseRepository.UpdateAverageRating(courseId, rating);
+        public async Task UpdateAverageRatingAfterPost(int courseId, double rating)
+            => await courseRepository.UpdateAverageRatingAfterPost(courseId, rating);
+
+        /// <summary>
+        /// Gets a Review object that is attached to the provided id.
+        /// </summary>
+        /// <param name="id">Provided review id.</param>
+        /// <returns>The review</returns>
+        public async Task<Review?> GetReview(int id)
+            => await reviewRepository.GetReviewAndConnectedData(id);
+
+        /// <summary>
+        /// Updates the given Review object with the provided data in the ReviewModel object.
+        /// </summary>
+        /// <param name="review">Provided Review.</param>
+        /// <param name="model">Provided ReviewModel.</param>
+        public void UpdateReview(Review review, ReviewModel model)
+        {
+            review.Rating = model.Rating;
+            review.Comment = model.Comment;
+            review.IsAnonymous = model.IsAnonymous;
+        }
+
+        /// <summary>
+        /// Puts the provided review.
+        /// </summary>
+        /// <param name="review">Provided review.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task PutReview(Review review)
+            => await reviewRepository.PutReview(review);
+
+        /// <summary>
+        /// Updates the average rating of the course with the newly changed rating.
+        /// </summary>
+        /// <param name="courseId">Provided course id.</param>
+        /// <param name="addedRating">Provided new rating.</param>
+        /// <param name="removedRating">Provided old rating.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task UpdateAverageRatingAfterPut(int courseId, double addedRating, double removedRating)
+            => await courseRepository.UpdateAverageRatingAfterPut(courseId, addedRating, removedRating);
+
+        /// <summary>
+        /// Deletes the provided review.
+        /// </summary>
+        /// <param name="review">Provided review.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task DeleteReview(Review review)
+            => await reviewRepository.DeleteReview(review);
+
+        /// <summary>
+        /// Updates the average rating of the course with the newly removed rating.
+        /// </summary>
+        /// <param name="courseId">Provided course id.</param>
+        /// <param name="removedRating">Provided removed rating.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task UpdateAverageRatingAfterDelete(int courseId, double removedRating)
+            => await courseRepository.UpdateAverageRatingAfterDelete(courseId, removedRating);
     }
 }
