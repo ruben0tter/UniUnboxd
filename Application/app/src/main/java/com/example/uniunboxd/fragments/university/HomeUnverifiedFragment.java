@@ -132,7 +132,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
 
     private void reload() {
         try {
-            replaceFragment(new HomeSubmittedFragment());
+            //replaceFragment(new HomeSubmittedFragment());
             //((StudentActivity) getActivity()).setUserState(new UserState("submitted"));
         } catch (Exception e) {
             Log.d("ERR", "i dunno");

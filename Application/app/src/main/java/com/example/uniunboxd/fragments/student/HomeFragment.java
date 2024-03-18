@@ -1,72 +1,98 @@
 package com.example.uniunboxd.fragments.student;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentActivity;
 
+import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.activities.MainActivity;
-import com.example.uniunboxd.fragments.university.CreateCourseFragment;
+import com.example.uniunboxd.models.home.PopularCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
-    }
+public class HomeFragment extends Fragment implements View.OnClickListener {
+    LinearLayout popularCoursesLayout;
+    LinearLayout newFromFriendsLayout;
+    LinearLayout popularCoursesWithFriendsLayout;
+
+    List<PopularCourse> popularCourses;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("HOME", "ey I got created maaannnnnnn!");
-        Log.i("HOME JWT", JWTValidation.getToken(getActivity()));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_student_home, container, false);
 
-        Button btn = (Button) view.findViewById(R.id.button);
-        btn.setOnClickListener(this);
-        ImageButton courseCreate = (ImageButton) view.findViewById(R.id.createCourse);
-        courseCreate.setOnClickListener(this);
-        Button signOut = (Button) view.findViewById(R.id.signOut);
-        signOut.setOnClickListener(this);
+        // Layouts
+        popularCoursesLayout = view.findViewById(R.id.popularCourses);
+        newFromFriendsLayout = view.findViewById(R.id.newFromFriends);
+        popularCoursesWithFriendsLayout = view.findViewById(R.id.popularCoursesWithFriends);
 
-        // Inflate the layout for this fragment
+        PopularCoursesInformation popularCoursesInformation;
+
+        String attachedUniversityId = JWTValidation.getTokenProperty(getActivity(), "university");
+        if(attachedUniversityId == null) {
+            popularCoursesInformation = new PopularCoursesInformation();
+        } else {
+            popularCoursesInformation = new PopularCoursesInformation(Integer.parseInt(attachedUniversityId));
+        }
+
+        try {
+            popularCourses = popularCoursesInformation.execute(getActivity()).get();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (popularCourses != null) {
+            for(PopularCourse c : popularCourses) {
+                popularCoursesLayout.addView(c.createView(inflater, container, this));
+            }
+        }
+
         return view;
 
     }
     @Override
     public void onClick(View view) {
-        int id = view.getId();
-        if (id == R.id.button) {
-            replaceFragment(new CourseFragment(1));
-        } else if (id == R.id.createCourse) {
-            replaceFragment(new CreateCourseFragment());
-        } else if (id == R.id.signOut) {
-            JWTValidation.deleteToken(getActivity());
-            ((IActivity) getActivity()).replaceActivity(MainActivity.class);
-        }
+    }
+}
+
+class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<PopularCourse>> {
+    private final int id;
+
+    public PopularCoursesInformation() {
+        this.id = 0;
     }
 
-    public void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
+    public PopularCoursesInformation(int id) {
+        this.id = id;
+    }
+
+    @Override
+    protected List<PopularCourse> doInBackground(FragmentActivity... fragmentActivities) {
+        try{
+            if(id == 0) {
+                return CourseController.getPopularCourses(fragmentActivities[0]);
+            } else {
+                return CourseController.getPopularCoursesByUniversity(id, fragmentActivities[0]);
+            }
+
+        } catch(Exception e) {
+            Log.e("ERR", "Couldn't get review" + e.toString());
+            return null;
+        }
     }
 }

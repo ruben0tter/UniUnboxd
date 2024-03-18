@@ -4,10 +4,9 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.uniunboxd.DTO.CourseModelWithoutCode;
 import com.example.uniunboxd.models.CourseCreationModel;
 import com.example.uniunboxd.models.CourseRetrievalModel;
-import com.example.uniunboxd.models.Home.PopularCoursesModel;
+import com.example.uniunboxd.models.home.PopularCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,7 +52,7 @@ public class CourseController {
         return objectMapper.readValue(body.toString(), CourseRetrievalModel.class);
     }
 
-    public static List<PopularCoursesModel> getPopularCourses(FragmentActivity f) throws IOException{
+    public static List<PopularCourse> getPopularCourses(FragmentActivity f) throws IOException{
         HttpURLConnection con = APIClient.get("Course/popular", JWTValidation.getToken(f));
         StringBuilder body = new StringBuilder();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -71,7 +70,28 @@ public class CourseController {
             Log.d("It's over", "we are not making it out");
         }
 
-        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCoursesModel>>(){});
+        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
+    }
+
+    public static List<PopularCourse> getPopularCoursesByUniversity(int id, FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/popular_by_university?id=" + id, JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
     }
 
     public static HttpURLConnection postCourse(CourseCreationModel model, FragmentActivity f) throws Exception{

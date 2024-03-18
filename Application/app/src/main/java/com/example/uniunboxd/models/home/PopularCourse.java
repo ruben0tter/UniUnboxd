@@ -1,6 +1,5 @@
-package com.example.uniunboxd.models.Home;
+package com.example.uniunboxd.models.home;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +15,16 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PopularCoursesModel implements View.OnClickListener {
+public class PopularCourse implements View.OnClickListener {
     public final int Id;
     public final String CourseImage;
     public final String CourseName;
     private Fragment fragment;
 
     @JsonCreator
-    public PopularCoursesModel(@JsonProperty("id") int id,
-                               @JsonProperty("courseImage") String courseImage,
-                               @JsonProperty("courseName") String courseName) {
+    public PopularCourse(@JsonProperty("id") int id,
+                         @JsonProperty("image") String courseImage,
+                         @JsonProperty("name") String courseName) {
         Id = id;
         CourseImage = courseImage;
         CourseName = courseName;
