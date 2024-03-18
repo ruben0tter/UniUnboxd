@@ -3,6 +3,7 @@ package com.example.uniunboxd.fragments.student;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +28,12 @@ import java.util.concurrent.ExecutionException;
 
 public class CourseFragment extends Fragment{
 
+    private final int id;
     private CourseRetrievalModel Course = null;
 
     public CourseFragment(int id) {
         // TODO: Get course information
+        this.id = id;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class CourseFragment extends Fragment{
         View view = null;
         AsyncGetTask asyncGetTask = new AsyncGetTask();
         try {
-            Course = asyncGetTask.execute(getActivity()).get();
+            Course = asyncGetTask.execute(new Pair<FragmentActivity, Integer>(getActivity(), id)).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -77,7 +80,7 @@ public class CourseFragment extends Fragment{
                     lastID = Course.Reviews.get(Course.Reviews.size() - 1).Id;
                 }
                 try {
-                    List<ReviewListItem> newReviews = ReviewController.getReviewListItems(lastID, getActivity());
+                    List<ReviewListItem> newReviews = ReviewController.getReviewListItems(lastID, Course.Id, getActivity());
                     Course.Reviews.addAll(newReviews);
                     for (ReviewListItem item : newReviews) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -97,13 +100,13 @@ public class CourseFragment extends Fragment{
     }
 }
 
-class AsyncGetTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
+class AsyncGetTask extends AsyncTask<Pair<FragmentActivity, Integer>, Void, CourseRetrievalModel>{
 
     @Override
-    protected CourseRetrievalModel doInBackground(FragmentActivity... fragmentActivities) {
+    protected CourseRetrievalModel doInBackground(Pair<FragmentActivity, Integer>... pairs) {
         CourseRetrievalModel course = null;
         try{
-            course = CourseController.getCourseById(1, fragmentActivities[0]);
+            course = CourseController.getCourseById(pairs[0].second, pairs[0].first);
         } catch(Exception ioe) {
             Log.e("ERR", "Couldn't get course" + ioe.toString());
         }

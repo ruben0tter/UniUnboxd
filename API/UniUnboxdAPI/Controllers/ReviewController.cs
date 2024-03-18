@@ -51,9 +51,9 @@ namespace UniUnboxdAPI.Controllers
 
         [HttpGet]
         [Route("get-next-reviews")]
-        public async Task<IActionResult> GetNextReviewsForCourse([FromQuery(Name = "id")] int id)
+        public async Task<IActionResult> GetNextReviewsForCourse([FromQuery(Name = "id")] int id, [FromQuery(Name="courseId")] int courseId)
         {
-            var models = await reviewService.GetNextReviewsForCourse(id, 1);
+            var models = await reviewService.GetNextReviewsForCourse(id, courseId, 1);
             if (models.IsNullOrEmpty()) return BadRequest($"No review with id bigger than {id} exists");
             
             return Ok(models);

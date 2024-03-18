@@ -58,6 +58,8 @@ namespace UniUnboxdAPI.Services
                 Code = creationModel.Code,
                 Description = creationModel.Description,
                 Professor = creationModel.Professor,
+                Image = creationModel.Image,
+                Banner = creationModel.Banner,
                 University = await userRepository.GetUniversity(creationModel.UniversityId),
                 Reviews = null
             };

@@ -113,9 +113,9 @@ namespace UniUnboxdAPI.Services
         /// <param name="id">id after which to get the reviews.</param>
         /// <param name="n">the number of reviews to get</param>
         /// <returns>A list of CourseReviewModels</returns>
-        public async Task<List<CourseReviewModel>> GetNextReviewsForCourse(int id, int n)
+        public async Task<List<CourseReviewModel>> GetNextReviewsForCourse(int id, int courseId, int n)
         {
-            List<Review> reviews = await reviewRepository.GetNextReviewsForCourse(id, n);
+            List<Review> reviews = await reviewRepository.GetNextReviewsForCourse(id, courseId, n);
             var models = new List<CourseReviewModel>();
             foreach (var x in reviews)
             {
@@ -127,7 +127,6 @@ namespace UniUnboxdAPI.Services
                     CourseId = x.Course.Id
                 });
             }
-
             return models;
         }
     }

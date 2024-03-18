@@ -59,7 +59,7 @@ public class CourseController {
         json.put("banner", model.Banner);
         json.put("universityId", model.UniversityID);
 
-        return APIClient.post("Course/create", json.toString(), JWTValidation.getToken(f));
+        return APIClient.post("Course", json.toString(), JWTValidation.getToken(f));
     }
 
     private static String readMessage(InputStream content) throws IOException{

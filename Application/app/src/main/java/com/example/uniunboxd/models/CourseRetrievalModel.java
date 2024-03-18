@@ -1,9 +1,13 @@
 package com.example.uniunboxd.models;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,13 +58,24 @@ public class CourseRetrievalModel {
         TextView professor = view.findViewById(R.id.professor);
         TextView description = view.findViewById(R.id.description);
         TextView universityName = view.findViewById(R.id.universityName);
+        ImageView image = view.findViewById(R.id.courseImage);
+        ImageView banner = view.findViewById(R.id.courseBanner);
 
         name.setText(Name);
         code.setText(Code);
         professor.setText(Professor);
         description.setText(Description);
         universityName.setText(UniversityName);
-
+        if(Image != null && !Image.equals("")){
+            byte[] imageData = Base64.decode(Image, Base64.DEFAULT);
+            Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            image.setImageBitmap(imageBitmap);
+        }
+        if(Banner != null && !Banner.equals("")) {
+            byte[] bannerData = Base64.decode(Banner, Base64.DEFAULT);
+            Bitmap bannerBitmap = BitmapFactory.decodeByteArray(bannerData, 0, bannerData.length);
+            image.setImageBitmap(bannerBitmap);
+        }
         LinearLayout linearLayout = view.findViewById(R.id.reviewList);
 
         for(ReviewListItem i : Reviews) {
