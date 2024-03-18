@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace UniUnboxdAPI.Models;
 public class VerificationApplication : Base {
     public required string[] VerificationData { get; set; }

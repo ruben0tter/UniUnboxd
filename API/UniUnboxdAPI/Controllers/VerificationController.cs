@@ -1,10 +1,9 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UniUnboxdAPI.Models;
+using System.Security.Claims;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
+using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Controllers
 {
@@ -13,71 +12,71 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class VerificationController(VerificationService verificationService) : ControllerBase
     {
-        private readonly VerificationService verificationService = verificationService;
-
         [HttpPost]
         [Authorize(Roles = "Student, University")]
         [Route("request")]
         public async Task<IActionResult> RequestVerification([FromBody] VerificationModel request)
         {
-            // get the user id from the request's jwt token
-            int userID = int.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
-            string role = this.User.Claims.First(i => i.Type == "UserRole").Value;
+            int userID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await verificationService.DoesUniversityExist(request.TargetUniversityId))
+                return BadRequest("Given university does not exist.");
 
             var result = await verificationService.RequestVerification(request, userID);
 
             if (result == null)
-            {
                 return BadRequest();
-            }
+
             return Ok(result);
         }
 
-        [Authorize(Roles = "Student, University")]
         [HttpGet]
+        [Authorize(Roles = "Student, University")]
         [Route("status")]
         public async Task<IActionResult> GetUserVerificationStatus() {
-            int userID = int.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
+            int userID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
             var result = await verificationService.GetVerificationStatus(userID);
-            if (result == null) {
+
+            if (result == null)
                 return BadRequest();
-            }
+
             return Ok(result);
         }
 
-        [Authorize(Roles = "University")]
         [HttpGet]
+        [Authorize(Roles = "University")]
         [Route("pending")]
         public async Task<IActionResult> GetPendingVerificationRequests([FromQuery(Name = "startID")] int startID) {
-            int uniUserID = int.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
+            int uniUserID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
             var result = await verificationService.GetPendingVerificationRequests(uniUserID, startID);
-            if (result == null) {
+
+            if (result == null)
                 return BadRequest();
-            }
+
             return Ok(result);
         }
 
-        [Authorize(Roles = "University")]
         [HttpPut]
+        [Authorize(Roles = "University")]
         [Route("set")]
-        public async Task<IActionResult> SetVerification([FromBody] AcceptReject request)
+        public async Task<IActionResult> SetVerification([FromBody] AcceptRejectModel request)
         {
-            // get the user id from the request's jwt token
-            int userID = int.Parse(this.User.Claims.First(i => i.Type == "UserID").Value);
-            // string role = this.User.Claims.First(i => i.Type == "UserRole").Value;
+            // TODO: Add check to see whether University is attached to the application.
             
-            
+            // int userID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
             bool result;
-            if(request.AcceptedOrRejected) {
+
+            if(request.AcceptedOrRejected)
                 result = await verificationService.AcceptApplication(request);
-            } else {
+            else
                 result = await verificationService.RejectApplication(request);
-            }
 
             if (result == false)
-            {
                 return BadRequest();
-            }
+
             return Ok(result);
         }
     }

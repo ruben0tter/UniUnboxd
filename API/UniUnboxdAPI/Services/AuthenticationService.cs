@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
+using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Services
@@ -13,11 +14,13 @@ namespace UniUnboxdAPI.Services
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly UserRepository userRepository;
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, UserRepository userRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.userRepository = userRepository;
         }
 
         /// <summary>
@@ -44,5 +47,11 @@ namespace UniUnboxdAPI.Services
 
             return null;
         }
+
+        public async Task<User> GetUser(int id)
+            => await userRepository.GetUser(id);
+
+        public string UpdateToken(User user)
+            => JWTConfiguration.GenerateJWT(user);
     }
 }

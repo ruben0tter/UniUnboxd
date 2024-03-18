@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.university;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.uniunboxd.API.VerificationController;
+import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.MainActivity;
+import com.example.uniunboxd.fragments.student.HomeFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
@@ -38,6 +43,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
         btnUpload1 = (Button) view.findViewById(R.id.selectApplicationData1);
         btnUpload2 = (Button) view.findViewById(R.id.selectApplicationData2);
         btnApply = (Button) view.findViewById(R.id.submitApplication);
+        Button signOut = (Button) view.findViewById(R.id.signOut);
         btnApply.setEnabled(false);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +53,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
                     @Override
                     public void run() {
                         try {
-                            VerificationController.sendApplication(verificationFileContents);
+                            VerificationController.sendApplication(verificationFileContents, getActivity());
                             reload();
                         } catch (Exception e) {
                             Log.e("APP", "Failed to upload documents: " + e.toString());
@@ -81,6 +87,14 @@ public class HomeUnverifiedFragment extends HomeFragment {
                         Intent.createChooser(chooseFile, "Choose a file"),
                         PICKFILE_RESULT_CODE
                 );
+            }
+        });
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JWTValidation.deleteToken(getActivity());
+                ((IActivity) getActivity()).replaceActivity(MainActivity.class);
             }
         });
 
@@ -119,7 +133,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
     private void reload() {
         try {
             replaceFragment(new HomeSubmittedFragment());
-            ((MainActivity) getActivity()).setUserState(new UserState("submitted"));
+            //((StudentActivity) getActivity()).setUserState(new UserState("submitted"));
         } catch (Exception e) {
             Log.d("ERR", "i dunno");
         }

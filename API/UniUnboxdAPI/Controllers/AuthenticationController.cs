@@ -1,24 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
+using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController(AuthenticationService authenticationService) : ControllerBase
     {
-        private readonly AuthenticationService authenticationService;
-
-        public AuthenticationController(AuthenticationService authenticationService)
-        {
-            this.authenticationService = authenticationService;
-        }
-
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticationModel model)
         {
             if (!ModelState.IsValid)
@@ -31,6 +25,22 @@ namespace UniUnboxdAPI.Controllers
 
             if (token == null)
                 return BadRequest("The email and password do not align.");
+
+            return Ok(new { Token = token });
+        }
+
+        [HttpGet("update")]
+        [Authorize]
+        public async Task<IActionResult> UpdateToken()
+        {
+            int id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var user = await authenticationService.GetUser(id);
+
+            if (user == null)
+                return BadRequest("User does not exist.");
+
+            var token = authenticationService.UpdateToken(user);
 
             return Ok(new { Token = token });
         }

@@ -6,6 +6,5 @@
         public string? Comment { get; set; }
         public required bool IsAnonymous { get; set; }
         public required int CourseId { get; set; }
-        public required int StudentId { get; set; }
     }
 }

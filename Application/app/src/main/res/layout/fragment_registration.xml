@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#C82424"
-    tools:context=".RegistrationFragment">
+    tools:context=".fragments.main.RegistrationFragment">
 
     <ImageView
         android:id="@+id/app_logo"
@@ -177,8 +177,8 @@
     <View
         android:id="@+id/line"
         android:layout_width="330dp"
-        android:layout_height="1.5dp"
-        android:background="@android:color/darker_gray"
+        android:layout_height="1dp"
+        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

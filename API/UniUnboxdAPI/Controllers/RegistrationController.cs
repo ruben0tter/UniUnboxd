@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
@@ -11,15 +9,8 @@ namespace UniUnboxdAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class RegistrationController : ControllerBase
+    public class RegistrationController(RegistrationService registrationService) : ControllerBase
     {
-        private readonly RegistrationService registrationService;
-
-        public RegistrationController(RegistrationService registrationService)
-        {
-            this.registrationService = registrationService;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Registrate([FromBody] RegisterModel model)
         {

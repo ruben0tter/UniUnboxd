@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.fragments.university;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.CourseController;
+import com.example.uniunboxd.fragments.student.HomeFragment;
+import com.example.uniunboxd.R;
 import com.example.uniunboxd.models.CourseCreationModel;
 
 import java.net.HttpURLConnection;
@@ -54,7 +56,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                             code.getText().toString(), description.getText().toString(),
                             professor.getText().toString(), null, null, 1);
                     try{
-                        HttpURLConnection con = CourseController.postCourse(course);
+                        HttpURLConnection con = CourseController.postCourse(course, getActivity());
                         if(con.getResponseCode() == 200){
                             replaceFragment(new HomeFragment());
                         }

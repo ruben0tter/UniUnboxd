@@ -7,24 +7,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class APIClient {
-    public static HttpURLConnection fetch(String method, String url) throws IOException {
-        String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI3YzJkMTY5OS0xNDU4LTRhMDMtOGYyYS1mZDU1ZGRmNDY5OGUiLCJzdWIiOiIyIiwibmFtZSI6Im1hcnRpbmhhdGVyIiwiZW1haWwiOiJtYXJ0aW5oYXRlckBnbWFpbC5jb20iLCJ0eXAiOiJVbml2ZXJzaXR5IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVW5pdmVyc2l0eSIsImV4cCI6MTcxMDk1MjMzOH0.wMmVQaXncphGFkpCNTP0tWq4VAHuZCsmjRGy92UyO2Y";
-
-        URL urlObj = new URL("http://10.0.2.2:5148/api/" + url);
-        HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
-        con.setRequestProperty ("Authorization", "Bearer " + token);
-        con.setRequestMethod(method);
-        con.setRequestProperty("Accept", "application/json");
-
-        return con;
+    public static HttpURLConnection get(String url, String token) throws IOException {
+        return fetch("GET", url, token);
     }
 
-    public static HttpURLConnection get(String url) throws IOException {
-        return fetch("GET", url);
-    }
-
-    public static HttpURLConnection post(String url, String body) throws IOException {
-        HttpURLConnection con = fetch("POST", url);
+    public static HttpURLConnection post(String url, String body, String token) throws IOException {
+        HttpURLConnection con = fetch("POST", url, token);
         con.setDoOutput(true);
         con.setRequestProperty("Content-Type", "application/json");
 
@@ -36,8 +24,9 @@ public class APIClient {
         return con;
     }
 
-    public static HttpURLConnection put(String url, String body) throws IOException {
-        HttpURLConnection con = fetch("PUT", url);
+    public static HttpURLConnection put(String url, String body, String token) throws IOException {
+        HttpURLConnection con = fetch("PUT", url, token);
+        con.setDoOutput(true);
         con.setRequestProperty("Content-Type", "application/json");
 
         try (OutputStream os = con.getOutputStream()) {
@@ -48,7 +37,18 @@ public class APIClient {
         return con;
     }
 
-    public static HttpURLConnection delete(String url) throws IOException {
-        return fetch("DELETE", url);
+    public static HttpURLConnection delete(String url, String token) throws IOException {
+        return fetch("DELETE", url, token);
     }
+
+    private static HttpURLConnection fetch(String method, String url, String token) throws IOException {
+        URL urlObj = new URL("http://10.0.2.2:5148/api/" + url);
+        HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
+        con.setRequestProperty ("Authorization", "Bearer " + (token != null ? token : ""));
+        con.setRequestMethod(method);
+        con.setRequestProperty("Accept", "application/json");
+
+        return con;
+    }
+
 }
