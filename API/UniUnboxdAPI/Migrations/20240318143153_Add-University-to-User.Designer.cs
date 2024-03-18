@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniUnboxdAPI.Data;
 
@@ -11,9 +12,11 @@ using UniUnboxdAPI.Data;
 namespace UniUnboxdAPI.Migrations
 {
     [DbContext(typeof(UniUnboxdDbContext))]
-    partial class UniUnboxdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240318143153_Add-University-to-User")]
+    partial class AddUniversitytoUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,9 +190,6 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("UniversityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .HasColumnType("longtext");
 
@@ -246,6 +246,11 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("UniversityId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("UniversityId");
+
                     b.ToTable("Professors");
                 });
 
@@ -256,6 +261,9 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("UniversityId")
+                        .HasColumnType("int");
+
                     b.HasIndex("UniversityId");
 
                     b.ToTable("Students");
@@ -264,6 +272,11 @@ namespace UniUnboxdAPI.Migrations
             modelBuilder.Entity("UniUnboxdAPI.Models.University", b =>
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
+
+                    b.Property<int?>("UniversityId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("UniversityId");
 
                     b.ToTable("Universities");
                 });
@@ -353,6 +366,12 @@ namespace UniUnboxdAPI.Migrations
                         .HasForeignKey("UniUnboxdAPI.Models.Professor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("UniUnboxdAPI.Models.University", "University")
+                        .WithMany()
+                        .HasForeignKey("UniversityId");
+
+                    b.Navigation("University");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
@@ -363,11 +382,11 @@ namespace UniUnboxdAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniUnboxdAPI.Models.University", null)
+                    b.HasOne("UniUnboxdAPI.Models.University", "University")
                         .WithMany("Students")
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UniversityId");
+
+                    b.Navigation("University");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.University", b =>
@@ -377,6 +396,12 @@ namespace UniUnboxdAPI.Migrations
                         .HasForeignKey("UniUnboxdAPI.Models.University", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("UniUnboxdAPI.Models.University", "University")
+                        .WithMany()
+                        .HasForeignKey("UniversityId");
+
+                    b.Navigation("University");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>

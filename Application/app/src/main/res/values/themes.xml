@@ -13,6 +13,11 @@
 
     <style name="Theme.UniUnboxd" parent="Base.Theme.UniUnboxd" />
 
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/light_grey</item>
         <item name="colorControlActivated">@color/red</item>
