@@ -5,57 +5,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="52dp"
-        android:layout_height="46dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.323"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.004"
-        app:srcCompat="@drawable/app_logo" />
-
-    <TextView
-        android:id="@+id/app_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/homeHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/k2d"
-        android:text="UniUnboxd"
-        android:textStyle="bold"
-        android:textColor="@color/TUeRed"
-        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toEndOf="@id/app_logo"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005" />
+        app:layout_constraintVertical_bias="0.018">
 
+        <ImageView
+            android:id="@+id/app_logo"
+            android:layout_width="52dp"
+            android:layout_height="46dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/app_logo" />
+
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/k2d"
+            android:text="UniUnboxd"
+            android:textColor="@color/TUeRed"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/app_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/app_logo"
+            app:layout_constraintTop_toTopOf="@id/app_logo"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
         android:id="@+id/line_separator_bottom"
         android:layout_width="330dp"
         android:layout_height="1.5dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.433"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView1" />
+        app:layout_constraintTop_toBottomOf="@+id/line_separator"
+        app:layout_constraintVertical_bias="0.33" />
 
     <View
         android:id="@+id/line_separator"
         android:layout_width="330dp"
         android:layout_height="1.5dp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_name"
+        app:layout_constraintTop_toBottomOf="@+id/homeHeader"
         app:layout_constraintVertical_bias="0.013" />
+
 
     <TextView
         android:id="@+id/popular_courses_text"
@@ -64,13 +77,15 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/k2d"
         android:text="Popular Courses"
-        android:textSize="18dp"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.07"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line_separator"
-        app:layout_constraintVertical_bias="0.002" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/new_from_friends"
@@ -79,23 +94,27 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/k2d"
         android:text="New From Friends"
-        android:textSize="18dp"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.072"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom" />
-
+        app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom"
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
         android:id="@+id/line_separator_bottom_2"
         android:layout_width="330dp"
         android:layout_height="1.5dp"
-        android:layout_marginTop="12dp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.433"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/line_separator"
+        app:layout_constraintVertical_bias="0.67" />
 
     <TextView
         android:id="@+id/popular_with_friends"
@@ -104,70 +123,105 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/k2d"
         android:text="Popular With Friends"
-        android:textSize="18dp"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom_2"
         app:layout_constraintVertical_bias="0.0" />
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView1"
-        android:layout_width="358dp"
-        android:layout_height="134dp"
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/line_separator_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popular_courses_text">
+
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.00">
+
+            <LinearLayout
+                android:id="@+id/popularCourses"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/line_separator_bottom_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_from_friends">
+
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.00">
+
+            <LinearLayout
+                android:id="@+id/newReviewsFromFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginTop="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popular_courses_text"
-        app:layout_constraintVertical_bias="0.02">
+        app:layout_constraintTop_toBottomOf="@+id/popular_with_friends">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="358dp"
-            android:layout_height="134dp"
-            android:layout_marginTop="68dp"
-            android:orientation="vertical" />
-    </HorizontalScrollView>
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView2"
-        android:layout_width="358dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_from_friends"
-        app:layout_constraintVertical_bias="0.02">
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.00">
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="358dp"
-            android:layout_height="134dp"
-            android:layout_marginTop="68dp"
-            android:orientation="vertical" />
-    </HorizontalScrollView>
+            <LinearLayout
+                android:id="@+id/popularCoursesWithFriends"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
 
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollView3"
-        android:layout_width="358dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popular_with_friends"
-        app:layout_constraintVertical_bias="0.02">
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="358dp"
-            android:layout_height="134dp"
-            android:layout_marginTop="68dp"
-            android:orientation="vertical" />
-    </HorizontalScrollView>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
