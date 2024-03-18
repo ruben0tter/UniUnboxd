@@ -82,6 +82,28 @@ namespace UniUnboxdAPI.Services
             return courseRetrievalModel;
         }
 
+        /// <summary>
+        /// Gets the popular courses amongst all universities of the last 7 days.
+        /// </summary>
+        /// <returns>The popular courses of last week of all universities.</returns>
+        public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeek()
+        {
+            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeek();
+            return CreateCourseGridModelCollection(courses);
+        }
+
+
+        /// <summary>
+        /// Gets the popular courses amongst a specific university of the last 7 days.
+        /// </summary>
+        /// <param name="id"> The id of the university.</param>
+        /// <returns>The popular courses of last week of the provided university.</returns>
+        public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeekByUniversity(int id)
+        {
+            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeekByUniversity(id);
+            return CreateCourseGridModelCollection(courses);
+        }
+
         private static CourseRetrievalModel CreateCourseRetrievalModel(Course course)
             => new ()
             {
@@ -118,22 +140,12 @@ namespace UniUnboxdAPI.Services
                     UserName = review.Student.UserName
                 };
 
-        public async Task<IEnumerable<CourseGridModel>> GetTenCoursesFromId(int id)
-        {
-            IEnumerable<Course> courses = await courseRepository.GetFirst10Courses(id);
-            IList<CourseGridModel> courseGridModels = new List<CourseGridModel>();
-            foreach (var item in courses)
-            {
-                CourseGridModel final = new CourseGridModel()
+        private static ICollection<CourseGridModel> CreateCourseGridModelCollection(ICollection<Course> courses)
+            => courses.Select(i => new CourseGridModel()
                 {
-                    Id = item.Id,
-                    Rating = item.AverageRating,
-                    Name = item.Name,
-                    Image = item.Image
-                };
-                courseGridModels.Add(final);
-            }
-            return courseGridModels;
-        }
+                    Id = i.Id,
+                    Name = i.Name,
+                    Image = i.Image
+                }).ToList();
     }
 }

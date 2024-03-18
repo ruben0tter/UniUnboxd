@@ -22,9 +22,6 @@ namespace UniUnboxdAPI.Repositories
         public async Task<Course> GetCourse(int id)
             => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
 
-        public async Task<IEnumerable<Course>> GetFirst10Courses(int id)
-            => await dbContext.Courses.Where(i => i.Id > id).Take(10).ToListAsync();
-
         public async Task<Course> GetCourseAndConnectedData(int id)
             => await dbContext.Courses.Where(i => i.Id == id)
                                     .Include(i => i.University)
@@ -60,5 +57,14 @@ namespace UniUnboxdAPI.Repositories
             course.AverageRating = reviewCount > 0 ? ((reviewCount + 1) * course.AverageRating - removedRating) / reviewCount : 0.0;
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task<ICollection<Course>> GetPopularCourseOfLastWeek()
+            => await dbContext.Courses.OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
+                                    .Take(10).ToListAsync();
+
+        public async Task<ICollection<Course>> GetPopularCourseOfLastWeekByUniversity(int id)
+            => await dbContext.Courses.Where(i => i.University.Id == id)
+                                .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
+                                .Take(10).ToListAsync();
     }
 }

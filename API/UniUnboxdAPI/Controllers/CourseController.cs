@@ -11,6 +11,33 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class CourseController(CourseService courseService) : ControllerBase
     {
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id)
+        {
+            var model = await courseService.GetCourseRetrievalModelById(id);
+
+            return Ok(model);
+        }
+
+        [HttpGet("popular")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetPopularCoursesOfLastWeek()
+        {
+            var courses = await courseService.GetPopularCoursesOfLastWeek();
+
+            return Ok(courses);
+        }
+
+        [HttpGet("popular_by_university")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetPopularCoursesOfLastWeekByUniversity([FromQuery(Name = "id")] int id)
+        {
+            var courses = await courseService.GetPopularCoursesOfLastWeekByUniversity(id);
+
+            return Ok(courses);
+        }
+
         [HttpPost]
         [Authorize(Roles = "University")]
         public async Task<IActionResult> PostCourse([FromBody] CourseCreationModel creationModel)
@@ -29,15 +56,6 @@ namespace UniUnboxdAPI.Controllers
             await courseService.PostCourse(course);
 
             return Ok("Course was created successfully.");
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id)
-        {
-            var model = await courseService.GetCourseRetrievalModelById(id);
-
-            return Ok(model);
         }
     }
 }
