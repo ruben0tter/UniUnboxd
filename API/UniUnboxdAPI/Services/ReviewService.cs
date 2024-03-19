@@ -66,6 +66,8 @@ namespace UniUnboxdAPI.Services
         public async Task<bool> DoesStudentExist(int studentId)
             => await userRepository.DoesStudentExist(studentId);
 
+        
+        //TODO: Change the implementations to use the method in the course service.
         /// <summary>
         /// Check whether there exists a course with the provided id.
         /// </summary>
@@ -110,6 +112,29 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task PostReview(Review review)
             => await reviewRepository.PostReview(review);
+
+        /// <summary>
+        /// Get next n reviews for a course.
+        /// </summary>
+        /// <param name="id">id after which to get the reviews.</param>
+        /// <param name="n">the number of reviews to get</param>
+        /// <returns>A list of CourseReviewModels</returns>
+        public async Task<List<CourseReviewModel>> GetNextReviewsForCourse(int id, int courseId, int n)
+        {
+            List<Review> reviews = await reviewRepository.GetNextReviewsForCourse(id, courseId, n);
+            var models = new List<CourseReviewModel>();
+            foreach (var x in reviews)
+            {
+                models.Add(new CourseReviewModel
+                {
+                    Id = x.Id,
+                    Rating = x.Rating,
+                    IsAnonymous = x.IsAnonymous,
+                    CourseId = x.Course.Id
+                });
+            }
+            return models;
+        }
 
         /// <summary>
         /// Updates the average rating of the course with the newly added rating.

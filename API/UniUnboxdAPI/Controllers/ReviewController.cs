@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.IdentityModel.Tokens;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
@@ -29,6 +31,16 @@ namespace UniUnboxdAPI.Controllers
             return Ok(review);
         }
 
+        [HttpGet("get-next-reviews")]
+        public async Task<IActionResult> GetNextReviewsForCourse([FromQuery(Name = "id")] int id, [FromQuery(Name="courseId")] int courseId, [FromQuery(Name="numReviews")] int n)
+        {
+            var models = await reviewService.GetNextReviewsForCourse(id, courseId, n);
+            
+            if (models.IsNullOrEmpty()) 
+                return BadRequest($"No review with id bigger than {id} exists");
+            
+            return Ok(models);
+        }
 
         [HttpGet("latest-by-friends")]
         [Authorize(Roles = "Student")]
