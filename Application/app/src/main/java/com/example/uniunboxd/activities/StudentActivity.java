@@ -61,19 +61,4 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
         fragmentTransaction.commit();
     }
 
-    /*
-        public void setUserState(UserState strategy) {
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(strategy.getHomeFragment());
-            } else if (itemId == R.id.search) {
-                replaceFragment(strategy.getSearchFragment());
-            } else if (itemId == R.id.profile) {
-                replaceFragment(strategy.getProfileFragment());
-            }
-            return true;
-        });
-    }
-     */
 }
