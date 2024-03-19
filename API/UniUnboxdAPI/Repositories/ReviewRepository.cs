@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Models.DataTransferObjects;
 
 namespace UniUnboxdAPI.Repositories
 {
@@ -38,7 +39,10 @@ namespace UniUnboxdAPI.Repositories
             await dbContext.Reviews.AddAsync(review);
             await dbContext.SaveChangesAsync();
         }
-
+        
+        public async Task<List<Review>> GetNextReviewsForCourse(int id, int courseId, int n)
+            => await dbContext.Reviews.Where(i => i.Id > id && i.Course.Id == courseId).Take(n).Include(i => i.Course).ToListAsync();
+        
         public async Task PutReview(Review review)
         {
             dbContext.Reviews.Update(review);
