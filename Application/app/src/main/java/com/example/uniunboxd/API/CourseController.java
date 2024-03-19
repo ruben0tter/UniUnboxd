@@ -74,7 +74,28 @@ public class CourseController {
     }
 
     public static List<PopularCourse> getPopularCoursesByUniversity(int id, FragmentActivity f) throws IOException{
-        HttpURLConnection con = APIClient.get("Course/popular_by_university?id=" + id, JWTValidation.getToken(f));
+        HttpURLConnection con = APIClient.get("Course/popular-by-university?id=" + id, JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
+    }
+
+    public static List<PopularCourse> getPopularCoursesByFriends(FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/popular-by-friends", JWTValidation.getToken(f));
         StringBuilder body = new StringBuilder();
         ObjectMapper objectMapper = new ObjectMapper();
 

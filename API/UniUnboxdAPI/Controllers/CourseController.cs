@@ -30,7 +30,7 @@ namespace UniUnboxdAPI.Controllers
             return Ok(courses);
         }
 
-        [HttpGet("popular_by_university")]
+        [HttpGet("popular-by-university")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetPopularCoursesOfLastWeekByUniversity([FromQuery(Name = "id")] int id)
         {
@@ -39,7 +39,7 @@ namespace UniUnboxdAPI.Controllers
             return Ok(courses);
         }
 
-        [HttpGet("popular_by_friends")]
+        [HttpGet("popular-by-friends")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetPopularCoursesOfLastWeekByFriends()
         {

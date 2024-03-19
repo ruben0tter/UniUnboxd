@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UniUnboxdAPI.Models;
@@ -26,6 +27,18 @@ namespace UniUnboxdAPI.Controllers
                 return BadRequest("Something went wrong.");
 
             return Ok(review);
+        }
+
+
+        [HttpGet("latest-by-friends")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetLatestReviewsByFriends()
+        {
+            var id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var reviews = await reviewService.GetLatestReviewsByFriends(id);
+
+            return Ok(reviews);
         }
 
 
