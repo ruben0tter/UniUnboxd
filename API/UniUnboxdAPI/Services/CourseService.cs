@@ -104,6 +104,17 @@ namespace UniUnboxdAPI.Services
             return CreateCourseGridModelCollection(courses);
         }
 
+        /// <summary>
+        /// Gets the popular courses amongst the student's friends of the last 7 days.
+        /// </summary>
+        /// <param name="id"> The id of the student.</param>
+        /// <returns>The popular courses of last week amongst friends of the provided student.</returns>
+        public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeekByFriends(int id)
+        {
+            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeekByFriends(id);
+            return CreateCourseGridModelCollection(courses);
+        }
+
         private static CourseRetrievalModel CreateCourseRetrievalModel(Course course)
             => new ()
             {
