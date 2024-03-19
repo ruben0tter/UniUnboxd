@@ -76,5 +76,10 @@ namespace UniUnboxdAPI.Repositories
                         .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7) 
                         && i.Student.Followers!.Any(i => i.FollowingStudentId == id)).Count())
                         .Take(10).ToListAsync();
+
+        public async Task<ICollection<Course>> GetLastEditedCoursesByUniversity(int id)
+            => await dbContext.Courses.Where(i => i.University.Id == id)
+                        .OrderByDescending(i => i.LastModificationTime)
+                        .Take(4).ToListAsync();
     }
 }

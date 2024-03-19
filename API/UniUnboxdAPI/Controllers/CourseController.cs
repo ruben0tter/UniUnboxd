@@ -54,6 +54,17 @@ namespace UniUnboxdAPI.Controllers
             return Ok(courses);
         }
 
+        [HttpGet("last-edited")]
+        [Authorize(Roles = "University")]
+        public async Task<IActionResult> GetLastEditedCoursesByUniversity()
+        {
+            var id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var courses = await courseService.GetLastEditedCoursesByUniversity(id);
+
+            return Ok(courses);
+        }
+
         [HttpPost]
         [Authorize(Roles = "University")]
         public async Task<IActionResult> PostCourse([FromBody] CourseCreationModel creationModel)
