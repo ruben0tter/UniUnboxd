@@ -62,7 +62,7 @@ namespace UniUnboxdAPI.Services
                 Image = creationModel.Image,
                 Banner = creationModel.Banner,
                 University = await userRepository.GetUniversity(creationModel.UniversityId),
-                Reviews = null
+                Reviews = new List<Review>()
             };
 
         /// <summary>
@@ -70,9 +70,9 @@ namespace UniUnboxdAPI.Services
         /// </summary>
         /// <param name="id"> The id of the course to be adapted and returned.</param>
         /// <returns>An adapted object, corresponding to the course id provided.</returns>
-        public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id)
+        public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id, int numOfReviews)
         {
-            var course = await courseRepository.GetCourseAndConnectedData(id, 1);
+            var course = await courseRepository.GetCourseAndConnectedData(id, numOfReviews);
 
             var courseRetrievalModel = CreateCourseRetrievalModel(course);
 

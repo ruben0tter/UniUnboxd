@@ -23,8 +23,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class CourseController {
-    public static CourseRetrievalModel getCourseById(int id, FragmentActivity f) throws IOException {
-        HttpURLConnection con = APIClient.get("Course?id=" + id, JWTValidation.getToken(f));
+    public static CourseRetrievalModel getCourseById(int id, int numOfReviews, FragmentActivity f) throws IOException {
+        HttpURLConnection con = APIClient.get("Course?id=" + id + "&numReviews=" + numOfReviews, JWTValidation.getToken(f));
 
         Log.i("APP", "Code: " + con.getResponseCode());
 

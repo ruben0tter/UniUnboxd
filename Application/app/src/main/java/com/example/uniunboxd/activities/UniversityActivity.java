@@ -10,8 +10,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
+import com.example.uniunboxd.fragments.student.CourseFragment;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
@@ -62,7 +64,8 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                replaceFragment(getCorrectHomeFragment());
+//                replaceFragment(getCorrectHomeFragment());
+                replaceFragment(new CourseFragment(6));
             } else if (itemId == R.id.search) {
                 // TODO: Set to University Search Fragment
                 replaceFragment(new SearchFragment());

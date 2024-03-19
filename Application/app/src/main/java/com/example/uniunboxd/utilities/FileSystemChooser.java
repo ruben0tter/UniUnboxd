@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class FileSystemChooser {
-    static final int PICKFILE_RESULT_CODE = 42069;
+    static final int PICKFILE_RESULT_CODE = 1;
     public static void ChoosePDF(Fragment f){
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.addCategory(Intent.CATEGORY_OPENABLE);

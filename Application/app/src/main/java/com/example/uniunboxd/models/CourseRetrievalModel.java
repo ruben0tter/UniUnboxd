@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -65,14 +66,12 @@ public class CourseRetrievalModel {
         description.setText(Description);
         universityName.setText(UniversityName);
         if(Image != null && !Image.equals("")){
-            byte[] imageData = Base64.decode(Image, Base64.DEFAULT);
-            Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            Bitmap imageBitmap = ImageHandler.decodeImageString(Image);
             image.setImageBitmap(imageBitmap);
         }
         if(Banner != null && !Banner.equals("")) {
-            byte[] bannerData = Base64.decode(Banner, Base64.DEFAULT);
-            Bitmap bannerBitmap = BitmapFactory.decodeByteArray(bannerData, 0, bannerData.length);
-            image.setImageBitmap(bannerBitmap);
+            Bitmap bannerBitmap = ImageHandler.decodeImageString(Image);
+            banner.setImageBitmap(bannerBitmap);
         }
         LinearLayout linearLayout = view.findViewById(R.id.reviewList);
 

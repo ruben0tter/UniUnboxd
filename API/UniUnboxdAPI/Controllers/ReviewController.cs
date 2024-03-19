@@ -30,12 +30,13 @@ namespace UniUnboxdAPI.Controllers
             return Ok(review);
         }
 
-        [HttpGet]
-        [Route("get-next-reviews")]
-        public async Task<IActionResult> GetNextReviewsForCourse([FromQuery(Name = "id")] int id, [FromQuery(Name="courseId")] int courseId)
+        [HttpGet("get-next-reviews")]
+        public async Task<IActionResult> GetNextReviewsForCourse([FromQuery(Name = "id")] int id, [FromQuery(Name="courseId")] int courseId, [FromQuery(Name="numReviews")] int n)
         {
-            var models = await reviewService.GetNextReviewsForCourse(id, courseId, 1);
-            if (models.IsNullOrEmpty()) return BadRequest($"No review with id bigger than {id} exists");
+            var models = await reviewService.GetNextReviewsForCourse(id, courseId, n);
+            
+            if (models.IsNullOrEmpty()) 
+                return BadRequest($"No review with id bigger than {id} exists");
             
             return Ok(models);
         }

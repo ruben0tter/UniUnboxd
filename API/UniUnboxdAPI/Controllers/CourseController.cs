@@ -14,12 +14,12 @@ namespace UniUnboxdAPI.Controllers
     {
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id)
+        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id, [FromQuery(Name = "numReviews")] int numOfReviews)
         {
             if (! await courseService.DoesCourseExist(id))
                 return BadRequest($"A course with id {id} does not exist.");
 
-            var model = await courseService.GetCourseRetrievalModelById(id);
+            var model = await courseService.GetCourseRetrievalModelById(id, numOfReviews);
 
             return Ok(model);
         }

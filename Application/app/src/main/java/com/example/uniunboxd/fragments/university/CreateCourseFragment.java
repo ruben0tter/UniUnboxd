@@ -34,8 +34,8 @@ import java.net.HttpURLConnection;
 import java.nio.file.FileSystem;
 
 public class CreateCourseFragment extends Fragment implements View.OnClickListener{
-    private final int imageCode = 420;
-    private final int bannerCode = 69;
+    private final int imageCode = 1;
+    private final int bannerCode = 2;
 
     private String imageEnc = null;
     private String bannerEnc = null;
@@ -45,9 +45,9 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course_page_setup, container, false);
 
-        Button btn = (Button) view.findViewById(R.id.saveChanges);
-        ImageButton imageBtn = (ImageButton) view.findViewById(R.id.courseImage_edit);
-        ImageButton bannerBtn = (ImageButton) view.findViewById(R.id.courseBanner_edit);
+        Button btn = view.findViewById(R.id.saveChanges);
+        ImageButton imageBtn = view.findViewById(R.id.courseImage_edit);
+        ImageButton bannerBtn = view.findViewById(R.id.courseBanner_edit);
 
         btn.setOnClickListener(this);
         imageBtn.setOnClickListener(this);

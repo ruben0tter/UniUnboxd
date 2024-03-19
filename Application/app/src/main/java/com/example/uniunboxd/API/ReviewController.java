@@ -67,8 +67,8 @@ public class ReviewController {
         return APIClient.post("Review", json.toString(), JWTValidation.getToken(f));
     }
 
-    public static List<ReviewListItem> getReviewListItems(int id, int courseId, FragmentActivity f) throws Exception {
-        HttpURLConnection con =  APIClient.get("Review/get-next-reviews?id="+id + "&courseId="+courseId, JWTValidation.getToken(f));
+    public static List<ReviewListItem> getReviewListItems(int id, int courseId, int num, FragmentActivity f) throws Exception {
+        HttpURLConnection con =  APIClient.get("Review/get-next-reviews?id="+id + "&courseId="+courseId +"&numReviews="+num, JWTValidation.getToken(f));
 
         StringBuilder body = new StringBuilder();
 

@@ -141,9 +141,6 @@ namespace UniUnboxdAPI.Services
         public async Task PostReview(Review review)
             => await reviewRepository.PostReview(review);
 
-        public async Task<bool> DoesReviewExist(int id)
-            => await reviewRepository.DoesReviewExist(id);
-
         /// <summary>
         /// Get next n reviews for a course.
         /// </summary>

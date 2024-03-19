@@ -28,12 +28,12 @@ import java.util.concurrent.ExecutionException;
 
 public class CourseFragment extends Fragment{
 
-    private final int id;
+    private final int ID;
+    private final int NUM_REVIEWS_TO_LOAD = 5;
     private CourseRetrievalModel Course = null;
 
     public CourseFragment(int id) {
-        // TODO: Get course information
-        this.id = id;
+        this.ID = id;
     }
 
     @Override
@@ -48,9 +48,9 @@ public class CourseFragment extends Fragment{
         // Inflate the layout for this fragment
 
         View view = null;
-        AsyncGetTask asyncGetTask = new AsyncGetTask();
+        GetCourseInformationAsyncTask asyncGetTask = new GetCourseInformationAsyncTask(ID, NUM_REVIEWS_TO_LOAD);
         try {
-            Course = asyncGetTask.execute(new Pair<FragmentActivity, Integer>(getActivity(), id)).get();
+            Course = asyncGetTask.execute(getActivity()).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -80,7 +80,7 @@ public class CourseFragment extends Fragment{
                     lastID = Course.Reviews.get(Course.Reviews.size() - 1).Id;
                 }
                 try {
-                    List<ReviewListItem> newReviews = ReviewController.getReviewListItems(lastID, Course.Id, getActivity());
+                    List<ReviewListItem> newReviews = ReviewController.getReviewListItems(lastID, Course.Id, 5, getActivity());
                     Course.Reviews.addAll(newReviews);
                     for (ReviewListItem item : newReviews) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -100,13 +100,21 @@ public class CourseFragment extends Fragment{
     }
 }
 
-class AsyncGetTask extends AsyncTask<Pair<FragmentActivity, Integer>, Void, CourseRetrievalModel>{
+class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
+
+    private final int ID;
+    private final int NUM_OF_REVIEWS_TO_LOAD;
+
+    public GetCourseInformationAsyncTask(int id, int numReviewsToLoad) {
+        ID = id;
+        NUM_OF_REVIEWS_TO_LOAD = numReviewsToLoad;
+    }
 
     @Override
-    protected CourseRetrievalModel doInBackground(Pair<FragmentActivity, Integer>... pairs) {
+    protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
         CourseRetrievalModel course = null;
         try{
-            course = CourseController.getCourseById(pairs[0].second, pairs[0].first);
+            course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
         } catch(Exception ioe) {
             Log.e("ERR", "Couldn't get course" + ioe.toString());
         }
