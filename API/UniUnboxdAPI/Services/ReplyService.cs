@@ -10,12 +10,14 @@ namespace UniUnboxdAPI.Services
         private readonly ReplyRepository replyRepository;
         private readonly ReviewRepository reviewRepository;
         private readonly UserRepository userRepository;
+        private readonly MailService mailService;
 
-        public ReplyService(ReplyRepository replyRepository, ReviewRepository reviewRepository, UserRepository userRepository) 
+        public ReplyService(ReplyRepository replyRepository, ReviewRepository reviewRepository, UserRepository userRepository, MailService mailService) 
         { 
             this.replyRepository = replyRepository;
             this.reviewRepository = reviewRepository;
             this.userRepository = userRepository;
+            this.mailService = mailService;
         }
 
         /// <summary>
@@ -58,6 +60,14 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task PostReply(Reply reply)
             => await replyRepository.PostReply(reply);
+
+        /// <summary>
+        /// Notifies user who made a review that a reply has been posted to it. 
+        /// </summary>
+        /// <param name="reply">Provided reply.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task NotifyReviewAuthor(Reply reply)
+            => mailService.NewReplyMail(reply);
 
 
         /// <summary>
