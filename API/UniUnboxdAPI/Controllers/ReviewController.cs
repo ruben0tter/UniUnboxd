@@ -139,7 +139,7 @@ namespace UniUnboxdAPI.Controllers
 
                 await reviewService.UpdateAverageRatingAfterDelete(review.Course.Id, review.Rating);
 
-                return Ok("Succesfully deleted review.");
+                return Ok("Successfully deleted review.");
             }
             catch (Exception ex)
             {

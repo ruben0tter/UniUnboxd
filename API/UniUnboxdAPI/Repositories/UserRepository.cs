@@ -36,5 +36,8 @@ namespace UniUnboxdAPI.Repositories
 
         public async Task<bool> DoesProfessorExist(int id)
             => await dbContext.Professors.AnyAsync(c => c.Id == id);
+
+        public int GetUniversityOfCourse(int courseId)
+            => dbContext.Universities.Where(i => i.Courses!.Any(c => c.Id == courseId)).FirstAsync().Id;
     }
 }

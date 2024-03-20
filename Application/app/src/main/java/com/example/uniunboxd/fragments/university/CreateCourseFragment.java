@@ -22,16 +22,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.CourseController;
+import com.example.uniunboxd.fragments.student.CourseFragment;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.models.CourseCreationModel;
+import com.example.uniunboxd.models.CourseEditModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
+import com.example.uniunboxd.utilities.ImageHandler;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.nio.file.FileSystem;
 
 public class CreateCourseFragment extends Fragment implements View.OnClickListener{
     private final int imageCode = 1;
@@ -39,19 +40,46 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
 
     private String imageEnc = null;
     private String bannerEnc = null;
+    protected final CourseEditModel Course;
+
+    public CreateCourseFragment(){
+        Course = null;
+    }
+
+    public CreateCourseFragment(CourseEditModel course) {
+        this.Course = course;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course_page_setup, container, false);
 
-        Button btn = view.findViewById(R.id.saveChanges);
+        Button saveChangesBtn = view.findViewById(R.id.saveChanges);
         ImageButton imageBtn = view.findViewById(R.id.courseImage_edit);
         ImageButton bannerBtn = view.findViewById(R.id.courseBanner_edit);
+        ImageButton deleteBtn = view.findViewById(R.id.deleteButton);
+        if(Course != null) {
+            ImageView image = view.findViewById(R.id.courseImage_image_courseSetup);
+            ImageView banner = view.findViewById(R.id.courseBanner_image_courseSetup);
+            EditText name = (EditText) view.findViewById(R.id.courseName_courseName_edit);
+            EditText code = (EditText) view.findViewById(R.id.courseName_courseCode_edit);
+            EditText description = (EditText) view.findViewById(R.id.courseDescription_edit);
+            EditText professor = (EditText) view.findViewById(R.id.courseName_courseDescription_edit);
 
-        btn.setOnClickListener(this);
+            if(Course.Image != null)
+                image.setImageBitmap(ImageHandler.decodeImageString(Course.Image));
+            if(Course.Banner != null)
+                banner.setImageBitmap(ImageHandler.decodeImageString(Course.Banner));
+            name.setText(Course.Name);
+            code.setText(Course.Code);
+            description.setText(Course.Description);
+            professor.setText(Course.Professor);
+        }
+        saveChangesBtn.setOnClickListener(this);
         imageBtn.setOnClickListener(this);
         bannerBtn.setOnClickListener(this);
+        deleteBtn.setOnClickListener(this);
 
         return view;
     }
@@ -72,22 +100,37 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                 @Override
                 public void run() {
                     int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(),"sub"));
-                    CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
-                            code.getText().toString(), description.getText().toString(),
-                            professor.getText().toString(), imageEnc, bannerEnc, universityId);
-                    try{
-                        HttpURLConnection con = CourseController.postCourse(course, getActivity());
-                        if(con.getResponseCode() == 200){
-                            replaceFragment(new HomeFragment());
+                    if(Course == null) {
+                        CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
+                                code.getText().toString(), description.getText().toString(),
+                                professor.getText().toString(), imageEnc, bannerEnc, universityId);
+                        try {
+                            HttpURLConnection con = CourseController.postCourse(course, getActivity());
+                            if (con.getResponseCode() == 200) {
+                                replaceFragment(new HomeFragment());
+                            } else {
+                                //TODO: see how to show a toast
+                                Log.d("DEB", "" + con.getResponseCode());
+                            }
+                        } catch (Exception e) {
+                            Log.e("ERR", e.toString());
                         }
-                        else{
+                        return;
+                    }
+                    CourseEditModel course = new CourseEditModel(Course.Id, name.getText().toString(),
+                            code.getText().toString(), description.getText().toString(),
+                            professor.getText().toString(), imageEnc, bannerEnc);
+                    try {
+                        HttpURLConnection con = CourseController.putCourse(course, getActivity());
+                        if (con.getResponseCode() == 200) {
+                            replaceFragment(new CourseFragment(course.Id));
+                        } else {
                             //TODO: see how to show a toast
-                            Log.d("DEB", ""+con.getResponseCode());
+                            Log.d("DEB", "" + con.getResponseCode());
                         }
                     } catch (Exception e) {
                         Log.e("ERR", e.toString());
                     }
-
                 }
             });
         }
@@ -96,6 +139,9 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         }
         else if(id == R.id.courseBanner_edit) {
             FileSystemChooser.ChooseImage(f, bannerCode);
+        }
+        else if(id == R.id.deleteButton) {
+
         }
     }
 

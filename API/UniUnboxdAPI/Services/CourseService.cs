@@ -4,6 +4,7 @@ using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
 using System.Collections.Generic;
+using Microsoft.Extensions.Azure;
 using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Services
@@ -106,7 +107,7 @@ namespace UniUnboxdAPI.Services
             return CreateCourseGridModelCollection(courses);
         }
 
-        private static CourseRetrievalModel CreateCourseRetrievalModel(Course course)
+        private CourseRetrievalModel CreateCourseRetrievalModel(Course course)
             => new ()
             {
                 Id = course.Id,
@@ -121,7 +122,7 @@ namespace UniUnboxdAPI.Services
                 UniversityName = course.University.UserName
             };
         
-        private static CourseReviewModel CreateCourseReviewModel(Review review, int courseId) 
+        private CourseReviewModel CreateCourseReviewModel(Review review, int courseId) 
             => new ()
             {
                 Id = review.Id,
@@ -132,7 +133,7 @@ namespace UniUnboxdAPI.Services
                 Poster = CreateReviewPosterStudentModel(review)
             };
 
-        private static ReviewPosterStudentModel? CreateReviewPosterStudentModel(Review review)
+        private ReviewPosterStudentModel? CreateReviewPosterStudentModel(Review review)
             => review.IsAnonymous
                 ? null
                 : new ReviewPosterStudentModel()
@@ -145,12 +146,33 @@ namespace UniUnboxdAPI.Services
         public async Task<bool> DoesCourseExist(int id)
             => await courseRepository.DoesCourseExist(id);
             
-        private static ICollection<CourseGridModel> CreateCourseGridModelCollection(ICollection<Course> courses)
+        private ICollection<CourseGridModel> CreateCourseGridModelCollection(ICollection<Course> courses)
             => courses.Select(i => new CourseGridModel()
                 {
                     Id = i.Id,
                     Name = i.Name,
                     Image = i.Image
                 }).ToList();
+
+        public int getUniversityId(int id)
+            => userRepository.GetUniversityOfCourse(id);
+
+        public async Task DeleteCourse(Course course)
+            => await courseRepository.DeleteCourse(course);
+
+        public async Task<Course> GetCourse(int id)
+            => await courseRepository.GetCourse(id);
+
+        public async Task UpdateCourse(Course course, CourseEditModel model)
+        {
+            course.Name = model.Name;
+            course.Code = model.Code;
+            course.Description = model.Description;
+            course.Professor = model.Professor;
+            course.Image = model.Image;
+            course.Banner = model.Banner;
+        }
+        public async Task PutCourse(Course course)
+            => await courseRepository.PutCourse(course);
     }
 }

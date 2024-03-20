@@ -69,18 +69,6 @@
             app:layout_constraintVertical_bias="0.468" />
 
         <TextView
-            android:id="@+id/currentState_courseSetup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.796"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.432" />
-
-        <TextView
             android:id="@+id/courseName_courseSetup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,30 +132,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.795" />
-
-        <TextView
-            android:id="@+id/delete_courseSetup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete course?"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.759"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.388" />
-
-        <TextView
-            android:id="@+id/statuts_courseSetup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.658"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.432" />
 
         <TextView
             android:id="@+id/courseImage_courseSetup"
@@ -252,31 +216,32 @@
             android:id="@+id/saveChanges"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
             android:background="#30C62D"
             android:text="SAVE CHANGES"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.537"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.976" />
 
-        <ImageView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="60dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="60dp"
+            android:backgroundTint="@android:color/transparent"
             android:clickable="true"
             android:contentDescription="delete"
             android:focusable="true"
             android:src="@drawable/baseline_delete_24"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/saveChanges"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.294"
-            app:layout_constraintStart_toEndOf="@+id/delete_courseSetup"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.384" />
+            app:layout_constraintHorizontal_bias="0.831"
+            app:layout_constraintStart_toEndOf="@+id/saveChanges"
+            app:layout_constraintTop_toTopOf="@+id/saveChanges"
+            app:layout_constraintVertical_bias="0.976" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
