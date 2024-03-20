@@ -3,7 +3,7 @@ using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
-    public class UserService(UserRepository userRepository, MailService mailService, NotificationSettings notificationSettings)
+    public class UserService(UserRepository userRepository, MailService mailService)
     {
         /// <summary>
         /// Check whether there exists a student with the provided id.
@@ -49,12 +49,7 @@ namespace UniUnboxdAPI.Services
         /// <param name="followedStudent">Provided student 2.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task NotifyFollowedStudent(Student followingStudent, Student followedStudent)
-        {
-            if (notificationSettings.ReceivesNewFollowerMail)
-            {
-                mailService.NewFollowerMail(followedStudent, followingStudent);
-            }
-        }
+            => mailService.NewFollowerMail(followedStudent, followingStudent);
 
         /// <summary>
         /// Student 1 unfollows student 2.

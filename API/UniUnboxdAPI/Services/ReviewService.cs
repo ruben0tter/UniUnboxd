@@ -17,15 +17,13 @@ namespace UniUnboxdAPI.Services
         private readonly CourseRepository courseRepository;
         private readonly UserRepository userRepository;
         private readonly MailService mailService;
-        private readonly NotificationSettings notificationSettings;
 
-        public ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository, MailService mailService, NotificationSettings notificationSettings)
+        public ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository, MailService mailService)
         {
             this.reviewRepository = reviewRepository;
             this.courseRepository = courseRepository;
             this.userRepository = userRepository;
             this.mailService = mailService;
-            this.notificationSettings = notificationSettings;
         }
 
         /// <summary>
@@ -124,11 +122,8 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task NotifyFollowers(Review review)
         {
-            if (notificationSettings.ReceivesFollowersReviewMail)
-            {
-                foreach (Follow follow in review.Student.Followers!)
-                    mailService.NewReviewMail(follow.FollowingStudent, review);
-            }
+            foreach (Follow follow in review.Student.Followers!)
+                mailService.NewReviewMail(follow.FollowingStudent, review);
         }
 
         /// <summary>
