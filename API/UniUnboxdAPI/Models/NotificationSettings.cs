@@ -4,8 +4,6 @@
     {
         public int StudentId { get; set; }
         public Student? Student { get; set; }
-        public bool ReceivesVerificationStatusChangeMail { get; set; } = true;
-        public bool ReceivesVerificationStatusChangePush { get; set; } = true;
         public bool ReceivesFollowersReviewMail { get; set; } = true;
         public bool ReceivesFollowersReviewPush { get; set; } = true;
         public bool ReceivesNewReplyMail { get; set; } = true;
