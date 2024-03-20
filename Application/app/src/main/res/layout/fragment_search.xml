@@ -4,13 +4,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.student.SearchFragment"
-    android:background="#ffeef7f0"
+    android:background="@color/white"
     >
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search_Fragment" />
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/main_red"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:textColor="@color/white"
+                android:text="Search"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textSize="36sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="64sp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+
+                    android:backgroundTint="@color/main_red"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Courses"
+                    android:id="@+id/coursesButton"
+                    />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/main_red"
+                    android:textColor="@color/light_grey"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:text="Users"
+                    android:id="@+id/usersButton"
+                    />
+            </LinearLayout>
+
+            <SearchView
+                android:layout_width="match_parent"
+                android:layout_height="64sp"
+                android:layout_marginHorizontal="8sp"
+                android:layout_marginBottom="16sp"
+                android:background="@color/white"
+                android:queryHint="Bruh"
+                />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TEXT TO FILL THE PAGE"
+                    android:textSize="160sp"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </FrameLayout>

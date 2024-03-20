@@ -29,15 +29,15 @@ public class MainActivity extends AppCompatActivity implements IActivity {
         if (JWTValidation.isUserLoggedIn(this)) {
             String type = JWTValidation.getTokenProperty(this, "typ");
 
-            if (Objects.equals(type, "Student")) {
-                replaceActivity(StudentActivity.class);
-            } else if (Objects.equals(type, "University")) {
-                replaceActivity(UniversityActivity.class);
-            } else if (Objects.equals(type, "Professor")) {
-                // TODO: Add Professor Activity
-            }
+//            if (Objects.equals(type, "Student")) {
+//                replaceActivity(StudentActivity.class);
+//            } else if (Objects.equals(type, "University")) {
+//                replaceActivity(UniversityActivity.class);
+//            } else if (Objects.equals(type, "Professor")) {
+//                // TODO: Add Professor Activity
+//            }
         } else {
-            replaceFragment(new AuthenticationFragment());
+            replaceActivity(UniversityActivity.class);
         }
     }
 

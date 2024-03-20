@@ -7,88 +7,156 @@
     android:background="@color/white"
     tools:context=".fragments.student.HomeFragment">
 
-    <Button
-        android:id="@+id/selectApplicationData1"
-        android:layout_width="123dp"
-        android:layout_height="35dp"
-        android:background="@drawable/button_red"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:fontFamily="@font/k2d"
-        android:text="Upload File"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/signOut"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22" />
+        app:layout_constraintVertical_bias="0.5"
+        tools:layout_editor_absoluteX="0dp">
 
-    <Button
-        android:id="@+id/selectApplicationData2"
-        android:layout_width="123dp"
-        android:layout_height="35dp"
-        android:background="@drawable/button_red"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:fontFamily="@font/k2d"
-        android:text="Upload File"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.291" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="36sp"
+            android:textAlignment="center"
+            android:text="Apply for verification"/>
 
-    <Button
-        android:id="@+id/submitApplication"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:text="GET VERIFIED"
-        android:background="@drawable/button_red"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:fontFamily="@font/k2d"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.698" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="274dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="36dp"
-        android:text="Request Verification"
-        android:textAlignment="center"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/fileLabel1"
+                android:layout_width="87dp"
+                android:layout_height="27dp"
+                android:text="File 1:"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/selectApplicationData1" />
 
-    <TextView
-        android:id="@+id/fileLabel1"
-        android:layout_width="87dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="184dp"
-        android:text="File 1:"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/selectApplicationData1"
-        app:layout_constraintEnd_toStartOf="@+id/selectApplicationData1"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/uploadFile1"
+                android:layout_width="123dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_red"
+                android:fontFamily="@font/k2d"
+                android:text="Upload File"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.22" />
 
-    <TextView
-        android:id="@+id/fileLabel2"
-        android:layout_width="87dp"
-        android:layout_height="27dp"
-        android:layout_marginTop="244dp"
-        android:text="File 2:"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/selectApplicationData2"
-        app:layout_constraintEnd_toStartOf="@+id/selectApplicationData2"
-        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/fileName1"
+                    android:layout_width="87dp"
+                    android:layout_height="27dp"
+                    android:textAlignment="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fileLabel2"
+                android:layout_width="87dp"
+                android:layout_height="27dp"
+                android:text="File 2:"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/selectApplicationData1" />
+
+            <Button
+                android:id="@+id/uploadFile2"
+                android:layout_width="123dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_red"
+                android:fontFamily="@font/k2d"
+                android:text="Upload File"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.22" />
+
+            <TextView
+                android:id="@+id/fileName2"
+                android:layout_width="87dp"
+                android:layout_height="27dp"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/fileLabel3"
+                android:layout_width="87dp"
+                android:layout_height="27dp"
+                android:text="File 3:"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/selectApplicationData1" />
+
+            <Button
+                android:id="@+id/uploadFile3"
+                android:layout_width="123dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_red"
+                android:fontFamily="@font/k2d"
+                android:text="Upload File"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.22" />
+
+            <TextView
+                android:id="@+id/fileName3"
+                android:layout_width="87dp"
+                android:layout_height="27dp"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/submitApplication"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_red"
+                android:text=" GET VERIFIED "
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                />
+        </LinearLayout>
+    </LinearLayout>
 
     <Button
         android:id="@+id/signOut"
@@ -103,7 +171,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitApplication"
         app:layout_constraintVertical_bias="0.75" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

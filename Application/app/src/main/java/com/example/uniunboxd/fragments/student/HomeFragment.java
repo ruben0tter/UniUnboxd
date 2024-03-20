@@ -30,8 +30,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("HOME", "ey I got created maaannnnnnn!");
-        Log.i("HOME JWT", JWTValidation.getToken(getActivity()));
     }
 
     @Override

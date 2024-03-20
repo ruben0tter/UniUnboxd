@@ -31,7 +31,10 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         binding = ActivityUniversityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        replaceFragment(getCorrectHomeFragment());
+        setNavigationMenu();
+
+        //replaceFragment(getCorrectHomeFragment());
+        replaceFragment(new HomeUnverifiedFragment());
 
         /*
         UserState state = new UserState("userToken");
@@ -62,7 +65,7 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                replaceFragment(getCorrectHomeFragment());
+                replaceFragment(new HomeUnverifiedFragment());
             } else if (itemId == R.id.search) {
                 // TODO: Set to University Search Fragment
                 replaceFragment(new SearchFragment());

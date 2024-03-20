@@ -68,4 +68,18 @@ public class CourseRetrievalModel {
 
         return view;
     }
+
+//    public View createResultView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.search_result_course, container, false);
+//        TextView name = view.findViewById(R.id.courseName);
+//        TextView code = view.findViewById(R.id.courseCode);
+//        TextView professor = view.findViewById(R.id.professor);
+//
+//        name.setText(Name);
+//        code.setText(Code);
+//        professor.setText(Professor);
+//
+//        return view;
+//    }
 }

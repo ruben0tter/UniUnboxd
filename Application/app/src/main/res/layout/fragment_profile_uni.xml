@@ -17,11 +17,12 @@
 
         <Button
             android:id="@+id/load_more_button"
-            android:backgroundTint="@color/secondary_red"
+            android:backgroundTint="@color/main_red"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="36dp"
             android:layout_marginRight="36dp"
+            android:textColor="@color/white"
             android:text="LOAD MORE APPLICATIONS" />
     </LinearLayout>
 </ScrollView>

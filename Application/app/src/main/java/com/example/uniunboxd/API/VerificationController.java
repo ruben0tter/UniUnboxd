@@ -43,7 +43,7 @@ public class VerificationController {
         return res;
     }
 
-    public static void sendApplication(List<byte[]> files, FragmentActivity f) throws Exception {
+    public static void sendApplication(byte[][] files, FragmentActivity f) throws Exception {
         JSONObject json = new JSONObject();
         JSONArray jsonData = new JSONArray();
         for (byte[] file : files) {

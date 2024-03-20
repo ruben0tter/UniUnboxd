@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: Unwire this shit from HomeFragmemt
 public class HomeUnverifiedFragment extends HomeFragment {
     public HomeUnverifiedFragment() {
         // Empty constructor.
@@ -34,16 +35,19 @@ public class HomeUnverifiedFragment extends HomeFragment {
     Button btnApply;
     Button btnUpload1;
     Button btnUpload2;
+    Button btnUpload3;
+    Button signOut;
 
-    private List<byte[]> verificationFileContents = new ArrayList<>();
+    private byte[][] verificationFiles = new byte[3][];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_uni_unverified, container, false);
-        btnUpload1 = (Button) view.findViewById(R.id.selectApplicationData1);
-        btnUpload2 = (Button) view.findViewById(R.id.selectApplicationData2);
+        btnUpload1 = (Button) view.findViewById(R.id.uploadFile1);
+        btnUpload2 = (Button) view.findViewById(R.id.uploadFile2);
+        btnUpload3 = (Button) view.findViewById(R.id.uploadFile3);
         btnApply = (Button) view.findViewById(R.id.submitApplication);
-        Button signOut = (Button) view.findViewById(R.id.signOut);
+        signOut = (Button) view.findViewById(R.id.signOut);
         btnApply.setEnabled(false);
 
         btnApply.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +57,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
                     @Override
                     public void run() {
                         try {
-                            VerificationController.sendApplication(verificationFileContents, getActivity());
+                            VerificationController.sendApplication(verificationFiles, getActivity());
                             reload();
                         } catch (Exception e) {
                             Log.e("APP", "Failed to upload documents: " + e.toString());
@@ -72,8 +76,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
                 chooseFile.setType("application/pdf");
                 startActivityForResult(
                         Intent.createChooser(chooseFile, "Choose a file"),
-                        PICKFILE_RESULT_CODE
-                );
+                        PICKFILE_RESULT_CODE                );
 
             }
         });
@@ -85,7 +88,20 @@ public class HomeUnverifiedFragment extends HomeFragment {
                 chooseFile.setType("application/pdf");
                 startActivityForResult(
                         Intent.createChooser(chooseFile, "Choose a file"),
-                        PICKFILE_RESULT_CODE
+                        PICKFILE_RESULT_CODE + 1
+                );
+            }
+        });
+
+        btnUpload3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+                chooseFile.setType("application/pdf");
+                startActivityForResult(
+                        Intent.createChooser(chooseFile, "Choose a file"),
+                        PICKFILE_RESULT_CODE + 2
                 );
             }
         });
@@ -122,7 +138,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
         if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             try {
-                verificationFileContents.add(readTextFromUri(uri));
+                verificationFiles[0] = (readTextFromUri(uri));
                 btnApply.setEnabled(true);
             } catch (Exception err) {
                 Log.e("APP", "Failed to read file: " + err);
