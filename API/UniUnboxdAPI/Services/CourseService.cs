@@ -154,9 +154,6 @@ namespace UniUnboxdAPI.Services
                     Image = i.Image
                 }).ToList();
 
-        public int getUniversityId(int id)
-            => userRepository.GetUniversityOfCourse(id);
-
         public async Task DeleteCourse(Course course)
             => await courseRepository.DeleteCourse(course);
 
@@ -174,5 +171,13 @@ namespace UniUnboxdAPI.Services
         }
         public async Task PutCourse(Course course)
             => await courseRepository.PutCourse(course);
+        public async Task<bool> DoesProfessorExist(int professorId)
+            => await userRepository.DoesProfessorExist(professorId);
+
+        public async Task<ICollection<CourseGridModel>> GetAssignedCourses(int professorId)
+        {
+            ICollection<Course> courses = await courseRepository.GetAssignedCourses(professorId);
+            return CreateCourseGridModelCollection(courses);
+        }
     }
 }

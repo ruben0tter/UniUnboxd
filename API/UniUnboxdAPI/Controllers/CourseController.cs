@@ -43,7 +43,17 @@ namespace UniUnboxdAPI.Controllers
 
             return Ok(courses);
         }
+        
+        [HttpGet("assigned-courses")]
+        [Authorize(Roles = "University")]
+        public async Task<IActionResult> GetAssignedCourses([FromQuery(Name = "professorId")] int professorId)
+        {
+            if (!await courseService.DoesProfessorExist(professorId))
+                return BadRequest("Professor does not exist.");
 
+            var courses = await courseService.GetAssignedCourses(professorId);
+            return Ok(courses);
+        }
         [HttpPost]
         [Authorize(Roles = "University")]
         public async Task<IActionResult> PostCourse([FromBody] CourseCreationModel creationModel)
@@ -95,7 +105,7 @@ namespace UniUnboxdAPI.Controllers
         
         [HttpDelete]
         [Authorize(Roles = "University")]
-        public async Task<IActionResult> DeleteCourse([FromQuery] int id)
+        public async Task<IActionResult> DeleteCourse([FromQuery(Name = "id")] int id)
         {
             if (!await courseService.DoesCourseExist(id))
                 return BadRequest($"Course with id {id} does not exist.");

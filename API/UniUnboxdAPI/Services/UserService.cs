@@ -1,9 +1,10 @@
 ﻿using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
-    public class UserService(UserRepository userRepository)
+    public class UserService(UserRepository userRepository, CourseRepository courseRepository)
     {
         /// <summary>
         /// Check whether there exists a student with the provided id.
@@ -60,5 +61,56 @@ namespace UniUnboxdAPI.Services
                 FollowingStudent = followingStudent,
                 FollowedStudent = followedStudent
             };
+
+        public async Task<bool> DoesProfessorExist(int id)
+            => await userRepository.DoesProfessorExist(id);
+
+        public async Task<bool> DoesCourseExist(int courseId)
+            => await courseRepository.DoesCourseExist(courseId);
+
+        public async Task<Course> GetCourse(int courseId)
+            => await courseRepository.GetCourse(courseId);
+
+
+        public async Task<Professor> GetProfessor(int professorId)
+            => await userRepository.GetProfessor(professorId);
+
+        public async Task AssignProfessor(Professor professor, Course course)
+        {
+            var courseProfessorAssignment = CreateCourseProfessorAssignment(professor, course);
+            await userRepository.AssignProfessorToCourse(courseProfessorAssignment);
+        }
+
+        private CourseProfessorAssignment CreateCourseProfessorAssignment(Professor professor, Course course)
+            => new()
+            {
+                Professor = professor,
+                Course = course
+            };
+
+        public async Task<bool> DoesCourseProfessorAssignmentExist(int courseId, int professorId)
+            => await userRepository.CourseProfessorAssignmentExist(courseId, professorId);
+
+        public async  Task<List<AssignedProfessorModel>> GetAssignedProfessors(int courseId)
+        {
+            List<Professor> professors = await userRepository.GetAssignedProfessors(courseId);
+            List<AssignedProfessorModel> models = new List<AssignedProfessorModel>();
+            foreach (var professor in professors)
+            {
+                models.Add(new AssignedProfessorModel
+                {
+                    Id = professor.Id,
+                    Name = professor.UserName,
+                    Email = professor.Email,
+                    Image = professor.Image
+                });
+            }
+            return models;
+        }
+
+        public async Task DismissProfessor(Professor professor, Course course)
+        {
+            var courseProfessorAssignment = CreateCourseProfessorAssignment(professor, course);
+            await userRepository.DismissProfessorFromCourse(courseProfessorAssignment);        }
     }
 }

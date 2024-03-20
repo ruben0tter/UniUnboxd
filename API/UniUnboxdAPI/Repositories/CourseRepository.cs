@@ -78,5 +78,9 @@ namespace UniUnboxdAPI.Repositories
             await dbContext.SaveChangesAsync();
         }
 
+        public async Task<List<Course>> GetAssignedCourses(int professorId)
+            => await dbContext.Courses.Where(i => i.AssignedProfessors
+                .Any(i => i.Professor.Id == professorId))
+                .ToListAsync();
     }
 }

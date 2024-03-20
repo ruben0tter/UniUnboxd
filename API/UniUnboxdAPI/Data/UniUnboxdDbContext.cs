@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Hosting;
 using UniUnboxdAPI.Models;
 
@@ -17,6 +18,7 @@ namespace UniUnboxdAPI.Data
         public DbSet<Reply> Replies { get; set; }
         public DbSet<VerificationApplication> Applications { get; set; }
         public DbSet<Follow> Follows { get; set; }
+        public DbSet<CourseProfessorAssignment> CourseProfessorAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +46,21 @@ namespace UniUnboxdAPI.Data
                 .HasOne(i => i.FollowedStudent)
                 .WithMany(i => i.Followers)
                 .HasForeignKey(i => i.FollowedStudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CourseProfessorAssignment>()
+                .HasKey(i => new { i.ProfessorId, i.CourseId });
+
+            modelBuilder.Entity<CourseProfessorAssignment>()
+                .HasOne(i => i.Professor)
+                .WithMany(i => i.AssignedCourses)
+                .HasForeignKey(i => i.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CourseProfessorAssignment>()
+                .HasOne(i => i.Course)
+                .WithMany(i => i.AssignedProfessors)
+                .HasForeignKey(i => i.ProfessorId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
