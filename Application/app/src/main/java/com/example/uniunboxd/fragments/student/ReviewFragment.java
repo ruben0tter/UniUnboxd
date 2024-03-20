@@ -191,7 +191,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 
     private void redirectToProfile() {
         if (!review.IsAnonymous) {
-            ((IActivity) getActivity()).replaceFragment(new ProfileFragment(review.Student.Id));
+            ((IActivity) getActivity()).replaceFragment(new ProfileFragment());
         }
     }
 

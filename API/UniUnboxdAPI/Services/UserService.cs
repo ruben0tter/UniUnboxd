@@ -62,4 +62,22 @@ public class UserService
             Image = course.Image,
             Code = course.Code
         };
+    
+        private static ProfessorProfileModel CreateProfessorProfileModel(Professor professor)
+        => new ()
+        {
+            Id = professor.Id,
+            ProfilePic = professor.Image,
+            Name = professor.UserName,
+            
+        };
+        
+        public async Task<ProfessorProfileModel> GetProfessorAndConnectedData(int id)
+        {
+            var professor = await userRepository.GetProfessorAndConnectedData(id);
+
+            var professorProfileModel = CreateProfessorProfileModel(professor);
+
+            return professorProfileModel;
+        }
 }

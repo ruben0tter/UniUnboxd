@@ -13,16 +13,31 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class UserController(UserService userService) : ControllerBase
     {
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetMyUser()
+        [HttpGet("student")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetStudent()
         {
             int id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
-    
+            
             StudentProfileModel student = await userService.GetStudentAndConnectedData(id);
             
             return Ok(student);
         }
+        
+        [HttpGet("professor")]
+        [Authorize(Roles = "Professor")]
+        public async Task<IActionResult> GetProfessor()
+        {
+            int id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            
+            
+            ProfessorProfileModel professor = await userService.GetProfessorAndConnectedData(id);
+            
+            
+            return Ok(professor);
+        }
+        
+        
         
     }
 }

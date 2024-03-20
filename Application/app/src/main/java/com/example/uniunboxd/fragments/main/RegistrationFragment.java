@@ -104,6 +104,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
             public void run() {
                 try {
                     HttpURLConnection response = RegistrationController.register(model);
+                    Log.d("DEB", ""+response.getResponseCode());
                     //TODO: Fix notification system.
                     //sendNotification(readMessage(response.getErrorStream()));
                     if (response.getResponseCode() == 200) {

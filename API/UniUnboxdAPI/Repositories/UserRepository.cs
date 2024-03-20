@@ -41,4 +41,8 @@ public class UserRepository {
                 .Include(i => i.Reviews)!
                 .ThenInclude(i => i.Course)
                 .FirstAsync(); 
+        
+        public async Task<Professor> GetProfessorAndConnectedData(int id)
+            => await dbContext.Professors.Where(i => i.Id == id)
+                .FirstAsync(); 
 }
