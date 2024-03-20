@@ -3,6 +3,7 @@ using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
+using System.Collections.Generic;
 using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Services
@@ -17,7 +18,7 @@ namespace UniUnboxdAPI.Services
             this.courseRepository = courseRepository;
             this.userRepository = userRepository;
         }
-        
+
         /// <summary>
         /// Checks whether the id contained in the JWT ligns up with the provided id.
         /// </summary>
@@ -58,8 +59,10 @@ namespace UniUnboxdAPI.Services
                 Code = creationModel.Code,
                 Description = creationModel.Description,
                 Professor = creationModel.Professor,
+                Image = creationModel.Image,
+                Banner = creationModel.Banner,
                 University = await userRepository.GetUniversity(creationModel.UniversityId),
-                Reviews = null
+                Reviews = new List<Review>()
             };
 
         /// <summary>
@@ -67,9 +70,9 @@ namespace UniUnboxdAPI.Services
         /// </summary>
         /// <param name="id"> The id of the course to be adapted and returned.</param>
         /// <returns>An adapted object, corresponding to the course id provided.</returns>
-        public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id)
+        public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id, int numOfReviews)
         {
-            var course = await courseRepository.GetCourseAndConnectedData(id);
+            var course = await courseRepository.GetCourseAndConnectedData(id, numOfReviews);
 
             var courseRetrievalModel = CreateCourseRetrievalModel(course);
 
@@ -79,6 +82,28 @@ namespace UniUnboxdAPI.Services
                 courseRetrievalModel.Reviews.Add(CreateCourseReviewModel(review, course.Id));
 
             return courseRetrievalModel;
+        }
+
+        /// <summary>
+        /// Gets the popular courses amongst all universities of the last 7 days.
+        /// </summary>
+        /// <returns>The popular courses of last week of all universities.</returns>
+        public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeek()
+        {
+            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeek();
+            return CreateCourseGridModelCollection(courses);
+        }
+
+
+        /// <summary>
+        /// Gets the popular courses amongst a specific university of the last 7 days.
+        /// </summary>
+        /// <param name="id"> The id of the university.</param>
+        /// <returns>The popular courses of last week of the provided university.</returns>
+        public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeekByUniversity(int id)
+        {
+            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeekByUniversity(id);
+            return CreateCourseGridModelCollection(courses);
         }
 
         private static CourseRetrievalModel CreateCourseRetrievalModel(Course course)
@@ -116,5 +141,16 @@ namespace UniUnboxdAPI.Services
                     Image = review.Student.Image,
                     UserName = review.Student.UserName
                 };
+
+        public async Task<bool> DoesCourseExist(int id)
+            => await courseRepository.DoesCourseExist(id);
+            
+        private static ICollection<CourseGridModel> CreateCourseGridModelCollection(ICollection<Course> courses)
+            => courses.Select(i => new CourseGridModel()
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    Image = i.Image
+                }).ToList();
     }
 }

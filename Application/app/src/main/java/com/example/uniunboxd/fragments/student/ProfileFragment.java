@@ -24,6 +24,10 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public ProfileFragment(int userId) {
+        // TODO: Set user id.
+    }
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.

@@ -9,6 +9,6 @@ public class Course : Base
     public string? Image { get; set; }
     public string? Banner { get; set; } 
     public double AverageRating { get; set; }
-    public List<Review>? Reviews { get; set; }
+    public required List<Review> Reviews { get; set; }
     public required University University { get; set; }
 }

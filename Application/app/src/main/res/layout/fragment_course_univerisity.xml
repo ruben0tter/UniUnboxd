@@ -7,7 +7,7 @@
     tools:context=".fragments.student.CourseFragment">
 
     <LinearLayout
-        android:id = "@+id/reviewList"
+        android:id = "@+id/reviewPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -187,6 +187,20 @@
             android:text="Reviews"
             android:textSize="18sp"
             android:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/reviewList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
+
+        <Button
+            android:id="@+id/load"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/TUeRed"
+            android:text="Load Reviews"
+            android:textColor="@color/white" />
 
 
     </LinearLayout>

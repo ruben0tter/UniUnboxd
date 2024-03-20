@@ -1,6 +1,9 @@
 package com.example.uniunboxd.models;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,17 +35,23 @@ public class ReviewListItem {
         Poster = poster;
     }
     public View createView(LayoutInflater inflater, ViewGroup container,
-                                    Bundle savedInstanceState, ReviewListItem reviewListItem) {
+                                    Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.review_list_item, container, false);
         TextView comment = view.findViewById(R.id.ReviewListItem_Comment);
         RatingBar ratingBar = view.findViewById(R.id.ReviewListItem_RatingBar);
         TextView posterName = view.findViewById(R.id.ReviewListItem_PosterName);
         ImageView posterIcon = view.findViewById(R.id.ReviewListItem_PosterIcon);
-        //TODO: set up the id
-
-        comment.setText(reviewListItem.Comment);
-        if(Poster != null) posterName.setText(reviewListItem.Poster.UserName);
-        ratingBar.setRating(reviewListItem.Rating);
+        
+        comment.setText(Comment);
+        if(Poster != null) {
+            posterName.setText(Poster.UserName);
+            if(Poster.Image != null && !Poster.Image.equals("")) {
+                byte[] iconData = Base64.decode(Poster.Image, Base64.DEFAULT);
+                Bitmap bannerBitmap = BitmapFactory.decodeByteArray(iconData, 0, iconData.length);
+                posterIcon.setImageBitmap(bannerBitmap);
+            }
+        }
+        ratingBar.setRating(Rating);
         return view;
     }
 
