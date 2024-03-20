@@ -19,7 +19,12 @@ public class UserService
         var student = await userRepository.GetStudentAndConnectedData(id);
 
         var studentProfileModel = CreateStudentProfileModel(student);
-
+        University university = null;
+        if(await userRepository.DoesUniversityExist(student.UniversityId))
+            university = await userRepository.GetUniversity(student.UniversityId);
+        if(university != null)
+            studentProfileModel.UniversityName = university.UserName;
+        
         if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
             
         foreach (var review in student.Reviews)
@@ -34,7 +39,7 @@ public class UserService
             Id = student.Id,
             ProfilePic = student.Image,
             Name = student.UserName,
-            UniversityName = student.University?.UserName,
+            UniversityName = "",
             Reviews = new List<StudentProfileReview>()
             
         };

@@ -18,7 +18,7 @@ namespace UniUnboxdAPI.Controllers
         public async Task<IActionResult> GetMyUser()
         {
             int id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
-
+    
             StudentProfileModel student = await userService.GetStudentAndConnectedData(id);
             
             return Ok(student);
