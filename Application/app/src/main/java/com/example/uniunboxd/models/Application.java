@@ -32,7 +32,7 @@ public class Application {
         Button btnAccept = view.findViewById(R.id.accept_button);
         btnAccept.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(activity, "Accepted application.", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Accepted application.", Toast.LENGTH_SHORT).show();
                 parent.removeView(view);
             }
         });

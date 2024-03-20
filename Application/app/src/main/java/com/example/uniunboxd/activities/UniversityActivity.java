@@ -12,9 +12,9 @@ import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
-import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
@@ -33,14 +33,7 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
 
         setNavigationMenu();
 
-        //replaceFragment(getCorrectHomeFragment());
-        replaceFragment(new HomeUnverifiedFragment());
-
-        /*
-        UserState state = new UserState("userToken");
-        replaceFragment(state.getHomeFragment());
-        setUserState(state);
-        */
+        replaceFragment(getCorrectHomeFragment());
     }
 
     private Fragment getCorrectHomeFragment() {
@@ -65,7 +58,7 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                replaceFragment(new HomeUnverifiedFragment());
+                replaceFragment(getCorrectHomeFragment());
             } else if (itemId == R.id.search) {
                 // TODO: Set to University Search Fragment
                 replaceFragment(new SearchFragment());
@@ -86,20 +79,4 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
-
-    /*
-        public void setUserState(UserState strategy) {
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(strategy.getHomeFragment());
-            } else if (itemId == R.id.search) {
-                replaceFragment(strategy.getSearchFragment());
-            } else if (itemId == R.id.profile) {
-                replaceFragment(strategy.getProfileFragment());
-            }
-            return true;
-        });
-    }
-     */
 }
