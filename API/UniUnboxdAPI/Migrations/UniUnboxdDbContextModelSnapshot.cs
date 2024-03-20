@@ -61,14 +61,62 @@ namespace UniUnboxdAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ProfessorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UniversityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProfessorId");
+
                     b.HasIndex("UniversityId");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.Reply", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("LastModificationTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("ProfessorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfessorId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Replies");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Review", b =>
@@ -80,6 +128,7 @@ namespace UniUnboxdAPI.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("CourseId")
@@ -138,6 +187,9 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
+                    b.Property<int>("UniversityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .HasColumnType("longtext");
 
@@ -187,18 +239,22 @@ namespace UniUnboxdAPI.Migrations
                     b.ToTable("Applications");
                 });
 
-            modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
+            modelBuilder.Entity("UniUnboxdAPI.Models.Professor", b =>
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
 
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("UniversityId")
-                        .HasColumnType("int");
+                    b.ToTable("Professors");
+                });
 
-                    b.Property<bool>("Verified")
-                        .HasColumnType("tinyint(1)");
+            modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
+                {
+                    b.HasBaseType("UniUnboxdAPI.Models.User");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("longtext");
 
                     b.HasIndex("UniversityId");
 
@@ -209,14 +265,15 @@ namespace UniUnboxdAPI.Migrations
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
 
-                    b.Property<bool>("Verified")
-                        .HasColumnType("tinyint(1)");
-
                     b.ToTable("Universities");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
                 {
+                    b.HasOne("UniUnboxdAPI.Models.Professor", null)
+                        .WithMany("AssignedCourses")
+                        .HasForeignKey("ProfessorId");
+
                     b.HasOne("UniUnboxdAPI.Models.University", "University")
                         .WithMany("Courses")
                         .HasForeignKey("UniversityId")
@@ -224,6 +281,33 @@ namespace UniUnboxdAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("University");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.Reply", b =>
+                {
+                    b.HasOne("UniUnboxdAPI.Models.Professor", null)
+                        .WithMany("Replies")
+                        .HasForeignKey("ProfessorId");
+
+                    b.HasOne("UniUnboxdAPI.Models.Review", "Review")
+                        .WithMany("Replies")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniUnboxdAPI.Models.Student", null)
+                        .WithMany("Replies")
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("UniUnboxdAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Review");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Review", b =>
@@ -262,6 +346,15 @@ namespace UniUnboxdAPI.Migrations
                     b.Navigation("UserToBeVerified");
                 });
 
+            modelBuilder.Entity("UniUnboxdAPI.Models.Professor", b =>
+                {
+                    b.HasOne("UniUnboxdAPI.Models.User", null)
+                        .WithOne()
+                        .HasForeignKey("UniUnboxdAPI.Models.Professor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
                 {
                     b.HasOne("UniUnboxdAPI.Models.User", null)
@@ -270,11 +363,11 @@ namespace UniUnboxdAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniUnboxdAPI.Models.University", "University")
+                    b.HasOne("UniUnboxdAPI.Models.University", null)
                         .WithMany("Students")
-                        .HasForeignKey("UniversityId");
-
-                    b.Navigation("University");
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.University", b =>
@@ -291,8 +384,22 @@ namespace UniUnboxdAPI.Migrations
                     b.Navigation("Reviews");
                 });
 
+            modelBuilder.Entity("UniUnboxdAPI.Models.Review", b =>
+                {
+                    b.Navigation("Replies");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.Professor", b =>
+                {
+                    b.Navigation("AssignedCourses");
+
+                    b.Navigation("Replies");
+                });
+
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
                 {
+                    b.Navigation("Replies");
+
                     b.Navigation("Reviews");
                 });
 

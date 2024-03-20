@@ -22,14 +22,20 @@ namespace UniUnboxdAPI.Repositories
         public async Task<Course> GetCourse(int id)
             => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
 
-        public async Task<Course> GetCourseAndConnectedData(int id)
+        public async Task<Course> GetCourseAndConnectedData(int id, int numOfReviews)
             => await dbContext.Courses.Where(i => i.Id == id)
                                     .Include(i => i.University)
-                                    .Include(i => i.Reviews)!
+                                    .Include(i => i.Reviews.Take(numOfReviews))
                                     .ThenInclude(i => i.Student)
-                                    .FirstAsync(); 
+                                    .FirstAsync();
 
-        public async Task UpdateAverageRating(int id, double addedRating)
+        public async Task PostCourse(Course course)
+        {
+            await dbContext.Courses.AddAsync(course);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UpdateAverageRatingAfterPost(int id, double addedRating)
         {
             var course = await GetCourse(id);
             var reviewCount = await dbContext.Reviews.Where(i => i.Course.Id == id).CountAsync();
@@ -37,10 +43,28 @@ namespace UniUnboxdAPI.Repositories
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task PostCourse(Course course)
+        public async Task UpdateAverageRatingAfterPut(int id, double addedRating, double removedRating)
         {
-            await dbContext.Courses.AddAsync(course);
+            var course = await GetCourse(id);
+            var reviewCount = await dbContext.Reviews.Where(i => i.Course.Id == id).CountAsync();
+            course.AverageRating = (reviewCount * course.AverageRating - removedRating + addedRating) / reviewCount;
             await dbContext.SaveChangesAsync();
         }
+        public async Task UpdateAverageRatingAfterDelete(int id, double removedRating)
+        {
+            var course = await GetCourse(id);
+            var reviewCount = await dbContext.Reviews.Where(i => i.Course.Id == id).CountAsync();
+            course.AverageRating = reviewCount > 0 ? ((reviewCount + 1) * course.AverageRating - removedRating) / reviewCount : 0.0;
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<Course>> GetPopularCourseOfLastWeek()
+            => await dbContext.Courses.OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
+                                    .Take(10).ToListAsync();
+
+        public async Task<ICollection<Course>> GetPopularCourseOfLastWeekByUniversity(int id)
+            => await dbContext.Courses.Where(i => i.University.Id == id)
+                                .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
+                                .Take(10).ToListAsync();
     }
 }

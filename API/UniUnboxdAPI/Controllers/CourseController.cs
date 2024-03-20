@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
@@ -11,6 +12,36 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class CourseController(CourseService courseService) : ControllerBase
     {
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id, [FromQuery(Name = "numReviews")] int numOfReviews)
+        {
+            if (! await courseService.DoesCourseExist(id))
+                return BadRequest($"A course with id {id} does not exist.");
+
+            var model = await courseService.GetCourseRetrievalModelById(id, numOfReviews);
+
+            return Ok(model);
+        }
+
+        [HttpGet("popular")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetPopularCoursesOfLastWeek()
+        {
+            var courses = await courseService.GetPopularCoursesOfLastWeek();
+
+            return Ok(courses);
+        }
+
+        [HttpGet("popular_by_university")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetPopularCoursesOfLastWeekByUniversity([FromQuery(Name = "id")] int id)
+        {
+            var courses = await courseService.GetPopularCoursesOfLastWeekByUniversity(id);
+
+            return Ok(courses);
+        }
+
         [HttpPost]
         [Authorize(Roles = "University")]
         public async Task<IActionResult> PostCourse([FromBody] CourseCreationModel creationModel)
@@ -29,15 +60,6 @@ namespace UniUnboxdAPI.Controllers
             await courseService.PostCourse(course);
 
             return Ok("Course was created successfully.");
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id)
-        {
-            var model = await courseService.GetCourseRetrievalModelById(id);
-
-            return Ok(model);
         }
     }
 }

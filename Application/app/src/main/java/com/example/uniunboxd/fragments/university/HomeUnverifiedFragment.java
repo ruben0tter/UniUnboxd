@@ -1,5 +1,7 @@
 package com.example.uniunboxd.fragments.university;
 
+import static androidx.core.app.ActivityCompat.startActivityForResult;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,11 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.fragments.student.HomeFragment;
+import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.JWTValidation;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -64,29 +70,17 @@ public class HomeUnverifiedFragment extends HomeFragment {
             }
         });
 
+        Fragment f = this;
         btnUpload1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-                chooseFile.setType("application/pdf");
-                startActivityForResult(
-                        Intent.createChooser(chooseFile, "Choose a file"),
-                        PICKFILE_RESULT_CODE
-                );
-
+                FileSystemChooser.ChoosePDF(f);
             }
         });
         btnUpload2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-                chooseFile.setType("application/pdf");
-                startActivityForResult(
-                        Intent.createChooser(chooseFile, "Choose a file"),
-                        PICKFILE_RESULT_CODE
-                );
+                FileSystemChooser.ChoosePDF(f);
             }
         });
 
@@ -101,28 +95,13 @@ public class HomeUnverifiedFragment extends HomeFragment {
         return view;
     }
 
-    private byte[] readTextFromUri(Uri uri) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        try (InputStream is = getActivity().getContentResolver().openInputStream(uri)) {
-            int nRead;
-            byte[] data = new byte[10000];
-
-            while ((nRead = is.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-
-            buffer.flush();
-        }
-        return buffer.toByteArray();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             try {
-                verificationFileContents.add(readTextFromUri(uri));
+                verificationFileContents.add(FileSystemChooser.readTextFromUri(uri, getActivity()));
                 btnApply.setEnabled(true);
             } catch (Exception err) {
                 Log.e("APP", "Failed to read file: " + err);
@@ -132,7 +111,7 @@ public class HomeUnverifiedFragment extends HomeFragment {
 
     private void reload() {
         try {
-            replaceFragment(new HomeSubmittedFragment());
+            //replaceFragment(new HomeSubmittedFragment());
             //((StudentActivity) getActivity()).setUserState(new UserState("submitted"));
         } catch (Exception e) {
             Log.d("ERR", "i dunno");
