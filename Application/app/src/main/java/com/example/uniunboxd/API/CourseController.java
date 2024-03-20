@@ -133,4 +133,7 @@ public class CourseController {
         return textBuilder.toString().replace("\"", "");
     }
 
+    public static HttpURLConnection deleteCourse(int id, FragmentActivity f) throws IOException{
+        return APIClient.delete("Course?id=" + id, JWTValidation.getToken(f));
+    }
 }

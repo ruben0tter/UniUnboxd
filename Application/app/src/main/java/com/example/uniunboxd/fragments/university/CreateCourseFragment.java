@@ -22,7 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.CourseController;
-import com.example.uniunboxd.fragments.student.CourseFragment;
+import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.models.CourseCreationModel;
@@ -48,6 +48,8 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
 
     public CreateCourseFragment(CourseEditModel course) {
         this.Course = course;
+        imageEnc = Course.Image;
+        bannerEnc = Course.Banner;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -141,7 +143,26 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             FileSystemChooser.ChooseImage(f, bannerCode);
         }
         else if(id == R.id.deleteButton) {
+            if(Course != null) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            HttpURLConnection con = CourseController.deleteCourse(Course.Id, getActivity());
+                            if(con.getResponseCode() == 200) {
+                                Log.d("DEB","Deleted the course.");
+                            } else{
+                                Log.e("ERR", ""+con.getResponseCode());
+                            }
+                        } catch (Exception e) {
+                            Log.e("ERR", e.toString());
+                        }
 
+                    }
+                });
+                //TODO: Check if this redirection is correct.
+            }
+            ((IActivity) getActivity()).replaceFragment(new ApplicationsFragment());
         }
     }
 

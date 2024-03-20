@@ -12,11 +12,9 @@ import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
-import com.example.uniunboxd.fragments.university.CreateCourseFragment;
+import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
-import com.example.uniunboxd.fragments.university.ApplicationsFragment;
-import com.example.uniunboxd.models.CourseEditModel;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
@@ -33,8 +31,7 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         binding = ActivityUniversityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        replaceFragment(getCorrectHomeFragment());
-        replaceFragment(new CreateCourseFragment(new CourseEditModel(7, "Image", "[Course Code]", "[Course Description]", "[Select Professor]", null, null)));
+        replaceFragment(getCorrectHomeFragment());
         /*
         UserState state = new UserState("userToken");
         replaceFragment(state.getHomeFragment());

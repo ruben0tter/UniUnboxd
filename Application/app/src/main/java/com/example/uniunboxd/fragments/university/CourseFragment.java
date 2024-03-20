@@ -1,13 +1,15 @@
-package com.example.uniunboxd.fragments.student;
+package com.example.uniunboxd.fragments.university;
+
+import static android.view.View.GONE;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
@@ -15,14 +17,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.API.ReviewController;
-import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.models.Application;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.models.CourseEditModel;
 import com.example.uniunboxd.models.CourseRetrievalModel;
 import com.example.uniunboxd.models.ReviewListItem;
+import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.utilities.Redirection;
 
-import java.net.HttpURLConnection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -57,16 +59,28 @@ public class CourseFragment extends Fragment{
 
         if(Course != null) {
             view = Course.createView(inflater, container, savedInstanceState);
-        }
-        if(view != null) {
-            Button load = (Button) view.findViewById(R.id.load);
+
+            Button loadBtn = (Button) view.findViewById(R.id.load);
             LinearLayout reviewList = view.findViewById(R.id.reviewList);
-            load.setOnClickListener(new View.OnClickListener() {
+
+            ImageButton editBtn = view.findViewById(R.id.editButton);
+            loadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     load(reviewList, inflater, container, savedInstanceState);
                 }
             });
+
+            editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner);
+                    ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel));
+                }
+            });
+            String role = JWTValidation.getTokenProperty(getActivity(), "typ");
+            if(role.equals("Student"))
+                editBtn.setVisibility(GONE);
         }
         return view;
     }

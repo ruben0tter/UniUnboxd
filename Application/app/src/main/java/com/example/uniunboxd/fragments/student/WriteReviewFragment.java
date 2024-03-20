@@ -20,6 +20,7 @@ import com.example.uniunboxd.DTO.CourseModel;
 import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 
 import java.net.HttpURLConnection;
