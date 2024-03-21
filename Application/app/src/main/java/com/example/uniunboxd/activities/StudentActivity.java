@@ -77,28 +77,28 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
     }
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    FirebaseMessaging.getInstance().getToken ()
-                            .addOnCompleteListener ( task -> {
-                                if (!task.isSuccessful()) { return; }
-                                if (task.getResult() != null) {
-                                    String deviceToken = Objects.requireNonNull ( task.getResult() );
-                                    FragmentActivity f = this;
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                FirebaseMessaging.getInstance().getToken ()
+                    .addOnCompleteListener ( task -> {
+                        if (!task.isSuccessful()) { return; }
+                        if (task.getResult() != null) {
+                            String deviceToken = Objects.requireNonNull ( task.getResult() );
+                            FragmentActivity f = this;
 
-                                    AsyncTask.execute(() -> {
-                                        try {
-                                            HttpURLConnection con = UserController.setDeviceToken(deviceToken, f);
+                            AsyncTask.execute(() -> {
+                                try {
+                                    HttpURLConnection con = UserController.setDeviceToken(deviceToken, f);
 
-                                            Log.i("DeviceToken", "Code: " + con.getResponseCode());
-                                            Log.i("DeviceToken", "Message: " + con.getResponseMessage());
-                                        } catch (Exception e) {
-                                            Log.e("DeviceToken", e.toString());
-                                        }
-
-                                    });
+                                    Log.i("DeviceToken", "Code: " + con.getResponseCode());
+                                    Log.i("DeviceToken", "Message: " + con.getResponseMessage());
+                                } catch (Exception e) {
+                                    Log.e("DeviceToken", e.toString());
                                 }
-                            } );
-                }
-            });
+
+                            });
+                        }
+                    } );
+            }
+        });
 }
