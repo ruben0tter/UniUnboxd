@@ -95,6 +95,7 @@ builder.Services.AddTransient<ReviewService>();
 builder.Services.AddTransient<CourseService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ReplyService>();
+builder.Services.AddTransient<UserService>();
 
 // Repositories
 builder.Services.AddTransient<VerificationRepository>();

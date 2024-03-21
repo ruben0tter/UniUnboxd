@@ -45,4 +45,22 @@ public class UserRepository {
         public async Task<Professor> GetProfessorAndConnectedData(int id)
             => await dbContext.Professors.Where(i => i.Id == id)
                 .FirstAsync(); 
-}
+
+        public async Task<bool> DoesStudentFollowStudent(int followingStudentId, int followedStudentId)
+        {
+            var followingStudent = await dbContext.Students.Where(i => i.Id == followingStudentId).Include(i => i.Following).FirstAsync();
+            return followingStudent.Following!.Any(i => i.FollowedStudentId == followedStudentId);
+        }
+
+        public async Task FollowStudent(Follow followRelation)
+        {
+            await dbContext.Follows.AddAsync(followRelation);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UnfollowStudent(Follow followRelation)
+        {
+            dbContext.Follows.Remove(followRelation);
+            await dbContext.SaveChangesAsync();
+        }
+    }

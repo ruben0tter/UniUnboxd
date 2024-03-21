@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniUnboxdAPI.Data;
 
@@ -11,9 +12,11 @@ using UniUnboxdAPI.Data;
 namespace UniUnboxdAPI.Migrations
 {
     [DbContext(typeof(UniUnboxdDbContext))]
-    partial class UniUnboxdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240319153802_Add-Follow-Relation-To-Student")]
+    partial class AddFollowRelationToStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,13 +304,13 @@ namespace UniUnboxdAPI.Migrations
             modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
                 {
                     b.HasOne("UniUnboxdAPI.Models.Student", "FollowedStudent")
-                        .WithMany("Followers")
+                        .WithMany("Following")
                         .HasForeignKey("FollowedStudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UniUnboxdAPI.Models.Student", "FollowingStudent")
-                        .WithMany("Following")
+                        .WithMany("Followers")
                         .HasForeignKey("FollowingStudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
