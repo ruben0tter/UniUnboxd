@@ -1,6 +1,6 @@
 package com.example.uniunboxd.utilities;
 
-import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 
@@ -24,7 +24,7 @@ public class UserState {
     }
     */
 
-    public ProfileFragment getProfileFragment() {
-        return new ApplicationsFragment();
-    }
+//    public StudentProfileFragment getProfileFragment() {
+//        return new ApplicationsFragment();
+//    }
 }

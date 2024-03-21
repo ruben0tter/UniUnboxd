@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.R;
 
-public class ProfileFragment extends Fragment {
+public class StudentProfileFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,6 +20,6 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile_page_student, container, false);
+        return inflater.inflate(R.layout.fragment_student_profile_page, container, false);
     }
 }

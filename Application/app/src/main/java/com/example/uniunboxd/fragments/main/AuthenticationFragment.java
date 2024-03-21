@@ -20,6 +20,7 @@ import com.example.uniunboxd.API.AuthenticationController;
 import com.example.uniunboxd.DTO.AuthenticationModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.ProfessorActivity;
 import com.example.uniunboxd.activities.StudentActivity;
 import com.example.uniunboxd.activities.UniversityActivity;
 import com.example.uniunboxd.utilities.JWTValidation;
@@ -145,7 +146,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         } else if (Objects.equals(userType, "University")) {
             ((IActivity) getActivity()).replaceActivity(UniversityActivity.class);
         } else if (Objects.equals(userType, "Professor")) {
-            //TODO: Redirect to Professor Home Page.
+            ((IActivity) getActivity()).replaceActivity(ProfessorActivity.class);
         }
     }
 

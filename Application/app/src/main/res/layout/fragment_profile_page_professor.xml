@@ -21,7 +21,7 @@
             android:background="@drawable/bottom_border">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView"
+                android:id="@+id/professorImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
@@ -35,17 +35,17 @@
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
 
             <TextView
-                android:id="@+id/EnrolledIN"
+                android:id="@+id/professorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="124dp"
                 android:text="Juan the professor"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"
+                app:layout_constraintEnd_toEndOf="@+id/professorImage"
                 app:layout_constraintHorizontal_bias="0.507"
-                app:layout_constraintStart_toStartOf="@+id/shapeableImageView"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
+                app:layout_constraintStart_toStartOf="@+id/professorImage"
+                app:layout_constraintTop_toTopOf="@+id/professorImage" />
 
             <TextView
                 android:id="@+id/userName"
@@ -54,9 +54,9 @@
                 android:layout_marginTop="20dp"
                 android:text="Works at: [University]"
                 android:textSize="15dp"
-                app:layout_constraintEnd_toEndOf="@+id/EnrolledIN"
-                app:layout_constraintStart_toStartOf="@+id/EnrolledIN"
-                app:layout_constraintTop_toBottomOf="@+id/EnrolledIN" />
+                app:layout_constraintEnd_toEndOf="@+id/professorName"
+                app:layout_constraintStart_toStartOf="@+id/professorName"
+                app:layout_constraintTop_toBottomOf="@+id/professorName" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -75,10 +75,9 @@
 
 
             <TextView
-                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reviews"
+                android:text="Your Courses"
                 android:textSize="18dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -90,9 +89,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="100dp" >
-
-
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

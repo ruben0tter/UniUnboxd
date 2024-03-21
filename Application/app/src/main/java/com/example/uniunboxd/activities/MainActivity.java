@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements IActivity {
             } else if (Objects.equals(type, "University")) {
                 replaceActivity(UniversityActivity.class);
             } else if (Objects.equals(type, "Professor")) {
-                // TODO: Add Professor Activity
+                replaceActivity(ProfessorActivity.class);
             }
         } else {
             replaceFragment(new AuthenticationFragment());

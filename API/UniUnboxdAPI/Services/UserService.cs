@@ -17,7 +17,7 @@ public class UserService
     public async Task<StudentProfileModel> GetStudentAndConnectedData(int id)
     {
         var student = await userRepository.GetStudentAndConnectedData(id);
-
+            
         var studentProfileModel = CreateStudentProfileModel(student);
         University university = null;
         if(await userRepository.DoesUniversityExist(student.UniversityId))
@@ -26,8 +26,8 @@ public class UserService
             studentProfileModel.UniversityName = university.UserName;
         
         if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
-            
-        foreach (var review in student.Reviews)
+
+        foreach (var review in student.Reviews.OrderByDescending(i => i.LastModificationTime))
             studentProfileModel.Reviews.Add(CreateStudentProfileReview(review));
 
         return studentProfileModel;

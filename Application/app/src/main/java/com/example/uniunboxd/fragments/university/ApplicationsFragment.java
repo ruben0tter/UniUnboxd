@@ -9,15 +9,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.models.Application;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApplicationsFragment extends ProfileFragment {
+public class ApplicationsFragment extends Fragment {
     private final List<Application> applications = new ArrayList<>();
 
     @Override

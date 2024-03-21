@@ -55,20 +55,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Enrolled at: [University]"
-                android:textSize="15dp"
+                android:textSize="17dp"
                 app:layout_constraintBottom_toTopOf="@+id/saveChanges"
                 app:layout_constraintEnd_toEndOf="@+id/EnrolledIN"
+                app:layout_constraintHorizontal_bias="0.476"
                 app:layout_constraintStart_toStartOf="@+id/EnrolledIN"
-                app:layout_constraintTop_toBottomOf="@+id/EnrolledIN" />
+                app:layout_constraintTop_toBottomOf="@+id/EnrolledIN"
+                app:layout_constraintVertical_bias="0.0" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/saveChanges"
-                android:layout_width="88dp"
-                android:layout_height="28dp"
+                android:layout_width="93dp"
+                android:layout_height="33dp"
                 android:background="#C82424"
                 android:text="Follow"
                 android:textColor="#FFFFFF"
-                android:textSize="15dp"
+                android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"

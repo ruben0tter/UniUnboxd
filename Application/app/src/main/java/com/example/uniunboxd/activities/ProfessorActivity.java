@@ -9,13 +9,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityStudentBinding;
-import com.example.uniunboxd.fragments.student.HomeFragment;
-import com.example.uniunboxd.fragments.student.StudentProfileFragment;
+import com.example.uniunboxd.fragments.professor.ProfessorProfileFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
-public class StudentActivity extends AppCompatActivity implements IActivity {
-
+public class ProfessorActivity extends AppCompatActivity implements IActivity{
     ActivityStudentBinding binding;
 
     @Override
@@ -27,38 +26,33 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
 
         setNavigationMenu();
 
-        replaceFragment(new HomeFragment());
-
-        /*
-        UserState state = new UserState("userToken");
-        replaceFragment(state.getHomeFragment());
-        setUserState(state);
-        */
+        int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
+        replaceFragment(new ProfessorProfileFragment(id));
     }
 
-    public void setNavigationMenu() {
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(new HomeFragment());
-            } else if (itemId == R.id.search) {
-                replaceFragment(new SearchFragment());
-            } else if (itemId == R.id.profile) {
-                replaceFragment(new StudentProfileFragment());
-            }
-            return true;
-        });
-    }
-
+    @Override
     public void replaceActivity(Class<? extends AppCompatActivity> activity) {
         Redirection.replaceActivity(this, activity);
     }
 
+    @Override
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
-
+    public void setNavigationMenu() {
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.profile) {
+                int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
+                replaceFragment(new ProfessorProfileFragment(id));
+            } else if (itemId == R.id.applications) {
+                //TODO: Link professor search
+                replaceFragment(new SearchFragment());
+            }
+            return true;
+        });
+    }
 }
