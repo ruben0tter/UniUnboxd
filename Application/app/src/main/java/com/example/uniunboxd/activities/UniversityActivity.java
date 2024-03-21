@@ -11,10 +11,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
-import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.student.SearchStudentFragment;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
+import com.example.uniunboxd.fragments.university.SearchUniversityFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
@@ -60,8 +61,7 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
             if (itemId == R.id.home) {
                 replaceFragment(getCorrectHomeFragment());
             } else if (itemId == R.id.search) {
-                // TODO: Set to University Search Fragment
-                replaceFragment(new SearchFragment());
+                replaceFragment(new SearchUniversityFragment());
             } else if (itemId == R.id.applications) {
                 replaceFragment(new ApplicationsFragment());
             }

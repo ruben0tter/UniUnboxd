@@ -16,7 +16,7 @@
             android:layout_gravity="center">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
@@ -30,12 +30,18 @@
             android:layout_gravity="center"
             android:orientation="vertical">
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:text="Course Name"
+                android:id="@+id/course"
                 tools:ignore="NestedWeights" />
 
             <TextView
@@ -44,12 +50,14 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:text="Course Code"
+                android:id="@+id/code"
                 tools:ignore="NestedWeights" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:id="@+id/university"
                 android:text="University" />
 
             <LinearLayout
@@ -67,7 +75,9 @@
                     style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:numStars="5" />
+                    android:numStars="5"
+                    android:rating="4"
+                    android:progressTint="@color/yellow"/>
             </LinearLayout>
 
             <LinearLayout
@@ -87,7 +97,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
-                    android:numStars="5" />
+                    android:numStars="5"
+                    android:rating="3"
+                    android:progressTint="@color/yellow"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

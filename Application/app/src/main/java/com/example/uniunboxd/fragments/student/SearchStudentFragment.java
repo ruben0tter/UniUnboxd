@@ -18,12 +18,19 @@ import com.example.uniunboxd.models.CourseSearchResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchStudentFragment extends Fragment {
 
     private List<CourseSearchResult> results = new ArrayList<>();
     private boolean SEARCH_COURSES = true;
 
-    public SearchFragment() {
+    private String currentQuery = "";
+    private Button usersButton;
+    private Button coursesButton;
+    private SearchView search;
+    private Button loadMore;
+    private LinearLayout resultsLayout;
+
+    public SearchStudentFragment() {
         // Required empty public constructor
     }
 
@@ -36,16 +43,16 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        SearchView search = view.findViewById(R.id.search);
-        Button usersButton = view.findViewById(R.id.searchUsersButton);
-        Button coursesButton = view.findViewById(R.id.searchCourseButton);
-        Button loadMore = view.findViewById(R.id.load_more_button);
+        search = view.findViewById(R.id.search);
+        usersButton = view.findViewById(R.id.searchUsersButton);
+        coursesButton = view.findViewById(R.id.searchCourseButton);
+        loadMore = view.findViewById(R.id.load_more_button);
         loadMore.setVisibility(View.INVISIBLE);
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String text) {
                 try {
-                    results.addAll(SearchController.searchCourses(text, getContext()));
+                    search(text);
                 } catch (Exception e) {
                     // Nothing lol
                 }
@@ -63,6 +70,10 @@ public class SearchFragment extends Fragment {
                 SEARCH_COURSES = false;
                 coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
                 usersButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+
+                loadMore.setVisibility(View.INVISIBLE);
+                resultsLayout.removeAllViews();
+                currentQuery = "";
             }
         });
 
@@ -72,14 +83,36 @@ public class SearchFragment extends Fragment {
                 SEARCH_COURSES = true;
                 coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
                 usersButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+
+                loadMore.setVisibility(View.INVISIBLE);
+                resultsLayout.removeAllViews();
+                currentQuery = "";
             }
         });
 
-        LinearLayout resultsLayout = view.findViewById(R.id.results);
+        resultsLayout = view.findViewById(R.id.results);
         resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
         resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
         resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
 
         return view;
+    }
+
+    public void search(String text) {
+        loadMore.setVisibility(View.VISIBLE);
+
+        if(!currentQuery.equals(text)) {
+            for(CourseSearchResult r: results) {
+                results.remove(r);
+            }
+            resultsLayout.removeAllViews();
+            currentQuery = text;
+        }
+
+        try {
+            SearchController.searchCourses(text, getContext());
+        } catch (Exception e) {
+            resultsLayout.removeAllViews();
+        }
     }
 }

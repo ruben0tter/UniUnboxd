@@ -42,8 +42,7 @@ public class CourseSearchResult {
     public View createView(LayoutInflater inflater, LinearLayout parent, Activity activity) {
         View view = inflater.inflate(R.layout.search_result_course, null);
 
-
-        ImageView image = view.findViewById(R.id.imageView);
+        ImageView image = view.findViewById(R.id.image);
 
         byte[] decodedString = Base64.decode(Image, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);

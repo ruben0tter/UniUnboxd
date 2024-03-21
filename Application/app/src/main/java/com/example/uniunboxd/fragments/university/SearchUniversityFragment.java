@@ -26,7 +26,7 @@ public class SearchUniversityFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search_uni, container, false);
 
         SearchView search = view.findViewById(R.id.search);
         Button loadMore = view.findViewById(R.id.load_more_button);

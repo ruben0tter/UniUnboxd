@@ -11,7 +11,7 @@ import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityStudentBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.fragments.student.ProfileFragment;
-import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.student.SearchStudentFragment;
 import com.example.uniunboxd.utilities.Redirection;
 
 public class StudentActivity extends AppCompatActivity implements IActivity {
@@ -28,12 +28,6 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
         setNavigationMenu();
 
         replaceFragment(new HomeFragment());
-
-        /*
-        UserState state = new UserState("userToken");
-        replaceFragment(state.getHomeFragment());
-        setUserState(state);
-        */
     }
 
     public void setNavigationMenu() {
@@ -42,7 +36,7 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
             if (itemId == R.id.home) {
                 replaceFragment(new HomeFragment());
             } else if (itemId == R.id.search) {
-                replaceFragment(new SearchFragment());
+                replaceFragment(new SearchStudentFragment());
             } else if (itemId == R.id.profile) {
                 replaceFragment(new ProfileFragment());
             }

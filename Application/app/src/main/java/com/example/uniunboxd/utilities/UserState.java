@@ -1,7 +1,7 @@
 package com.example.uniunboxd.utilities;
 
 import com.example.uniunboxd.fragments.student.ProfileFragment;
-import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.student.SearchStudentFragment;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 
 public class UserState {
@@ -10,8 +10,8 @@ public class UserState {
         SUBMITTED = userToken.equals("submitted");
     }
 
-    public SearchFragment getSearchFragment() {
-        return new SearchFragment();
+    public SearchStudentFragment getSearchFragment() {
+        return new SearchStudentFragment();
     }
 
     /*
