@@ -10,11 +10,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
-import com.example.uniunboxd.fragments.student.HomeFragment;
-import com.example.uniunboxd.fragments.student.SearchStudentFragment;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
+import com.example.uniunboxd.fragments.university.HomeVerifiedFragment;
 import com.example.uniunboxd.fragments.university.SearchUniversityFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
@@ -40,21 +39,18 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
     private Fragment getCorrectHomeFragment() {
         String state = JWTValidation.getTokenProperty(this, "verified");
 
-        if (Objects.equals(state, "Unverified")) {
-            binding.bottomNavigationView.setVisibility(View.GONE);
-            return new HomeUnverifiedFragment();
+        if (Objects.equals(state, "Verified")) {
+            setNavigationMenu();
+            return new HomeVerifiedFragment();
         } else if (Objects.equals(state, "Pending")) {
             binding.bottomNavigationView.setVisibility(View.GONE);
             return new HomeSubmittedFragment();
-        } else if (Objects.equals(state, "Verified")) {
-            // TODO: Add the University Home Fragment
-            setNavigationMenu();
-            return new HomeFragment();
+        } else {
+            binding.bottomNavigationView.setVisibility(View.GONE);
+            return new HomeUnverifiedFragment();
         }
-
-        return null;
     }
-
+    
     public void setNavigationMenu() {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();

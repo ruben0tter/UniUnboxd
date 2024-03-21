@@ -26,9 +26,13 @@ public class JWTValidation {
         try {
             JSONObject obj = new JSONObject(payload);
 
-            return obj.get(key).toString();
+            if (obj.has(key)) {
+                return obj.get(key).toString();
+            } else {
+                return null;
+            }
         } catch (Throwable t) {
-            Log.e("JWT", "Could not parse malformed JSON: \"" + payload + "\"");
+            Log.e("JWT", "Could not parse malformed JSON: \"" + payload + "\"" + "\n\n" + t.toString());
         }
 
         return null;

@@ -1,4 +1,5 @@
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel;
 using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
@@ -7,11 +8,12 @@ using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Services
 {
-    public class SearchService(SearchRepository searchRepository)
+    public class SearchService(SearchRepository searchRepository, UserRepository userRepository)
     {
 
         public async Task<List<CourseSearchModel>> GetCourses(SearchOptions options) {
-            List<Course> courses;
+            List<Course> courses = [];
+
             if (options.Start.HasValue && options.Count.HasValue) {
                 courses = await searchRepository.GetCourses(options.Search, options.Start.Value, options.Count.Value);
             } else {
@@ -22,7 +24,7 @@ namespace UniUnboxdAPI.Services
         }
 
         public async Task<List<UserSearchModel>> GetUsers(SearchOptions options) {
-            List<User> users;
+            List<User> users = [];
             if (options.Start.HasValue && options.Count.HasValue) {
                 users = await searchRepository.GetUsers(options.Search, options.Start.Value, options.Count.Value);
             } else {
@@ -39,8 +41,8 @@ namespace UniUnboxdAPI.Services
                 Id = course.Id,
                 Name = course.Name,
                 Code = course.Code,
-                University = course.University.UserName,
-                UniversityId = course.University.Id,
+                University = course.University?.UserName ?? "",
+                UniversityId = course.University?.Id ?? -1,
                 Professor = course.Professor,
                 Image = course.Image,
                 AverageRating = course.AverageRating
@@ -53,8 +55,8 @@ namespace UniUnboxdAPI.Services
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                UserType = user.UserType,
                 // Image = user.Image
+                UserType = user.UserType,
             };
         }
     }

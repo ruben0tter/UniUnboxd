@@ -22,23 +22,21 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.CourseController;
-import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.models.CourseCreationModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.nio.file.FileSystem;
 
-public class CreateCourseFragment extends Fragment implements View.OnClickListener{
+public class CreateCourseFragment extends Fragment implements View.OnClickListener {
     private final int imageCode = 1;
     private final int bannerCode = 2;
 
     private String imageEnc = null;
     private String bannerEnc = null;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,7 +58,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
     public void onClick(View view) {
         Fragment f = FragmentManager.findFragment(view);
         int id = view.getId();
-        if(id == R.id.saveChanges) {
+        if (id == R.id.saveChanges) {
             //TODO: fix these ID's
             ConstraintLayout layout = (ConstraintLayout) view.getParent();
             EditText name = (EditText) layout.getViewById(R.id.courseName_courseName_edit);
@@ -71,18 +69,17 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(),"sub"));
+                    int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
                     CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
                             code.getText().toString(), description.getText().toString(),
                             professor.getText().toString(), imageEnc, bannerEnc, universityId);
-                    try{
+                    try {
                         HttpURLConnection con = CourseController.postCourse(course, getActivity());
-                        if(con.getResponseCode() == 200){
-                            replaceFragment(new HomeFragment());
-                        }
-                        else{
+                        if (con.getResponseCode() == 200) {
+                            replaceFragment(new HomeVerifiedFragment());
+                        } else {
                             //TODO: see how to show a toast
-                            Log.d("DEB", ""+con.getResponseCode());
+                            Log.d("DEB", "" + con.getResponseCode());
                         }
                     } catch (Exception e) {
                         Log.e("ERR", e.toString());
@@ -90,11 +87,9 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
 
                 }
             });
-        }
-        else if(id == R.id.courseImage_edit) {
+        } else if (id == R.id.courseImage_edit) {
             FileSystemChooser.ChooseImage(f, imageCode);
-        }
-        else if(id == R.id.courseBanner_edit) {
+        } else if (id == R.id.courseBanner_edit) {
             FileSystemChooser.ChooseImage(f, bannerCode);
         }
     }
@@ -103,10 +98,9 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ImageView image = null;
-        if(requestCode == imageCode) {
+        if (requestCode == imageCode) {
             image = this.getView().findViewById(R.id.courseImage_image_courseSetup);
-        }
-        else if (requestCode == bannerCode) {
+        } else if (requestCode == bannerCode) {
             image = this.getView().findViewById(R.id.courseBanner_image_courseSetup);
         }
         Uri uri = data.getData();
@@ -125,12 +119,13 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
     }
 
     public void encodeImageOrBanner(byte[] data, int code) {
-        if(code == imageCode){
+        if (code == imageCode) {
             imageEnc = Base64.encodeToString(data, Base64.DEFAULT);
         } else if (code == bannerCode) {
             bannerEnc = Base64.encodeToString(data, Base64.DEFAULT);
         }
     }
+
     public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

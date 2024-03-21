@@ -17,10 +17,11 @@ namespace UniUnboxdAPI.Controllers
     public class SearchController(SearchService searchService) : ControllerBase
     {
         [HttpGet]
-        [Authorize(Roles = "University")]
+        [Authorize(Roles = "Student, University")]
         [Route("Course")]
         public async Task<IActionResult> SearchCourses([FromQuery] SearchOptions query)
         {
+            Console.WriteLine("\n\n\n\n\nSearching for courses\n\n\n\n\n");
             if (query.Search == "") {
                 return BadRequest("Search query cannot be empty");
             }
@@ -31,6 +32,7 @@ namespace UniUnboxdAPI.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("User")]
         public async Task<IActionResult> SearchUsers([FromQuery] SearchOptions query)
         {
             if (query.Search == "") {

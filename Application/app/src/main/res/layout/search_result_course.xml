@@ -33,7 +33,7 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"/>
+                android:layout_weight="2" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -77,7 +77,8 @@
                     android:layout_height="wrap_content"
                     android:numStars="5"
                     android:rating="4"
-                    android:progressTint="@color/yellow"/>
+                    android:id="@+id/anonRating"
+                    android:progressTint="@color/yellow" />
             </LinearLayout>
 
             <LinearLayout
@@ -99,7 +100,8 @@
                     android:isIndicator="true"
                     android:numStars="5"
                     android:rating="3"
-                    android:progressTint="@color/yellow"/>
+                    android:id="@+id/nonAnonRating"
+                    android:progressTint="@color/yellow" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

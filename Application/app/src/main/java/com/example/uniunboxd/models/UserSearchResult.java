@@ -16,44 +16,32 @@ import com.example.uniunboxd.fragments.student.CourseFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CourseSearchResult {
+public class UserSearchResult {
     public final int Id;
-    public final String Name;
-    public final String Code;
-    public final String University;
-    public final int UniversityId;
+    public final String UserName;
     public final String Image;
-    public final String Professor;
-    public final double AverageRating;
+    public final int UserType;
 
     @JsonCreator
-    public CourseSearchResult(@JsonProperty("id") int id,
-                              @JsonProperty("name") String name,
-                              @JsonProperty("code") String code,
-                              @JsonProperty("university") String university,
-                              @JsonProperty("universityId") int universityId,
-                              @JsonProperty("professor") String professor,
-                              @JsonProperty("image") String image,
-                              @JsonProperty("averageRating") int averageRating) {
+    public UserSearchResult(@JsonProperty("id") int id,
+                            @JsonProperty("userName") String username,
+                            @JsonProperty("image") String image,
+                            @JsonProperty("userType") int userType) {
         Id = id;
-        Name = name;
-        Code = code;
-        University = university;
-        UniversityId = universityId;
-        Professor = professor;
+        UserName = username;
         Image = image;
-        AverageRating = averageRating;
+        UserType = userType;
     }
 
 
     public View createView(LayoutInflater inflater, Activity activity) {
-        View view = inflater.inflate(R.layout.search_result_course, null);
+        View view = inflater.inflate(R.layout.search_result_user, null);
 
         view.setOnClickListener(l -> {
             ((IActivity) activity).replaceFragment(new CourseFragment(Id));
         });
 
-        ((TextView) view.findViewById(R.id.course)).setText(Name);
+        ((TextView) view.findViewById(R.id.username)).setText(Name);
         ((TextView) view.findViewById(R.id.code)).setText(Code);
         ((TextView) view.findViewById(R.id.university)).setText(University);
         ((RatingBar) view.findViewById(R.id.anonRating)).setRating((float) AverageRating);

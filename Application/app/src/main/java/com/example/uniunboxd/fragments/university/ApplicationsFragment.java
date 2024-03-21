@@ -59,7 +59,7 @@ public class ApplicationsFragment extends ProfileFragment {
                         });
                     }
                 } catch (Exception e) {
-                    Log.e("APP", e.toString());
+                    Log.e("LoadApplications", e.toString());
                 }
             }
         });

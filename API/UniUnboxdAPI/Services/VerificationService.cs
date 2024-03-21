@@ -85,7 +85,7 @@ namespace UniUnboxdAPI.Services
                 CreationTime = DateTime.Now,
                 LastModificationTime = DateTime.Now,
                 VerificationData = request.VerificationData,
-                UserType = userType,
+                // UserType = userType,
                 UserToBeVerified = user,
                 TargetUniversity = university
             };

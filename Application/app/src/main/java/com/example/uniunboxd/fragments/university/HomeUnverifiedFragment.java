@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
@@ -111,11 +109,7 @@ public class HomeUnverifiedFragment extends Fragment {
 
     private void reload() {
         try {
-            FragmentManager fragmentManager = getParentFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frame_layout, new HomeSubmittedFragment());
-            fragmentTransaction.commit();
-            //((StudentActivity) getActivity()).setUserState(new UserState("submitted"));
+            ((IActivity) getActivity()).replaceFragment(new HomeSubmittedFragment());
         } catch (Exception e) {
             Log.d("ERR", "i dunno");
         }

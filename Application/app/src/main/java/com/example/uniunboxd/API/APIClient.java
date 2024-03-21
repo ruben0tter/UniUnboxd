@@ -52,6 +52,8 @@ public class APIClient {
         con.setRequestProperty("Authorization", "Bearer " + (token != null ? token : ""));
         con.setRequestMethod(method);
         con.setRequestProperty("Accept", "application/json");
+        con.setConnectTimeout(5000);
+        con.setReadTimeout(5000);
 
         return con;
     }

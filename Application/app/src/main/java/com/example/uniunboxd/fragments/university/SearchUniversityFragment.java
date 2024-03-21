@@ -1,6 +1,8 @@
 package com.example.uniunboxd.fragments.university;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +36,16 @@ public class SearchUniversityFragment extends Fragment {
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String text) {
-                try {
-                    results.addAll(SearchController.searchCourses(text, getContext()));
-                } catch (Exception e) {
-                    // Nothing lol
-                }
+                AsyncTask.execute(() -> {
+                    try {
+                        List<CourseSearchResult> courses = SearchController.searchCourses(text, getContext());
+                        getActivity().runOnUiThread(() -> {
+                            results.addAll(courses);
+                        });
+                    } catch (Exception e) {
+                        Log.e("APP", "failed to search courses: " + e.toString());
+                    }
+                });
                 return false;
             }
 

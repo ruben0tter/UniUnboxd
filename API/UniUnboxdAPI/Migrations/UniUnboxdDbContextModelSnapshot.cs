@@ -73,7 +73,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UniversityId");
 
-                    b.ToTable("Courses");
+                    b.ToTable("Courses", (string)null);
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Reply", b =>
@@ -116,7 +116,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Replies");
+                    b.ToTable("Replies", (string)null);
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Review", b =>
@@ -155,7 +155,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.User", b =>
@@ -201,7 +201,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -226,9 +226,6 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<int>("UserToBeVerifiedId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserType")
-                        .HasColumnType("int");
-
                     b.Property<string>("VerificationData")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -239,7 +236,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UserToBeVerifiedId");
 
-                    b.ToTable("Applications");
+                    b.ToTable("Applications", (string)null);
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Professor", b =>
@@ -249,7 +246,7 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
-                    b.ToTable("Professors");
+                    b.ToTable("Professors", (string)null);
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
@@ -261,14 +258,14 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UniversityId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.University", b =>
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
 
-                    b.ToTable("Universities");
+                    b.ToTable("Universities", (string)null);
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
