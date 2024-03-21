@@ -67,7 +67,12 @@ namespace UniUnboxdAPI.Services
         /// <param name="reply">Provided reply.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task NotifyReviewAuthor(Reply reply)
-            => mailService.NewReplyMail(reply);
+        {
+            if (reply.Review.Student.NotificationSettings.ReceivesNewReplyMail)
+            {
+                mailService.NewReplyMail(reply);
+            }
+        }
 
 
         /// <summary>

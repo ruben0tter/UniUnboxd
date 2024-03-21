@@ -122,8 +122,11 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task NotifyFollowers(Review review)
         {
-            foreach (Follow follow in review.Student.Followers!)
-                mailService.NewReviewMail(follow.FollowingStudent, review);
+            if (review.Student.NotificationSettings.ReceivesFollowersReviewMail)
+            {
+                foreach (Follow follow in review.Student.Followers!)
+                    mailService.NewReviewMail(follow.FollowingStudent, review);
+            }
         }
 
         /// <summary>

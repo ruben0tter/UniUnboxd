@@ -11,11 +11,11 @@ namespace UniUnboxdAPI.Utilities
 
         public static string NewReviewMailBody(Review review)
         {
-            return review.Student + " has posted a review for the course " + review.Course + ". Go check it out :)";
+            return review.Student + " has posted a review for the course " + review.Course.Name + ". Go check it out :)";
         }
         public static string NewReplyMailBody(Reply reply)
         {
-            return reply.User.UserName + " has replied to you review for the course " + reply.Review.Course;
+            return reply.User.UserName + " has replied to you review for the course " + reply.Review.Course.Name;
         }
     }
 }
