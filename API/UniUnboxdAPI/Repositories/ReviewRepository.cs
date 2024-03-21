@@ -29,10 +29,11 @@ namespace UniUnboxdAPI.Repositories
         public async Task<Review?> GetReviewAndConnectedData(int id)
             => await dbContext.Reviews.Where(i => i.Id == id)
                                         .Include(i => i.Student)
+                                        .ThenInclude(i => i.NotificationSettings)
                                         .Include(i => i.Course)
                                         .Include(i => i.Replies)  
                                         .ThenInclude(i => i.User)        
-                                        .FirstOrDefaultAsync();
+                                        .FirstAsync();
 
         public async Task<ICollection<Review>> GetLatestReviewsByFriends(int id)
             => await dbContext.Reviews.Where(i => i.Student.Followers!.Any(i => i.FollowingStudentId == id) 

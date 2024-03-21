@@ -17,13 +17,15 @@ namespace UniUnboxdAPI.Services
         private readonly CourseRepository courseRepository;
         private readonly UserRepository userRepository;
         private readonly MailService mailService;
+        private readonly PushNotificationService pushNotificationService;
 
-        public ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository, MailService mailService)
+        public ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService)
         {
             this.reviewRepository = reviewRepository;
             this.courseRepository = courseRepository;
             this.userRepository = userRepository;
             this.mailService = mailService;
+            this.pushNotificationService = pushNotificationService;
         }
 
         /// <summary>
@@ -120,12 +122,19 @@ namespace UniUnboxdAPI.Services
         /// </summary>
         /// <param name="review">Provided review.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
-        public async Task NotifyFollowers(Review review)
+        public void NotifyFollowers(Review review)
         {
-            if (review.Student.NotificationSettings.ReceivesFollowersReviewMail)
+            if (review.IsAnonymous)
+                return;
+
+
+            foreach (Follow follow in review.Student.Followers!)
             {
-                foreach (Follow follow in review.Student.Followers!)
-                    mailService.NewReviewMail(follow.FollowingStudent, review);
+                if (follow.FollowingStudent.NotificationSettings!.ReceivesFollowersReviewMail)
+                    mailService.SendNewReviewNotification(follow.FollowingStudent, review);
+
+                if (follow.FollowingStudent.NotificationSettings.ReceivesFollowersReviewPush)
+                    pushNotificationService.SendNewReviewNotification(follow.FollowingStudent, review);
             }
         }
 

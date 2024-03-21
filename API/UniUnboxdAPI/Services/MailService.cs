@@ -11,17 +11,12 @@ using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace UniUnboxdAPI.Services
 {
-    public class MailService
+    public class MailService(IConfiguration configuration) : INotificationService
     {
         private readonly MailboxAddress uniUnboxdEmail = new("UniUnboxd", "uniunboxd@gmail.com");
-        private readonly string uniUnboxdPassword;
+        private readonly string uniUnboxdPassword = configuration["UniUnboxdPassword"]!;
 
-        public MailService(IConfiguration configuration)
-        {
-            uniUnboxdPassword = configuration["UniUnboxdPassword"];
-        }
-
-        public void NewFollowerMail(Student studentFollowed, Student studentFollowing)
+        public void SendNewFollowerNotification(Student studentFollowing, Student studentFollowed)
         {
             var newFollowerMail = new MimeMessage();
 
@@ -31,7 +26,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = MailBodyGenerator.NewFollowerMailBody(studentFollowing)
+                HtmlBody = NotificationBodyGenerator.NewFollowerNotificationBody(studentFollowing)
             };
             newFollowerMail.Body = builder.ToMessageBody();
 
@@ -39,7 +34,7 @@ namespace UniUnboxdAPI.Services
 
         }
 
-        public void NewReviewMail(Student receiver, Review review)
+        public void SendNewReviewNotification(Student receiver, Review review)
         {
             var newReviewMail = new MimeMessage();
 
@@ -49,14 +44,14 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = MailBodyGenerator.NewReviewMailBody(review)
+                HtmlBody = NotificationBodyGenerator.NewReviewNotificationBody(review)
             };
             newReviewMail.Body = builder.ToMessageBody();
 
             SendEmail(newReviewMail);
         }
 
-        public void NewReplyMail(Reply reply) {
+        public void SendNewReplyNotification(Reply reply) {
 
             var newReplyMail = new MimeMessage();
 
@@ -66,7 +61,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = MailBodyGenerator.NewReplyMailBody(reply)
+                HtmlBody = NotificationBodyGenerator.NewReplyNotificationBody(reply)
             };
             newReplyMail.Body = builder.ToMessageBody();
 

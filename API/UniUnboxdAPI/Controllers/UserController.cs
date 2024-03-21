@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Models.DataTransferObjects.Notifications;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
 
@@ -12,6 +13,23 @@ namespace UniUnboxdAPI.Controllers
     [ApiController]
     public class UserController(UserService userService) : ControllerBase
     {
+        [HttpPut("set-device-token")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> SetDeviceToken([FromBody] DeviceTokenModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Not all required fields have been filled in.");
+
+            if (string.IsNullOrWhiteSpace(model.DeviceToken))
+                return BadRequest("No device token was provided.");
+
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            await userService.SetDeviceToken(studentId, model.DeviceToken);
+
+            return Ok();
+        }
+
         [HttpPut("follow")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Follow([FromQuery(Name = "id")] int followedStudentId)
@@ -31,6 +49,8 @@ namespace UniUnboxdAPI.Controllers
             Student followedStudent = await userService.GetStudent(followedStudentId);
 
             await userService.FollowStudent(followingStudent, followedStudent);
+            userService.NotifyFollowedStudent(followingStudent, followedStudent);
+
             return Ok();
         }
 

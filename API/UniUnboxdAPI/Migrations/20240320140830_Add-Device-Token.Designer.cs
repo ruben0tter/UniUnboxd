@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniUnboxdAPI.Data;
 
@@ -11,9 +12,11 @@ using UniUnboxdAPI.Data;
 namespace UniUnboxdAPI.Migrations
 {
     [DbContext(typeof(UniUnboxdDbContext))]
-    partial class UniUnboxdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240320140830_Add-Device-Token")]
+    partial class AddDeviceToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,6 +215,9 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("DeviceToken")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Email")
                         .HasColumnType("longtext");
 
@@ -295,9 +301,6 @@ namespace UniUnboxdAPI.Migrations
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
-
-                    b.Property<string>("DeviceToken")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
