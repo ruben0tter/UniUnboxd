@@ -36,5 +36,23 @@ namespace UniUnboxdAPI.Repositories
 
         public async Task<bool> DoesProfessorExist(int id)
             => await dbContext.Professors.AnyAsync(c => c.Id == id);
+
+        public async Task<bool> DoesStudentFollowStudent(int followingStudentId, int followedStudentId)
+        {
+            var followingStudent = await dbContext.Students.Where(i => i.Id == followingStudentId).Include(i => i.Following).FirstAsync();
+            return followingStudent.Following!.Any(i => i.FollowedStudentId == followedStudentId);
+        }
+
+        public async Task FollowStudent(Follow followRelation)
+        {
+            await dbContext.Follows.AddAsync(followRelation);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UnfollowStudent(Follow followRelation)
+        {
+            dbContext.Follows.Remove(followRelation);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
