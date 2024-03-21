@@ -9,7 +9,7 @@ namespace UniUnboxdAPI.Services
         public async Task<bool> DoesUniversityExist(int universityId)
             => await userRepository.DoesUniversityExist(universityId);
 
-        public async Task<VerificationApplication?> RequestVerification(VerificationModel request, int userId)
+        public async Task<bool?> RequestStudentVerification(VerificationModel request, int userId)
         {
             Student? user = await userRepository.GetStudent(userId);
 
@@ -18,9 +18,27 @@ namespace UniUnboxdAPI.Services
 
             University? university = await userRepository.GetUniversity(request.TargetUniversityId);
 
-            var verificationApplication = CreateVerificationApplicationModel(request, user, university);
+            var verificationApplication = CreateVerificationApplicationModel(request, user, UserType.Student, university);
 
-            return await verificationRepository.AddApplication(verificationApplication);
+            await verificationRepository.AddApplication(verificationApplication);
+
+            await userRepository.SetVerificationStatus(user, VerificationStatus.Pending);
+
+            return true;
+        }
+
+        public async Task<bool?> RequestUniversityVerification(VerificationModel request, int userId)
+        {
+            University? user = await userRepository.GetUniversity(userId);
+
+            if (user == null)
+                return null;
+
+            var verificationApplication = CreateVerificationApplicationModel(request, user, UserType.University, null);
+
+            await verificationRepository.AddApplication(verificationApplication);
+
+            return true;
         }
 
         public async Task<VerificationStatus?> GetVerificationStatus(int userId)
@@ -61,12 +79,13 @@ namespace UniUnboxdAPI.Services
         public async Task<bool> RejectApplication(AcceptRejectModel request)
             => await ResolveApplication(request, VerificationStatus.Unverified);
 
-        private static VerificationApplication CreateVerificationApplicationModel(VerificationModel request, Student user, University university)
+        private static VerificationApplication CreateVerificationApplicationModel(VerificationModel request, User user, UserType userType, University? university)
             => new ()
             {
                 CreationTime = DateTime.Now,
                 LastModificationTime = DateTime.Now,
                 VerificationData = request.VerificationData,
+                UserType = userType,
                 UserToBeVerified = user,
                 TargetUniversity = university
             };

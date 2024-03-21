@@ -7,52 +7,55 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.models.Application;
 import com.example.uniunboxd.utilities.JWTValidation;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
 public class VerificationController {
     public static List<Application> getPendingApplications(int startID, FragmentActivity f) throws Exception {
         HttpURLConnection con = APIClient.get("verify/pending?startID=" + startID, JWTValidation.getToken(f));
 
-        StringBuilder body = new StringBuilder();
+        String body = APIClient.readStream(con.getInputStream());
 
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            String responseLine;
-            while ((responseLine = br.readLine()) != null) {
-                body.append(responseLine);
-            }
-        }
+        Log.d("APP", body);
 
-        Log.d("APP", body.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        List<Application> res = new ArrayList<>();
-
-        JSONArray json = new JSONArray(body.toString());
-        for (int i = 0; i < json.length(); i++) {
-            throw new Exception("TODO: need a functioning server first");
-        }
-
-        return res;
+        return objectMapper.readValue(body, new TypeReference<List<Application>>() {
+        });
     }
 
     public static void sendApplication(byte[][] files, FragmentActivity f) throws Exception {
         JSONObject json = new JSONObject();
         JSONArray jsonData = new JSONArray();
         for (byte[] file : files) {
+            if (file == null) continue;
+
             String base64 = Base64.encodeToString(file, Base64.DEFAULT);
             jsonData.put(base64);
         }
-        json.put("VerificationData", jsonData);
-        json.put("TargetUniversity", 69);
+        json.put("verificationData", jsonData);
+        json.put("targetUniversityId", 2);
+
+        Log.d("DASdasnjkda", json.toString());
 
         HttpURLConnection con = APIClient.post("verify/request", json.toString(), JWTValidation.getToken(f));
+
+        if (con.getResponseCode() == 200) {
+            String body = APIClient.readStream(con.getInputStream());
+
+            Log.d("APP1", body);
+        } else {
+            String test = APIClient.readStream(con.getErrorStream());
+            Log.d("PLS", test);
+            throw new IOException("Failed to send application");
+        }
+
     }
 }

@@ -1,6 +1,11 @@
 package com.example.uniunboxd.API;
 
+import android.util.Log;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -51,4 +56,18 @@ public class APIClient {
         return con;
     }
 
+    public static String readStream(InputStream stream) {
+        StringBuilder body = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(stream, "utf-8"))) {
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                body.append(responseLine);
+            }
+        } catch (Exception e) {
+            Log.e("ERR", e.toString());
+        }
+
+        return body.toString();
+    }
 }

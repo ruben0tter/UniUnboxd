@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.uniunboxd.R;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Application {
     public final int ID;
@@ -19,7 +20,8 @@ public class Application {
     public final String PFP;
     public final String[] FILES;
 
-    public Application(int id, String name, String pfp, String[] files) {
+    public Application(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("image") String pfp,
+                       @JsonProperty("files") String[] files) {
         ID = id;
         NAME = name;
         PFP = pfp;

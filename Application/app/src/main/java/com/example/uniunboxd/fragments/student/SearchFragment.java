@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.core.content.ContextCompat;
@@ -38,6 +39,8 @@ public class SearchFragment extends Fragment {
         SearchView search = view.findViewById(R.id.search);
         Button usersButton = view.findViewById(R.id.searchUsersButton);
         Button coursesButton = view.findViewById(R.id.searchCourseButton);
+        Button loadMore = view.findViewById(R.id.load_more_button);
+        loadMore.setVisibility(View.INVISIBLE);
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String text) {
@@ -71,6 +74,11 @@ public class SearchFragment extends Fragment {
                 usersButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
             }
         });
+
+        LinearLayout resultsLayout = view.findViewById(R.id.results);
+        resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
+        resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
+        resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
 
         return view;
     }

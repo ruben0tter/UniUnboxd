@@ -36,5 +36,13 @@ namespace UniUnboxdAPI.Repositories
 
         public async Task<bool> DoesProfessorExist(int id)
             => await dbContext.Professors.AnyAsync(c => c.Id == id);
+
+        public async Task<bool> SetVerificationStatus(User user, VerificationStatus status)
+        {
+            user.VerificationStatus = status;
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

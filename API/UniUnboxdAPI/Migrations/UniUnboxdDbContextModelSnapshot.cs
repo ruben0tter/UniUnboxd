@@ -226,6 +226,9 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<int>("UserToBeVerifiedId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserType")
+                        .HasColumnType("int");
+
                     b.Property<string>("VerificationData")
                         .IsRequired()
                         .HasColumnType("longtext");

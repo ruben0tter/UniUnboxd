@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,8 @@ public class SearchUniversityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         SearchView search = view.findViewById(R.id.search);
+        Button loadMore = view.findViewById(R.id.load_more_button);
+        loadMore.setVisibility(View.INVISIBLE);
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String text) {

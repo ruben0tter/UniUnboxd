@@ -1,5 +1,15 @@
 package com.example.uniunboxd.models;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import com.example.uniunboxd.R;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -28,18 +38,17 @@ public class CourseSearchResult {
         AverageRating = averageRating;
     }
 
-//    public View createView(LayoutInflater inflater, ViewGroup container,
-//                           Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.search_result_course, container, false);
-//        TextView name = view.findViewById(R.id.courseName);
-//        TextView code = view.findViewById(R.id.courseCode);
-//        TextView professor = view.findViewById(R.id.professor);
-//        TextView description = view.findViewById(R.id.description);
-//        TextView universityName = view.findViewById(R.id.universityName);
-//
-//        name.setText(Name);
-//        code.setText(Code);
-//        universityName.setText(University);
-//        return view;
-//    }
+
+    public View createView(LayoutInflater inflater, LinearLayout parent, Activity activity) {
+        View view = inflater.inflate(R.layout.search_result_course, null);
+
+
+        ImageView image = view.findViewById(R.id.imageView);
+
+        byte[] decodedString = Base64.decode(Image, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        image.setImageBitmap(decodedByte);
+
+        return view;
+    }
 }
