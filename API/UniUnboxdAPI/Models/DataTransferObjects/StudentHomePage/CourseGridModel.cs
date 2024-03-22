@@ -1,4 +1,4 @@
-namespace UniUnboxdAPI.Models.DataTransferObjects;
+namespace UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage;
 
 public class CourseGridModel
 {

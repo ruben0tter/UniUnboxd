@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.models.CourseCreationModel;
 import com.example.uniunboxd.models.CourseRetrievalModel;
+import com.example.uniunboxd.models.home.OverviewCourse;
 import com.example.uniunboxd.models.home.PopularCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -74,7 +75,7 @@ public class CourseController {
     }
 
     public static List<PopularCourse> getPopularCoursesByUniversity(int id, FragmentActivity f) throws IOException{
-        HttpURLConnection con = APIClient.get("Course/popular_by_university?id=" + id, JWTValidation.getToken(f));
+        HttpURLConnection con = APIClient.get("Course/popular-by-university?id=" + id, JWTValidation.getToken(f));
         StringBuilder body = new StringBuilder();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -92,6 +93,48 @@ public class CourseController {
         }
 
         return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
+    }
+
+    public static List<PopularCourse> getPopularCoursesByFriends(FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/popular-by-friends", JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
+    }
+
+    public static List<OverviewCourse> getLastEditedCoursesByUniversity(FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/last-edited", JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<OverviewCourse>>(){});
     }
 
     public static HttpURLConnection postCourse(CourseCreationModel model, FragmentActivity f) throws Exception{

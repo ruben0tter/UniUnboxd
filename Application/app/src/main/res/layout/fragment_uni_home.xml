@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/homeHeader"
@@ -43,8 +43,8 @@
             app:layout_constraintStart_toEndOf="@id/app_logo"
             app:layout_constraintTop_toTopOf="@id/app_logo"
             app:layout_constraintVertical_bias="0.0" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/signOut"
@@ -70,106 +70,111 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <View
-        android:id="@+id/line_separator_bottom"
+        android:id="@+id/line_separator_under_uni"
         android:layout_width="330dp"
         android:layout_height="1.5dp"
         android:background="@color/red"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line_separator"
-        app:layout_constraintVertical_bias="0.33" />
+        app:layout_constraintTop_toBottomOf="@+id/university_name_text"
+        app:layout_constraintVertical_bias="0.0" />
 
     <View
-        android:id="@+id/line_separator"
+        android:id="@+id/line_separator_under_courses"
+        android:layout_width="330dp"
+        android:layout_height="1.5dp"
+        android:background="@color/red"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courses_text"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/line_separator_under_uniunboxd"
         android:layout_width="330dp"
         android:layout_height="1.5dp"
         android:background="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeHeader"
         app:layout_constraintVertical_bias="0.013" />
 
-
     <TextView
-        android:id="@+id/popular_courses_text"
+        android:id="@+id/university_name_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/k2d"
-        android:text="Popular Courses"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line_separator"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/new_from_friends"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:fontFamily="@font/k2d"
-        android:text="New From Friends"
+        android:text="[University Name]"
         android:textColor="@color/black"
         android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.158"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom"
+        app:layout_constraintTop_toBottomOf="@+id/line_separator_under_uniunboxd"
         app:layout_constraintVertical_bias="0.0" />
 
-    <View
-        android:id="@+id/line_separator_bottom_2"
-        android:layout_width="330dp"
-        android:layout_height="1.5dp"
-        android:background="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line_separator"
-        app:layout_constraintVertical_bias="0.7" />
-
     <TextView
-        android:id="@+id/popular_with_friends"
+        android:id="@+id/courses_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/k2d"
-        android:text="Popular With Friends"
+        android:text="Last Edited Courses"
         android:textColor="@color/black"
-        android:textSize="25dp"
+        android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.195"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom_2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/line_separator_under_uni"
+        app:layout_constraintTop_toBottomOf="@+id/line_separator_under_uni"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/addCourses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_red"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/k2d"
+        android:gravity="center"
+        android:padding="3dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="Add Course +"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/line_separator_under_uni"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@+id/courses_text"
+        app:layout_constraintTop_toBottomOf="@+id/line_separator_under_uni"
+        app:layout_constraintVertical_bias="0.004" />
 
     <LinearLayout
+        android:id="@+id/linearLayoutforCourses"
         android:layout_width="0dp"
+        android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/line_separator_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popular_courses_text">
+        app:layout_constraintTop_toBottomOf="@+id/line_separator_under_courses">
 
 
-        <HorizontalScrollView
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scrollbars="none"
@@ -183,72 +188,10 @@
                 android:id="@+id/popularCourses"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
+                android:orientation="vertical" />
+        </ScrollView>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/line_separator_bottom_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_from_friends">
-
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.00">
-
-            <LinearLayout
-                android:id="@+id/newFromFriends"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popular_with_friends">
-
-
-        <HorizontalScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.00">
-
-            <LinearLayout
-                android:id="@+id/popularCoursesWithFriends"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
-        </HorizontalScrollView>
-
-    </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

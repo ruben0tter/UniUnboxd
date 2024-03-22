@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
+using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Controllers
 {
@@ -33,11 +34,33 @@ namespace UniUnboxdAPI.Controllers
             return Ok(courses);
         }
 
-        [HttpGet("popular_by_university")]
+        [HttpGet("popular-by-university")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetPopularCoursesOfLastWeekByUniversity([FromQuery(Name = "id")] int id)
         {
             var courses = await courseService.GetPopularCoursesOfLastWeekByUniversity(id);
+
+            return Ok(courses);
+        }
+
+        [HttpGet("popular-by-friends")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetPopularCoursesOfLastWeekByFriends()
+        {
+            var id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var courses = await courseService.GetPopularCoursesOfLastWeekByFriends(id);
+
+            return Ok(courses);
+        }
+
+        [HttpGet("last-edited")]
+        [Authorize(Roles = "University")]
+        public async Task<IActionResult> GetLastEditedCoursesByUniversity()
+        {
+            var id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var courses = await courseService.GetLastEditedCoursesByUniversity(id);
 
             return Ok(courses);
         }

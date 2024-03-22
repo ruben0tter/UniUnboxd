@@ -34,6 +34,14 @@ namespace UniUnboxdAPI.Repositories
                                         .ThenInclude(i => i.User)        
                                         .FirstOrDefaultAsync();
 
+        public async Task<ICollection<Review>> GetLatestReviewsByFriends(int id)
+            => await dbContext.Reviews.Where(i => i.Student.Followers!.Any(i => i.FollowingStudentId == id) 
+                                        && i == i.Student.Reviews!.Where(i => !i.IsAnonymous)
+                                        .OrderBy(i => i.CreationTime).Last())
+                                        .Include(i => i.Course).Include(i => i.Student)
+                                        .OrderByDescending(i => i.CreationTime)
+                                        .Take(10).ToListAsync();
+
         public async Task PostReview(Review review)
         {
             await dbContext.Reviews.AddAsync(review);
