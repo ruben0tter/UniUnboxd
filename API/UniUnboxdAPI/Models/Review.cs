@@ -8,4 +8,5 @@ public class Review : Base
     public required Course Course { get; set; } 
     public required Student Student { get; set;  }
     public required ICollection<Reply> Replies { get; set; }
+    public required ICollection<Like> Likes { get; set; }
 }

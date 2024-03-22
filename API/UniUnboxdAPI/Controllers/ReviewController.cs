@@ -131,6 +131,52 @@ namespace UniUnboxdAPI.Controllers
             }
         }
 
+        [HttpPut("like")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> LikeReview([FromQuery(Name = "review")] int reviewId)
+        {
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesReviewExist(reviewId))
+                return BadRequest("Given review does nto exist.");
+
+            if (!await reviewService.DoesStudentExist(studentId))
+                return BadRequest("Given student does not exist.");
+
+            if (await reviewService.IsReviewWrittenByStudent(reviewId, studentId))
+                return BadRequest("You can not like your own review.");
+
+            if (await reviewService.DoesStudentLikeReview(reviewId, studentId))
+                return BadRequest("Given review is already liked.");
+
+            await reviewService.LikeReview(reviewId, studentId);
+
+            return Ok();
+        }
+
+        [HttpPut("unlike")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> UnlikeReview([FromQuery(Name = "review")] int reviewId)
+        {
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesReviewExist(reviewId))
+                return BadRequest("Given review does nto exist.");
+
+            if (!await reviewService.DoesStudentExist(studentId))
+                return BadRequest("Given student does not exist.");
+
+            if (await reviewService.IsReviewWrittenByStudent(reviewId, studentId))
+                return BadRequest("You can not unlike your own review.");
+
+            if (!await reviewService.DoesStudentLikeReview(reviewId, studentId))
+                return BadRequest("Given review is not liked.");
+
+            await reviewService.UnlikeReview(reviewId, studentId);
+
+            return Ok();
+        }
+
         [HttpDelete]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> DeleteReview([FromQuery(Name = "id")] int id)
