@@ -3,11 +3,15 @@ package com.example.uniunboxd.models.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.student.CourseFragment;
+import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -30,8 +34,27 @@ public class OverviewCourse implements View.OnClickListener {
         Image = image;
     }
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
-        // TODO: Add view creation of course overview.
-        return null;
+        View view = inflater.inflate(R.layout.fragment_uni_home_page_courses, container, false);
+
+        TextView courseName = view.findViewById(R.id.courseName_text);
+        courseName.setOnClickListener(this);
+        TextView courseCode = view.findViewById(R.id.courseCode_text);
+        courseName.setOnClickListener(this);
+        TextView professorText = view.findViewById(R.id.professor_text);
+        courseName.setOnClickListener(this);
+        ImageView courseImage = view.findViewById(R.id.courseImage);
+        courseImage.setOnClickListener(this);
+
+        courseName.setText("Course: " + Name);
+        courseCode.setText("Code: " + Code);
+        professorText.setText("Professor: " + Professor);
+        if (Image != null) {
+            courseImage.setImageBitmap(ImageHandler.decodeImageString(Image));
+        }
+
+        fragment = f;
+        return view;
+
     }
     @Override
     public void onClick(View v) {
