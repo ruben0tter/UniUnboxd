@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Models.DataTransferObjects;
 
 namespace UniUnboxdAPI.Repositories;
 
@@ -63,4 +64,17 @@ public class UserRepository {
             dbContext.Follows.Remove(followRelation);
             await dbContext.SaveChangesAsync();
         }
-    }
+
+        public async Task<Professor> GetProfessor(int id)
+            => await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
+
+        public async Task putProfessor(Professor professor)
+        {
+            dbContext.Professors.Update(professor);
+            await dbContext.SaveChangesAsync();
+        }
+        
+        public async Task PutReview(Review review)
+        {
+        }
+}

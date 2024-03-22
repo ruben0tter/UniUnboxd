@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".fragments.ProfessorEditFragrment">
 
     <LinearLayout
         android:id = "@+id/reviewList"
@@ -13,7 +13,6 @@
         android:orientation="vertical"
         android:padding="16dp"
         tools:ignore="ExtraText">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -27,17 +26,16 @@
                 android:background="#C82424"
                 android:padding="10dp"
                 android:text="Save"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.463"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.99" />
+                app:layout_constraintVertical_bias="1.0" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView"
+                android:id="@+id/professorImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
@@ -53,50 +51,21 @@
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
 
             <TextView
-                android:id="@+id/ProfileImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="124dp"
-                android:text="[Profile Image]]"
-                android:textColor="@android:color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
-                app:layout_constraintVertical_bias="0.425" />
-
-            <ImageView
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:contentDescription="camera2"
-                android:focusable="true"
-                android:src="@drawable/baseline_camera_alt_24"
-                app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView"
-                app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/shapeableImageView"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
-                app:layout_constraintVertical_bias="1.0" />
-
-            <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="144dp"
+                android:layout_marginStart="28dp"
                 android:text="User Name:"
                 android:textColor="@android:color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.102"
+                app:layout_constraintBottom_toBottomOf="@+id/professorNameEdit"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
-                app:layout_constraintVertical_bias="0.13" />
+                app:layout_constraintTop_toTopOf="@+id/professorNameEdit"
+                app:layout_constraintVertical_bias="1.0" />
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id ="@+id/professorNameEdit"
                 android:layout_width="202dp"
                 android:layout_height="37dp"
                 android:background="@drawable/edit_text_field"
@@ -110,6 +79,17 @@
                 app:layout_constraintStart_toEndOf="@+id/userName"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.776" />
+
+            <ImageButton
+                android:id="@+id/professorImageEditButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="72dp"
+                android:layout_marginTop="72dp"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/baseline_camera_alt_24"
+                app:layout_constraintStart_toStartOf="@+id/professorImage"
+                app:layout_constraintTop_toTopOf="@+id/professorImage" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

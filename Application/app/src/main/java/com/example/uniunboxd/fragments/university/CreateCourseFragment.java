@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.CourseController;
+import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.models.CourseCreationModel;
@@ -78,7 +79,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                     try{
                         HttpURLConnection con = CourseController.postCourse(course, getActivity());
                         if(con.getResponseCode() == 200){
-                            replaceFragment(new HomeFragment());
+                            ((IActivity) getActivity()).replaceFragment(new HomeFragment());
                         }
                         else{
                             //TODO: see how to show a toast
@@ -130,11 +131,5 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         } else if (code == bannerCode) {
             bannerEnc = Base64.encodeToString(data, Base64.DEFAULT);
         }
-    }
-    public void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
     }
 }

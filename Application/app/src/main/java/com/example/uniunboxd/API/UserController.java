@@ -4,10 +4,14 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.models.CourseRetrievalModel;
+import com.example.uniunboxd.models.ProfessorEditModel;
 import com.example.uniunboxd.models.ProfessorProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,6 +57,14 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
 
         return objectMapper.readValue(body.toString(), ProfessorProfileModel.class);
+    }
+
+    public static HttpURLConnection putProfessor(ProfessorEditModel model, FragmentActivity f) throws Exception {
+        JSONObject json = new JSONObject();
+        json.put("id", model.Id);
+        json.put("image", model.Image);
+        json.put("name", model.Name);
+        return APIClient.put("User/professor", json.toString(), JWTValidation.getToken(f));
     }
 
     private static String readMessage(InputStream content) throws IOException{

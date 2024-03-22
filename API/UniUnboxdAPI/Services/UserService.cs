@@ -136,4 +136,18 @@ public class UserService
             FollowingStudent = followingStudent,
             FollowedStudent = followedStudent
         };
+
+    public async Task<bool> DoesProfessorExist(int id)
+        => await userRepository.DoesProfessorExist(id);
+
+    public async  Task<Professor> GetProfessor(int id)
+        => await userRepository.GetProfessor(id);
+
+    public void UpdateProfessor(Professor professor, ProfessorEditModel model)
+    {
+        professor.UserName = model.Name;
+        professor.Image = model.Image;
+    }
+    public async Task PutProfessor(Professor professor)
+        => await userRepository.putProfessor(professor);
 }

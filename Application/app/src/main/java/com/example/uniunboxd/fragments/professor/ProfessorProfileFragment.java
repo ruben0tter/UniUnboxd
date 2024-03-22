@@ -6,21 +6,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.uniunboxd.API.CourseController;
-import com.example.uniunboxd.API.ReviewController;
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.models.CourseRetrievalModel;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.models.ProfessorEditModel;
 import com.example.uniunboxd.models.ProfessorProfileModel;
-import com.example.uniunboxd.models.ReviewListItem;
+import com.example.uniunboxd.utilities.JWTValidation;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class ProfessorProfileFragment extends Fragment {
@@ -55,9 +52,27 @@ public class ProfessorProfileFragment extends Fragment {
             view = Professor.createView(inflater, container, savedInstanceState);
         }
 
+        ImageButton editBtn = view.findViewById(R.id.editButton);
+
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfessorEditModel professorEditModel = MakeProfessorEditModel(Professor);
+                ((IActivity) getActivity()).replaceFragment(new ProfessorEditFragment(professorEditModel));
+            }
+        });
+        int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+        if(userId != ID) {
+            editBtn.setVisibility(View.GONE);
+        }
         return view;
     }
+
+    private ProfessorEditModel MakeProfessorEditModel(ProfessorProfileModel professor) {
+        return new ProfessorEditModel(professor.Id, professor.Image, professor.Name);
+    }
 }
+
 
 class GetProfessorInformationAsyncTask extends AsyncTask<FragmentActivity, Void, ProfessorProfileModel>{
 

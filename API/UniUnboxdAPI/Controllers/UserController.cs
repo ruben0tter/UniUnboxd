@@ -7,6 +7,7 @@ using UniUnboxdAPI.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Abstractions;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
@@ -34,6 +35,24 @@ namespace UniUnboxdAPI.Controllers
             ProfessorProfileModel professor = await userService.GetProfessorAndConnectedData(id);
             
             return Ok(professor);
+        }
+
+        [HttpPut("professor")]
+        [Authorize(Roles = "Professor")]
+        public async Task<IActionResult> PutProfessor([FromBody] ProfessorEditModel model)
+        {
+            if (!await userService.DoesProfessorExist(model.Id))
+                return BadRequest("This professor user does not exist.");
+            
+            if (!JWTValidation.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.Id))
+                return BadRequest("Incorrect user.");
+
+            Professor professor = await userService.GetProfessor(model.Id);
+
+            userService.UpdateProfessor(professor, model);
+            await userService.PutProfessor(professor);
+
+            return Ok("Professor was updated successfully.");
         }
         
         
