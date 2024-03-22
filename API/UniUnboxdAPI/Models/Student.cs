@@ -9,5 +9,7 @@ namespace UniUnboxdAPI.Models
         public ICollection<Reply>? Replies { get; set; }
         public ICollection<Follow>? Following { get; set; }
         public ICollection<Follow>? Followers { get; set; }
+        public NotificationSettings? NotificationSettings { get; set; }
+        public string? DeviceToken { get; set; }
     }
 }

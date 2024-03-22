@@ -35,6 +35,8 @@ namespace UniUnboxdAPI.Controllers
 
                 await replyService.PostReply(reply);
 
+                replyService.NotifyReviewAuthor(reply);
+
                 var DTO = replyService.CreateReviewReplyModel(reply);
 
                 return Ok(DTO);

@@ -3,7 +3,7 @@ using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
-    public class UserService(UserRepository userRepository)
+    public class UserService(UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService)
     {
         /// <summary>
         /// Check whether there exists a student with the provided id.
@@ -20,6 +20,9 @@ namespace UniUnboxdAPI.Services
         /// <returns>Student model with given id.</returns>
         public async Task<Student> GetStudent(int id)
             => await userRepository.GetStudent(id);
+
+        public async Task SetDeviceToken(int studentId, string deviceToken)
+            => await userRepository.SetDeviceToken(studentId, deviceToken);
 
         /// <summary>
         /// Check whether student 1 already follows student 2.
@@ -43,6 +46,21 @@ namespace UniUnboxdAPI.Services
         }
 
         /// <summary>
+        /// Notify Student 2 that Student 1 has followed them.
+        /// </summary>
+        /// <param name="followingStudent">Provided student 1.</param>
+        /// <param name="followedStudent">Provided student 2.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public void NotifyFollowedStudent(Student followingStudent, Student followedStudent)
+        {
+            if (followedStudent.NotificationSettings!.ReceivesNewFollowerMail)
+                mailService.SendNewFollowerNotification(followingStudent, followedStudent);
+
+            if (followedStudent.NotificationSettings!.ReceivesNewFollowerPush)
+                pushNotificationService.SendNewFollowerNotification(followingStudent, followedStudent);
+        }
+
+        /// <summary>
         /// Student 1 unfollows student 2.
         /// </summary>
         /// <param name="unfollowingStudent">Provided student 1.</param>
@@ -50,8 +68,7 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task UnfollowStudent(Student unfollowingStudent, Student unfollowedStudent)
         {
-            var followModel = CreateFollow(unfollowingStudent, unfollowedStudent);
-            await userRepository.UnfollowStudent(followModel);
+            await userRepository.UnfollowStudent(unfollowingStudent.Id, unfollowedStudent.Id);
         }
 
         private static Follow CreateFollow(Student followingStudent, Student followedStudent)

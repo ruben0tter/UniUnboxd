@@ -80,6 +80,8 @@ namespace UniUnboxdAPI.Controllers
 
                 await reviewService.UpdateAverageRatingAfterPost(review.Course.Id, review.Rating);
 
+                reviewService.NotifyFollowers(review);
+
                 return Ok("Succesfully created review.");
             } 
             catch (Exception ex) 

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Net.Mail;
+using UniUnboxdAPI.Migrations;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
+using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
@@ -12,10 +14,12 @@ namespace UniUnboxdAPI.Services
     public class RegistrationService
     {
         private readonly UserManager<User> userManager;
+        private readonly MailService mailService;
 
-        public RegistrationService(UserManager<User> userManager)
+        public RegistrationService(UserManager<User> userManager, MailService mailService)
         {
-            this.userManager = userManager;
+            this.userManager = userManager; 
+            this.mailService = mailService;
         }
 
         /// <summary>
@@ -29,7 +33,7 @@ namespace UniUnboxdAPI.Services
             return model.Type switch
             {
                 UserType.University => CreateUserModel<University>(model),
-                _ => CreateUserModel<Student>(model)
+                _ => CreateStudentModel(model)
             };
         }
 
@@ -68,6 +72,7 @@ namespace UniUnboxdAPI.Services
         public async Task<bool> CreateAccount(User user, string password)
         {
             var result = await userManager.CreateAsync(user, password);
+            mailService.SendWelcomeNotification(user);
             return result.Succeeded;
         }
 
@@ -86,6 +91,18 @@ namespace UniUnboxdAPI.Services
                 LastModificationTime = DateTime.Now,
                 UserType = model.Type,
                 SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+        private static Student CreateStudentModel(RegisterModel model)
+            => new()
+            {
+                Email = model.Email,
+                UserName = CreateUserName(model.Email),
+                CreationTime = DateTime.Now,
+                LastModificationTime = DateTime.Now,
+                UserType = model.Type,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                NotificationSettings = new NotificationSettings()
             };
 
         /// <summary>

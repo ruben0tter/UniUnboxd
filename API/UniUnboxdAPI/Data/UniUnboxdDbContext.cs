@@ -17,6 +17,7 @@ namespace UniUnboxdAPI.Data
         public DbSet<Reply> Replies { get; set; }
         public DbSet<VerificationApplication> Applications { get; set; }
         public DbSet<Follow> Follows { get; set; }
+        public DbSet<NotificationSettings> NotificationSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +45,15 @@ namespace UniUnboxdAPI.Data
                 .HasOne(i => i.FollowedStudent)
                 .WithMany(i => i.Followers)
                 .HasForeignKey(i => i.FollowedStudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<NotificationSettings>()
+               .HasKey(i => i.StudentId);
+
+            modelBuilder.Entity<NotificationSettings>()
+                .HasOne(i => i.Student)
+                .WithOne(i => i.NotificationSettings)
+                .HasForeignKey<NotificationSettings>(i => i.StudentId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
