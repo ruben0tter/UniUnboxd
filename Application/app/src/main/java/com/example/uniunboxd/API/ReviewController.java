@@ -127,6 +127,14 @@ public class ReviewController {
         return APIClient.put("Review?id=" + model.id, json.toString(), JWTValidation.getToken(f));
     }
 
+    public static HttpURLConnection like(int id, FragmentActivity f) throws Exception {
+        return APIClient.put("Review/like?review=" + id, null, JWTValidation.getToken(f));
+    }
+
+    public static HttpURLConnection unlike(int id, FragmentActivity f) throws Exception {
+        return APIClient.put("Review/unlike?review=" + id, null, JWTValidation.getToken(f));
+    }
+
     public static HttpURLConnection deleteReview(int id, FragmentActivity f) throws Exception {
         return APIClient.delete("Review?id=" + id, JWTValidation.getToken(f));
     }

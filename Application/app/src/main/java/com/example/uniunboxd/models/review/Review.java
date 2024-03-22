@@ -29,12 +29,15 @@ public class Review {
     public final CourseHeader Course;
     public final UserHeader Student;
     public final List<Reply> Replies;
+    public int LikeCount;
+    public final List<Integer> StudentLikes;
 
     @JsonCreator
     public Review(@JsonProperty("id") int id, @JsonProperty("date") Date date,
                   @JsonProperty("rating") double rating, @JsonProperty("comment") String comment,
                   @JsonProperty("isAnonymous") boolean isAnonymous, @JsonProperty("courseHeader") CourseHeader course,
-                  @JsonProperty("studentHeader") UserHeader student, @JsonProperty("replies") List<Reply> replies) {
+                  @JsonProperty("studentHeader") UserHeader student, @JsonProperty("replies") List<Reply> replies,
+                  @JsonProperty("likeCount") int likeCount, @JsonProperty("studentLikes") List<Integer> studentLikes) {
         Id = id;
         Date = date;
         Rating = rating;
@@ -43,6 +46,8 @@ public class Review {
         Course = course;
         Student = student;
         Replies = replies;
+        LikeCount = likeCount;
+        StudentLikes = studentLikes;
     }
 
     public void createView(View view, LayoutInflater inflater, ViewGroup container, Fragment f) {
@@ -55,6 +60,7 @@ public class Review {
         RatingBar rating = view.findViewById(R.id.rating);
         TextView reviewDate = view.findViewById(R.id.reviewDate);
         TextView reviewComment = view.findViewById(R.id.reviewComment);
+        TextView likeCount = view.findViewById(R.id.likeCount);
 
         if (IsAnonymous) {
             reviewHeader.setText("Anonymous review");
@@ -80,6 +86,7 @@ public class Review {
         rating.setRating((float) Rating);
         reviewDate.setText(String.format("Reviewed on %s", new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH).format(Date)));
         reviewComment.setText(Comment);
+        likeCount.setText(String.format("%d likes", LikeCount));
 
         LinearLayout replies = view.findViewById(R.id.replies);
 

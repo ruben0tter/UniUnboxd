@@ -250,6 +250,49 @@
             app:layout_constraintTop_toBottomOf="@+id/reviewDate"
             app:layout_constraintVertical_bias="0.053" />
 
+        <ImageView
+            android:id="@+id/like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/like_open"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/reviewComment"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/reviewComment"
+            app:layout_constraintTop_toBottomOf="@+id/reviewComment"
+            app:layout_constraintVertical_bias="0.05" />
+
+        <TextView
+            android:id="@+id/likeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Like?"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintStart_toEndOf="@+id/like"
+            app:layout_constraintTop_toTopOf="@+id/like"
+            app:layout_constraintVertical_bias="0.25" />
+
+        <TextView
+            android:id="@+id/likeCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[# of likes] likes"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@+id/like"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.18"
+            app:layout_constraintStart_toEndOf="@+id/like"
+            app:layout_constraintTop_toTopOf="@+id/like"
+            app:layout_constraintVertical_bias="0.25" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
