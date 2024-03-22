@@ -16,6 +16,34 @@ namespace UniUnboxdAPI.Services
         private readonly MailboxAddress uniUnboxdEmail = new("UniUnboxd", "uniunboxd@gmail.com");
         private readonly string uniUnboxdPassword = configuration["UniUnboxdPassword"]!;
 
+        public void SendWelcomeNotification(User user)
+        {
+            var welcomeMail = new MimeMessage();
+
+            welcomeMail.From.Add(uniUnboxdEmail);
+            welcomeMail.To.Add(new MailboxAddress(user.UserName, user.Email));
+            welcomeMail.Subject = "Welcome to UniUnboxd!";
+
+            var builder = new BodyBuilder();
+
+            switch (user.UserType)
+            {
+                case UserType.Student:
+                    builder.HtmlBody = NotificationBodyGenerator.WelcomeStudentNotificationBody();
+                    break;
+                case UserType.University:
+                    builder.TextBody = NotificationBodyGenerator.WelcomeUniversityNotificationBody();
+                    break;
+                case UserType.Professor:
+                    builder.HtmlBody = NotificationBodyGenerator.WelcomeProfessorNotificationBody();
+                    break;
+            }
+
+            welcomeMail.Body = builder.ToMessageBody();
+
+            SendEmail(welcomeMail);
+        }
+
         public void SendNewFollowerNotification(Student studentFollowing, Student studentFollowed)
         {
             var newFollowerMail = new MimeMessage();
@@ -51,7 +79,8 @@ namespace UniUnboxdAPI.Services
             SendEmail(newReviewMail);
         }
 
-        public void SendNewReplyNotification(Reply reply) {
+        public void SendNewReplyNotification(Reply reply) 
+        {
 
             var newReplyMail = new MimeMessage();
 
@@ -68,6 +97,41 @@ namespace UniUnboxdAPI.Services
             SendEmail(newReplyMail);
         }
 
+        //TODO: Implement function for student users.
+        public void SendVerificationStatusChangeNotification(Student student, VerificationApplication application)
+        {
+            var verificationStatusChangedMail = new MimeMessage();
+
+            verificationStatusChangedMail.From.Add(uniUnboxdEmail);
+            verificationStatusChangedMail.To.Add(new MailboxAddress(student.UserName, student.Email));
+            verificationStatusChangedMail.Subject = "The status of your verification application has changed.";
+
+            var builder = new BodyBuilder
+            {
+                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(student)
+            };
+            verificationStatusChangedMail.Body = builder.ToMessageBody();
+
+            SendEmail(verificationStatusChangedMail);
+        }
+
+        //TODO: Implement function for university users.
+        public void SendVerificationStatusChangeNotification(VerificationApplication application)
+        {
+            var verificationStatusChangedMail = new MimeMessage();
+
+            verificationStatusChangedMail.From.Add(uniUnboxdEmail);
+            verificationStatusChangedMail.To.Add(new MailboxAddress(application.UserToBeVerified.UserName, application.UserToBeVerified.Email));
+            verificationStatusChangedMail.Subject = "The status of your verification application has changed.";
+
+            var builder = new BodyBuilder
+            {
+                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(application.UserToBeVerified)
+            };
+            verificationStatusChangedMail.Body = builder.ToMessageBody();
+
+            SendEmail(verificationStatusChangedMail);
+        }
 
         private async Task SendEmail(MimeMessage email)
         {

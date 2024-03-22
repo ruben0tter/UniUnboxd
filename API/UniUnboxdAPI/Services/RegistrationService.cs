@@ -14,10 +14,12 @@ namespace UniUnboxdAPI.Services
     public class RegistrationService
     {
         private readonly UserManager<User> userManager;
+        private readonly MailService mailService;
 
-        public RegistrationService(UserManager<User> userManager)
+        public RegistrationService(UserManager<User> userManager, MailService mailService)
         {
-            this.userManager = userManager;
+            this.userManager = userManager; 
+            this.mailService = mailService;
         }
 
         /// <summary>
@@ -70,6 +72,7 @@ namespace UniUnboxdAPI.Services
         public async Task<bool> CreateAccount(User user, string password)
         {
             var result = await userManager.CreateAsync(user, password);
+            mailService.SendWelcomeNotification(user);
             return result.Succeeded;
         }
 
