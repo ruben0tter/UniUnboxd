@@ -1,5 +1,6 @@
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel;
+using System.Drawing;
 using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
@@ -31,7 +32,12 @@ namespace UniUnboxdAPI.Services
                 users = await searchRepository.GetAllUsers(options.Search);
             }
 
-            return users.Select(CreateUserSearchModel).ToList();
+            List<UserSearchModel> result = new List<UserSearchModel>();
+            foreach (User user in users)
+            {
+                result.Add(await CreateUserSearchModel(user));
+            }
+            return result;
         }
 
         private CourseSearchModel CreateCourseSearchModel(Course course)
@@ -49,13 +55,15 @@ namespace UniUnboxdAPI.Services
             };
         }
 
-        private UserSearchModel CreateUserSearchModel(User user)
+        private async Task<UserSearchModel> CreateUserSearchModel(User user)
         {
+            String image = await searchRepository.GetImageOf(user.Id, user.UserType);
+
             return new UserSearchModel
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                // Image = user.Image
+                Image = image,
                 UserType = user.UserType,
             };
         }

@@ -33,25 +33,34 @@
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2" />
+                android:layout_weight="1" />
 
             <TextView
-                android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="Username"
+                android:layout_gravity="center_vertical"
+                android:text="Course Name"
+                android:id="@+id/username"
                 tools:ignore="NestedWeights" />
-            <!--            -->
-            <!--            <TextView-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_weight="1"-->
-            <!--                android:id="@+id/university"-->
-            <!--                android:text="University" />-->
 
-            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:text="Role"
+                android:id="@+id/role"
+                tools:ignore="NestedWeights" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/university"
+                android:text="University" />
+
+
         </LinearLayout>
     </LinearLayout>
 

@@ -20,17 +20,20 @@ public class UserSearchResult {
     public final int Id;
     public final String UserName;
     public final String Image;
+    public final String University;
     public final int UserType;
 
     @JsonCreator
     public UserSearchResult(@JsonProperty("id") int id,
                             @JsonProperty("userName") String username,
                             @JsonProperty("image") String image,
-                            @JsonProperty("userType") int userType) {
+                            @JsonProperty("userType") int userType,
+                            @JsonProperty("university") String university) {
         Id = id;
         UserName = username;
         Image = image;
         UserType = userType;
+        University = university;
     }
 
 
@@ -41,11 +44,9 @@ public class UserSearchResult {
             ((IActivity) activity).replaceFragment(new CourseFragment(Id));
         });
 
-        ((TextView) view.findViewById(R.id.username)).setText(Name);
-        ((TextView) view.findViewById(R.id.code)).setText(Code);
+        ((TextView) view.findViewById(R.id.username)).setText(UserName);
+        ((TextView) view.findViewById(R.id.role)).setText(UserType);
         ((TextView) view.findViewById(R.id.university)).setText(University);
-        ((RatingBar) view.findViewById(R.id.anonRating)).setRating((float) AverageRating);
-        ((RatingBar) view.findViewById(R.id.nonAnonRating)).setRating((float) AverageRating);
 
         if (Image != null) {
             ImageView image = view.findViewById(R.id.image);

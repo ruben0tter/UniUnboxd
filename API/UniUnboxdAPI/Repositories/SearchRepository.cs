@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
 
@@ -28,5 +29,23 @@ namespace UniUnboxdAPI.Repositories
         public async Task<List<User>> GetAllUsers(String search)
             => await dbContext.Users.Where(i => i.UserName.Contains(search))
                                     .ToListAsync();
+
+        public async Task<String> GetImageOf(int id, UserType type)
+        {
+            if(type == UserType.Student)
+            {
+                Student result = await dbContext.Students.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            } 
+            else
+            {
+                Professor result = await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            }
+            
+        }
+
+        public async Task<Course> GetCourse(int id)
+            => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
     }
 }
