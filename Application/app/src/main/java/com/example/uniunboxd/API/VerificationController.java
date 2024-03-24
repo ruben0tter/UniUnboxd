@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -32,6 +33,10 @@ public class VerificationController {
     }
 
     public static void sendApplication(byte[][] files, FragmentActivity f) throws Exception {
+        sendApplication(files, -1, f);
+    }
+
+    public static void sendApplication(byte[][] files, int targetUniversityId, FragmentActivity f) throws Exception {
         JSONObject json = new JSONObject();
         JSONArray jsonData = new JSONArray();
         for (byte[] file : files) {
@@ -41,9 +46,9 @@ public class VerificationController {
             jsonData.put(base64);
         }
         json.put("verificationData", jsonData);
-        json.put("targetUniversityId", 2);
-
-        Log.d("DASdasnjkda", json.toString());
+        if(targetUniversityId != -1) {
+            json.put("targetUniversityId", targetUniversityId);
+        }
 
         HttpURLConnection con = APIClient.post("verify/request", json.toString(), JWTValidation.getToken(f));
 
@@ -57,5 +62,26 @@ public class VerificationController {
             throw new IOException("Failed to send application");
         }
 
+    }
+
+    public static void resolveApplication(int id, boolean result, FragmentActivity f) throws Exception {
+        JSONObject json = new JSONObject();
+
+        json.put("userId", id);
+        json.put("acceptedOrRejected", result);
+
+        Log.d("POG", json.toString());
+
+        HttpURLConnection con = APIClient.post("verify/request/set", json.toString(), JWTValidation.getToken(f));
+
+        if (con.getResponseCode() == 200) {
+            String body = APIClient.readStream(con.getInputStream());
+
+            Log.d("APP1", body);
+        } else {
+            String test = APIClient.readStream(con.getErrorStream());
+            Log.d("PLS", test);
+            throw new IOException("Failed to accept/reject application");
+        }
     }
 }

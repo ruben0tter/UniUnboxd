@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -35,6 +38,11 @@ public class Application {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(activity, "Accepted application.", Toast.LENGTH_SHORT).show();
+                try {
+                    VerificationController.resolveApplication(ID, true, (FragmentActivity) activity);
+                } catch (Exception e) {
+                    throw new RuntimeException("I dont even know");
+                }
                 parent.removeView(view);
             }
         });
@@ -43,6 +51,11 @@ public class Application {
         btnReject.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(activity, "Rejected application.", Toast.LENGTH_LONG).show();
+                try {
+                    VerificationController.resolveApplication(ID, false, (FragmentActivity) activity);
+                } catch (Exception e) {
+                    throw new RuntimeException("I dont even know");
+                }
                 parent.removeView(view);
             }
         });

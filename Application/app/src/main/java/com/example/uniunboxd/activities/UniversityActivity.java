@@ -13,11 +13,8 @@ import com.example.uniunboxd.databinding.ActivityUniversityBinding;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
-import com.example.uniunboxd.fragments.university.HomeVerifiedFragment;
 import com.example.uniunboxd.fragments.university.SearchUniversityFragment;
-import com.example.uniunboxd.fragments.student.SearchFragment;
 import com.example.uniunboxd.fragments.university.UniversityHomeFragment;
-import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 

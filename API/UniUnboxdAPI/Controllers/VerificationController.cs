@@ -11,7 +11,7 @@ namespace UniUnboxdAPI.Controllers
     [Route("api/verify")]
     [ApiController]
     [Authorize]
-    public class VerificationController(VerificationService verificationService) : ControllerBase
+    public class VerificationController(VerificationService verificationService, MailService mailService, PushNotificationService notificationService) : ControllerBase
     {
         [HttpPost]
         [Authorize(Roles = "Student, University")]
@@ -76,8 +76,7 @@ namespace UniUnboxdAPI.Controllers
         public async Task<IActionResult> SetVerification([FromBody] AcceptRejectModel request)
         {
             // TODO: Add check to see whether University is attached to the application.
-            
-            // int userID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            // int uniUserID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             bool result;
 
