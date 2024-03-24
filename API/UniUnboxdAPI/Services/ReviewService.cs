@@ -2,6 +2,7 @@
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
+using UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage;
 using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
@@ -15,12 +16,16 @@ namespace UniUnboxdAPI.Services
         private readonly ReviewRepository reviewRepository;
         private readonly CourseRepository courseRepository;
         private readonly UserRepository userRepository;
+        private readonly MailService mailService;
+        private readonly PushNotificationService pushNotificationService;
 
-        public ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository)
+        public ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService)
         {
             this.reviewRepository = reviewRepository;
             this.courseRepository = courseRepository;
             this.userRepository = userRepository;
+            this.mailService = mailService;
+            this.pushNotificationService = pushNotificationService;
         }
 
         /// <summary>
@@ -47,44 +52,15 @@ namespace UniUnboxdAPI.Services
         }
 
         /// <summary>
-        /// Creates a ReviewPageModel object with the given Review.
+        /// Gets the latest reviews by friends of the student attached to the provided id.
         /// </summary>
-        /// <param name="model">Review information.</param>
-        /// <returns>Created ReviewPageModel object.</returns>
-        public ReviewPageModel CreateReviewPageModel(Review model)
-            => new()
-            {
-                Id = model.Id,
-                Date = model.LastModificationTime,
-                Rating = model.Rating,
-                Comment = model.Comment,
-                IsAnonymous = model.IsAnonymous,
-                CourseHeader = new()
-                {
-                    Id = model.Course.Id,
-                    Name = model.Course.Name,
-                    Code = model.Course.Code,
-                    Image = model.Course.Image,
-                    Banner = model.Course.Banner
-                },
-                StudentHeader = new()
-                                {
-                                    Id = model.Student.Id,
-                                    Name = model.Student.UserName,
-                                    Image = model.Student.Image
-                                },
-                Replies = model.Replies.Select(i => new ReviewReplyModel()
-                {
-                    Text = i.Text,
-                    UserHeader = new UserHeaderModel()
-                    {
-                        Id = i.User.Id,
-                        Name = i.User.UserName,
-                        Image = i.User is Student ? (i.User as Student).Image : 
-                            (i.User as Professor).Image
-                    }
-                }).ToList()
-            };
+        /// <param name="id">Provided student id.</param>
+        /// <returns>The latest reviews by friends of the provided student.</returns>
+        public async Task<ICollection<ReviewGridModel>> GetLatestReviewsByFriends(int id)
+        {
+            ICollection<Review> reviews = await reviewRepository.GetLatestReviewsByFriends(id);
+            return CreateReviewGridModelCollection(reviews);
+        }
 
         /// <summary>
         /// Check whether there exists a student with the provided id.
@@ -140,6 +116,27 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task PostReview(Review review)
             => await reviewRepository.PostReview(review);
+
+        /// <summary>
+        /// Notfies followers of user that they have posted a review.
+        /// </summary>
+        /// <param name="review">Provided review.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public void NotifyFollowers(Review review)
+        {
+            if (review.IsAnonymous)
+                return;
+
+
+            foreach (Follow follow in review.Student.Followers!)
+            {
+                if (follow.FollowingStudent.NotificationSettings!.ReceivesFollowersReviewMail)
+                    mailService.SendNewReviewNotification(follow.FollowingStudent, review);
+
+                if (follow.FollowingStudent.NotificationSettings.ReceivesFollowersReviewPush)
+                    pushNotificationService.SendNewReviewNotification(follow.FollowingStudent, review);
+            }
+        }
 
         /// <summary>
         /// Get next n reviews for a course.
@@ -227,5 +224,52 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task UpdateAverageRatingAfterDelete(int courseId, double removedRating)
             => await courseRepository.UpdateAverageRatingAfterDelete(courseId, removedRating);
+
+        private static ReviewPageModel CreateReviewPageModel(Review model)
+            => new()
+            {
+                Id = model.Id,
+                Date = model.LastModificationTime,
+                Rating = model.Rating,
+                Comment = model.Comment,
+                IsAnonymous = model.IsAnonymous,
+                CourseHeader = new()
+                {
+                    Id = model.Course.Id,
+                    Name = model.Course.Name,
+                    Code = model.Course.Code,
+                    Image = model.Course.Image!,
+                    Banner = model.Course.Banner!
+                },
+                StudentHeader = new()
+                {
+                    Id = model.Student.Id,
+                    Name = model.Student.UserName!,
+                    Image = model.Student.Image!
+                },
+                Replies = model.Replies.Select(i => new ReviewReplyModel()
+                {
+                    Text = i.Text,
+                    UserHeader = new UserHeaderModel()
+                    {
+                        Id = i.User.Id,
+                        Name = i.User.UserName!,
+                        Image = i.User is Student ? (i.User as Student)!.Image! :
+                            (i.User as Professor)!.Image!
+                    }
+                }).ToList()
+            };
+
+        private static ICollection<ReviewGridModel> CreateReviewGridModelCollection(ICollection<Review> reviews)
+            => reviews.Select(i => new ReviewGridModel()
+            {
+                Id = i.Id,
+                CourseName = i.Course.Name,
+                CourseImage = i.Course.Image!,
+                StudentId = i.Student.Id,
+                StudentName = i.Student.UserName!,
+                StudentImage = i.Student.Image!,
+                Rating = i.Rating
+            }).ToList();
     }
 }

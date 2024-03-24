@@ -13,9 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.API.CourseController;
+import com.example.uniunboxd.API.ReviewController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.activities.MainActivity;
+import com.example.uniunboxd.models.home.FriendReview;
 import com.example.uniunboxd.models.home.PopularCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
 
@@ -28,6 +30,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     LinearLayout popularCoursesWithFriendsLayout;
 
     List<PopularCourse> popularCourses;
+    List<FriendReview> newFromFriends;
+    List<PopularCourse> popularCoursesWithFriends;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         signOut.setOnClickListener(this);
 
         PopularCoursesInformation popularCoursesInformation;
+        LatestReviewsByFriendsInformation newFromFriendsInformation = new LatestReviewsByFriendsInformation();
+        PopularCoursesByFriendsInformation popularCoursesByFriendsInformation = new PopularCoursesByFriendsInformation();
 
         String attachedUniversityId = JWTValidation.getTokenProperty(getActivity(), "university");
         if(attachedUniversityId == null) {
@@ -59,6 +65,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         try {
             popularCourses = popularCoursesInformation.execute(getActivity()).get();
+            newFromFriends = newFromFriendsInformation.execute(getActivity()).get();
+            popularCoursesWithFriends = popularCoursesByFriendsInformation.execute(getActivity()).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -66,6 +74,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (popularCourses != null) {
             for(PopularCourse c : popularCourses) {
                 popularCoursesLayout.addView(c.createView(inflater, container, this));
+            }
+        }
+
+        if (newFromFriends != null) {
+            for(FriendReview r : newFromFriends) {
+                newFromFriendsLayout.addView(r.createView(inflater, container, this));
+            }
+        }
+
+        if (popularCoursesWithFriends != null) {
+            for(PopularCourse c : popularCoursesWithFriends) {
+                popularCoursesWithFriendsLayout.addView(c.createView(inflater, container, this));
             }
         }
 
@@ -98,6 +118,32 @@ class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<P
             } else {
                 return CourseController.getPopularCoursesByUniversity(id, fragmentActivities[0]);
             }
+
+        } catch(Exception e) {
+            Log.e("ERR", "Couldn't get review" + e.toString());
+            return null;
+        }
+    }
+}
+
+class LatestReviewsByFriendsInformation extends AsyncTask<FragmentActivity, Void, List<FriendReview>> {
+    @Override
+    protected List<FriendReview> doInBackground(FragmentActivity... fragmentActivities) {
+        try{
+            return ReviewController.getLatestReviewsByFriends(fragmentActivities[0]);
+
+        } catch(Exception e) {
+            Log.e("ERR", "Couldn't get review" + e.toString());
+            return null;
+        }
+    }
+}
+
+class PopularCoursesByFriendsInformation extends AsyncTask<FragmentActivity, Void, List<PopularCourse>> {
+    @Override
+    protected List<PopularCourse> doInBackground(FragmentActivity... fragmentActivities) {
+        try{
+            return CourseController.getPopularCoursesByFriends(fragmentActivities[0]);
 
         } catch(Exception e) {
             Log.e("ERR", "Couldn't get review" + e.toString());

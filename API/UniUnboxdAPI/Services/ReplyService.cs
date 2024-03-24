@@ -10,12 +10,16 @@ namespace UniUnboxdAPI.Services
         private readonly ReplyRepository replyRepository;
         private readonly ReviewRepository reviewRepository;
         private readonly UserRepository userRepository;
+        private readonly MailService mailService;
+        private readonly PushNotificationService pushNotificationService;
 
-        public ReplyService(ReplyRepository replyRepository, ReviewRepository reviewRepository, UserRepository userRepository) 
+        public ReplyService(ReplyRepository replyRepository, ReviewRepository reviewRepository, UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService) 
         { 
             this.replyRepository = replyRepository;
             this.reviewRepository = reviewRepository;
             this.userRepository = userRepository;
+            this.mailService = mailService;
+            this.pushNotificationService = pushNotificationService;
         }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace UniUnboxdAPI.Services
                 LastModificationTime = DateTime.Now,
                 Text = model.Text,
                 User = await userRepository.GetUser(userId),
-                Review = await reviewRepository.GetReview(model.ReviewId)
+                Review = (await reviewRepository.GetReviewAndConnectedData(model.ReviewId))!
             };
 
         /// <summary>
@@ -58,6 +62,24 @@ namespace UniUnboxdAPI.Services
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task PostReply(Reply reply)
             => await replyRepository.PostReply(reply);
+
+        /// <summary>
+        /// Notifies user who made a review that a reply has been posted to it. 
+        /// </summary>
+        /// <param name="reply">Provided reply.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public void NotifyReviewAuthor(Reply reply)
+        {
+            if (reply.User.Id == reply.Review.Student.Id)
+                return;
+
+
+            if (reply.Review.Student.NotificationSettings!.ReceivesNewReplyMail)
+                mailService.SendNewReplyNotification(reply);
+
+            if (reply.Review.Student.NotificationSettings!.ReceivesNewReplyPush)
+                pushNotificationService.SendNewReplyNotification(reply);
+        }
 
 
         /// <summary>
@@ -72,9 +94,9 @@ namespace UniUnboxdAPI.Services
                 UserHeader = new UserHeaderModel()
                 {
                     Id = model.User.Id,
-                    Name = model.User.UserName,
-                    Image = model.User is Student ? (model.User as Student).Image :
-                            (model.User as Professor).Image
+                    Name = model.User.UserName!,
+                    Image = model.User is Student ? (model.User as Student)!.Image! :
+                            (model.User as Professor)!.Image!
                 }
             };
     }

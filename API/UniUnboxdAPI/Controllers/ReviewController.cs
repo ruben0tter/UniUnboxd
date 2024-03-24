@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -41,6 +42,18 @@ namespace UniUnboxdAPI.Controllers
             return Ok(models);
         }
 
+        [HttpGet("latest-by-friends")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetLatestReviewsByFriends()
+        {
+            var id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var reviews = await reviewService.GetLatestReviewsByFriends(id);
+
+            return Ok(reviews);
+        }
+
+
         [HttpPost]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> PostReview([FromBody] ReviewModel model)
@@ -66,6 +79,8 @@ namespace UniUnboxdAPI.Controllers
                 await reviewService.PostReview(review);
 
                 await reviewService.UpdateAverageRatingAfterPost(review.Course.Id, review.Rating);
+
+                reviewService.NotifyFollowers(review);
 
                 return Ok("Succesfully created review.");
             } 

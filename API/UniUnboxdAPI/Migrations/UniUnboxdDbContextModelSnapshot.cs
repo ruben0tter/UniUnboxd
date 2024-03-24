@@ -76,6 +76,49 @@ namespace UniUnboxdAPI.Migrations
                     b.ToTable("Courses", (string)null);
                 });
 
+            modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
+                {
+                    b.Property<int>("FollowingStudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowedStudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FollowingStudentId", "FollowedStudentId");
+
+                    b.HasIndex("FollowedStudentId");
+
+                    b.ToTable("Follows");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.NotificationSettings", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("ReceivesFollowersReviewMail")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ReceivesFollowersReviewPush")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ReceivesNewFollowerMail")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ReceivesNewFollowerPush")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ReceivesNewReplyMail")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("ReceivesNewReplyPush")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("StudentId");
+
+                    b.ToTable("NotificationSettings");
+                });
+
             modelBuilder.Entity("UniUnboxdAPI.Models.Reply", b =>
                 {
                     b.Property<int>("Id")
@@ -253,6 +296,9 @@ namespace UniUnboxdAPI.Migrations
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
 
+                    b.Property<string>("DeviceToken")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
@@ -281,6 +327,36 @@ namespace UniUnboxdAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("University");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
+                {
+                    b.HasOne("UniUnboxdAPI.Models.Student", "FollowedStudent")
+                        .WithMany("Followers")
+                        .HasForeignKey("FollowedStudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniUnboxdAPI.Models.Student", "FollowingStudent")
+                        .WithMany("Following")
+                        .HasForeignKey("FollowingStudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FollowedStudent");
+
+                    b.Navigation("FollowingStudent");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.NotificationSettings", b =>
+                {
+                    b.HasOne("UniUnboxdAPI.Models.Student", "Student")
+                        .WithOne("NotificationSettings")
+                        .HasForeignKey("UniUnboxdAPI.Models.NotificationSettings", "StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Reply", b =>
@@ -398,6 +474,12 @@ namespace UniUnboxdAPI.Migrations
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
                 {
+                    b.Navigation("Followers");
+
+                    b.Navigation("Following");
+
+                    b.Navigation("NotificationSettings");
+
                     b.Navigation("Replies");
 
                     b.Navigation("Reviews");

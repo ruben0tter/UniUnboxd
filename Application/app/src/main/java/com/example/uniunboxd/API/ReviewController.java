@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.DTO.ReviewModel;
+import com.example.uniunboxd.models.home.FriendReview;
 import com.example.uniunboxd.models.ReviewListItem;
 import com.example.uniunboxd.models.review.Review;
 import com.example.uniunboxd.utilities.JWTValidation;
@@ -55,6 +56,27 @@ public class ReviewController {
 
             return null;
         }
+    }
+
+    public static List<FriendReview> getLatestReviewsByFriends(FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Review/latest-by-friends", JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<FriendReview>>(){});
     }
 
     public static HttpURLConnection postReview(ReviewModel model, FragmentActivity f) throws Exception {

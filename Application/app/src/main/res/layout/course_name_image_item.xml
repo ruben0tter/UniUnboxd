@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="15dp"
+    android:layout_marginStart="10dp">
 
     <ImageView
         android:id="@+id/courseImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -21,8 +23,8 @@
 
     <TextView
         android:id="@+id/courseName"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
+        android:layout_width="110dp"
+        android:layout_height="30dp"
         android:fontFamily="@font/k2d"
         android:text="[Course Name]"
         android:textColor="@color/black"
@@ -31,7 +33,7 @@
         android:focusable="true"
         app:autoSizeTextType="uniform"
         app:autoSizeMinTextSize="5dp"
-        app:autoSizeMaxTextSize="18dp"
+        app:autoSizeMaxTextSize="20dp"
         app:autoSizeStepGranularity="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

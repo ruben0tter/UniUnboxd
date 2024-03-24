@@ -15,6 +15,9 @@ import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
 import com.example.uniunboxd.fragments.university.HomeVerifiedFragment;
 import com.example.uniunboxd.fragments.university.SearchUniversityFragment;
+import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.university.UniversityHomeFragment;
+import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
@@ -41,7 +44,7 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
 
         if (Objects.equals(state, "Verified")) {
             setNavigationMenu();
-            return new HomeVerifiedFragment();
+            return new UniversityHomeFragment();
         } else if (Objects.equals(state, "Pending")) {
             binding.bottomNavigationView.setVisibility(View.GONE);
             return new HomeSubmittedFragment();

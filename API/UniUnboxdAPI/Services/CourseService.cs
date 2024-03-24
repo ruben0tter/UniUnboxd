@@ -5,6 +5,8 @@ using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
 using System.Collections.Generic;
 using UniUnboxdAPI.Utilities;
+using UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage;
+using UniUnboxdAPI.Models.DataTransferObjects.UniversityHomePage;
 
 namespace UniUnboxdAPI.Services
 {
@@ -106,6 +108,28 @@ namespace UniUnboxdAPI.Services
             return CreateCourseGridModelCollection(courses);
         }
 
+        /// <summary>
+        /// Gets the popular courses amongst the student's friends of the last 7 days.
+        /// </summary>
+        /// <param name="id"> The id of the student.</param>
+        /// <returns>The popular courses of last week amongst friends of the provided student.</returns>
+        public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeekByFriends(int id)
+        {
+            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeekByFriends(id);
+            return CreateCourseGridModelCollection(courses);
+        }
+
+        /// <summary>
+        /// Gets the lastly edited courses of the university attached to the provided id.
+        /// </summary>
+        /// <param name="id"> The id of the university.</param>
+        /// <returns>The lastly edited courses of the provied university.</returns>
+        public async Task<ICollection<CourseOverviewModel>> GetLastEditedCoursesByUniversity(int id)
+        {
+            ICollection<Course> courses = await courseRepository.GetLastEditedCoursesByUniversity(id);
+            return CreateCourseOverviewModelCollection(courses);
+        }
+
         private static CourseRetrievalModel CreateCourseRetrievalModel(Course course)
             => new ()
             {
@@ -152,5 +176,15 @@ namespace UniUnboxdAPI.Services
                     Name = i.Name,
                     Image = i.Image
                 }).ToList();
+
+        private static ICollection<CourseOverviewModel> CreateCourseOverviewModelCollection(ICollection<Course> courses)
+            => courses.Select(i => new CourseOverviewModel()
+            {
+                Id = i.Id,
+                Name = i.Name,
+                Code = i.Code,
+                Professor = i.Professor,
+                Image = i.Image
+            }).ToList();
     }
 }

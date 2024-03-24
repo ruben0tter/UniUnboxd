@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using UniUnboxdAPI.Models;
 
 namespace UniUnboxdAPI.Data
@@ -15,6 +16,8 @@ namespace UniUnboxdAPI.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Reply> Replies { get; set; }
         public DbSet<VerificationApplication> Applications { get; set; }
+        public DbSet<Follow> Follows { get; set; }
+        public DbSet<NotificationSettings> NotificationSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +31,30 @@ namespace UniUnboxdAPI.Data
             modelBuilder.Entity<User>().Ignore(i => i.AccessFailedCount);
 
             modelBuilder.Entity<User>().UseTptMappingStrategy();
+
+            modelBuilder.Entity<Follow>()
+               .HasKey(i => new { i.FollowingStudentId, i.FollowedStudentId });
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(i => i.FollowingStudent)
+                .WithMany(i => i.Following)
+                .HasForeignKey(i => i.FollowingStudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(i => i.FollowedStudent)
+                .WithMany(i => i.Followers)
+                .HasForeignKey(i => i.FollowedStudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<NotificationSettings>()
+               .HasKey(i => i.StudentId);
+
+            modelBuilder.Entity<NotificationSettings>()
+                .HasOne(i => i.Student)
+                .WithOne(i => i.NotificationSettings)
+                .HasForeignKey<NotificationSettings>(i => i.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
