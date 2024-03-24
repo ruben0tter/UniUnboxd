@@ -83,7 +83,7 @@ namespace UniUnboxdAPI.Controllers
             //TODO: update for professor users.
             int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if (!await courseService.DoesUniversityExist(userId))
+            if (!(await courseService.DoesUniversityExist(userId) || await courseService.DoesProfessorExist(userId)))
                 return BadRequest("User does not exist.");
 
             if (!await courseService.DoesCourseExist(model.Id))

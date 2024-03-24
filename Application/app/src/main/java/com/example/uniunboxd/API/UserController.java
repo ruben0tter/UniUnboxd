@@ -4,10 +4,8 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.uniunboxd.DTO.ReviewModel;
-import com.example.uniunboxd.models.CourseRetrievalModel;
-import com.example.uniunboxd.models.ProfessorEditModel;
-import com.example.uniunboxd.models.ProfessorProfileModel;
+import com.example.uniunboxd.models.professor.ProfessorEditModel;
+import com.example.uniunboxd.models.professor.ProfessorProfileModel;
 import com.example.uniunboxd.models.student.StudentEditModel;
 import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;

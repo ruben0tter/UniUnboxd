@@ -14,7 +14,6 @@
         android:padding="16dp"
         tools:ignore="ExtraText">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="240dp"
@@ -22,8 +21,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/professorImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -38,14 +37,13 @@
                 android:id="@+id/professorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="124dp"
                 android:text="Juan the professor"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@+id/professorImage"
-                app:layout_constraintHorizontal_bias="0.507"
+                app:layout_constraintHorizontal_bias="0.38"
                 app:layout_constraintStart_toStartOf="@+id/professorImage"
-                app:layout_constraintTop_toTopOf="@+id/professorImage" />
+                app:layout_constraintTop_toBottomOf="@+id/professorImage" />
 
             <TextView
                 android:id="@+id/universityName"
@@ -97,11 +95,13 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="100dp" >
+            android:layout_height="wrap_content" >
+
             <LinearLayout
+                android:id="@+id/listAssignedCourses"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
 
             </LinearLayout>

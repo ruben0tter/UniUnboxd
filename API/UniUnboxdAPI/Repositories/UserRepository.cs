@@ -47,6 +47,9 @@ public class UserRepository {
         
         public async Task<Professor> GetProfessorAndConnectedData(int id)
             => await dbContext.Professors.Where(i => i.Id == id)
+                .Include(i => i.AssignedCourses)
+                .ThenInclude(i => i.Course)
+                .ThenInclude(i => i.University)
                 .FirstAsync(); 
 
         public async Task<bool> DoesStudentFollowStudent(int followingStudentId, int followedStudentId)
@@ -106,5 +109,4 @@ public class UserRepository {
             dbContext.CourseProfessorAssignments.Remove(courseProfessorAssignment);
             await dbContext.SaveChangesAsync();        
         }
-    }
 }

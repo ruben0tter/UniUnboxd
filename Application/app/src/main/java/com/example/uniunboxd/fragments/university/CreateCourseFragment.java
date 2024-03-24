@@ -81,7 +81,10 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         saveChangesBtn.setOnClickListener(this);
         imageBtn.setOnClickListener(this);
         bannerBtn.setOnClickListener(this);
-        deleteBtn.setOnClickListener(this);
+        if(JWTValidation.getTokenProperty(this.getActivity(), "typ").equals("University"))
+            deleteBtn.setOnClickListener(this);
+        else
+            deleteBtn.setVisibility(View.GONE);
 
         return view;
     }
@@ -109,7 +112,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         try {
                             HttpURLConnection con = CourseController.postCourse(course, getActivity());
                             if (con.getResponseCode() == 200) {
-                                replaceFragment(new HomeFragment());
+                                ((IActivity) f.getActivity()).replaceFragment(new HomeFragment());
                             } else {
                                 //TODO: see how to show a toast
                                 Log.d("DEB", "" + con.getResponseCode());
@@ -125,7 +128,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                     try {
                         HttpURLConnection con = CourseController.putCourse(course, getActivity());
                         if (con.getResponseCode() == 200) {
-                            replaceFragment(new CourseFragment(course.Id));
+                            ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Course.Id));
                         } else {
                             //TODO: see how to show a toast
                             Log.d("DEB", "" + con.getResponseCode());

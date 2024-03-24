@@ -14,8 +14,8 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.models.ProfessorEditModel;
-import com.example.uniunboxd.models.ProfessorProfileModel;
+import com.example.uniunboxd.models.professor.ProfessorEditModel;
+import com.example.uniunboxd.models.professor.ProfessorProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.concurrent.ExecutionException;
@@ -49,7 +49,7 @@ public class ProfessorProfileFragment extends Fragment {
         }
 
         if(Professor != null) {
-            view = Professor.createView(inflater, container, savedInstanceState);
+            view = Professor.createView(inflater, container, savedInstanceState, this);
         }
 
         ImageButton editBtn = view.findViewById(R.id.editButton);

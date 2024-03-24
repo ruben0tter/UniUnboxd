@@ -14,8 +14,6 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.professor.ProfessorEditFragment;
-import com.example.uniunboxd.models.ProfessorEditModel;
 import com.example.uniunboxd.models.student.StudentEditModel;
 import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;

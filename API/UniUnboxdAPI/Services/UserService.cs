@@ -188,7 +188,7 @@ public class UserService(UserRepository userRepository, CourseRepository courseR
             Id = professor.Id,
             ProfilePic = professor.Image,
             Name = professor.UserName,
-            
+            Courses = new List<AssignedCourseModel>(),
         };
         
     public async Task<ProfessorProfileModel> GetProfessorAndConnectedData(int id)
@@ -196,10 +196,29 @@ public class UserService(UserRepository userRepository, CourseRepository courseR
             var professor = await userRepository.GetProfessorAndConnectedData(id);
 
             var professorProfileModel = CreateProfessorProfileModel(professor);
+            
+            foreach (var course in await courseRepository.GetAssignedCourses(id))
+            {
+                professorProfileModel.UniversityName = course.University.UserName;
+                professorProfileModel.Courses.Add(MakeAssignedCourseModel(course));
+            }
 
             return professorProfileModel;
         }
-    public void UpdateProfessor(Professor professor, ProfessorEditModel model)
+
+        private AssignedCourseModel MakeAssignedCourseModel(Course course)
+            => new()
+            {
+                Id = course.Id,
+                Rating = course.AverageRating,
+                Name = course.Name,
+                Code = course.Code,
+                Professor = course.Professor,
+                Image = course.Image
+            };
+            
+
+        public void UpdateProfessor(Professor professor, ProfessorEditModel model)
     {
         professor.UserName = model.Name;
         professor.Image = model.Image;

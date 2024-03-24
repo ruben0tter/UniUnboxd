@@ -1,4 +1,4 @@
-package com.example.uniunboxd.models;
+package com.example.uniunboxd.models.professor;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;

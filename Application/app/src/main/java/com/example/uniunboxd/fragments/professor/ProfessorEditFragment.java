@@ -18,13 +18,10 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.uniunboxd.API.ReviewController;
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.CourseFragment;
-import com.example.uniunboxd.models.ProfessorEditModel;
-import com.example.uniunboxd.models.ProfessorProfileModel;
+import com.example.uniunboxd.models.professor.ProfessorEditModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 
 import java.io.IOException;
