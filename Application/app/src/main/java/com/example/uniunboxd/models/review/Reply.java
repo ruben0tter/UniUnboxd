@@ -54,6 +54,6 @@ public class Reply implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment());
+        ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(User.Id));
     }
 }

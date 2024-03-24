@@ -7,6 +7,7 @@ using UniUnboxdAPI.Models.DataTransferObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Azure.Core.Extensions;
 using Microsoft.IdentityModel.Abstractions;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Services;
@@ -37,6 +38,24 @@ namespace UniUnboxdAPI.Controllers
             return Ok(professor);
         }
 
+        [HttpPut("student")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> PutStudent([FromBody] StudentEditModel model)
+        {
+            if (!await userService.DoesStudentExist(model.Id))
+                return BadRequest("This student does not exist.");
+            
+            if (!JWTValidation.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.Id))
+                return BadRequest("Incorrect user.");
+
+            Student student = await userService.GetStudent(model.Id);
+            userService.UpdateStudent(student, model);
+            await userService.PutStudent(student);
+
+            return Ok("Student successfully updated");
+        }
+        
+        
         [HttpPut("professor")]
         [Authorize(Roles = "Professor")]
         public async Task<IActionResult> PutProfessor([FromBody] ProfessorEditModel model)
@@ -88,7 +107,7 @@ namespace UniUnboxdAPI.Controllers
             int unfollowingStudentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (unfollowingStudentId == unfollowedStudentId)
-                return BadRequest("You can not unfollow yourself.");
+                return BadRequest("You cannot unfollow yourself.");
 
             if (!await userService.DoesStudentFollowStudent(unfollowingStudentId, unfollowedStudentId))
                 return BadRequest("Given student is not followed.");

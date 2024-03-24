@@ -6,7 +6,7 @@
     android:background="@drawable/bottom_border">
 
         <RatingBar
-            android:id="@+id/ReviewListItem_RatingBar"
+            android:id="@+id/RatingBar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

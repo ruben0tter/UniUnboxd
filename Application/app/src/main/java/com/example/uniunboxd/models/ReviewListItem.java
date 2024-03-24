@@ -38,7 +38,7 @@ public class ReviewListItem {
                                     Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.review_list_item, container, false);
         TextView comment = view.findViewById(R.id.ReviewListItem_Comment);
-        RatingBar ratingBar = view.findViewById(R.id.ReviewListItem_RatingBar);
+        RatingBar ratingBar = view.findViewById(R.id.RatingBar);
         TextView posterName = view.findViewById(R.id.ReviewListItem_PosterName);
         ImageView posterIcon = view.findViewById(R.id.ReviewListItem_PosterIcon);
         

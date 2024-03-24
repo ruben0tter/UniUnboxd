@@ -25,11 +25,30 @@ public class UserService
         if(university != null)
             studentProfileModel.UniversityName = university.UserName;
         
-        if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
+        // if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
 
         foreach (var review in student.Reviews.OrderByDescending(i => i.LastModificationTime))
             studentProfileModel.Reviews.Add(CreateStudentProfileReview(review));
-
+        
+        
+        studentProfileModel.Followers = new List<StudentGridModel>();
+        foreach(var x in await userRepository.GetFollowers(id))
+            studentProfileModel.Followers.Add(new StudentGridModel
+            {
+                Id = x.Id,
+                Name = x.UserName,
+                Image = x.Image
+            });
+        
+        studentProfileModel.Following = new List<StudentGridModel>();
+        foreach(var x in await userRepository.GetFollowing(id))
+            studentProfileModel.Following.Add(new StudentGridModel
+            {
+                Id = x.Id,
+                Name = x.UserName,
+                Image = x.Image
+            });
+        
         return studentProfileModel;
     }
     
@@ -149,5 +168,14 @@ public class UserService
         professor.Image = model.Image;
     }
     public async Task PutProfessor(Professor professor)
-        => await userRepository.putProfessor(professor);
+        => await userRepository.PutProfessor(professor);
+
+    public void UpdateStudent(Student student, StudentEditModel model)
+    {
+        student.UserName = model.Name;
+        student.Image = model.Image;
+    }
+
+    public async Task PutStudent(Student student)
+        => await userRepository.PutStudent(student);
 }

@@ -21,7 +21,7 @@
             android:background="@drawable/bottom_border">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView"
+                android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
@@ -35,28 +35,28 @@
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
 
             <TextView
-                android:id="@+id/EnrolledIN"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="124dp"
                 android:text="Juan the professor"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"
+                app:layout_constraintEnd_toEndOf="@+id/image"
                 app:layout_constraintHorizontal_bias="0.507"
-                app:layout_constraintStart_toStartOf="@+id/shapeableImageView"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView" />
+                app:layout_constraintStart_toStartOf="@+id/image"
+                app:layout_constraintTop_toTopOf="@+id/image" />
 
             <TextView
-                android:id="@+id/userName"
+                android:id="@+id/universityName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Works at: [University]"
                 android:textSize="15dp"
-                app:layout_constraintEnd_toEndOf="@+id/EnrolledIN"
-                app:layout_constraintStart_toStartOf="@+id/EnrolledIN"
-                app:layout_constraintTop_toBottomOf="@+id/EnrolledIN" />
+                app:layout_constraintEnd_toEndOf="@+id/name"
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

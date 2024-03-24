@@ -12,6 +12,7 @@ import com.example.uniunboxd.databinding.ActivityStudentBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
 public class StudentActivity extends AppCompatActivity implements IActivity {
@@ -37,6 +38,7 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
     }
 
     public void setNavigationMenu() {
+        int userId = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
@@ -44,7 +46,7 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
             } else if (itemId == R.id.search) {
                 replaceFragment(new SearchFragment());
             } else if (itemId == R.id.profile) {
-                replaceFragment(new StudentProfileFragment());
+                replaceFragment(new StudentProfileFragment(userId));
             }
             return true;
         });

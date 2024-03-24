@@ -39,6 +39,8 @@ public class UserRepository {
         
         public async Task<Student> GetStudentAndConnectedData(int id)
             => await dbContext.Students.Where(i => i.Id == id)
+                .Include(i => i.Following)
+                .Include(i => i.Followers)
                 .Include(i => i.Reviews)!
                 .ThenInclude(i => i.Course)
                 .FirstAsync(); 
@@ -68,13 +70,22 @@ public class UserRepository {
         public async Task<Professor> GetProfessor(int id)
             => await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
 
-        public async Task putProfessor(Professor professor)
+        public async Task PutProfessor(Professor professor)
         {
             dbContext.Professors.Update(professor);
             await dbContext.SaveChangesAsync();
         }
-        
-        public async Task PutReview(Review review)
+
+        public async Task PutStudent(Student student)
         {
+            dbContext.Students.Update(student);
+            await dbContext.SaveChangesAsync();
         }
+        public async Task<ICollection<Student>> GetFollowers(int id)
+            => await dbContext.Follows.Where(i => i.FollowedStudent.Id == id).Select(i => i.FollowingStudent).ToListAsync();
+
+        public async Task<ICollection<Student>> GetFollowing(int id)
+            => await dbContext.Follows.Where(i => i.FollowingStudent.Id == id).Select(i => i.FollowedStudent)
+                .ToListAsync();
+
 }

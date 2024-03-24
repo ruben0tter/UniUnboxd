@@ -8,6 +8,8 @@ import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.models.CourseRetrievalModel;
 import com.example.uniunboxd.models.ProfessorEditModel;
 import com.example.uniunboxd.models.ProfessorProfileModel;
+import com.example.uniunboxd.models.student.StudentEditModel;
+import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -59,6 +61,42 @@ public class UserController {
         return objectMapper.readValue(body.toString(), ProfessorProfileModel.class);
     }
 
+    public static StudentProfileModel getStudent(int id, FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("User/student?id=" + id, JWTValidation.getToken(f));
+
+        Log.i("APP", "Code: " + con.getResponseCode());
+
+        StringBuilder body = new StringBuilder();
+
+        if (con.getResponseCode() == 200) {
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("ERR", e.toString());
+            }
+        } else {
+            String test = readMessage(con.getErrorStream());
+            Log.d("PLS", test);
+        }
+
+        Log.d("APP1", body.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        Log.i("Student", body.toString());
+        return objectMapper.readValue(body.toString(), StudentProfileModel.class);
+    }
+
+    public static HttpURLConnection putStudent(StudentEditModel model, FragmentActivity f) throws Exception {
+        JSONObject json = new JSONObject();
+        json.put("id", model.Id);
+        json.put("image", model.Image);
+        json.put("name", model.Name);
+        return APIClient.put("User/student", json.toString(), JWTValidation.getToken(f));
+    }
     public static HttpURLConnection putProfessor(ProfessorEditModel model, FragmentActivity f) throws Exception {
         JSONObject json = new JSONObject();
         json.put("id", model.Id);

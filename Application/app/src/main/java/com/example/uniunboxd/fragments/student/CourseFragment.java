@@ -30,7 +30,7 @@ public class CourseFragment extends Fragment{
 
     private final int ID;
     private final int NUM_REVIEWS_TO_LOAD = 5;
-    private CourseRetrievalModel Course = null;
+    public CourseRetrievalModel Course = null;
 
     public CourseFragment(int id) {
         this.ID = id;
@@ -98,28 +98,31 @@ public class CourseFragment extends Fragment{
             }
         });
     }
-}
 
-class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
+    class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
 
-    private final int ID;
-    private final int NUM_OF_REVIEWS_TO_LOAD;
+        private final int ID;
+        private final int NUM_OF_REVIEWS_TO_LOAD;
 
-    public GetCourseInformationAsyncTask(int id, int numReviewsToLoad) {
-        ID = id;
-        NUM_OF_REVIEWS_TO_LOAD = numReviewsToLoad;
-    }
-
-    @Override
-    protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
-        CourseRetrievalModel course = null;
-        try{
-            course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
-        } catch(Exception ioe) {
-            Log.e("ERR", "Couldn't get course" + ioe.toString());
+        public GetCourseInformationAsyncTask(int id, int numReviewsToLoad) {
+            ID = id;
+            NUM_OF_REVIEWS_TO_LOAD = numReviewsToLoad;
         }
-        return course;
+
+        @Override
+        protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
+            CourseRetrievalModel course = null;
+            try{
+                course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
+            } catch(Exception ioe) {
+                Log.e("ERR", "Couldn't get course" + ioe.toString());
+            }
+
+            Course = course;
+            return course;
+        }
     }
 }
+
 
 

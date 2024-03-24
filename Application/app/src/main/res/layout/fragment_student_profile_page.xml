@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".fragments.StudentProfileFragment">
 
     <LinearLayout
-        android:id = "@+id/reviewList"
+        android:id="@+id/pageScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -21,7 +21,7 @@
             android:background="@drawable/bottom_border">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView"
+                android:id="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
@@ -35,36 +35,36 @@
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
 
             <TextView
-                android:id="@+id/EnrolledIN"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="124dp"
                 android:text="Juan"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/saveChanges"
-                app:layout_constraintEnd_toEndOf="@+id/shapeableImageView"
+                app:layout_constraintBottom_toTopOf="@+id/followActionButton"
+                app:layout_constraintEnd_toEndOf="@+id/image"
                 app:layout_constraintHorizontal_bias="0.507"
-                app:layout_constraintStart_toStartOf="@+id/shapeableImageView"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
+                app:layout_constraintStart_toStartOf="@+id/image"
+                app:layout_constraintTop_toTopOf="@+id/image"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/userName"
+                android:id="@+id/universityName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Enrolled at: [University]"
                 android:textSize="17dp"
-                app:layout_constraintBottom_toTopOf="@+id/saveChanges"
-                app:layout_constraintEnd_toEndOf="@+id/EnrolledIN"
+                app:layout_constraintBottom_toTopOf="@+id/followActionButton"
+                app:layout_constraintEnd_toEndOf="@+id/name"
                 app:layout_constraintHorizontal_bias="0.476"
-                app:layout_constraintStart_toStartOf="@+id/EnrolledIN"
-                app:layout_constraintTop_toBottomOf="@+id/EnrolledIN"
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name"
                 app:layout_constraintVertical_bias="0.0" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/saveChanges"
+                android:id="@+id/followActionButton"
                 android:layout_width="93dp"
                 android:layout_height="33dp"
                 android:background="#C82424"
@@ -75,8 +75,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView"
+                app:layout_constraintTop_toTopOf="@+id/image"
                 app:layout_constraintVertical_bias="0.971" />
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_edit_24"
+                android:backgroundTint="@android:color/transparent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -97,13 +106,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <HorizontalScrollView
+            android:id="@+id/listFollowing"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bottom_border">
 
 
-
             <LinearLayout
+                android:id = "@+id/listFollowingLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -130,13 +140,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <HorizontalScrollView
+            android:id="@+id/listFollowers"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bottom_border">
 
 
-
             <LinearLayout
+                android:id="@+id/listFollowersLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -179,12 +190,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
+            android:id="@+id/listReviews"
             android:layout_width="match_parent"
-            android:layout_height="100dp" >
-
+            android:layout_height="wrap_content">
 
 
             <LinearLayout
+                android:id="@+id/listReviewsLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
