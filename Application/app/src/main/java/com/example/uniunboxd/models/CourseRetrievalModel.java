@@ -70,7 +70,7 @@ public class CourseRetrievalModel {
             image.setImageBitmap(imageBitmap);
         }
         if(Banner != null && !Banner.equals("")) {
-            Bitmap bannerBitmap = ImageHandler.decodeImageString(Image);
+            Bitmap bannerBitmap = ImageHandler.decodeImageString(Banner);
             banner.setImageBitmap(bannerBitmap);
         }
         LinearLayout linearLayout = view.findViewById(R.id.reviewList);

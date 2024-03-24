@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.models.CourseCreationModel;
+import com.example.uniunboxd.models.CourseEditModel;
 import com.example.uniunboxd.models.CourseRetrievalModel;
 import com.example.uniunboxd.models.home.PopularCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
@@ -106,6 +107,18 @@ public class CourseController {
 
         return APIClient.post("Course", json.toString(), JWTValidation.getToken(f));
     }
+    public static HttpURLConnection putCourse(CourseEditModel course, FragmentActivity f) throws Exception{
+        JSONObject json = new JSONObject();
+        json.put("id", course.Id);
+        json.put("name", course.Name);
+        json.put("code", course.Code);
+        json.put("description", course.Description);
+        json.put("professor", course.Professor);
+        json.put("image", course.Image);
+        json.put("banner", course.Banner);
+
+        return APIClient.put("Course", json.toString(), JWTValidation.getToken(f));
+    }
 
     private static String readMessage(InputStream content) throws IOException{
         StringBuilder textBuilder = new StringBuilder();
@@ -120,4 +133,7 @@ public class CourseController {
         return textBuilder.toString().replace("\"", "");
     }
 
+    public static HttpURLConnection deleteCourse(int id, FragmentActivity f) throws IOException{
+        return APIClient.delete("Course?id=" + id, JWTValidation.getToken(f));
+    }
 }

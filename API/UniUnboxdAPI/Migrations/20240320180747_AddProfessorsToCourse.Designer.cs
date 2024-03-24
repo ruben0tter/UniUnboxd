@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniUnboxdAPI.Data;
 
@@ -11,9 +12,11 @@ using UniUnboxdAPI.Data;
 namespace UniUnboxdAPI.Migrations
 {
     [DbContext(typeof(UniUnboxdDbContext))]
-    partial class UniUnboxdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240320180747_AddProfessorsToCourse")]
+    partial class AddProfessorsToCourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace UniUnboxdAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("CourseProfessor", b =>
+                {
+                    b.Property<int>("AssignedCoursesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AssignedProfessorsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AssignedCoursesId", "AssignedProfessorsId");
+
+                    b.HasIndex("AssignedProfessorsId");
+
+                    b.ToTable("CourseProfessor");
+                });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
                 {
@@ -69,36 +87,6 @@ namespace UniUnboxdAPI.Migrations
                     b.HasIndex("UniversityId");
 
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("UniUnboxdAPI.Models.CourseProfessorAssignment", b =>
-                {
-                    b.Property<int>("ProfessorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProfessorId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("CourseProfessorAssignments");
-                });
-
-            modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
-                {
-                    b.Property<int>("FollowingStudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FollowedStudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FollowingStudentId", "FollowedStudentId");
-
-                    b.HasIndex("FollowedStudentId");
-
-                    b.ToTable("Follows");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Reply", b =>
@@ -293,6 +281,21 @@ namespace UniUnboxdAPI.Migrations
                     b.ToTable("Universities");
                 });
 
+            modelBuilder.Entity("CourseProfessor", b =>
+                {
+                    b.HasOne("UniUnboxdAPI.Models.Course", null)
+                        .WithMany()
+                        .HasForeignKey("AssignedCoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniUnboxdAPI.Models.Professor", null)
+                        .WithMany()
+                        .HasForeignKey("AssignedProfessorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
                 {
                     b.HasOne("UniUnboxdAPI.Models.University", "University")
@@ -302,44 +305,6 @@ namespace UniUnboxdAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("University");
-                });
-
-            modelBuilder.Entity("UniUnboxdAPI.Models.CourseProfessorAssignment", b =>
-                {
-                    b.HasOne("UniUnboxdAPI.Models.Professor", "Professor")
-                        .WithMany("AssignedCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniUnboxdAPI.Models.Course", "Course")
-                        .WithMany("AssignedProfessors")
-                        .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Professor");
-                });
-
-            modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
-                {
-                    b.HasOne("UniUnboxdAPI.Models.Student", "FollowedStudent")
-                        .WithMany("Followers")
-                        .HasForeignKey("FollowedStudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UniUnboxdAPI.Models.Student", "FollowingStudent")
-                        .WithMany("Following")
-                        .HasForeignKey("FollowingStudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FollowedStudent");
-
-                    b.Navigation("FollowingStudent");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Reply", b =>
@@ -440,8 +405,6 @@ namespace UniUnboxdAPI.Migrations
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
                 {
-                    b.Navigation("AssignedProfessors");
-
                     b.Navigation("Reviews");
                 });
 
@@ -452,17 +415,11 @@ namespace UniUnboxdAPI.Migrations
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Professor", b =>
                 {
-                    b.Navigation("AssignedCourses");
-
                     b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
                 {
-                    b.Navigation("Followers");
-
-                    b.Navigation("Following");
-
                     b.Navigation("Replies");
 
                     b.Navigation("Reviews");

@@ -88,4 +88,23 @@ public class UserRepository {
             => await dbContext.Follows.Where(i => i.FollowingStudent.Id == id).Select(i => i.FollowedStudent)
                 .ToListAsync();
 
+        public async Task<List<Professor>> GetAssignedProfessors(int id)
+            => await dbContext.Professors.Where(i => i.AssignedCourses.Any(i => i.Course.Id == id)).ToListAsync();
+
+        public async Task AssignProfessorToCourse(CourseProfessorAssignment courseProfessorAssignment)
+        {
+            dbContext.CourseProfessorAssignments.Add(courseProfessorAssignment);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> CourseProfessorAssignmentExist(int courseId, int professorId)
+            => await dbContext.CourseProfessorAssignments.AnyAsync(i =>
+                i.Professor.Id == professorId && i.Course.Id == courseId);
+
+        public async Task DismissProfessorFromCourse(CourseProfessorAssignment courseProfessorAssignment)
+        {
+            dbContext.CourseProfessorAssignments.Remove(courseProfessorAssignment);
+            await dbContext.SaveChangesAsync();        
+        }
+    }
 }

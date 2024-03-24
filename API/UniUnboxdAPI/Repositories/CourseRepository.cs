@@ -20,7 +20,7 @@ namespace UniUnboxdAPI.Repositories
             => await dbContext.Courses.AnyAsync(c => c.Id == id);
 
         public async Task<Course> GetCourse(int id)
-            => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
+            => await dbContext.Courses.Where(i => i.Id == id).Include(i => i.University).FirstAsync();
 
         public async Task<Course> GetCourseAndConnectedData(int id, int numOfReviews)
             => await dbContext.Courses.Where(i => i.Id == id)
@@ -66,5 +66,21 @@ namespace UniUnboxdAPI.Repositories
             => await dbContext.Courses.Where(i => i.University.Id == id)
                                 .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
                                 .Take(10).ToListAsync();
+
+        public async Task PutCourse(Course course)
+        {
+            dbContext.Courses.Update(course);
+            await dbContext.SaveChangesAsync();
+        }
+        public async Task DeleteCourse(Course course)
+        {
+            dbContext.Courses.Remove(course);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<Course>> GetAssignedCourses(int professorId)
+            => await dbContext.Courses.Where(i => i.AssignedProfessors
+                .Any(i => i.Professor.Id == professorId))
+                .ToListAsync();
     }
 }
