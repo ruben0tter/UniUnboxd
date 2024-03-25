@@ -138,7 +138,7 @@ namespace UniUnboxdAPI.Controllers
             int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (!await reviewService.DoesReviewExist(reviewId))
-                return BadRequest("Given review does nto exist.");
+                return BadRequest("Given review does not exist.");
 
             if (!await reviewService.DoesStudentExist(studentId))
                 return BadRequest("Given student does not exist.");
@@ -161,7 +161,7 @@ namespace UniUnboxdAPI.Controllers
             int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (!await reviewService.DoesReviewExist(reviewId))
-                return BadRequest("Given review does nto exist.");
+                return BadRequest("Given review does not exist.");
 
             if (!await reviewService.DoesStudentExist(studentId))
                 return BadRequest("Given student does not exist.");
