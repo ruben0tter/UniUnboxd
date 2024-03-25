@@ -28,6 +28,7 @@ import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.example.uniunboxd.utilities.JWTValidation;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutionException;
@@ -61,7 +62,8 @@ public class StudentEditFragment extends Fragment {
         editImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileSystemChooser.ChooseImage(f);
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 1);
             }
         });
 
@@ -98,7 +100,15 @@ public class StudentEditFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ImageView image = this.getView().findViewById(R.id.image);
+        if (requestCode == 1) {
+            Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
+            image.setImageBitmap(cameraImage);
 
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            cameraImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            Model.Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        } else {
         Uri uri = data.getData();
 
         byte[] bitmapdata = null;
@@ -110,5 +120,7 @@ public class StudentEditFragment extends Fragment {
         Model.Image = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
         image.setImageBitmap(bitmap);
+        }
+
     }
 }
