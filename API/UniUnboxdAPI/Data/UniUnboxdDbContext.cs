@@ -4,10 +4,8 @@ using UniUnboxdAPI.Models;
 
 namespace UniUnboxdAPI.Data
 {
-    public class UniUnboxdDbContext : DbContext
+    public class UniUnboxdDbContext(DbContextOptions<UniUnboxdDbContext> options) : DbContext(options)
     {
-        public UniUnboxdDbContext(DbContextOptions<UniUnboxdDbContext> options) : base(options) { }
-
         public DbSet<User> Users { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<University> Universities { get; set; }
@@ -18,6 +16,7 @@ namespace UniUnboxdAPI.Data
         public DbSet<VerificationApplication> Applications { get; set; }
         public DbSet<Follow> Follows { get; set; }
         public DbSet<NotificationSettings> NotificationSettings { get; set; }
+        public DbSet<Like> Likes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,6 +53,21 @@ namespace UniUnboxdAPI.Data
                 .HasOne(i => i.Student)
                 .WithOne(i => i.NotificationSettings)
                 .HasForeignKey<NotificationSettings>(i => i.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Like>()
+                .HasKey(i => new { i.ReviewId, i.StudentId });
+
+            modelBuilder.Entity<Like>()
+                .HasOne(i => i.Review)
+                .WithMany(i => i.Likes)
+                .HasForeignKey(i => i.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Like>()
+                .HasOne(i => i.Student)
+                .WithMany(i => i.Likes)
+                .HasForeignKey(i => i.StudentId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

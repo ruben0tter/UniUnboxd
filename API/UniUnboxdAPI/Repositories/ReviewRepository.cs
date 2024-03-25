@@ -32,7 +32,9 @@ namespace UniUnboxdAPI.Repositories
                                         .ThenInclude(i => i.NotificationSettings)
                                         .Include(i => i.Course)
                                         .Include(i => i.Replies)  
-                                        .ThenInclude(i => i.User)        
+                                        .ThenInclude(i => i.User)
+                                        .Include(i => i.Likes)
+                                        .ThenInclude(i => i.Student)
                                         .FirstAsync();
 
         public async Task<ICollection<Review>> GetLatestReviewsByFriends(int id)
@@ -55,6 +57,34 @@ namespace UniUnboxdAPI.Repositories
         public async Task PutReview(Review review)
         {
             dbContext.Reviews.Update(review);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsReviewWrittenByStudent(int reviewId, int studentId)
+        {
+            var review = await dbContext.Reviews.Where(i => i.Id == reviewId).Include(i => i.Student).FirstAsync();
+            return review.Student.Id == studentId;
+        }
+
+        public async Task<bool> DoesStudentLikeReview(int reviewId, int studentId)
+        {
+            var review = await dbContext.Reviews.Where(i => i.Id == reviewId).Include(i => i.Likes).FirstAsync();
+            return review.Likes.Any(i => i.StudentId == studentId);
+        }
+
+        public async Task LikeReview(int reviewId, int studentId)
+        {
+            var review = await dbContext.Reviews.FindAsync(reviewId);
+            var student = await dbContext.Students.FindAsync(studentId);
+            var like = new Like() { Review = review!, Student = student! };
+
+            await dbContext.Likes.AddAsync(like);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task UnlikeReview(int reviewId, int studentId)
+        {
+            dbContext.Likes.Remove(dbContext.Likes.Where(i => i.ReviewId == reviewId && i.StudentId == studentId).First());
             await dbContext.SaveChangesAsync();
         }
 

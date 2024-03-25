@@ -106,7 +106,8 @@ namespace UniUnboxdAPI.Services
                 IsAnonymous = model.IsAnonymous,
                 Course = await courseRepository.GetCourse(model.CourseId),
                 Student = await userRepository.GetStudent(studentId),
-                Replies = new List<Reply>()
+                Replies = new List<Reply>(),
+                Likes = new List<Like>()
             };
 
         /// <summary>
@@ -199,6 +200,42 @@ namespace UniUnboxdAPI.Services
             => await reviewRepository.PutReview(review);
 
         /// <summary>
+        /// Check whether student wrote review.
+        /// </summary>
+        /// <param name="reviewId">Provided review id.</param>
+        /// <param name="studentId">Provided student id.</param>
+        /// <returns>Whether student wrote review.</returns>
+        public async Task<bool> IsReviewWrittenByStudent(int reviewId, int studentId)
+            => await reviewRepository.IsReviewWrittenByStudent(reviewId, studentId);
+
+        /// <summary>
+        /// Check whether student already liked review.
+        /// </summary>
+        /// <param name="reviewId">Provided review id.</param>
+        /// <param name="studentId">Provided student id.</param>
+        /// <returns>Whether student liked review.</returns>
+        public async Task<bool> DoesStudentLikeReview(int reviewId, int studentId)
+            => await reviewRepository.DoesStudentLikeReview(reviewId, studentId);
+
+        /// <summary>
+        /// Registers that student attached to provided id liked the review attached to the provided id.
+        /// </summary>
+        /// <param name="reviewId">Provided review id.</param>
+        /// <param name="studentId">Provided student id.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task LikeReview(int reviewId, int studentId)
+            => await reviewRepository.LikeReview(reviewId, studentId);
+
+        /// <summary>
+        /// Registers that student attached to provided id unliked the review attached to the provided id.
+        /// </summary>
+        /// <param name="reviewId">Provided review id.</param>
+        /// <param name="studentId">Provided student id.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public async Task UnlikeReview(int reviewId, int studentId)
+            => await reviewRepository.UnlikeReview(reviewId, studentId);
+
+        /// <summary>
         /// Updates the average rating of the course with the newly changed rating.
         /// </summary>
         /// <param name="courseId">Provided course id.</param>
@@ -225,29 +262,29 @@ namespace UniUnboxdAPI.Services
         public async Task UpdateAverageRatingAfterDelete(int courseId, double removedRating)
             => await courseRepository.UpdateAverageRatingAfterDelete(courseId, removedRating);
 
-        private static ReviewPageModel CreateReviewPageModel(Review model)
+        private static ReviewPageModel CreateReviewPageModel(Review review)
             => new()
             {
-                Id = model.Id,
-                Date = model.LastModificationTime,
-                Rating = model.Rating,
-                Comment = model.Comment,
-                IsAnonymous = model.IsAnonymous,
+                Id = review.Id,
+                Date = review.LastModificationTime,
+                Rating = review.Rating,
+                Comment = review.Comment,
+                IsAnonymous = review.IsAnonymous,
                 CourseHeader = new()
                 {
-                    Id = model.Course.Id,
-                    Name = model.Course.Name,
-                    Code = model.Course.Code,
-                    Image = model.Course.Image!,
-                    Banner = model.Course.Banner!
+                    Id = review.Course.Id,
+                    Name = review.Course.Name,
+                    Code = review.Course.Code,
+                    Image = review.Course.Image!,
+                    Banner = review.Course.Banner!
                 },
                 StudentHeader = new()
                 {
-                    Id = model.Student.Id,
-                    Name = model.Student.UserName!,
-                    Image = model.Student.Image!
+                    Id = review.Student.Id,
+                    Name = review.Student.UserName!,
+                    Image = review.Student.Image!
                 },
-                Replies = model.Replies.Select(i => new ReviewReplyModel()
+                Replies = review.Replies.Select(i => new ReviewReplyModel()
                 {
                     Text = i.Text,
                     UserHeader = new UserHeaderModel()
@@ -257,7 +294,9 @@ namespace UniUnboxdAPI.Services
                         Image = i.User is Student ? (i.User as Student)!.Image! :
                             (i.User as Professor)!.Image!
                     }
-                }).ToList()
+                }).ToList(),
+                LikeCount = review.Likes.Count(),
+                StudentLikes = review.Likes.Select(i => i.StudentId).ToList()
             };
 
         private static ICollection<ReviewGridModel> CreateReviewGridModelCollection(ICollection<Review> reviews)
