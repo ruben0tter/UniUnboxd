@@ -13,21 +13,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.RegistrationController;
 import com.example.uniunboxd.DTO.RegisterModel;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.fragments.main.AuthenticationFragment;
+import com.example.uniunboxd.activities.IActivity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +111,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     private void redirectToSignIn() {
-        replaceFragment(new AuthenticationFragment());
+        ((IActivity) getActivity()).replaceFragment(new AuthenticationFragment());
     }
 
     private boolean arePasswordsEqual() {
@@ -133,27 +125,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 userType.getSelectedItem().toString());
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
-
     private void sendNotification(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
-    }
-
-    private String readMessage(InputStream content) throws IOException{
-        StringBuilder textBuilder = new StringBuilder();
-        try (Reader reader = new BufferedReader(new InputStreamReader
-                (content, StandardCharsets.UTF_8))) {
-            int c = 0;
-            while ((c = reader.read()) != -1) {
-                textBuilder.append((char) c);
-            }
-        }
-
-        return textBuilder.toString().replace("\"", "");
     }
 }

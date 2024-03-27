@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
 
@@ -59,13 +60,27 @@ namespace UniUnboxdAPI.Repositories
         }
 
         public async Task<ICollection<Course>> GetPopularCourseOfLastWeek()
-            => await dbContext.Courses.OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
-                                    .Take(10).ToListAsync();
+            => await dbContext.Courses.Where(i => i.Reviews.Any(i => i.LastModificationTime > DateTime.Now.AddDays(-7)))
+                        .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
+                        .Take(10).ToListAsync();
 
         public async Task<ICollection<Course>> GetPopularCourseOfLastWeekByUniversity(int id)
+            => await dbContext.Courses.Where(i => i.Reviews.Any(i => i.LastModificationTime > DateTime.Now.AddDays(-7)) 
+                        && i.University.Id == id)
+                        .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
+                        .Take(10).ToListAsync();
+
+        public async Task<ICollection<Course>> GetPopularCourseOfLastWeekByFriends(int id)
+            => await dbContext.Courses.Where(i => i.Reviews.Any(i => i.LastModificationTime > DateTime.Now.AddDays(-7) 
+                        && i.Student.Followers!.Any(i => i.FollowingStudentId == id)))
+                        .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7) 
+                        && i.Student.Followers!.Any(i => i.FollowingStudentId == id)).Count())
+                        .Take(10).ToListAsync();
+
+        public async Task<ICollection<Course>> GetLastEditedCoursesByUniversity(int id)
             => await dbContext.Courses.Where(i => i.University.Id == id)
-                                .OrderByDescending(i => i.Reviews.Where(i => i.LastModificationTime > DateTime.Now.AddDays(-7)).Count())
-                                .Take(10).ToListAsync();
+                        .OrderByDescending(i => i.LastModificationTime)
+                        .Take(4).ToListAsync();
 
         public async Task PutCourse(Course course)
         {

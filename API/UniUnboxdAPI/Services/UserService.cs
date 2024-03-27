@@ -3,8 +3,9 @@ using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
 
-namespace UniUnboxdAPI.Services;
-public class UserService(UserRepository userRepository, CourseRepository courseRepository)
+namespace UniUnboxdAPI.Services
+{
+    public class UserService(UserRepository userRepository, CourseRepository courseRepository, MailService mailService, PushNotificationService pushNotificationService)
     {
         /// <summary>
         /// Check whether there exists a student with the provided id.
@@ -21,6 +22,9 @@ public class UserService(UserRepository userRepository, CourseRepository courseR
         /// <returns>Student model with given id.</returns>
         public async Task<Student> GetStudent(int id)
             => await userRepository.GetStudent(id);
+
+        public async Task SetDeviceToken(int studentId, string deviceToken)
+            => await userRepository.SetDeviceToken(studentId, deviceToken);
 
         /// <summary>
         /// Check whether student 1 already follows student 2.
@@ -44,6 +48,21 @@ public class UserService(UserRepository userRepository, CourseRepository courseR
         }
 
         /// <summary>
+        /// Notify Student 2 that Student 1 has followed them.
+        /// </summary>
+        /// <param name="followingStudent">Provided student 1.</param>
+        /// <param name="followedStudent">Provided student 2.</param>
+        /// <returns>No object or value is returned by this method when it completes.</returns>
+        public void NotifyFollowedStudent(Student followingStudent, Student followedStudent)
+        {
+            if (followedStudent.NotificationSettings!.ReceivesNewFollowerMail)
+                mailService.SendNewFollowerNotification(followingStudent, followedStudent);
+
+            if (followedStudent.NotificationSettings!.ReceivesNewFollowerPush)
+                pushNotificationService.SendNewFollowerNotification(followingStudent, followedStudent);
+        }
+
+        /// <summary>
         /// Student 1 unfollows student 2.
         /// </summary>
         /// <param name="unfollowingStudent">Provided student 1.</param>
@@ -51,8 +70,7 @@ public class UserService(UserRepository userRepository, CourseRepository courseR
         /// <returns>No object or value is returned by this method when it completes.</returns>
         public async Task UnfollowStudent(Student unfollowingStudent, Student unfollowedStudent)
         {
-            var followModel = CreateFollow(unfollowingStudent, unfollowedStudent);
-            await userRepository.UnfollowStudent(followModel);
+            await userRepository.UnfollowStudent(unfollowingStudent.Id, unfollowedStudent.Id);
         }
 
         private static Follow CreateFollow(Student followingStudent, Student followedStudent)
@@ -114,124 +132,125 @@ public class UserService(UserRepository userRepository, CourseRepository courseR
             await userRepository.DismissProfessorFromCourse(courseProfessorAssignment);        
         }
     
-    public async Task<StudentProfileModel> GetStudentAndConnectedData(int id)
-    {
-        var student = await userRepository.GetStudentAndConnectedData(id);
+        public async Task<StudentProfileModel> GetStudentAndConnectedData(int id)
+        {
+            var student = await userRepository.GetStudentAndConnectedData(id);
+                
+            var studentProfileModel = CreateStudentProfileModel(student);
+            University university = null;
+            if(await userRepository.DoesUniversityExist(student.UniversityId))
+                university = await userRepository.GetUniversity(student.UniversityId);
+            if(university != null)
+                studentProfileModel.UniversityName = university.UserName;
             
-        var studentProfileModel = CreateStudentProfileModel(student);
-        University university = null;
-        if(await userRepository.DoesUniversityExist(student.UniversityId))
-            university = await userRepository.GetUniversity(student.UniversityId);
-        if(university != null)
-            studentProfileModel.UniversityName = university.UserName;
-        
-        // if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
+            // if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
 
-        foreach (var review in student.Reviews.OrderByDescending(i => i.LastModificationTime))
-            studentProfileModel.Reviews.Add(CreateStudentProfileReview(review));
-        
-        
-        studentProfileModel.Followers = new List<StudentGridModel>();
-        foreach(var x in await userRepository.GetFollowers(id))
-            studentProfileModel.Followers.Add(new StudentGridModel
-            {
-                Id = x.Id,
-                Name = x.UserName,
-                Image = x.Image
-            });
-        
-        studentProfileModel.Following = new List<StudentGridModel>();
-        foreach(var x in await userRepository.GetFollowing(id))
-            studentProfileModel.Following.Add(new StudentGridModel
-            {
-                Id = x.Id,
-                Name = x.UserName,
-                Image = x.Image
-            });
-        
-        return studentProfileModel;
-    }
-    
-    private static StudentProfileModel CreateStudentProfileModel(Student student)
-        => new ()
-        {
-            Id = student.Id,
-            ProfilePic = student.Image,
-            Name = student.UserName,
-            UniversityName = "",
-            Reviews = new List<StudentProfileReview>()
+            foreach (var review in student.Reviews.OrderByDescending(i => i.LastModificationTime))
+                studentProfileModel.Reviews.Add(CreateStudentProfileReview(review));
             
-        };
-    
-    private static StudentProfileReview CreateStudentProfileReview(Review review)
-        => new ()
-        {
-            Id = review.Id,
-            Rating = review.Rating,
-            Comment = review.Comment,
-            StudentProfileReviewCourse = CreateStudentProfileReviewCourse(review.Course)
             
-        };
-    
-    private static StudentProfileReviewCourse CreateStudentProfileReviewCourse(Course course)
-        => new ()
-        {
-            Id = course.Id,
-            Name = course.Name,
-            Image = course.Image,
-            Code = course.Code
-        };
-    
-    private static ProfessorProfileModel CreateProfessorProfileModel(Professor professor)
-        => new ()
-        {
-            Id = professor.Id,
-            ProfilePic = professor.Image,
-            Name = professor.UserName,
-            Courses = new List<AssignedCourseModel>(),
-        };
-        
-    public async Task<ProfessorProfileModel> GetProfessorAndConnectedData(int id)
-        {
-            var professor = await userRepository.GetProfessorAndConnectedData(id);
-
-            var professorProfileModel = CreateProfessorProfileModel(professor);
+            studentProfileModel.Followers = new List<StudentGridModel>();
+            foreach(var x in await userRepository.GetFollowers(id))
+                studentProfileModel.Followers.Add(new StudentGridModel
+                {
+                    Id = x.Id,
+                    Name = x.UserName,
+                    Image = x.Image
+                });
             
-            foreach (var course in await courseRepository.GetAssignedCourses(id))
-            {
-                professorProfileModel.UniversityName = course.University.UserName;
-                professorProfileModel.Courses.Add(MakeAssignedCourseModel(course));
-            }
-
-            return professorProfileModel;
+            studentProfileModel.Following = new List<StudentGridModel>();
+            foreach(var x in await userRepository.GetFollowing(id))
+                studentProfileModel.Following.Add(new StudentGridModel
+                {
+                    Id = x.Id,
+                    Name = x.UserName,
+                    Image = x.Image
+                });
+            
+            return studentProfileModel;
         }
-
-        private AssignedCourseModel MakeAssignedCourseModel(Course course)
-            => new()
+        
+        private static StudentProfileModel CreateStudentProfileModel(Student student)
+            => new ()
+            {
+                Id = student.Id,
+                ProfilePic = student.Image,
+                Name = student.UserName,
+                UniversityName = "",
+                Reviews = new List<StudentProfileReview>()
+                
+            };
+        
+        private static StudentProfileReview CreateStudentProfileReview(Review review)
+            => new ()
+            {
+                Id = review.Id,
+                Rating = review.Rating,
+                Comment = review.Comment,
+                StudentProfileReviewCourse = CreateStudentProfileReviewCourse(review.Course)
+                
+            };
+        
+        private static StudentProfileReviewCourse CreateStudentProfileReviewCourse(Course course)
+            => new ()
             {
                 Id = course.Id,
-                Rating = course.AverageRating,
                 Name = course.Name,
-                Code = course.Code,
-                Professor = course.Professor,
-                Image = course.Image
+                Image = course.Image,
+                Code = course.Code
+            };
+        
+        private static ProfessorProfileModel CreateProfessorProfileModel(Professor professor)
+            => new ()
+            {
+                Id = professor.Id,
+                ProfilePic = professor.Image,
+                Name = professor.UserName,
+                Courses = new List<AssignedCourseModel>(),
             };
             
+        public async Task<ProfessorProfileModel> GetProfessorAndConnectedData(int id)
+            {
+                var professor = await userRepository.GetProfessorAndConnectedData(id);
 
-        public void UpdateProfessor(Professor professor, ProfessorEditModel model)
-    {
-        professor.UserName = model.Name;
-        professor.Image = model.Image;
+                var professorProfileModel = CreateProfessorProfileModel(professor);
+                
+                foreach (var course in await courseRepository.GetAssignedCourses(id))
+                {
+                    professorProfileModel.UniversityName = course.University.UserName;
+                    professorProfileModel.Courses.Add(MakeAssignedCourseModel(course));
+                }
+
+                return professorProfileModel;
+            }
+
+            private AssignedCourseModel MakeAssignedCourseModel(Course course)
+                => new()
+                {
+                    Id = course.Id,
+                    Rating = course.AverageRating,
+                    Name = course.Name,
+                    Code = course.Code,
+                    Professor = course.Professor,
+                    Image = course.Image
+                };
+                
+
+            public void UpdateProfessor(Professor professor, ProfessorEditModel model)
+        {
+            professor.UserName = model.Name;
+            professor.Image = model.Image;
+        }
+        public async Task PutProfessor(Professor professor)
+            => await userRepository.PutProfessor(professor);
+
+        public void UpdateStudent(Student student, StudentEditModel model)
+        {
+            student.UserName = model.Name;
+            student.Image = model.Image;
+        }
+
+        public async Task PutStudent(Student student)
+            => await userRepository.PutStudent(student);
     }
-    public async Task PutProfessor(Professor professor)
-        => await userRepository.PutProfessor(professor);
-
-    public void UpdateStudent(Student student, StudentEditModel model)
-    {
-        student.UserName = model.Name;
-        student.Image = model.Image;
-    }
-
-    public async Task PutStudent(Student student)
-        => await userRepository.PutStudent(student);
 }

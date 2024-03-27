@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -29,12 +31,14 @@ import com.example.uniunboxd.models.review.Reply;
 import com.example.uniunboxd.models.review.Review;
 import com.example.uniunboxd.utilities.JWTValidation;
 
+import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutionException;
 
 public class ReviewFragment extends Fragment implements View.OnClickListener {
     private final int id;
     private Review review;
     private boolean isReviewTabActive = false;
+    private boolean isReviewLiked = false;
 
     private ConstraintLayout reviewPage;
     private ConstraintLayout repliesPage;
@@ -44,6 +48,9 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private TextView repliesTab;
     private EditText replyInput;
 
+    private ImageView likeReview;
+    private TextView likeText;
+    private TextView likeCount;
 
     public ReviewFragment(int id)
     {
@@ -79,6 +86,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         replyPost.setOnClickListener(this);
         ImageView editReview = view.findViewById(R.id.editReview);
         editReview.setOnClickListener(this);
+        likeReview = view.findViewById(R.id.like);
+
+        // Extra
+        likeText = view.findViewById(R.id.likeText);
+        likeCount = view.findViewById(R.id.likeCount);
 
         // Profile Redirects
         ImageView profileImage = view.findViewById(R.id.profileImage);
@@ -105,8 +117,28 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             review.createView(view, inflater, container, this);
 
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+            String userType = JWTValidation.getTokenProperty(getActivity(), "typ");
+
             if(review.Student.Id != userId) {
                 editReview.setVisibility(View.GONE);
+            }
+
+            if(userType.equals("Student")) {
+                likeReview.setOnClickListener(this);
+                if(review.StudentLikes.contains(userId)) {
+                    isReviewLiked = true;
+                    likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
+                    likeText.setText("Liked");
+                }
+            } else {
+                likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
+
+                likeText.setVisibility(View.GONE);
+
+                ConstraintSet cs = new ConstraintSet();
+                cs.clone(reviewPage);
+                cs.setHorizontalBias(R.id.likeCount, (float) 0.02);
+                cs.applyTo(reviewPage);
             }
         }
 
@@ -131,6 +163,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             redirectToCourse();
         } else if (id == R.id.editReview) {
             redirectToEditReview();
+        } else if (id == R.id.like) {
+            changeLikeStatus();
         }
     }
 
@@ -214,6 +248,40 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private CourseModel createCourseModel() {
         return new CourseModel(review.Course.Id, review.Course.Name,
                 review.Course.Code, review.Course.Image);
+    }
+
+    private void changeLikeStatus() {
+        if (isReviewLiked) {
+            likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_open));
+            likeText.setText("Like?");
+            review.LikeCount--;
+            likeCount.setText(String.format("%d likes", review.LikeCount));
+        } else {
+            likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
+            likeText.setText("Liked");
+            review.LikeCount++;
+            likeCount.setText(String.format("%d like%s", review.LikeCount, review.LikeCount != 1 ? "s" : ""));
+        }
+
+        isReviewLiked = !isReviewLiked;
+        applyLikeStatus();
+    }
+
+    private void applyLikeStatus() {
+        AsyncTask.execute(() -> {
+            try {
+                if (isReviewLiked) {
+                    ReviewController.like(review.Id, getActivity());
+                } else {
+                    HttpURLConnection con = ReviewController.unlike(review.Id, getActivity());
+
+                    Log.i("LIKE", con.getResponseMessage());
+                }
+            } catch (Exception e) {
+                Log.e("APP", "Failed to register like change: " + e.toString());
+            }
+
+        });
     }
 }
 

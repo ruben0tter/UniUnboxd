@@ -10,11 +10,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
-import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
+import com.example.uniunboxd.fragments.university.UniversityHomeFragment;
+import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
@@ -51,7 +52,7 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         } else if (Objects.equals(state, "Verified")) {
             // TODO: Add the University Home Fragment
             setNavigationMenu();
-            return new HomeFragment();
+            return new UniversityHomeFragment();
         }
 
         return null;

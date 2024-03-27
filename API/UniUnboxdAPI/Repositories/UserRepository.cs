@@ -20,13 +20,18 @@ public class UserRepository {
             => await dbContext.Users.Where(i => i.Id == id).FirstAsync();
 
         public async Task<User> GetUser(string email)
-            => await dbContext.Users.Where(i => i.Email.Equals(email)).FirstAsync();
+            => await dbContext.Users.Where(i => i.Email!.Equals(email)).FirstAsync();
 
         public async Task<bool> DoesStudentExist(int id)
             => await dbContext.Students.AnyAsync(c => c.Id == id);
 
         public async Task<Student> GetStudent(int id)
-            => await dbContext.Students.Where(i => i.Id == id).FirstAsync();
+            => await dbContext.Students.Where(i => i.Id == id)
+                    .Include(i => i.NotificationSettings)
+                    .Include(i => i.Followers)!
+                    .ThenInclude(i => i.FollowingStudent)
+                    .ThenInclude(i => i.NotificationSettings)
+                    .FirstAsync();
 
         public async Task<bool> DoesUniversityExist(int id)
             => await dbContext.Universities.AnyAsync(c => c.Id == id);
@@ -52,6 +57,13 @@ public class UserRepository {
                 .ThenInclude(i => i.University)
                 .FirstAsync(); 
 
+        public async Task SetDeviceToken(int studentId, string deviceToken)
+        {
+            var student = await GetStudent(studentId);
+            student.DeviceToken = deviceToken;
+            await dbContext.SaveChangesAsync();
+        }
+
         public async Task<bool> DoesStudentFollowStudent(int followingStudentId, int followedStudentId)
         {
             var followingStudent = await dbContext.Students.Where(i => i.Id == followingStudentId).Include(i => i.Following).FirstAsync();
@@ -64,9 +76,9 @@ public class UserRepository {
             await dbContext.SaveChangesAsync();
         }
 
-        public async Task UnfollowStudent(Follow followRelation)
+        public async Task UnfollowStudent(int unfollowingStudentId, int unfollowedStudentId)
         {
-            dbContext.Follows.Remove(followRelation);
+            dbContext.Follows.Remove(dbContext.Follows.Where(i => i.FollowingStudentId == unfollowingStudentId  && i.FollowedStudentId == unfollowedStudentId).First());
             await dbContext.SaveChangesAsync();
         }
 

@@ -1,12 +1,20 @@
 package com.example.uniunboxd.activities;
 
+import android.Manifest;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityStudentBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
@@ -14,6 +22,10 @@ import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.fragments.student.SearchFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.net.HttpURLConnection;
+import java.util.Objects;
 
 public class StudentActivity extends AppCompatActivity implements IActivity {
 
@@ -30,11 +42,7 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
 
         replaceFragment(new HomeFragment());
 
-        /*
-        UserState state = new UserState("userToken");
-        replaceFragment(state.getHomeFragment());
-        setUserState(state);
-        */
+        askNotificationPermission();
     }
 
     public void setNavigationMenu() {
@@ -63,4 +71,36 @@ public class StudentActivity extends AppCompatActivity implements IActivity {
         fragmentTransaction.commit();
     }
 
+    private void askNotificationPermission() {
+        // TODO: Figure out how to do this for API Level < 33
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+        }
+    }
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                FirebaseMessaging.getInstance().getToken ()
+                    .addOnCompleteListener ( task -> {
+                        if (!task.isSuccessful()) { return; }
+                        if (task.getResult() != null) {
+                            String deviceToken = Objects.requireNonNull ( task.getResult() );
+                            FragmentActivity f = this;
+
+                            AsyncTask.execute(() -> {
+                                try {
+                                    HttpURLConnection con = UserController.setDeviceToken(deviceToken, f);
+
+                                    Log.i("DeviceToken", "Code: " + con.getResponseCode());
+                                    Log.i("DeviceToken", "Message: " + con.getResponseMessage());
+                                } catch (Exception e) {
+                                    Log.e("DeviceToken", e.toString());
+                                }
+
+                            });
+                        }
+                    } );
+            }
+        });
 }

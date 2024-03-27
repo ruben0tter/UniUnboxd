@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -41,6 +42,18 @@ namespace UniUnboxdAPI.Controllers
             return Ok(models);
         }
 
+        [HttpGet("latest-by-friends")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetLatestReviewsByFriends()
+        {
+            var id = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var reviews = await reviewService.GetLatestReviewsByFriends(id);
+
+            return Ok(reviews);
+        }
+
+
         [HttpPost]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> PostReview([FromBody] ReviewModel model)
@@ -66,6 +79,8 @@ namespace UniUnboxdAPI.Controllers
                 await reviewService.PostReview(review);
 
                 await reviewService.UpdateAverageRatingAfterPost(review.Course.Id, review.Rating);
+
+                reviewService.NotifyFollowers(review);
 
                 return Ok("Succesfully created review.");
             } 
@@ -114,6 +129,52 @@ namespace UniUnboxdAPI.Controllers
             {
                 return BadRequest("Something went wrong when updating a review.\nThe following exception was thrown:\n" + ex.Message);
             }
+        }
+
+        [HttpPut("like")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> LikeReview([FromQuery(Name = "review")] int reviewId)
+        {
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesReviewExist(reviewId))
+                return BadRequest("Given review does not exist.");
+
+            if (!await reviewService.DoesStudentExist(studentId))
+                return BadRequest("Given student does not exist.");
+
+            if (await reviewService.IsReviewWrittenByStudent(reviewId, studentId))
+                return BadRequest("You can not like your own review.");
+
+            if (await reviewService.DoesStudentLikeReview(reviewId, studentId))
+                return BadRequest("Given review is already liked.");
+
+            await reviewService.LikeReview(reviewId, studentId);
+
+            return Ok();
+        }
+
+        [HttpPut("unlike")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> UnlikeReview([FromQuery(Name = "review")] int reviewId)
+        {
+            int studentId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesReviewExist(reviewId))
+                return BadRequest("Given review does not exist.");
+
+            if (!await reviewService.DoesStudentExist(studentId))
+                return BadRequest("Given student does not exist.");
+
+            if (await reviewService.IsReviewWrittenByStudent(reviewId, studentId))
+                return BadRequest("You can not unlike your own review.");
+
+            if (!await reviewService.DoesStudentLikeReview(reviewId, studentId))
+                return BadRequest("Given review is not liked.");
+
+            await reviewService.UnlikeReview(reviewId, studentId);
+
+            return Ok();
         }
 
         [HttpDelete]
