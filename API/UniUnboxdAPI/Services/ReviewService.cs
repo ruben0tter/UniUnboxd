@@ -139,6 +139,9 @@ namespace UniUnboxdAPI.Services
             }
         }
 
+        public void FlagReview(FlagReviewModel model, int userId)
+            => mailService.sendFlagReviewNotification(model, userId);
+
         /// <summary>
         /// Get next n reviews for a course.
         /// </summary>

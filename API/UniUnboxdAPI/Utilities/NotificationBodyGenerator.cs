@@ -1,4 +1,6 @@
-﻿using UniUnboxdAPI.Models;
+﻿using Microsoft.IdentityModel.Tokens;
+using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 
 namespace UniUnboxdAPI.Utilities
 {
@@ -25,8 +27,13 @@ namespace UniUnboxdAPI.Utilities
 
         public static string NewReviewNotificationBody(Review review)
             => review.Student.UserName + " has posted a review for the course " + review.Course.Name + ". Go check it out :)";
+
         public static string NewReplyNotificationBody(Reply reply)
             => reply.User.UserName + " has replied to you review for the course " + reply.Review.Course.Name;
+
+        public static string FlagReviewNotificationBody(FlagReviewModel model, int userId)
+            => "The review with ID " + model.ReviewId + " has been flagged by a student with ID " + userId + ".\n" 
+            + (model.Message.IsNullOrEmpty() ? string.Empty : ("The following message was given: \"" + model.Message + "\""));
 
         public static string VerificationStatusChangeBody(User user)
             => "Your verification application has been " + 
