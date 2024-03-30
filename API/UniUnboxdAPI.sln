@@ -1,9 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniUnboxdAPI", "UniUnboxdAPI\UniUnboxdAPI.csproj", "{F9313B86-2324-4271-9B83-158FFE0BB909}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UniUnboxdAPI", "UniUnboxdAPI\UniUnboxdAPI.csproj", "{F9313B86-2324-4271-9B83-158FFE0BB909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniUnboxdAPITests", "UniUnboxdAPITests\UniUnboxdAPITests.csproj", "{10ECBB4A-B986-4465-94D5-FDB39AE2578B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +16,10 @@ Global
 		{F9313B86-2324-4271-9B83-158FFE0BB909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9313B86-2324-4271-9B83-158FFE0BB909}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9313B86-2324-4271-9B83-158FFE0BB909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10ECBB4A-B986-4465-94D5-FDB39AE2578B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10ECBB4A-B986-4465-94D5-FDB39AE2578B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10ECBB4A-B986-4465-94D5-FDB39AE2578B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10ECBB4A-B986-4465-94D5-FDB39AE2578B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
