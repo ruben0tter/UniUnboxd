@@ -13,13 +13,11 @@ namespace UniUnboxdAPI.Services
     public class AuthenticationService
     {
         private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
         private readonly UserRepository userRepository;
 
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, UserRepository userRepository)
+        public AuthenticationService(UserManager<User> userManager, UserRepository userRepository)
         {
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this.userRepository = userRepository;
         }
 
@@ -40,10 +38,10 @@ namespace UniUnboxdAPI.Services
         public async Task<string?> Authenticate(AuthenticationModel model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
-            var result = await signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            var isPasswordCorrect = await userManager.CheckPasswordAsync(user!, model.Password);
 
-            if (result.Succeeded)
-                return JWTConfiguration.GenerateJWT(user);
+            if (isPasswordCorrect)
+                return JWTConfiguration.GenerateJWT(user!);
 
             return null;
         }

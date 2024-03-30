@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Storage;
-using UniUnboxdAPI.Models;
 using UniUnboxdAPITests.TestUtilities;
 
 namespace UniUnboxdAPITests.Services

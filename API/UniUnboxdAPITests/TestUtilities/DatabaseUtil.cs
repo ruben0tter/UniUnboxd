@@ -29,7 +29,7 @@ namespace UniUnboxdAPITests.TestUtilities
             var userValidators = new List<IUserValidator<User>>();
             var validator = new Mock<IUserValidator<User>>();
             userValidators.Add(validator.Object);
-            var pwdValidators = new List<PasswordValidator<User>>();
+            var pwdValidators = new List<IPasswordValidator<User>>();
             var userManager = new UserManager<User>(store, options.Object, new PasswordHasher<User>(),
                 userValidators, pwdValidators, MockLookupNormalizer()!,
                 new IdentityErrorDescriber(), null!,
