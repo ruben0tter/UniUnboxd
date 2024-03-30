@@ -1,11 +1,9 @@
 package com.example.uniunboxd.fragments.student;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -297,7 +295,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void changeFlagReview() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MyDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
         builder.setTitle("Flag Review");
 
         View viewInflated= LayoutInflater.from(getContext()).inflate(R.layout.flag_review_message_pop_up, (ViewGroup) getView(), false);
@@ -316,12 +314,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             }
 
         }));
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
 }
