@@ -9,12 +9,11 @@ namespace UniUnboxdAPITests.Services
     public class RegistrationServiceTest
     {
         private readonly RegistrationService registrationService;
-        private readonly UniUnboxdDbContext dbContext;
         private readonly UserManager<User> userManager;
 
         public RegistrationServiceTest()
         {
-            dbContext = DatabaseUtil.CreateDbContext();
+            var dbContext = DatabaseUtil.CreateDbContext();
             userManager = DatabaseUtil.CreateUserManager(dbContext);
             var mailService = new MailService(ConfigurationUtil.CreateConfiguration());
             registrationService = new RegistrationService(userManager, mailService);
