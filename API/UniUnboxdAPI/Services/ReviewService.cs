@@ -192,6 +192,7 @@ namespace UniUnboxdAPI.Services
             review.Rating = model.Rating;
             review.Comment = model.Comment;
             review.IsAnonymous = model.IsAnonymous;
+            review.LastModificationTime = DateTime.Now;
         }
 
         /// <summary>

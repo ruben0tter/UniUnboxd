@@ -5,5 +5,8 @@
         <item name="colorControlNormal">#C82424</item>
     </style>
 
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/TUeRed</item>
+    </style>
 
 </resources>

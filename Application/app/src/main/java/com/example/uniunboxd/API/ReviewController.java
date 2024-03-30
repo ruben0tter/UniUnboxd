@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.uniunboxd.DTO.FlagReviewModel;
 import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.models.home.FriendReview;
 import com.example.uniunboxd.models.ReviewListItem;
@@ -133,6 +134,14 @@ public class ReviewController {
 
     public static HttpURLConnection unlike(int id, FragmentActivity f) throws Exception {
         return APIClient.put("Review/unlike?review=" + id, null, JWTValidation.getToken(f));
+    }
+
+    public static HttpURLConnection flagReview(FlagReviewModel model, FragmentActivity f) throws Exception {
+        JSONObject json = new JSONObject();
+        json.put("reviewId", model.reviewId);
+        json.put("message", model.message);
+
+        return APIClient.post("Review/flag-review", json.toString(), JWTValidation.getToken(f));
     }
 
     public static HttpURLConnection deleteReview(int id, FragmentActivity f) throws Exception {
