@@ -15,7 +15,7 @@ namespace UniUnboxdAPI.Services
                 Notification = new Notification
                 {
                     Title = "You have a new follower!",
-                    Body = NotificationBodyGenerator.NewFollowerNotificationBody(studentFollowing)
+                    Body = NotificationBodyGenerator.NewFollowerNotificationBody(studentFollowing.UserName!)
                 },
                 Token = studentFollowed.DeviceToken
             };
@@ -30,7 +30,7 @@ namespace UniUnboxdAPI.Services
                 Notification = new Notification
                 {
                     Title = "Someone you follow has posted a review!",
-                    Body = NotificationBodyGenerator.NewReviewNotificationBody(review)
+                    Body = NotificationBodyGenerator.NewReviewNotificationBody(review.Student.UserName!, review.Course.Name)
                 },
                 Token = receiver.DeviceToken
             };
@@ -45,7 +45,7 @@ namespace UniUnboxdAPI.Services
                 Notification = new Notification
                 {
                     Title = "Someone has replied to your review!",
-                    Body = NotificationBodyGenerator.NewReplyNotificationBody(reply)
+                    Body = NotificationBodyGenerator.NewReplyNotificationBody(reply.User.UserName!, reply.Review.Course.Name)
                 },
                 Token = reply.Review.Student.DeviceToken
             };
@@ -61,7 +61,7 @@ namespace UniUnboxdAPI.Services
                 Notification = new Notification
                 {
                     Title = "The status of your verification application has changed.",
-                    Body = NotificationBodyGenerator.VerificationStatusChangeBody(application.UserToBeVerified)
+                    Body = NotificationBodyGenerator.VerificationStatusChangeBody(application.UserToBeVerified.VerificationStatus)
                 },
                 Token = student.DeviceToken
             };

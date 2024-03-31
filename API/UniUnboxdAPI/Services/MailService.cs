@@ -55,7 +55,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = NotificationBodyGenerator.NewFollowerNotificationBody(studentFollowing)
+                HtmlBody = NotificationBodyGenerator.NewFollowerNotificationBody(studentFollowing.UserName!)
             };
             newFollowerMail.Body = builder.ToMessageBody();
 
@@ -73,7 +73,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = NotificationBodyGenerator.NewReviewNotificationBody(review)
+                HtmlBody = NotificationBodyGenerator.NewReviewNotificationBody(review.Student.UserName!, review.Course.Name)
             };
             newReviewMail.Body = builder.ToMessageBody();
 
@@ -91,7 +91,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = NotificationBodyGenerator.NewReplyNotificationBody(reply)
+                HtmlBody = NotificationBodyGenerator.NewReplyNotificationBody(reply.User.UserName!, reply.Review.Course.Name)
             };
             newReplyMail.Body = builder.ToMessageBody();
 
@@ -109,7 +109,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(student)
+                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(student.VerificationStatus)
             };
             verificationStatusChangedMail.Body = builder.ToMessageBody();
 
@@ -127,7 +127,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(application.UserToBeVerified)
+                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(application.UserToBeVerified.VerificationStatus)
             };
             verificationStatusChangedMail.Body = builder.ToMessageBody();
 
