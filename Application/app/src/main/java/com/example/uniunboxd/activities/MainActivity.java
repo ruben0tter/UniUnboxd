@@ -33,7 +33,7 @@ public class MainActivity extends IActivity {
                 // TODO: Add Professor Activity
             }
         } else {
-            replaceFragment(new AuthenticationFragment());
+            replaceFragment(new AuthenticationFragment(), false);
         }
     }
 }

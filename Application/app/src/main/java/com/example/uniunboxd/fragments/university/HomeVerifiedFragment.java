@@ -29,16 +29,13 @@ public class HomeVerifiedFragment extends Fragment {
         createBtn.setOnClickListener(v -> {
             Log.w("dasnjkads", "dnajskdas");
             AsyncTask.execute(() -> {
-                ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment());
+                ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(), true);
             });
         });
 
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JWTValidation.deleteToken(getActivity());
-                ((IActivity) getActivity()).replaceActivity(MainActivity.class);
-            }
+        signOut.setOnClickListener(v -> {
+            JWTValidation.deleteToken(getActivity());
+            ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         });
 
         return view;

@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.models.CourseCreationModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.JWTValidation;
@@ -66,26 +67,23 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             EditText description = (EditText) layout.getViewById(R.id.courseDescription_edit);
             EditText professor = (EditText) layout.getViewById(R.id.courseName_courseDescription_edit);
 
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-                    CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
-                            code.getText().toString(), description.getText().toString(),
-                            professor.getText().toString(), imageEnc, bannerEnc, universityId);
-                    try {
-                        HttpURLConnection con = CourseController.postCourse(course, getActivity());
-                        if (con.getResponseCode() == 200) {
-                            replaceFragment(new HomeVerifiedFragment());
-                        } else {
-                            //TODO: see how to show a toast
-                            Log.d("DEB", "" + con.getResponseCode());
-                        }
-                    } catch (Exception e) {
-                        Log.e("ERR", e.toString());
+            AsyncTask.execute(() -> {
+                int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+                CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
+                        code.getText().toString(), description.getText().toString(),
+                        professor.getText().toString(), imageEnc, bannerEnc, universityId);
+                try {
+                    HttpURLConnection con = CourseController.postCourse(course, getActivity());
+                    if (con.getResponseCode() == 200) {
+                        ((IActivity) getActivity()).goBack();
+                    } else {
+                        //TODO: see how to show a toast
+                        Log.d("DEB", "" + con.getResponseCode());
                     }
-
+                } catch (Exception e) {
+                    Log.e("ERR", e.toString());
                 }
+
             });
         } else if (id == R.id.courseImage_edit) {
             FileSystemChooser.ChooseImage(f, imageCode);

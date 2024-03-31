@@ -38,21 +38,21 @@ public class UniversityActivity extends IActivity {
             binding.bottomNavigationView.setOnItemSelectedListener(item -> {
                 int itemId = item.getItemId();
                 if (itemId == R.id.home) {
-                    replaceFragment(new UniversityHomeFragment());
+                    replaceFragment(new UniversityHomeFragment(), false);
                 } else if (itemId == R.id.search) {
-                    replaceFragment(new SearchUniversityFragment());
+                    replaceFragment(new SearchUniversityFragment(), false);
                 } else if (itemId == R.id.applications) {
-                    replaceFragment(new ApplicationsFragment());
+                    replaceFragment(new ApplicationsFragment(), false);
                 }
                 fragmentHistory.removeAllElements();
                 return true;
             });
 
-            replaceFragment(new UniversityHomeFragment());
+            replaceFragment(new UniversityHomeFragment(), false);
         } else {
             binding.bottomNavigationView.setVisibility(View.GONE);
             replaceFragment(Objects.equals(status, "Submitted") ?
-                    new HomeSubmittedFragment() : new HomeUnverifiedFragment());
+                    new HomeSubmittedFragment() : new HomeUnverifiedFragment(), false);
         }
     }
 }

@@ -103,7 +103,7 @@ public class HomeUnverifiedFragment extends Fragment {
 
     private void reload() {
         try {
-            ((IActivity) getActivity()).replaceFragment(new HomeSubmittedFragment());
+            ((IActivity) getActivity()).replaceFragment(new HomeSubmittedFragment(), false);
         } catch (Exception e) {
             Log.d("ERR", "i dunno");
         }

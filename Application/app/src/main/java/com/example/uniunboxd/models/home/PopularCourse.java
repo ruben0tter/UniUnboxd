@@ -29,6 +29,7 @@ public class PopularCourse implements View.OnClickListener {
         CourseImage = courseImage;
         CourseName = courseName;
     }
+
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.course_name_image_item, container, false);
 
@@ -46,8 +47,9 @@ public class PopularCourse implements View.OnClickListener {
 
         return view;
     }
+
     @Override
     public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id));
+        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true);
     }
 }

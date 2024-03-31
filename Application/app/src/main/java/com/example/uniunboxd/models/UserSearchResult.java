@@ -45,7 +45,7 @@ public class UserSearchResult {
         View view = inflater.inflate(R.layout.search_result_user, null);
 
         view.setOnClickListener(l -> {
-            ((IActivity) activity).replaceFragment(new ProfileFragment(Id));
+            ((IActivity) activity).replaceFragment(new ProfileFragment(Id), true);
         });
 
         ((TextView) view.findViewById(R.id.username)).setText(UserName);

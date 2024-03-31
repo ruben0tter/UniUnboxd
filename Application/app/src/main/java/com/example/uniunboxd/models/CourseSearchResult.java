@@ -50,7 +50,7 @@ public class CourseSearchResult {
         View view = inflater.inflate(R.layout.search_result_course, null);
 
         view.setOnClickListener(l -> {
-            ((IActivity) activity).replaceFragment(new CourseFragment(Id));
+            ((IActivity) activity).replaceFragment(new CourseFragment(Id), true);
         });
 
         ((TextView) view.findViewById(R.id.course)).setText(Name);

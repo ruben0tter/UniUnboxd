@@ -40,6 +40,7 @@ public class FriendReview implements View.OnClickListener {
         StudentImage = studentImage;
         Rating = rating;
     }
+
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.course_name_image_review_item, container, false);
 
@@ -67,13 +68,14 @@ public class FriendReview implements View.OnClickListener {
 
         return view;
     }
+
     @Override
     public void onClick(View v) {
         int test = v.getId();
-        if(v.getId() == R.id.courseName || v.getId() == R.id.courseImage) {
-            ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id));
-        } else if(v.getId() == R.id.studentName || v.getId() == R.id.studentImage) {
-            ((IActivity) fragment.getActivity()).replaceFragment(new ProfileFragment(StudentId));
+        if (v.getId() == R.id.courseName || v.getId() == R.id.courseImage) {
+            ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
+        } else if (v.getId() == R.id.studentName || v.getId() == R.id.studentImage) {
+            ((IActivity) fragment.getActivity()).replaceFragment(new ProfileFragment(StudentId), true);
         }
     }
 }

@@ -36,7 +36,7 @@ public class StudentActivity extends IActivity {
 
         getOnBackPressedDispatcher().addCallback(backPressed);
 
-        replaceFragment(new HomeFragment());
+        replaceFragment(new HomeFragment(), false);
 
         askNotificationPermission();
     }
@@ -45,11 +45,11 @@ public class StudentActivity extends IActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
-                replaceFragment(new HomeFragment());
+                replaceFragment(new HomeFragment(), false);
             } else if (itemId == R.id.search) {
-                replaceFragment(new SearchStudentFragment());
+                replaceFragment(new SearchStudentFragment(), false);
             } else if (itemId == R.id.profile) {
-                replaceFragment(new ProfileFragment());
+                replaceFragment(new ProfileFragment(), false);
             }
             fragmentHistory.removeAllElements();
             return true;
