@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UniUnboxdAPI.Data;
 
@@ -11,9 +12,11 @@ using UniUnboxdAPI.Data;
 namespace UniUnboxdAPI.Migrations
 {
     [DbContext(typeof(UniUnboxdDbContext))]
-    partial class UniUnboxdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240322141534_Add-Likes")]
+    partial class AddLikes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +76,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UniversityId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
@@ -174,7 +177,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Replies", (string)null);
+                    b.ToTable("Replies");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Review", b =>
@@ -213,7 +216,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.User", b =>
@@ -259,7 +262,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.UseTptMappingStrategy();
                 });
@@ -294,7 +297,7 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UserToBeVerifiedId");
 
-                    b.ToTable("Applications", (string)null);
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Professor", b =>
@@ -304,7 +307,7 @@ namespace UniUnboxdAPI.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("longtext");
 
-                    b.ToTable("Professors", (string)null);
+                    b.ToTable("Professors");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Student", b =>
@@ -319,14 +322,14 @@ namespace UniUnboxdAPI.Migrations
 
                     b.HasIndex("UniversityId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.University", b =>
                 {
                     b.HasBaseType("UniUnboxdAPI.Models.User");
 
-                    b.ToTable("Universities", (string)null);
+                    b.ToTable("Universities");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>

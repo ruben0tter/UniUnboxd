@@ -31,12 +31,15 @@ public class APIClient {
 
     public static HttpURLConnection put(String url, String body, String token) throws IOException {
         HttpURLConnection con = fetch("PUT", url, token);
-        con.setDoOutput(true);
-        con.setRequestProperty("Content-Type", "application/json");
 
-        try (OutputStream os = con.getOutputStream()) {
-            byte[] input = body.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
+        if (body != null) {
+            con.setDoOutput(true);
+            con.setRequestProperty("Content-Type", "application/json");
+
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = body.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
         }
 
         return con;

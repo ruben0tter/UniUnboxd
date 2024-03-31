@@ -10,5 +10,7 @@
         public required CourseHeaderModel CourseHeader { get; set; }
         public UserHeaderModel? StudentHeader { get; set; }
         public required ICollection<ReviewReplyModel> Replies { get; set; }
+        public required int LikeCount { get; set; }
+        public required ICollection<int> StudentLikes { get; set; }
     }
 }
