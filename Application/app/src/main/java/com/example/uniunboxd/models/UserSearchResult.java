@@ -7,12 +7,11 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.CourseFragment;
+import com.example.uniunboxd.fragments.student.ProfileFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -36,16 +35,21 @@ public class UserSearchResult {
         University = university;
     }
 
+    private static String[] USER_TYPES = new String[]{
+            "Student",
+            "University",
+            "Professor"
+    };
 
     public View createView(LayoutInflater inflater, Activity activity) {
         View view = inflater.inflate(R.layout.search_result_user, null);
 
         view.setOnClickListener(l -> {
-            ((IActivity) activity).replaceFragment(new CourseFragment(Id));
+            ((IActivity) activity).replaceFragment(new ProfileFragment(Id));
         });
 
         ((TextView) view.findViewById(R.id.username)).setText(UserName);
-        ((TextView) view.findViewById(R.id.role)).setText(UserType);
+        ((TextView) view.findViewById(R.id.role)).setText(USER_TYPES[UserType]);
         ((TextView) view.findViewById(R.id.university)).setText(University);
 
         if (Image != null) {

@@ -14,8 +14,10 @@ import java.net.HttpURLConnection;
 import java.util.List;
 
 public class SearchController {
+    public static int SEARCH_LIMIT = 10;
+
     public static List<CourseSearchResult> searchCourses(String text, Context c) throws IOException {
-        HttpURLConnection con = APIClient.get("Search/Course?Search=" + text, JWTValidation.getToken(c));
+        HttpURLConnection con = APIClient.get("Search/Course?Count=" + SEARCH_LIMIT + "&Search=" + text, JWTValidation.getToken(c));
 
         if (con.getResponseCode() == 200) {
             String body = APIClient.readStream(con.getInputStream());
@@ -25,14 +27,17 @@ public class SearchController {
             return objectMapper.readValue(body, new TypeReference<List<CourseSearchResult>>() {
             });
         } else {
+
             String test = APIClient.readStream(con.getErrorStream());
             Log.d("PLS", test);
+            Log.d("PLS-code", "" + con.getResponseCode());
+
             throw new IOException("Failed to search courses");
         }
     }
 
     public static List<UserSearchResult> searchUsers(String text, Context c) throws IOException {
-        HttpURLConnection con = APIClient.get("Search/User?Search=" + text, JWTValidation.getToken(c));
+        HttpURLConnection con = APIClient.get("Search/User?Count=" + SEARCH_LIMIT + "&Search=" + text, JWTValidation.getToken(c));
 
         if (con.getResponseCode() == 200) {
             String body = APIClient.readStream(con.getInputStream());

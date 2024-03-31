@@ -5,8 +5,8 @@ using UniUnboxdAPI.Services;
 
 public class SearchOptions {
     public string Search { get; set; } = "";
-    public int? Start { get; set; }
-    public int? Count { get; set; }
+    public int? Start { get; set; } = 0;
+    public int? Count { get; set; } = 10;
 }
 
 namespace UniUnboxdAPI.Controllers
@@ -38,9 +38,9 @@ namespace UniUnboxdAPI.Controllers
             if (query.Search == "") {
                 return BadRequest("Search query cannot be empty");
             }
-            var courses = await searchService.GetUsers(query);
+            var users = await searchService.GetUsers(query);
 
-            return Ok(courses);
+            return Ok(users);
         }
     }
 }

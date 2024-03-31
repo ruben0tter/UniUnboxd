@@ -72,11 +72,18 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/results"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/results"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                </LinearLayout>
 
                 <Button
                     android:layout_width="match_parent"
@@ -88,6 +95,7 @@
                     android:textSize="16sp"
                     android:text="LOAD MORE RESULTS"
                     android:id="@+id/load_more_button" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

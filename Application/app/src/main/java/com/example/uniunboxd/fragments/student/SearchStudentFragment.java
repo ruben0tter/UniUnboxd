@@ -1,5 +1,7 @@
 package com.example.uniunboxd.fragments.student;
 
+import static com.example.uniunboxd.API.SearchController.SEARCH_LIMIT;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import com.example.uniunboxd.API.SearchController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.models.CourseSearchResult;
+import com.example.uniunboxd.models.UserSearchResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,15 +105,11 @@ public class SearchStudentFragment extends Fragment {
                 ((IActivity) getActivity()).replaceFragment(new CourseFragment(0));
             }
         });
-        resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
-        resultsLayout.addView(inflater.inflate(R.layout.search_result_course, container, false));
 
         return view;
     }
 
     public void search(String text) {
-        loadMore.setVisibility(View.VISIBLE);
-
         if (!currentQuery.equals(text)) {
             results.clear();
             resultsLayout.removeAllViews();
@@ -119,26 +118,55 @@ public class SearchStudentFragment extends Fragment {
 
         try {
             AsyncTask.execute(() -> {
-                try {
-                    List<CourseSearchResult> courses = SearchController.searchCourses(text, getContext());
-                    getActivity().runOnUiThread(() -> {
-                        results.addAll(courses);
-                        for (CourseSearchResult course : courses) {
-                            View view = course.createView(getLayoutInflater(), getActivity());
-                            resultsLayout.addView(view);
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e("APP", "failed to search courses: " + e.toString());
+                int result_count;
+                if (SEARCH_COURSES) {
+                    result_count = searchCourses(text);
+                } else {
+                    result_count = searchUsers(text);
                 }
-
+                if (result_count < SEARCH_LIMIT) {
+                    loadMore.setVisibility(View.INVISIBLE);
+                } else {
+                    loadMore.setVisibility(View.VISIBLE);
+                }
             });
-
-
-//            SearchController.searchCourses(text, getContext());
         } catch (Exception e) {
             Log.e("Search", e.toString());
             resultsLayout.removeAllViews();
         }
+    }
+
+    private int searchCourses(String text) {
+        try {
+            List<CourseSearchResult> courses = SearchController.searchCourses(text, getContext());
+            getActivity().runOnUiThread(() -> {
+                results.addAll(courses);
+                for (CourseSearchResult course : courses) {
+                    View view = course.createView(getLayoutInflater(), getActivity());
+                    resultsLayout.addView(view);
+                }
+            });
+            return courses.size();
+        } catch (Exception e) {
+            Log.e("APP", "failed to search courses: " + e.toString());
+        }
+        return 0;
+    }
+
+    private int searchUsers(String text) {
+        try {
+            List<UserSearchResult> users = SearchController.searchUsers(text, getContext());
+            getActivity().runOnUiThread(() -> {
+//                results.addAll(users);
+                for (UserSearchResult user : users) {
+                    View view = user.createView(getLayoutInflater(), getActivity());
+                    resultsLayout.addView(view);
+                }
+            });
+            return users.size();
+        } catch (Exception e) {
+            Log.e("APP", "failed to search courses: " + e.toString());
+        }
+        return 0;
     }
 }

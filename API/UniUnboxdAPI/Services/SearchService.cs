@@ -1,11 +1,6 @@
-using Microsoft.IdentityModel.Tokens;
-using System.ComponentModel;
-using System.Drawing;
-using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
-using UniUnboxdAPI.Utilities;
 
 namespace UniUnboxdAPI.Services
 {
@@ -25,14 +20,14 @@ namespace UniUnboxdAPI.Services
         }
 
         public async Task<List<UserSearchModel>> GetUsers(SearchOptions options) {
-            List<User> users = [];
+            List<User> users;
             if (options.Start.HasValue && options.Count.HasValue) {
                 users = await searchRepository.GetUsers(options.Search, options.Start.Value, options.Count.Value);
             } else {
                 users = await searchRepository.GetAllUsers(options.Search);
             }
 
-            List<UserSearchModel> result = new List<UserSearchModel>();
+            List<UserSearchModel> result = [];
             foreach (User user in users)
             {
                 result.Add(await CreateUserSearchModel(user));
