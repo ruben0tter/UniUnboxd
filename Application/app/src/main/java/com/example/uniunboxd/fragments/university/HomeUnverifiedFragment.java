@@ -46,22 +46,16 @@ public class HomeUnverifiedFragment extends Fragment {
         signOut = (Button) view.findViewById(R.id.signOut);
         btnApply.setEnabled(false);
 
-        btnApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.w("dasnjkads", "dnajskdas");
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            VerificationController.sendApplication(verificationFiles, getActivity());
-                            reload();
-                        } catch (Exception e) {
-                            Log.e("APP", "Failed to upload documents: " + e.toString());
-                        }
-                    }
-                });
-            }
+        btnApply.setOnClickListener(v -> {
+            btnApply.setEnabled(false);
+            AsyncTask.execute(() -> {
+                try {
+                    VerificationController.sendApplication(verificationFiles, getActivity());
+                    reload();
+                } catch (Exception e) {
+                    Log.e("APP", "Failed to upload documents: " + e.toString());
+                }
+            });
         });
 
         Fragment f = this;

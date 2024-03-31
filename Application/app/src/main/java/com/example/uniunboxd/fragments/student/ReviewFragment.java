@@ -51,8 +51,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private TextView likeText;
     private TextView likeCount;
 
-    public ReviewFragment(int id)
-    {
+    public ReviewFragment(int id) {
         this.id = id;
     }
 
@@ -64,7 +63,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_review, container, false);
+        View view = inflater.inflate(R.layout.fragment_review, container, false);
 
         // Layouts
         reviewPage = view.findViewById(R.id.reviewPage);
@@ -112,19 +111,19 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             throw new RuntimeException(e);
         }
 
-        if(review != null) {
+        if (review != null) {
             review.createView(view, inflater, container, this);
 
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
             String userType = JWTValidation.getTokenProperty(getActivity(), "typ");
 
-            if(review.Student.Id != userId) {
+            if (review.Student.Id != userId) {
                 editReview.setVisibility(View.GONE);
             }
 
-            if(userType.equals("Student")) {
+            if (userType.equals("Student")) {
                 likeReview.setOnClickListener(this);
-                if(review.StudentLikes.contains(userId)) {
+                if (review.StudentLikes.contains(userId)) {
                     isReviewLiked = true;
                     likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
                     likeText.setText("Liked");
@@ -168,7 +167,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void goToRepliesTab(View view) {
-        if(isReviewTabActive) {
+        if (isReviewTabActive) {
             reviewPage.setVisibility(View.GONE);
             reviewTab.setTypeface(null, Typeface.NORMAL);
             repliesPage.setVisibility(View.VISIBLE);
@@ -178,7 +177,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void goToReviewTab(View view) {
-        if(!isReviewTabActive) {
+        if (!isReviewTabActive) {
             repliesPage.setVisibility(View.GONE);
             repliesTab.setTypeface(null, Typeface.NORMAL);
             reviewPage.setVisibility(View.VISIBLE);
@@ -198,7 +197,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             throw new RuntimeException(e);
         }
 
-        if(reply != null) {
+        if (reply != null) {
             addReply(reply);
             replyInput.setText("");
         } else {
@@ -225,18 +224,18 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 
     private void redirectToProfile() {
         if (!review.IsAnonymous) {
-            ((IActivity) getActivity()).replaceFragment(new ProfileFragment(review.Student.Id));
+            ((IActivity) getActivity()).replaceFragment(new ProfileFragment(review.Student.Id), true);
         }
     }
 
     private void redirectToCourse() {
-        ((IActivity) getActivity()).replaceFragment(new CourseFragment(review.Course.Id));
+        ((IActivity) getActivity()).replaceFragment(new CourseFragment(review.Course.Id), true);
     }
 
     private void redirectToEditReview() {
         ReviewModel r = createReviewModel();
         CourseModel c = createCourseModel();
-        ((IActivity) getActivity()).replaceFragment(new WriteReviewFragment(c, r));
+        ((IActivity) getActivity()).replaceFragment(new WriteReviewFragment(c, r), true);
     }
 
     private ReviewModel createReviewModel() {
@@ -295,9 +294,9 @@ class ReviewInformation extends AsyncTask<FragmentActivity, Void, Review> {
     @Override
     protected Review doInBackground(FragmentActivity... fragmentActivities) {
         Review review = null;
-        try{
+        try {
             review = ReviewController.getReview(id, fragmentActivities[0]);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e("ERR", "Couldn't get review" + e.toString());
         }
         return review;
@@ -315,9 +314,9 @@ class ReplyPost extends AsyncTask<FragmentActivity, Void, Reply> {
     @Override
     protected Reply doInBackground(FragmentActivity... fragmentActivities) {
         Reply reply = null;
-        try{
+        try {
             reply = ReplyController.postReply(model, fragmentActivities[0]);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e("ERR", "Couldn't get reply" + e.toString());
         }
         return reply;

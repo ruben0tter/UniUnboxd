@@ -71,39 +71,30 @@ public class SearchStudentFragment extends Fragment {
             }
         });
 
-        usersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SEARCH_COURSES = false;
-                coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
-                usersButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        usersButton.setOnClickListener(v -> {
+            SEARCH_COURSES = false;
+            coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+            usersButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
 
-                loadMore.setVisibility(View.INVISIBLE);
-                resultsLayout.removeAllViews();
-                currentQuery = "";
-            }
+            loadMore.setVisibility(View.INVISIBLE);
+            resultsLayout.removeAllViews();
+            currentQuery = "";
         });
 
-        coursesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SEARCH_COURSES = true;
-                coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
-                usersButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
+        coursesButton.setOnClickListener(v -> {
+            SEARCH_COURSES = true;
+            coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+            usersButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
 
-                loadMore.setVisibility(View.INVISIBLE);
-                resultsLayout.removeAllViews();
-                currentQuery = "";
-            }
+            loadMore.setVisibility(View.INVISIBLE);
+            resultsLayout.removeAllViews();
+            currentQuery = "";
         });
 
         resultsLayout = view.findViewById(R.id.results);
         View v1 = inflater.inflate(R.layout.search_result_course, container, false);
-        v1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((IActivity) getActivity()).replaceFragment(new CourseFragment(0));
-            }
+        v1.setOnClickListener(v -> {
+            ((IActivity) getActivity()).replaceFragment(new CourseFragment(0), true);
         });
 
         return view;

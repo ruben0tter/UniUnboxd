@@ -23,8 +23,8 @@ public class Application {
     public final String PFP;
     public final String[] FILES;
 
-    public Application(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("image") String pfp,
-                       @JsonProperty("files") String[] files) {
+    public Application(@JsonProperty("userId") int id, @JsonProperty("name") String name, @JsonProperty("image") String pfp,
+                       @JsonProperty("verificationData") String[] files) {
         ID = id;
         NAME = name;
         PFP = pfp;

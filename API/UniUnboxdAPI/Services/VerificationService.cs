@@ -52,14 +52,28 @@ namespace UniUnboxdAPI.Services
             return user.VerificationStatus;
         }
 
-        public async Task<VerificationApplication[]> GetPendingVerificationRequests(int userId, int startID)
+        public async Task<PendingVerificationsModel[]> GetPendingVerificationRequests(int userId, int startID)
         {
             University? user = await userRepository.GetUniversity(userId);
             
             if (user == null)
                 return [];
 
-            return await verificationRepository.GetNextApplications(user, startID, 10);
+            VerificationApplication[] applications = await verificationRepository.GetNextApplications(user, startID, 10);
+
+            return await Task.WhenAll(applications.Select(CreatePendingVerificationModel));
+        }
+
+        private async Task<PendingVerificationsModel> CreatePendingVerificationModel(VerificationApplication application) {
+            User user = await userRepository.GetUser(application.UserId);
+            string image = await userRepository.GetImageOf(user.Id, user.UserType);
+
+            return new() {
+                VerificationData = application.VerificationData,
+                UserId = application.UserId,
+                Name = user.UserName,
+                Image = image
+            };
         }
 
         private async Task<bool> ResolveApplication(AcceptRejectModel request, VerificationStatus status)

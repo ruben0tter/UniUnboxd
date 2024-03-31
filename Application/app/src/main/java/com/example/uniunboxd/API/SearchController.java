@@ -52,4 +52,25 @@ public class SearchController {
             throw new IOException("Failed to search users");
         }
     }
+
+    public static List<CourseSearchResult> searchUniversity(String text, Context c) throws IOException {
+        HttpURLConnection con = APIClient.get("Search/Course?Count=" + SEARCH_LIMIT + "&UniverityId=" +
+                JWTValidation.getTokenProperty(c, "sub") + "&Search=" + text, JWTValidation.getToken(c));
+
+        if (con.getResponseCode() == 200) {
+            String body = APIClient.readStream(con.getInputStream());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            return objectMapper.readValue(body, new TypeReference<List<CourseSearchResult>>() {
+            });
+        } else {
+
+            String test = APIClient.readStream(con.getErrorStream());
+            Log.d("PLS", test);
+            Log.d("PLS-code", "" + con.getResponseCode());
+
+            throw new IOException("Failed to search courses");
+        }
+    }
 }

@@ -8,13 +8,23 @@ namespace UniUnboxdAPI.Services
     {
 
         public async Task<List<CourseSearchModel>> GetCourses(SearchOptions options) {
-            List<Course> courses = [];
+            Func<SearchOptions, Task<List<Course>>> GetRelevantCourses;
 
-            if (options.Start.HasValue && options.Count.HasValue) {
-                courses = await searchRepository.GetCourses(options.Search, options.Start.Value, options.Count.Value);
+            if (options.UniversityId.HasValue) {
+                if (options.Start.HasValue && options.Count.HasValue) {
+                    GetRelevantCourses = searchRepository.GetCoursesFromUni;
+                } else {
+                    GetRelevantCourses = searchRepository.GetAllCoursesFromUni;
+                }
             } else {
-                courses = await searchRepository.GetAllCourses(options.Search);
+                if (options.Start.HasValue && options.Count.HasValue) {
+                    GetRelevantCourses = searchRepository.GetCourses;
+                } else {
+                    GetRelevantCourses = searchRepository.GetAllCourses;
+                }
             }
+
+            List<Course> courses = await GetRelevantCourses(options);
 
             return courses.Select(CreateCourseSearchModel).ToList();
         }
@@ -22,9 +32,9 @@ namespace UniUnboxdAPI.Services
         public async Task<List<UserSearchModel>> GetUsers(SearchOptions options) {
             List<User> users;
             if (options.Start.HasValue && options.Count.HasValue) {
-                users = await searchRepository.GetUsers(options.Search, options.Start.Value, options.Count.Value);
+                users = await searchRepository.GetUsers(options);
             } else {
-                users = await searchRepository.GetAllUsers(options.Search);
+                users = await searchRepository.GetAllUsers(options);
             }
 
             List<UserSearchModel> result = [];
@@ -52,7 +62,7 @@ namespace UniUnboxdAPI.Services
 
         private async Task<UserSearchModel> CreateUserSearchModel(User user)
         {
-            String image = await searchRepository.GetImageOf(user.Id, user.UserType);
+            String image = await userRepository.GetImageOf(user.Id, user.UserType);
 
             return new UserSearchModel
             {

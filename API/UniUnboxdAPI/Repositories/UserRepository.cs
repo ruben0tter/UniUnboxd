@@ -42,6 +42,9 @@ namespace UniUnboxdAPI.Repositories
         public async Task<bool> DoesProfessorExist(int id)
             => await dbContext.Professors.AnyAsync(c => c.Id == id);
 
+        public async Task<Professor> GetProfessor(int id)
+            => await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
+
         public async Task<bool> SetVerificationStatus(User user, VerificationStatus status)
         {
             user.VerificationStatus = status;
@@ -74,5 +77,22 @@ namespace UniUnboxdAPI.Repositories
             dbContext.Follows.Remove(dbContext.Follows.Where(i => i.FollowingStudentId == unfollowingStudentId  && i.FollowedStudentId == unfollowedStudentId).First());
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task<String> GetImageOf(int id, UserType type)
+        {
+            if(type == UserType.Student)
+            {
+                Student result = await dbContext.Students.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            } 
+            else
+            {
+                Professor result = await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            }
+            
+        }
+
+
     }
 }

@@ -10,40 +10,36 @@ namespace UniUnboxdAPI.Repositories
     /// </summary>
     public class SearchRepository(UniUnboxdDbContext dbContext)
     {
-        public async Task<List<Course>> GetCourses(String search, int start, int count)
-            => await dbContext.Courses.Where(i => i.Name.Contains(search) || i.Code == search)
-                                    .Skip(start)
-                                    .Take(count)
+        public async Task<List<Course>> GetCourses(SearchOptions options)
+            => await dbContext.Courses.Where(i => i.Name.Contains(options.Search) || i.Code == options.Search)
+                                    .Skip(options.Start ?? throw new ArgumentNullException(nameof(options.Start)))
+                                    .Take(options.Count ?? throw new ArgumentNullException(nameof(options.Count)))
                                     .ToListAsync();
 
-        public async Task<List<Course>> GetAllCourses(String search)
-            => await dbContext.Courses.Where(i => i.Name.Contains(search) || i.Code == search)
+        public async Task<List<Course>> GetAllCourses(SearchOptions options)
+            => await dbContext.Courses.Where(i => i.Name.Contains(options.Search) || i.Code == options.Search)
                                     .ToListAsync();
 
-        public async Task<List<User>> GetUsers(String search, int start, int count)
-            => await dbContext.Users.Where(i => i.UserName.Contains(search))
-                                    .Skip(start)
-                                    .Take(count)
+        public async Task<List<Course>> GetCoursesFromUni(SearchOptions options)
+            => await dbContext.Courses.Where(i => i.University.Id == options.UniversityId && (i.Name.Contains(options.Search) || i.Code == options.Search))
+                                    .Skip(options.Start ?? throw new ArgumentNullException(nameof(options.Start)))
+                                    .Take(options.Count ?? throw new ArgumentNullException(nameof(options.Count)))
                                     .ToListAsync();
 
-        public async Task<List<User>> GetAllUsers(String search)
-            => await dbContext.Users.Where(i => i.UserName.Contains(search))
+        public async Task<List<Course>> GetAllCoursesFromUni(SearchOptions options)
+            => await dbContext.Courses.Where(i => i.University.Id == options.UniversityId && (i.Name.Contains(options.Search) || i.Code == options.Search))
                                     .ToListAsync();
 
-        public async Task<String> GetImageOf(int id, UserType type)
-        {
-            if(type == UserType.Student)
-            {
-                Student result = await dbContext.Students.Where(i => i.Id == id).FirstAsync();
-                return result.Image;
-            } 
-            else
-            {
-                Professor result = await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
-                return result.Image;
-            }
-            
-        }
+
+        public async Task<List<User>> GetUsers(SearchOptions options)
+            => await dbContext.Users.Where(i => i.UserName.Contains(options.Search))
+                                    .Skip(options.Start ?? throw new ArgumentNullException(nameof(options.Start)))
+                                    .Take(options.Count ?? throw new ArgumentNullException(nameof(options.Count)))
+                                    .ToListAsync();
+
+        public async Task<List<User>> GetAllUsers(SearchOptions options)
+            => await dbContext.Users.Where(i => i.UserName.Contains(options.Search))
+                                    .ToListAsync();
 
         public async Task<Course> GetCourse(int id)
             => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();

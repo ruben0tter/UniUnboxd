@@ -7,6 +7,7 @@ public class SearchOptions {
     public string Search { get; set; } = "";
     public int? Start { get; set; } = 0;
     public int? Count { get; set; } = 10;
+    public int? UniversityId { get; set; } = null;
 }
 
 namespace UniUnboxdAPI.Controllers
@@ -26,6 +27,10 @@ namespace UniUnboxdAPI.Controllers
                 return BadRequest("Search query cannot be empty");
             }
             var courses = await searchService.GetCourses(query);
+
+            if (courses == null) {
+                return BadRequest();
+            }
 
             return Ok(courses);
         }
