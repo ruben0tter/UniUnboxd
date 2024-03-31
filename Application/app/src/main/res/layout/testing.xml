@@ -55,17 +55,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_red"
-            android:clickable="true"
-            android:focusable="true"
             android:fontFamily="@font/k2d"
+            android:text="Sign Out"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="13sp"
             android:gravity="center"
             android:padding="3dp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="Sign Out"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
-            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="@+id/homeHeader"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.66"
@@ -105,12 +105,12 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/k2d"
             android:text="Popular Courses"
-            android:textColor="@color/black"
             android:textSize="25dp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.182"
+            app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/line_separator"
             app:layout_constraintVertical_bias="0.0" />
@@ -127,7 +127,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.191"
+            app:layout_constraintHorizontal_bias="0.158"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom"
             app:layout_constraintVertical_bias="0.0" />
@@ -156,13 +156,13 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.235"
+            app:layout_constraintHorizontal_bias="0.195"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom_2"
             app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout
-            android:layout_width="330dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -193,7 +193,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="330dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"
@@ -224,7 +224,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="330dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
             android:layout_marginEnd="25dp"

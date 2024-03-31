@@ -112,7 +112,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         try {
                             HttpURLConnection con = CourseController.postCourse(course, getActivity());
                             if (con.getResponseCode() == 200) {
-                                ((IActivity) f.getActivity()).replaceFragment(new HomeFragment());
+                                ((IActivity) f.getActivity()).replaceFragment(new UniversityHomeFragment());
                             } else {
                                 //TODO: see how to show a toast
                                 Log.d("DEB", "" + con.getResponseCode());

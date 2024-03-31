@@ -17,7 +17,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="124dp"
             android:background="@drawable/bottom_border">
 
             <com.google.android.material.imageview.ShapeableImageView
@@ -34,76 +34,72 @@
                 app:layout_constraintVertical_bias="0.0"
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
 
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="ExtraText">
+
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="124dp"
+                android:fontFamily="@font/k2d"
                 android:text="Juan"
+                android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/followActionButton"
-                app:layout_constraintEnd_toEndOf="@+id/image"
-                app:layout_constraintHorizontal_bias="0.507"
-                app:layout_constraintStart_toStartOf="@+id/image"
-                app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="0.0" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/universityName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:fontFamily="@font/k2d"
+                android:gravity="center_vertical"
                 android:text="Enrolled at: [University]"
-                android:textSize="17dp"
-                app:layout_constraintBottom_toTopOf="@+id/followActionButton"
-                app:layout_constraintEnd_toEndOf="@+id/name"
-                app:layout_constraintHorizontal_bias="0.476"
-                app:layout_constraintStart_toStartOf="@+id/name"
-                app:layout_constraintTop_toBottomOf="@+id/name"
-                app:layout_constraintVertical_bias="0.0" />
+                android:textColor="@color/black"
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/followActionButton"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
                 android:layout_width="93dp"
                 android:layout_height="33dp"
                 android:background="#C82424"
                 android:text="Follow"
                 android:textColor="#FFFFFF"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="0.971" />
-
-            <ImageButton
-                android:id="@+id/editButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/baseline_edit_24"
-                android:backgroundTint="@android:color/transparent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textSize="20dp" />
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-            <TextView
-                android:id="@+id/Following"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Following"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/Following"
+            android:fontFamily="@font/k2d"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Following" />
 
         <HorizontalScrollView
             android:id="@+id/listFollowing"
@@ -129,6 +125,8 @@
 
             <TextView
                 android:id="@+id/Followers"
+                android:fontFamily="@font/k2d"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Followers"
@@ -164,6 +162,8 @@
 
             <TextView
                 android:id="@+id/textView"
+                android:fontFamily="@font/k2d"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recents"
@@ -176,6 +176,8 @@
 
             <TextView
                 android:id="@+id/textView4"
+                android:fontFamily="@font/k2d"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reviews"

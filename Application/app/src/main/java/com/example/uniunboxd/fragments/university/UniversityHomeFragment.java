@@ -18,7 +18,6 @@ import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.activities.MainActivity;
-import com.example.uniunboxd.fragments.student.CourseFragment;
 import com.example.uniunboxd.models.home.OverviewCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
 

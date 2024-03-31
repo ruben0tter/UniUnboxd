@@ -60,7 +60,7 @@ namespace UniUnboxdAPI.Data
             modelBuilder.Entity<CourseProfessorAssignment>()
                 .HasOne(i => i.Course)
                 .WithMany(i => i.AssignedProfessors)
-                .HasForeignKey(i => i.ProfessorId)
+                .HasForeignKey(i => i.ProfessorId);
                 
             modelBuilder.Entity<NotificationSettings>()
                .HasKey(i => i.StudentId);
