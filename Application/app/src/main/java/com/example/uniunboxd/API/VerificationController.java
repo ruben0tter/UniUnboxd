@@ -11,25 +11,31 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VerificationController {
     public static List<Application> getPendingApplications(int startID, FragmentActivity f) throws Exception {
-        HttpURLConnection con = APIClient.get("verify/pending?startID=" + startID, JWTValidation.getToken(f));
+        try {
+            HttpURLConnection con = APIClient.get("verify/pending?startID=" + startID, JWTValidation.getToken(f));
 
-        String body = APIClient.readStream(con.getInputStream());
+            String body = APIClient.readStream(con.getInputStream());
 
-        Log.d("APP", body);
+            Log.d("APP", body);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        return objectMapper.readValue(body, new TypeReference<List<Application>>() {
-        });
+            return objectMapper.readValue(body, new TypeReference<List<Application>>() {
+            });
+        } catch (Exception e) {
+            Log.e("NIG", e.toString());
+        }
+
+        return new ArrayList<>();
     }
 
     public static void sendApplication(byte[][] files, FragmentActivity f) throws Exception {
@@ -46,7 +52,7 @@ public class VerificationController {
             jsonData.put(base64);
         }
         json.put("verificationData", jsonData);
-        if(targetUniversityId != -1) {
+        if (targetUniversityId != -1) {
             json.put("targetUniversityId", targetUniversityId);
         }
 
@@ -72,7 +78,7 @@ public class VerificationController {
 
         Log.d("POG", json.toString());
 
-        HttpURLConnection con = APIClient.post("verify/request/set", json.toString(), JWTValidation.getToken(f));
+        HttpURLConnection con = APIClient.put("verify/set", json.toString(), JWTValidation.getToken(f));
 
         if (con.getResponseCode() == 200) {
             String body = APIClient.readStream(con.getInputStream());
@@ -81,6 +87,7 @@ public class VerificationController {
         } else {
             String test = APIClient.readStream(con.getErrorStream());
             Log.d("PLS", test);
+            Log.d("PLS-code", "" + con.getResponseCode());
             throw new IOException("Failed to accept/reject application");
         }
     }

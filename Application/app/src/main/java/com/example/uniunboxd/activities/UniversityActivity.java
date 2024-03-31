@@ -3,9 +3,6 @@ package com.example.uniunboxd.activities;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.fragment.app.Fragment;
-
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
 import com.example.uniunboxd.fragments.university.ApplicationsFragment;
@@ -16,19 +13,10 @@ import com.example.uniunboxd.fragments.university.UniversityHomeFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.Objects;
-import java.util.Stack;
 
 public class UniversityActivity extends IActivity {
 
     String status;
-    Stack<Fragment> fragmentHistory = new Stack<>();
-    OnBackPressedCallback backPressed = new OnBackPressedCallback(true) {
-        @Override
-        public void handleOnBackPressed() {
-            if (fragmentHistory.empty()) return;
-            replaceFragment(fragmentHistory.pop());
-        }
-    };
 
     ActivityUniversityBinding binding;
 
@@ -56,6 +44,7 @@ public class UniversityActivity extends IActivity {
                 } else if (itemId == R.id.applications) {
                     replaceFragment(new ApplicationsFragment());
                 }
+                fragmentHistory.removeAllElements();
                 return true;
             });
 

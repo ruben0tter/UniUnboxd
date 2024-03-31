@@ -130,6 +130,7 @@ public class SearchStudentFragment extends Fragment {
     private int searchCourses(String text) {
         try {
             List<CourseSearchResult> courses = SearchController.searchCourses(text, getContext());
+            Log.d("SEARCH", "Got " + courses.size() + " courses ");
             getActivity().runOnUiThread(() -> {
                 results.addAll(courses);
                 for (CourseSearchResult course : courses) {

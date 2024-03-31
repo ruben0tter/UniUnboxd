@@ -3,12 +3,15 @@ package com.example.uniunboxd.models;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -35,36 +38,45 @@ public class Application {
         View view = inflater.inflate(R.layout.application_item, null);
 
         Button btnAccept = view.findViewById(R.id.accept_button);
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(activity, "Accepted application.", Toast.LENGTH_SHORT).show();
+        btnAccept.setOnClickListener(v -> {
+            Toast.makeText(activity, "Accepted application.", Toast.LENGTH_SHORT).show();
+            AsyncTask.execute(() -> {
                 try {
                     VerificationController.resolveApplication(ID, true, (FragmentActivity) activity);
                 } catch (Exception e) {
-                    throw new RuntimeException("I dont even know");
+                    Log.e("ERR", e.toString());
+                    //                throw new RuntimeException("I dont even know");
                 }
-                parent.removeView(view);
-            }
+            });
+            parent.removeView(view);
         });
 
         Button btnReject = view.findViewById(R.id.reject_button);
-        btnReject.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(activity, "Rejected application.", Toast.LENGTH_LONG).show();
+        btnReject.setOnClickListener(v -> {
+            Toast.makeText(activity, "Rejected application.", Toast.LENGTH_LONG).show();
+            AsyncTask.execute(() -> {
                 try {
                     VerificationController.resolveApplication(ID, false, (FragmentActivity) activity);
                 } catch (Exception e) {
-                    throw new RuntimeException("I dont even know");
+                    Log.e("ERR", e.toString());
+                    //                throw new RuntimeException("I dont even know");
                 }
-                parent.removeView(view);
-            }
+            });
+            parent.removeView(view);
         });
 
-        ImageView image = view.findViewById(R.id.imageView);
+        TextView label = view.findViewById(R.id.application_text);
+        label.setText(NAME);
 
-        byte[] decodedString = Base64.decode(PFP, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        image.setImageBitmap(decodedByte);
+        try {
+            ImageView image = view.findViewById(R.id.imageView);
+
+            byte[] decodedString = Base64.decode(PFP, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            image.setImageBitmap(decodedByte);
+        } catch (Exception e) {
+            // no image
+        }
 
         return view;
     }

@@ -50,7 +50,7 @@ public class APIClient {
     }
 
     private static HttpURLConnection fetch(String method, String url, String token) throws IOException {
-        URL urlObj = new URL("http://localhost:5148/api/" + url);
+        URL urlObj = new URL("https://uniunboxd.com/api/" + url);
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
         con.setRequestProperty("Authorization", "Bearer " + (token != null ? token : ""));
         con.setRequestMethod(method);

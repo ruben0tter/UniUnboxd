@@ -1,3 +1,4 @@
+using System.Diagnostics.Eventing.Reader;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
@@ -86,9 +87,9 @@ namespace UniUnboxdAPI.Services
             mailService.SendVerificationStatusChangeNotification(user);
             notificationService.SendVerificationStatusChangeNotification((Student) user);
 
-            return await verificationRepository.SetVerificationStatus(user, status);
-
-            // TODO: Set Student to verified in case of status == verified.
+            bool result = await verificationRepository.SetVerificationStatus(user, status);
+            await verificationRepository.RemoveApplication(request.UserId);
+            return result;
         }
 
         public async Task<bool> AcceptApplication(AcceptRejectModel request)

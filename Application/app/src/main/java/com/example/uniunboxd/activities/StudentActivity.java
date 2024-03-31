@@ -5,11 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.API.UserController;
@@ -22,18 +20,9 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.net.HttpURLConnection;
 import java.util.Objects;
-import java.util.Stack;
 
 public class StudentActivity extends IActivity {
 
-    Stack<Fragment> fragmentHistory = new Stack<>();
-    OnBackPressedCallback backPressed = new OnBackPressedCallback(true) {
-        @Override
-        public void handleOnBackPressed() {
-            if (fragmentHistory.empty()) return;
-            replaceFragment(fragmentHistory.pop());
-        }
-    };
     ActivityStudentBinding binding;
 
     @Override
@@ -44,6 +33,8 @@ public class StudentActivity extends IActivity {
         setContentView(binding.getRoot());
 
         setNavigationMenu();
+
+        getOnBackPressedDispatcher().addCallback(backPressed);
 
         replaceFragment(new HomeFragment());
 
@@ -60,6 +51,7 @@ public class StudentActivity extends IActivity {
             } else if (itemId == R.id.profile) {
                 replaceFragment(new ProfileFragment());
             }
+            fragmentHistory.removeAllElements();
             return true;
         });
     }
