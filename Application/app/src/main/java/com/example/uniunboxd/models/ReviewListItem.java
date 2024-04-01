@@ -41,8 +41,7 @@ public class ReviewListItem {
         CourseId = courseId;
         Poster = poster;
     }
-    public View createView(LayoutInflater inflater, ViewGroup container,
-                                    Bundle savedInstanceState) {
+    public View createView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.review_list_item, container, false);
         TextView comment = view.findViewById(R.id.ReviewListItem_Comment);
         RatingBar ratingBar = view.findViewById(R.id.RatingBar);

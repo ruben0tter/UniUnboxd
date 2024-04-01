@@ -75,14 +75,14 @@ public class StudentProfileModel {
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(f.getActivity(), "sub"));
         if(!Following.isEmpty())
             for (StudentListItem x : Following) {
-                following.addView(x.createView(inflater, container, savedInstanceState, f));
+                following.addView(x.createView(inflater, container, f.getActivity()));
             }
 
         if(!Followers.isEmpty())
             for (StudentListItem x : Followers) {
                 if(x.ID == userId)
                     isFollowing = true;
-                followers.addView(x.createView(inflater, container, savedInstanceState, f));
+                followers.addView(x.createView(inflater, container, f.getActivity()));
             }
 
         if(!Reviews.isEmpty())
@@ -113,7 +113,7 @@ public class StudentProfileModel {
                                                 followAction.setText("FOLLOW");
                                                 followers.removeAllViews();
                                                 for (StudentListItem x : Followers) {
-                                                    followers.addView(x.createView(inflater, container, savedInstanceState, f));
+                                                    followers.addView(x.createView(inflater, container, f.getActivity()));
                                                 }
                                             }
                                         });
@@ -138,7 +138,7 @@ public class StudentProfileModel {
                                             @Override
                                             public void run() {
                                                 followAction.setText("UNFOLLOW");
-                                                followers.addView(user.createView(inflater, container, savedInstanceState, f));
+                                                followers.addView(user.createView(inflater, container, f.getActivity()));
                                             }
                                         });
                                     } else {

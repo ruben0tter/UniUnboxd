@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
+using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
 
@@ -13,16 +14,24 @@ namespace UniUnboxdAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CourseController(CourseService courseService) : ControllerBase
+    public class CourseController(CourseService courseService, ReviewService reviewService) : ControllerBase
     {
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int id, [FromQuery(Name = "numReviews")] int numOfReviews)
+        public async Task<IActionResult> GetCourse([FromQuery(Name = "id")] int courseId, [FromQuery(Name = "numReviews")] int numOfReviews)
         {
-            if (! await courseService.DoesCourseExist(id))
-                return BadRequest($"A course with id {id} does not exist.");
+            string role = JWTValidation.GetRole(HttpContext.User.Identity as ClaimsIdentity);
 
-            var model = await courseService.GetCourseRetrievalModelById(id, numOfReviews);
+            if (! await courseService.DoesCourseExist(courseId))
+                return BadRequest($"A course with id {courseId} does not exist.");
+
+            CourseRetrievalModel model = await courseService.GetCourseRetrievalModelById(courseId, numOfReviews);
+            
+            if (role == "Student")
+            {
+                int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+                model.FriendsThatReviewed = await reviewService.GetAllFriendsThatReviewed(userId, courseId);
+            }
 
             return Ok(model);
         }

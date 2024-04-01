@@ -32,7 +32,7 @@ public class StudentListItem {
         Image = image;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f){
+    public View createView(LayoutInflater inflater, ViewGroup container, Activity a){
         View view = inflater.inflate(R.layout.user_icon_name_item, container, false);
         ImageView image = view.findViewById(R.id.image);
         TextView name = view.findViewById(R.id.name);
@@ -46,7 +46,7 @@ public class StudentListItem {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((IActivity) f.getActivity()).replaceFragment(new StudentProfileFragment(ID), true);
+                ((IActivity) a).replaceFragment(new StudentProfileFragment(ID), true);
             }
         });
 

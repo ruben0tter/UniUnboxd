@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.models.ReviewListItem;
+import com.example.uniunboxd.models.student.StudentListItem;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -32,6 +33,7 @@ public class CourseRetrievalModel {
     public final String UniversityName;
     public final List<ReviewListItem> Reviews;
     public final List<Integer> AssignedProfessors;
+    public final List<StudentListItem> FriendsThatReviewed;
 
     @JsonCreator
     public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name")String name,
@@ -39,7 +41,8 @@ public class CourseRetrievalModel {
                                 @JsonProperty("professor") String professor, @JsonProperty("image") String image,
                                 @JsonProperty("banner") String banner, @JsonProperty("universityId") int universityId,
                                 @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName,
-                                @JsonProperty("assignedProfessors") List<Integer> assignedProfessors) {
+                                @JsonProperty("assignedProfessors") List<Integer> assignedProfessors,
+                                @JsonProperty("friendsThatReviewed")List<StudentListItem> friendsThatReviewed) {
         Id = id;
         Name = name;
         Code = code;
@@ -51,6 +54,7 @@ public class CourseRetrievalModel {
         Reviews = reviews;
         UniversityName = universityName;
         AssignedProfessors = assignedProfessors;
+        FriendsThatReviewed = friendsThatReviewed;
     }
 
     public View createView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +84,7 @@ public class CourseRetrievalModel {
         LinearLayout linearLayout = view.findViewById(R.id.reviewList);
 
         for(ReviewListItem i : Reviews) {
-            linearLayout.addView(i.createView(inflater, container, savedInstanceState));
+            linearLayout.addView(i.createView(inflater, container));
         }
 
         return view;

@@ -13,4 +13,6 @@ public class CourseRetrievalModel
     public string? UniversityName { get; set; }
     public ICollection<CourseReviewModel>? Reviews { get; set; }
     public ICollection<int>? AssignedProfessors { get; set; }
+    
+    public ICollection<StudentGridModel>? FriendsThatReviewed { get; set; }
 }

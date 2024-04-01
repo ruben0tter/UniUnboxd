@@ -68,10 +68,10 @@ namespace UniUnboxdAPI.Services
         /// <param name="id">Provided student id.</param>
         /// <param name="id">Provided course id.</param>
         /// <returns>The latest reviews by friends of the provided student.</returns>
-        public async Task<ICollection<ReviewGridModel>> GetAllFriendsThatReviewed(int userId, int courseId)
+        public async Task<ICollection<StudentGridModel>> GetAllFriendsThatReviewed(int userId, int courseId)
         {
             ICollection<Student> friends = await reviewRepository.GetAllFriendsThatReviewed(userId, courseId);
-            return CreateReviewGridModelCollection(reviews);
+            return CreateStudentGridModelCollection(friends);
         }
 
         /// <summary>
@@ -323,12 +323,12 @@ namespace UniUnboxdAPI.Services
                 Rating = i.Rating
             }).ToList();
 
-        private StudentGridModel CreateStudentGridModel(Student student)
-            => new()
+        private ICollection<StudentGridModel> CreateStudentGridModelCollection(ICollection<Student> students)
+            => students.Select(i => new StudentGridModel()
             {
-                Id = student.Id,
-                Name = student.UserName!,
-                Image = student.Image
-            };
+                Id = i.Id,
+                Name = i.UserName!,
+                Image = i.Image
+            }).ToList();
     }
 }

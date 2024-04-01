@@ -24,7 +24,9 @@ public class CourseSearchResult extends SearchResult{
     public final int UniversityId;
     public final String Image;
     public final String Professor;
-    public final double AverageRating;
+    public final double AnonRating;
+    public final double NonaRating;
+
 
     @JsonCreator
     public CourseSearchResult(@JsonProperty("id") int id,
@@ -34,7 +36,8 @@ public class CourseSearchResult extends SearchResult{
                               @JsonProperty("universityId") int universityId,
                               @JsonProperty("professor") String professor,
                               @JsonProperty("image") String image,
-                              @JsonProperty("averageRating") int averageRating) {
+                              @JsonProperty("anonymousRating") int anonRating,
+                              @JsonProperty("nonAnonymousRating") int nonaRating) {
         Id = id;
         Name = name;
         Code = code;
@@ -42,7 +45,8 @@ public class CourseSearchResult extends SearchResult{
         UniversityId = universityId;
         Professor = professor;
         Image = image;
-        AverageRating = averageRating;
+        AnonRating = anonRating;
+        NonaRating = nonaRating;
     }
 
 
@@ -56,8 +60,8 @@ public class CourseSearchResult extends SearchResult{
         ((TextView) view.findViewById(R.id.course)).setText(Name);
         ((TextView) view.findViewById(R.id.code)).setText(Code);
         ((TextView) view.findViewById(R.id.university)).setText(University);
-        ((RatingBar) view.findViewById(R.id.anonRating)).setRating((float) AverageRating);
-        ((RatingBar) view.findViewById(R.id.nonAnonRating)).setRating((float) AverageRating);
+        ((RatingBar) view.findViewById(R.id.anonRating)).setRating((float) AnonRating);
+        ((RatingBar) view.findViewById(R.id.nonAnonRating)).setRating((float) NonaRating);
 
         if (Image != null) {
             ImageView image = view.findViewById(R.id.image);

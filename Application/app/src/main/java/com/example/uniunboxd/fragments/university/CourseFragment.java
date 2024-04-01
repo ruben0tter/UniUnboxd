@@ -22,6 +22,7 @@ import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.models.course.CourseEditModel;
 import com.example.uniunboxd.models.course.CourseRetrievalModel;
 import com.example.uniunboxd.models.ReviewListItem;
+import com.example.uniunboxd.models.student.StudentListItem;
 import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.ArrayList;
@@ -41,7 +42,6 @@ public class CourseFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -62,12 +62,13 @@ public class CourseFragment extends Fragment{
 
             Button loadBtn = (Button) view.findViewById(R.id.load);
             LinearLayout reviewList = view.findViewById(R.id.reviewList);
+            LinearLayout reviewedBy = view.findViewById(R.id.friendsThatReviewed);
 
             ImageButton editBtn = view.findViewById(R.id.editButton);
             loadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    load(reviewList, inflater, container, savedInstanceState);
+                    load(reviewList, reviewedBy, inflater, container);
                 }
             });
 
@@ -86,7 +87,7 @@ public class CourseFragment extends Fragment{
         return view;
     }
 
-    private void load(LinearLayout reviewListView, LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    private void load(LinearLayout reviewListView, LinearLayout reviewedBy, LayoutInflater inflater, ViewGroup container){
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -102,13 +103,17 @@ public class CourseFragment extends Fragment{
                             @Override
 
                             public void run() {
-                                View appView = item.createView(inflater, container, savedInstanceState);
+                                View appView = item.createView(inflater, container);
                                 reviewListView.addView(appView);
                             }
                         });
                     }
                 } catch (Exception e) {
                     Log.e("APP", e.toString());
+                }
+
+                for(StudentListItem reviewer: Course.FriendsThatReviewed) {
+                    reviewedBy.addView(reviewer.createView(inflater, container, getActivity()));
                 }
             }
         });

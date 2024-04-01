@@ -142,7 +142,8 @@ namespace UniUnboxdAPI.Services
                 Reviews = new List<CourseReviewModel>(),
                 UniversityId = course.University.Id,
                 UniversityName = course.University.UserName,
-                AssignedProfessors = course.AssignedProfessors.Select(x => x.ProfessorId).ToList()
+                AssignedProfessors = course.AssignedProfessors.Select(x => x.ProfessorId).ToList(),
+                FriendsThatReviewed = null
             };
         
         private CourseReviewModel CreateCourseReviewModel(Review review, int courseId) 
