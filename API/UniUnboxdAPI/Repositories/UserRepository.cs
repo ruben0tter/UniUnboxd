@@ -57,7 +57,15 @@ public class UserRepository {
                 .ThenInclude(i => i.Course)
                 .ThenInclude(i => i.University)
                 .FirstAsync(); 
-
+        
+        public async Task<bool> SetVerificationStatus(User user, VerificationStatus status)
+        {
+            user.VerificationStatus = status;
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+        
         public async Task SetDeviceToken(int studentId, string deviceToken)
         {
             var student = await GetStudent(studentId);
@@ -132,4 +140,18 @@ public class UserRepository {
         public async Task<CourseProfessorAssignment> GetProfessorAssignment(int professorId, int courseId)
             => await dbContext.CourseProfessorAssignments.FirstAsync(i =>
                         i.Professor.Id == professorId && i.Course.Id == courseId);
-}
+        public async Task<String> GetImageOf(int id, UserType type)
+        {
+            if(type == UserType.Student)
+            {
+                Student result = await dbContext.Students.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            } 
+            else
+            {
+                Professor result = await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            }
+            
+        }
+    }

@@ -157,7 +157,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         try {
                             HttpURLConnection con = CourseController.postCourse(course, getActivity());
                             if (con.getResponseCode() == 200) {
-                                ((IActivity) f.getActivity()).replaceFragment(new UniversityHomeFragment());
+                                ((IActivity) f.getActivity()).replaceFragment(new UniversityHomeFragment(), true);
                             } else {
                                 //TODO: see how to show a toast
                                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
@@ -178,7 +178,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                     try {
                         HttpURLConnection con = CourseController.putCourse(course, getActivity());
                         if (con.getResponseCode() == 200) {
-                            ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Course.Id));
+                            ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Course.Id), true);
                         } else {
                             //TODO: see how to show a toast
 
@@ -188,6 +188,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         Log.e("ERR", e.toString());
                     }
                 }
+
             });
         } else if (id == R.id.courseImage_edit) {
             FileSystemChooser.ChooseImage(f, imageCode);
@@ -208,12 +209,11 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         } catch (Exception e) {
                             Log.e("ERR", e.toString());
                         }
-
                     }
                 });
                 //TODO: Check if this redirection is correct.
             }
-            ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment());
+            ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
         }
         else if (id == R.id.searchButton) {
             ConstraintLayout layout = (ConstraintLayout) view.getParent();

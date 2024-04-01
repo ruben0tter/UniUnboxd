@@ -49,7 +49,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_write_review, container, false);
+        View view = inflater.inflate(R.layout.fragment_write_review, container, false);
 
         // Course Info
         TextView courseName = (TextView) view.findViewById(R.id.courseName);
@@ -113,7 +113,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                         HttpURLConnection response = ReviewController.postReview(model, getActivity());
                         if (response.getResponseCode() == 200) {
                             // TODO: Show notification with "Review successfully created."
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
+                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                         } else {
                             // TODO: Show notification with error message.
                         }
@@ -138,7 +138,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                     HttpURLConnection response = ReviewController.putReview(review, getActivity());
                     if (response.getResponseCode() == 200) {
                         // TODO: Show notification with "Review successfully updated."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                     } else {
                         // TODO: Show notification with error message.
                     }
@@ -152,7 +152,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
 
     private void deleteReview() {
         if (review == null) {
-            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
+            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
         } else {
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -161,7 +161,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                         HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
                         if (response.getResponseCode() == 200) {
                             // TODO: Show notification with "Review successfully deleted."
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
+                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                         } else {
                             // TODO: Show notification with error message.
                         }

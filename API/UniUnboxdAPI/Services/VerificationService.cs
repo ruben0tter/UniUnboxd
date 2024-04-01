@@ -1,15 +1,17 @@
+using System.Diagnostics.Eventing.Reader;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
-    public class VerificationService(VerificationRepository verificationRepository, UserRepository userRepository)
+    public class VerificationService(VerificationRepository verificationRepository, UserRepository userRepository,
+        MailService mailService, PushNotificationService notificationService)
     {
         public async Task<bool> DoesUniversityExist(int universityId)
             => await userRepository.DoesUniversityExist(universityId);
 
-        public async Task<VerificationApplication?> RequestVerification(VerificationModel request, int userId)
+        public async Task<bool?> RequestStudentVerification(VerificationModel request, int userId)
         {
             Student? user = await userRepository.GetStudent(userId);
 
@@ -20,7 +22,25 @@ namespace UniUnboxdAPI.Services
 
             var verificationApplication = CreateVerificationApplicationModel(request, user, university);
 
-            return await verificationRepository.AddApplication(verificationApplication);
+            await verificationRepository.AddApplication(verificationApplication);
+
+            await userRepository.SetVerificationStatus(user, VerificationStatus.Pending);
+
+            return true;
+        }
+
+        public async Task<bool?> RequestUniversityVerification(VerificationModel request, int userId)
+        {
+            University? user = await userRepository.GetUniversity(userId);
+
+            if (user == null)
+                return null;
+
+            var verificationApplication = CreateVerificationApplicationModel(request, user, null);
+
+            await verificationRepository.AddApplication(verificationApplication);
+
+            return true;
         }
 
         public async Task<VerificationStatus?> GetVerificationStatus(int userId)
@@ -33,14 +53,28 @@ namespace UniUnboxdAPI.Services
             return user.VerificationStatus;
         }
 
-        public async Task<VerificationApplication[]> GetPendingVerificationRequests(int userId, int startID)
+        public async Task<PendingVerificationsModel[]> GetPendingVerificationRequests(int userId, int startID)
         {
             University? user = await userRepository.GetUniversity(userId);
             
             if (user == null)
                 return [];
 
-            return await verificationRepository.GetNextApplications(user, startID, 10);
+            VerificationApplication[] applications = await verificationRepository.GetNextApplications(user, startID, 10);
+
+            return await Task.WhenAll(applications.Select(CreatePendingVerificationModel));
+        }
+
+        private async Task<PendingVerificationsModel> CreatePendingVerificationModel(VerificationApplication application) {
+            User user = await userRepository.GetUser(application.UserId);
+            string image = await userRepository.GetImageOf(user.Id, user.UserType);
+
+            return new() {
+                VerificationData = application.VerificationData,
+                UserId = application.UserId,
+                Name = user.UserName,
+                Image = image
+            };
         }
 
         private async Task<bool> ResolveApplication(AcceptRejectModel request, VerificationStatus status)
@@ -50,9 +84,12 @@ namespace UniUnboxdAPI.Services
             if (user == null)
                 return false;
 
-            return await verificationRepository.SetVerificationStatus(user, status);
+            mailService.SendVerificationStatusChangeNotification(user);
+            notificationService.SendVerificationStatusChangeNotification((Student) user);
 
-            // TODO: Set Student to verified in case of status == verified.
+            bool result = await verificationRepository.SetVerificationStatus(user, status);
+            await verificationRepository.RemoveApplication(request.UserId);
+            return result;
         }
 
         public async Task<bool> AcceptApplication(AcceptRejectModel request)
@@ -61,13 +98,13 @@ namespace UniUnboxdAPI.Services
         public async Task<bool> RejectApplication(AcceptRejectModel request)
             => await ResolveApplication(request, VerificationStatus.Unverified);
 
-        private static VerificationApplication CreateVerificationApplicationModel(VerificationModel request, Student user, University university)
+        private static VerificationApplication CreateVerificationApplicationModel(VerificationModel request, User user, University? university)
             => new ()
             {
                 CreationTime = DateTime.Now,
                 LastModificationTime = DateTime.Now,
                 VerificationData = request.VerificationData,
-                UserToBeVerified = user,
+                UserId = user.Id,
                 TargetUniversity = university
             };
     }

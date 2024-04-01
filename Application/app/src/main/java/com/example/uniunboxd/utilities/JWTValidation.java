@@ -7,7 +7,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class JWTValidation {
     public static boolean isUserLoggedIn(Context c) {
@@ -17,6 +17,7 @@ public class JWTValidation {
 
     public static String getToken(Context c) {
         SharedPreferences prefs = c.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+
         return prefs.getString("token", null);
     }
 
@@ -26,9 +27,13 @@ public class JWTValidation {
         try {
             JSONObject obj = new JSONObject(payload);
 
-            return obj.get(key).toString();
+            if (obj.has(key)) {
+                return obj.get(key).toString();
+            } else {
+                return null;
+            }
         } catch (Throwable t) {
-            Log.e("JWT", "Could not parse malformed JSON: \"" + payload + "\"");
+            Log.e("JWT", "Could not parse malformed JSON: \"" + payload + "\"" + "\n\n" + t.toString());
         }
 
         return null;
@@ -44,6 +49,6 @@ public class JWTValidation {
         String[] chunks = token.split("\\.");
 
         byte[] bytes = Base64.decode(chunks[1], Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
-        return new String(bytes, Charset.defaultCharset());
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 }

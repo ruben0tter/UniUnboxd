@@ -61,7 +61,7 @@ public class ApplicationsFragment extends Fragment {
                         });
                     }
                 } catch (Exception e) {
-                    Log.e("APP", e.toString());
+                    Log.e("LoadApplications", e.toString());
                 }
             }
         });

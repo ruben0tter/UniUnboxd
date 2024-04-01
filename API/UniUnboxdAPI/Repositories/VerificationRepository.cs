@@ -32,5 +32,13 @@ namespace UniUnboxdAPI.Repositories
             await dbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> RemoveApplication(int userId)
+        {
+            var applications = await dbContext.Applications.Where(a => a.UserId == userId).ToArrayAsync();
+            dbContext.Applications.RemoveRange(applications);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

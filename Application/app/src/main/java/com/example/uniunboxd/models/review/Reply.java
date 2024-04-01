@@ -28,7 +28,7 @@ public class Reply implements View.OnClickListener {
     }
 
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f, boolean isLastReply) {
-        View view =  inflater.inflate(R.layout.reply, container, false);
+        View view = inflater.inflate(R.layout.reply, container, false);
 
         ImageView image = view.findViewById(R.id.replyImage);
         image.setOnClickListener(this);
@@ -36,13 +36,13 @@ public class Reply implements View.OnClickListener {
         user.setOnClickListener(this);
         TextView text = view.findViewById(R.id.replyText);
 
-        if(User.Image != null) {
+        if (User.Image != null) {
             image.setImageBitmap(ImageHandler.decodeImageString(User.Image));
         }
         user.setText(User.Name);
         text.setText(Text);
 
-        if(isLastReply) {
+        if (isLastReply) {
             View replyDivider = view.findViewById(R.id.replyDivider);
             replyDivider.setVisibility(View.GONE);
         }
@@ -54,6 +54,6 @@ public class Reply implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(User.Id));
+        ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(User.Id), true);
     }
 }

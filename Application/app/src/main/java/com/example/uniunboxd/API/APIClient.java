@@ -1,6 +1,11 @@
 package com.example.uniunboxd.API;
 
+import android.util.Log;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -45,13 +50,29 @@ public class APIClient {
     }
 
     private static HttpURLConnection fetch(String method, String url, String token) throws IOException {
-        URL urlObj = new URL("http://10.0.2.2:5148/api/" + url);
+        URL urlObj = new URL("https://uniunboxd.com/api/" + url);
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
-        con.setRequestProperty ("Authorization", "Bearer " + (token != null ? token : ""));
+        con.setRequestProperty("Authorization", "Bearer " + (token != null ? token : ""));
         con.setRequestMethod(method);
         con.setRequestProperty("Accept", "application/json");
+        con.setConnectTimeout(5000);
+        con.setReadTimeout(5000);
 
         return con;
     }
 
+    public static String readStream(InputStream stream) {
+        StringBuilder body = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(stream, "utf-8"))) {
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                body.append(responseLine);
+            }
+        } catch (Exception e) {
+            Log.e("ERR", e.toString());
+        }
+
+        return body.toString();
+    }
 }

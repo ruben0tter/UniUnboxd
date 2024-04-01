@@ -33,6 +33,7 @@ public class OverviewCourse implements View.OnClickListener {
         Professor = professor;
         Image = image;
     }
+
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.fragment_uni_home_page_courses, container, false);
 
@@ -56,8 +57,9 @@ public class OverviewCourse implements View.OnClickListener {
         return view;
 
     }
+
     @Override
     public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id));
+        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true);
     }
 }
