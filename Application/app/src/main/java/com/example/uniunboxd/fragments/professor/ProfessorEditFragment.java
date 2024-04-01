@@ -29,8 +29,9 @@ import java.net.HttpURLConnection;
 
 public class ProfessorEditFragment extends Fragment {
     private ProfessorEditModel Professor;
-    public ProfessorEditFragment(ProfessorEditModel professor){
-       Professor = professor;
+
+    public ProfessorEditFragment(ProfessorEditModel professor) {
+        Professor = professor;
     }
 
     @Override
@@ -49,34 +50,21 @@ public class ProfessorEditFragment extends Fragment {
         Button saveChangesBtn = v.findViewById(R.id.saveChanges);
 
         Fragment f = this;
-        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Professor.Name = name.getText().toString();
-                        try{
-                            HttpURLConnection response = UserController.putProfessor(Professor, getActivity());
-                            if (response.getResponseCode() == 200) {
-                                // TODO: Show notification with "Review successfully created."
-                                ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id), true);
-                            } else {
-                                // TODO: Show notification with error message.
-                            }
-                        } catch (Exception e) {
-                            Log.e("APP", "Failed to post review: " + e);
-                        }
-                    }
-                });
+        saveChangesBtn.setOnClickListener(v1 -> AsyncTask.execute(() -> {
+            Professor.Name = name.getText().toString();
+            try {
+                HttpURLConnection response = UserController.putProfessor(Professor, getActivity());
+                if (response.getResponseCode() == 200) {
+                    // TODO: Show notification with "Review successfully created."
+                    ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id), true);
+                } else {
+                    // TODO: Show notification with error message.
+                }
+            } catch (Exception e) {
+                Log.e("APP", "Failed to post review: " + e);
             }
-        });
-        editImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileSystemChooser.ChooseImage(f, 1);
-            }
-        });
+        }));
+        editImageBtn.setOnClickListener(v12 -> FileSystemChooser.ChooseImage(f, 1));
 
         return v;
     }

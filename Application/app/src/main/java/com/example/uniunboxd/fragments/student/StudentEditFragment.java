@@ -7,12 +7,10 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,7 +36,6 @@ import com.example.uniunboxd.utilities.ImageHandler;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -75,27 +72,18 @@ public class StudentEditFragment extends Fragment {
         Button verifyBtn = view.findViewById(R.id.getVerified);
         AutoCompleteTextView universitySearch = view.findViewById(R.id.universityAutoCompleteTextView);
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Universities = UserController.GetUniversities(getActivity());
-                    for(UniversityNameModel x : Universities){
-                        UniversityNames.add(x.Name);
-                    }
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, UniversityNames);
-                    (getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            universitySearch.setAdapter(arrayAdapter);
-                        }
-                    });
-                } catch (IOException e) {
-                    Log.e("ERR", "Could not get universities.");
+        AsyncTask.execute(() -> {
+            try {
+                Universities = UserController.GetUniversities(getActivity());
+                for (UniversityNameModel x : Universities) {
+                    UniversityNames.add(x.Name);
                 }
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, UniversityNames);
+                (getActivity()).runOnUiThread(() -> universitySearch.setAdapter(arrayAdapter));
+            } catch (IOException e) {
+                Log.e("ERR", "Could not get universities.");
             }
         });
-
 
 
         name.setText(Model.Name);
@@ -109,123 +97,91 @@ public class StudentEditFragment extends Fragment {
         PopupMenu dropDownMenu = new PopupMenu(getActivity(), editImageBtn);
         Menu menu = dropDownMenu.getMenu();
         menu.add(0, 0, 0, "Camera");
-        menu.add(0,1,0,"Files");
+        menu.add(0, 1, 0, "Files");
 
         Fragment f = this;
-        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case 0:
-                        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 1);
+        dropDownMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case 0:
+                    if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 1);
 
-                        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
-                                != PackageManager.PERMISSION_DENIED) {
-                            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(cameraIntent, CAMERA_CODE);
-                        }
-                        return true;
-                    case 1:
-                        FileSystemChooser.ChooseImage(f, IMAGE_PICKER_CODE);
-                        return true;
+                    if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
+                            != PackageManager.PERMISSION_DENIED) {
+                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, CAMERA_CODE);
+                    }
+                    return true;
+                case 1:
+                    FileSystemChooser.ChooseImage(f, IMAGE_PICKER_CODE);
+                    return true;
+            }
+            return false;
+        });
+
+        editImageBtn.setOnClickListener(v -> dropDownMenu.show());
+
+        saveChangesBtn.setOnClickListener(v -> AsyncTask.execute(() -> {
+            try {
+                Model.Name = name.getText().toString();
+                UpdateNotificationSettings(view);
+                HttpURLConnection con = UserController.putStudent(Model, getActivity());
+                if (con.getResponseCode() == 200) {
+                    ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id), true);
+                } else {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                    StringBuilder st = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null)
+                        st.append(line);
+                    Log.e("ERR", "" + st);
                 }
-                return false;
+            } catch (Exception e) {
+                Log.e("ERR", e.toString());
             }
-        });
 
-        editImageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dropDownMenu.show();
-            }
-        });
+        }));
 
-        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Model.Name = name.getText().toString();
-                            UpdateNotificationSettings(view);
-                            HttpURLConnection con = UserController.putStudent(Model, getActivity());
-                            if (con.getResponseCode() == 200) {
-                                ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id), true);
-                            } else {
-                                BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                                StringBuilder st = new StringBuilder();
-                                String line;
-                                while((line = br.readLine()) != null)
-                                    st.append(line);
-                                Log.e("ERR", "" + st);
-                            }
-                        } catch (Exception e) {
-                            Log.e("ERR", e.toString());
-                        }
+        uploadBtn.setOnClickListener(v -> FileSystemChooser.ChoosePDF(f, 3));
 
+        verifyBtn.setOnClickListener(v -> AsyncTask.execute(() -> {
+
+            try {
+                String universityName = universitySearch.getText().toString();
+                int id = -1;
+                for (UniversityNameModel university : Universities) {
+                    if (university.Name.equals(universityName)) {
+                        id = university.Id;
+                        break;
                     }
+                }
+                if (id == -1) {
+                    return;
+                }
+                HttpURLConnection con = VerificationController.sendApplication(file, id, getActivity());
+                if (con.getResponseCode() != 200) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                    StringBuilder st = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null)
+                        st.append(line);
+                    Log.e("DEB", "" + st);
+                    return;
+                }
+                Model.VerificationStatus = 1;
+                getActivity().runOnUiThread(() -> {
+                    view.findViewById(R.id.verification).setVisibility(View.GONE);
+                    view.findViewById(R.id.verificationBox).setVisibility(View.GONE);
                 });
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-        });
-
-        uploadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileSystemChooser.ChoosePDF(f, 3);
-            }
-        });
-
-        verifyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        try {
-                            String universityName = universitySearch.getText().toString();
-                            int id = -1;
-                            for(UniversityNameModel university : Universities) {
-                                if(university.Name.equals(universityName)) {
-                                    id = university.Id;
-                                    break;
-                                }
-                            }
-                            if(id == -1){
-                                return;
-                            }
-                            HttpURLConnection con = VerificationController.sendApplication(file, id, getActivity());
-                            if(con.getResponseCode() != 200){
-                                BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                                StringBuilder st = new StringBuilder();
-                                String line;
-                                while((line = br.readLine()) != null)
-                                    st.append(line);
-                                Log.e("DEB", "" + st);
-                                return;
-                            }
-                            Model.VerificationStatus = 1;
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    view.findViewById(R.id.verification).setVisibility(View.GONE);
-                                    view.findViewById(R.id.verificationBox).setVisibility(View.GONE);
-                                }
-                            });
-
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-            }
-        });
+        }));
 
         SetUpNotificationSettings(view);
 
-        if(Model.VerificationStatus != 0){
+        if (Model.VerificationStatus != 0) {
             view.findViewById(R.id.verification).setVisibility(View.GONE);
             view.findViewById(R.id.verificationBox).setVisibility(View.GONE);
         }
@@ -245,20 +201,18 @@ public class StudentEditFragment extends Fragment {
             cameraImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             Model.Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        }
-        else if (requestCode == FILE_PICKER_CODE){
+        } else if (requestCode == FILE_PICKER_CODE) {
             Uri uri = data.getData();
             try {
                 //null file, so that it only keeps the most recent.
-                if(file.size() > 0)
+                if (file.size() > 0)
                     file = new ArrayList<>();
                 file.add(FileSystemChooser.readTextFromUri(uri, getActivity()));
             } catch (IOException e) {
                 //TODO: deal with this better
                 throw new RuntimeException(e);
             }
-        }
-        else if (requestCode == IMAGE_PICKER_CODE){
+        } else if (requestCode == IMAGE_PICKER_CODE) {
             Uri uri = data.getData();
 
             byte[] bitmapdata = null;
@@ -274,7 +228,7 @@ public class StudentEditFragment extends Fragment {
 
     }
 
-    private void SetUpNotificationSettings(View view){
+    private void SetUpNotificationSettings(View view) {
 
         CheckBox followerMail = view.findViewById(R.id.follower_mail);
         CheckBox followerPush = view.findViewById(R.id.follower_push);
@@ -283,26 +237,26 @@ public class StudentEditFragment extends Fragment {
         CheckBox activityMail = view.findViewById(R.id.activity_mail);
         CheckBox activityPush = view.findViewById(R.id.activity_push);
 
-        if(Model.NotificationSettings.ReceivesNewFollowerMail)
+        if (Model.NotificationSettings.ReceivesNewFollowerMail)
             followerMail.setChecked(true);
 
-        if(Model.NotificationSettings.ReceivesNewFollowerPush)
+        if (Model.NotificationSettings.ReceivesNewFollowerPush)
             followerPush.setChecked(true);
 
-        if(Model.NotificationSettings.ReceivesNewReplyMail)
+        if (Model.NotificationSettings.ReceivesNewReplyMail)
             replyMail.setChecked(true);
 
-        if(Model.NotificationSettings.ReceivesNewReplyPush)
+        if (Model.NotificationSettings.ReceivesNewReplyPush)
             replyPush.setChecked(true);
 
-        if(Model.NotificationSettings.ReceivesFollowersReviewMail)
+        if (Model.NotificationSettings.ReceivesFollowersReviewMail)
             activityMail.setChecked(true);
 
-        if(Model.NotificationSettings.ReceivesFollowersReviewPush)
+        if (Model.NotificationSettings.ReceivesFollowersReviewPush)
             activityPush.setChecked(true);
     }
 
-    private void UpdateNotificationSettings(View view){
+    private void UpdateNotificationSettings(View view) {
         CheckBox followerMail = view.findViewById(R.id.follower_mail);
         CheckBox followerPush = view.findViewById(R.id.follower_push);
         CheckBox replyMail = view.findViewById(R.id.reply_mail);

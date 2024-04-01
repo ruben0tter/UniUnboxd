@@ -132,11 +132,8 @@ public class SearchStudentFragment extends Fragment {
                 results.addAll(courses);
                 for (CourseSearchResult course : courses) {
                     View view = course.createView(getLayoutInflater(), getActivity());
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
-                        }
+                    view.setOnClickListener(v -> {
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
                     });
 
                     resultsLayout.addView(view);
@@ -156,11 +153,8 @@ public class SearchStudentFragment extends Fragment {
                 results.addAll(users);
                 for (UserSearchResult user : users) {
                     View view = user.createView(getLayoutInflater(), getActivity());
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(user.Id), true);
-                        }
+                    view.setOnClickListener(v -> {
+                        ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(user.Id), true);
                     });
                     resultsLayout.addView(view);
                 }

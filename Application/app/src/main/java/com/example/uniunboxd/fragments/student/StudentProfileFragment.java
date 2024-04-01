@@ -24,6 +24,7 @@ public class StudentProfileFragment extends Fragment {
 
     private final int ID;
     private StudentProfileModel Student;
+
     public StudentProfileFragment(int id) {
         ID = id;
     }
@@ -46,31 +47,28 @@ public class StudentProfileFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        if(Student == null) {
+        if (Student == null) {
             Log.e("ERR", "Something went wrong.");
         }
 
         view = Student.createView(inflater, container, savedInstanceState, this);
         ImageButton editBtn = view.findViewById(R.id.editButton);
 
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StudentEditModel studentEditModel = new StudentEditModel(Student);
-                ((IActivity) getActivity()).replaceFragment(new StudentEditFragment(studentEditModel), true);
-            }
+        editBtn.setOnClickListener(v -> {
+            StudentEditModel studentEditModel = new StudentEditModel(Student);
+            ((IActivity) getActivity()).replaceFragment(new StudentEditFragment(studentEditModel), true);
         });
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-        if(userId != ID) {
+        if (userId != ID) {
             editBtn.setVisibility(View.GONE);
         }
 
-        if(Student.Following == null || Student.Following.size() == 0) {
+        if (Student.Following == null || Student.Following.size() == 0) {
             view.findViewById(R.id.Following).setVisibility(View.GONE);
             view.findViewById(R.id.listFollowing).setVisibility(View.GONE);
             view.findViewById(R.id.listFollowingLinear).setVisibility(View.GONE);
         }
-        if(Student.Followers == null || Student.Followers.size() == 0) {
+        if (Student.Followers == null || Student.Followers.size() == 0) {
             view.findViewById(R.id.Followers).setVisibility(View.GONE);
             view.findViewById(R.id.listFollowers).setVisibility(View.GONE);
             view.findViewById(R.id.listFollowersLinear).setVisibility(View.GONE);
@@ -78,6 +76,7 @@ public class StudentProfileFragment extends Fragment {
         return view;
     }
 }
+
 class GetStudentInformationAsyncTask extends AsyncTask<FragmentActivity, Void, StudentProfileModel> {
 
     private final int ID;
@@ -91,9 +90,9 @@ class GetStudentInformationAsyncTask extends AsyncTask<FragmentActivity, Void, S
     @Override
     protected StudentProfileModel doInBackground(FragmentActivity... fragments) {
         StudentProfileModel student = null;
-        try{
+        try {
             student = UserController.getStudent(ID, fragments[0]);
-        } catch(Exception ioe) {
+        } catch (Exception ioe) {
             Log.e("ERR", "Couldn't get course" + ioe.toString());
         }
         return student;

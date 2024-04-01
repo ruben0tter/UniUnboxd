@@ -39,6 +39,7 @@ namespace UniUnboxdAPI.Services
             var verificationApplication = CreateVerificationApplicationModel(request, user, null);
 
             await verificationRepository.AddApplication(verificationApplication);
+            await userRepository.SetVerificationStatus(user, VerificationStatus.Pending);
 
             return true;
         }
@@ -67,7 +68,7 @@ namespace UniUnboxdAPI.Services
 
         private async Task<PendingVerificationsModel> CreatePendingVerificationModel(VerificationApplication application) {
             User user = await userRepository.GetUser(application.UserId);
-            string image = await userRepository.GetImageOf(user.Id, user.UserType);
+            string? image = await userRepository.GetImageOf(user.Id, user.UserType);
 
             return new() {
                 VerificationData = application.VerificationData,

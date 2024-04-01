@@ -50,29 +50,23 @@ public class ProfessorProfileFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        if(Professor != null) {
+        if (Professor != null) {
             view = Professor.createView(inflater, container, savedInstanceState, this);
         }
 
         ImageButton editBtn = view.findViewById(R.id.editButton);
         TextView signOutBtn = view.findViewById(R.id.signOut);
 
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProfessorEditModel professorEditModel = MakeProfessorEditModel(Professor);
-                ((IActivity) getActivity()).replaceFragment(new ProfessorEditFragment(professorEditModel), true);
-            }
+        editBtn.setOnClickListener(v -> {
+            ProfessorEditModel professorEditModel = MakeProfessorEditModel(Professor);
+            ((IActivity) getActivity()).replaceFragment(new ProfessorEditFragment(professorEditModel), true);
         });
-        signOutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JWTValidation.deleteToken(getActivity());
-                ((IActivity) getActivity()).replaceActivity(MainActivity.class);
-            }
+        signOutBtn.setOnClickListener(v -> {
+            JWTValidation.deleteToken(getActivity());
+            ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         });
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-        if(userId != ID) {
+        if (userId != ID) {
             editBtn.setVisibility(View.GONE);
         }
         return view;
@@ -84,7 +78,7 @@ public class ProfessorProfileFragment extends Fragment {
 }
 
 
-class GetProfessorInformationAsyncTask extends AsyncTask<FragmentActivity, Void, ProfessorProfileModel>{
+class GetProfessorInformationAsyncTask extends AsyncTask<FragmentActivity, Void, ProfessorProfileModel> {
 
     private final int ID;
     private final int NUM_OF_REVIEWS_TO_LOAD;
@@ -97,9 +91,9 @@ class GetProfessorInformationAsyncTask extends AsyncTask<FragmentActivity, Void,
     @Override
     protected ProfessorProfileModel doInBackground(FragmentActivity... fragments) {
         ProfessorProfileModel professor = null;
-        try{
+        try {
             professor = UserController.getProfessorProfile(ID, fragments[0]);
-        } catch(Exception ioe) {
+        } catch (Exception ioe) {
             Log.e("ERR", "Couldn't get course" + ioe.toString());
         }
         return professor;

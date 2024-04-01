@@ -106,22 +106,19 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         if (review == null) {
             ReviewModel model = createReviewModel();
 
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        HttpURLConnection response = ReviewController.postReview(model, getActivity());
-                        if (response.getResponseCode() == 200) {
-                            // TODO: Show notification with "Review successfully created."
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                        } else {
-                            // TODO: Show notification with error message.
-                        }
-                    } catch (Exception e) {
-                        Log.e("APP", "Failed to post review: " + e);
+            AsyncTask.execute(() -> {
+                try {
+                    HttpURLConnection response = ReviewController.postReview(model, getActivity());
+                    if (response.getResponseCode() == 200) {
+                        // TODO: Show notification with "Review successfully created."
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
+                    } else {
+                        // TODO: Show notification with error message.
                     }
-
+                } catch (Exception e) {
+                    Log.e("APP", "Failed to post review: " + e);
                 }
+
             });
         } else {
             putReview();
@@ -131,22 +128,19 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     private void putReview() {
         updateReviewModel();
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection response = ReviewController.putReview(review, getActivity());
-                    if (response.getResponseCode() == 200) {
-                        // TODO: Show notification with "Review successfully updated."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                    } else {
-                        // TODO: Show notification with error message.
-                    }
-                } catch (Exception e) {
-                    Log.e("APP", "Failed to put review: " + e);
+        AsyncTask.execute(() -> {
+            try {
+                HttpURLConnection response = ReviewController.putReview(review, getActivity());
+                if (response.getResponseCode() == 200) {
+                    // TODO: Show notification with "Review successfully updated."
+                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
+                } else {
+                    // TODO: Show notification with error message.
                 }
-
+            } catch (Exception e) {
+                Log.e("APP", "Failed to put review: " + e);
             }
+
         });
     }
 
@@ -154,22 +148,19 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         if (review == null) {
             ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
         } else {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
-                        if (response.getResponseCode() == 200) {
-                            // TODO: Show notification with "Review successfully deleted."
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                        } else {
-                            // TODO: Show notification with error message.
-                        }
-                    } catch (Exception e) {
-                        Log.e("APP", "Failed to delete review: " + e);
+            AsyncTask.execute(() -> {
+                try {
+                    HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
+                    if (response.getResponseCode() == 200) {
+                        // TODO: Show notification with "Review successfully deleted."
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
+                    } else {
+                        // TODO: Show notification with error message.
                     }
-
+                } catch (Exception e) {
+                    Log.e("APP", "Failed to delete review: " + e);
                 }
+
             });
         }
     }

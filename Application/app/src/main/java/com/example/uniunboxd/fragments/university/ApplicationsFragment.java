@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.models.Application;
 
 import java.util.ArrayList;
@@ -30,39 +29,27 @@ public class ApplicationsFragment extends Fragment {
         LinearLayout layout = listView.findViewById(R.id.applications_list);
         Button loadButton = listView.findViewById(R.id.load_more_button);
         loadApplications(inflater, layout);
-        loadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadApplications(inflater, layout);
-            }
-        });
+        loadButton.setOnClickListener(v -> loadApplications(inflater, layout));
         return listView;
     }
 
     private void loadApplications(LayoutInflater inflater, LinearLayout layout) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                int lastID = 0;
-                if (!applications.isEmpty()) {
-                    lastID = applications.get(applications.size() - 1).ID;
+        AsyncTask.execute(() -> {
+            int lastID = 0;
+            if (!applications.isEmpty()) {
+                lastID = applications.get(applications.size() - 1).ID;
+            }
+            try {
+                List<Application> newApplications = VerificationController.getPendingApplications(lastID, getActivity());
+                applications.addAll(newApplications);
+                for (Application app : newApplications) {
+                    getActivity().runOnUiThread(() -> {
+                        View appView = app.createView(inflater, layout, getActivity());
+                        layout.addView(appView);
+                    });
                 }
-                try {
-                    List<Application> newApplications = VerificationController.getPendingApplications(lastID, getActivity());
-                    applications.addAll(newApplications);
-                    for (Application app : newApplications) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-
-                            public void run() {
-                                View appView = app.createView(inflater, layout, getActivity());
-                                layout.addView(appView);
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    Log.e("LoadApplications", e.toString());
-                }
+            } catch (Exception e) {
+                Log.e("LoadApplications", e.toString());
             }
         });
     }

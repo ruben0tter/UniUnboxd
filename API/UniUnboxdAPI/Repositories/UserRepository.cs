@@ -105,6 +105,7 @@ public class UserRepository {
             dbContext.Students.Update(student);
             await dbContext.SaveChangesAsync();
         }
+
         public async Task<ICollection<Student>> GetFollowers(int id)
             => await dbContext.Follows.Where(i => i.FollowedStudent.Id == id).Select(i => i.FollowingStudent).ToListAsync();
 
@@ -140,19 +141,20 @@ public class UserRepository {
         public async Task<CourseProfessorAssignment> GetProfessorAssignment(int professorId, int courseId)
             => await dbContext.CourseProfessorAssignments.FirstAsync(i =>
                         i.Professor.Id == professorId && i.Course.Id == courseId);
-        public async Task<String> GetImageOf(int id, UserType type)
+        public async Task<String?> GetImageOf(int id, UserType type)
         {
             if(type == UserType.Student)
             {
                 Student result = await dbContext.Students.Where(i => i.Id == id).FirstAsync();
                 return result.Image;
-            } 
-            else
+            }
+            else if (type == UserType.Professor)
             {
                 Professor result = await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
                 return result.Image;
+            } else {
+                return null;
             }
-            
         }
         public async Task<List<University>> GetUniversities()
             => await dbContext.Universities.ToListAsync();
