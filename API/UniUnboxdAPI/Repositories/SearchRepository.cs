@@ -32,7 +32,7 @@ namespace UniUnboxdAPI.Repositories
 
 
         public async Task<List<User>> GetUsers(SearchOptions options)
-            => await dbContext.Users.Where(i => i.UserName.Contains(options.Search))
+            => await dbContext.Users.Where(i => i.UserName.Contains(options.Search) && i.UserType != UserType.University)
                                     .Skip(options.Start ?? throw new ArgumentNullException(nameof(options.Start)))
                                     .Take(options.Count ?? throw new ArgumentNullException(nameof(options.Count)))
                                     .ToListAsync();
