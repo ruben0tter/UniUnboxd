@@ -15,7 +15,7 @@ import com.example.uniunboxd.fragments.student.ProfileFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserSearchResult {
+public class UserSearchResult extends SearchResult{
     public final int Id;
     public final String UserName;
     public final String Image;

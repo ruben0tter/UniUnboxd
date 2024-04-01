@@ -66,10 +66,6 @@ public class SearchUniversityFragment extends Fragment {
         });
 
         resultsLayout = view.findViewById(R.id.results);
-        View v1 = inflater.inflate(R.layout.search_result_course, container, false);
-        v1.setOnClickListener(v -> {
-            ((IActivity) getActivity()).replaceFragment(new CourseFragment(0), true);
-        });
 
         return view;
     }
@@ -79,21 +75,21 @@ public class SearchUniversityFragment extends Fragment {
             results.clear();
             resultsLayout.removeAllViews();
             currentQuery = text;
-        }
 
-        try {
-            AsyncTask.execute(() -> {
-                int result_count = searchCourses(text);
+            try {
+                AsyncTask.execute(() -> {
+                    int result_count = searchCourses(text);
 
-                if (result_count < SEARCH_LIMIT) {
-                    loadMore.setVisibility(View.INVISIBLE);
-                } else {
-                    loadMore.setVisibility(View.VISIBLE);
-                }
-            });
-        } catch (Exception e) {
-            Log.e("Search", e.toString());
-            resultsLayout.removeAllViews();
+                    if (result_count < SEARCH_LIMIT) {
+                        loadMore.setVisibility(View.INVISIBLE);
+                    } else {
+                        loadMore.setVisibility(View.VISIBLE);
+                    }
+                });
+            } catch (Exception e) {
+                Log.e("Search", e.toString());
+                resultsLayout.removeAllViews();
+            }
         }
     }
 
@@ -104,6 +100,12 @@ public class SearchUniversityFragment extends Fragment {
                 results.addAll(courses);
                 for (CourseSearchResult course : courses) {
                     View view = course.createView(getLayoutInflater(), getActivity());
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
+                        }
+                    });
                     resultsLayout.addView(view);
                 }
             });

@@ -67,6 +67,13 @@ public class Application {
 
         TextView label = view.findViewById(R.id.application_text);
         label.setText(NAME);
+        Button btnDocuments = view.findViewById(R.id.view_documents_button);
+        btnDocuments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO : Set to open / download files.
+            }
+        });
 
         try {
             ImageView image = view.findViewById(R.id.imageView);

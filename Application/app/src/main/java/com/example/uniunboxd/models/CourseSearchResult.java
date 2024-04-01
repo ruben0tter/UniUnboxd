@@ -16,7 +16,7 @@ import com.example.uniunboxd.fragments.student.CourseFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CourseSearchResult {
+public class CourseSearchResult extends SearchResult{
     public final int Id;
     public final String Name;
     public final String Code;

@@ -19,6 +19,7 @@ import com.example.uniunboxd.API.SearchController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.models.CourseSearchResult;
+import com.example.uniunboxd.models.SearchResult;
 import com.example.uniunboxd.models.UserSearchResult;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.List;
 
 public class SearchStudentFragment extends Fragment {
 
-    private List<CourseSearchResult> results = new ArrayList<>();
+    private List<SearchResult> results = new ArrayList<>();
     private boolean SEARCH_COURSES = true;
 
     private String currentQuery = "";
@@ -92,11 +93,6 @@ public class SearchStudentFragment extends Fragment {
         });
 
         resultsLayout = view.findViewById(R.id.results);
-        View v1 = inflater.inflate(R.layout.search_result_course, container, false);
-        v1.setOnClickListener(v -> {
-            ((IActivity) getActivity()).replaceFragment(new CourseFragment(0), true);
-        });
-
         return view;
     }
 
@@ -105,25 +101,25 @@ public class SearchStudentFragment extends Fragment {
             results.clear();
             resultsLayout.removeAllViews();
             currentQuery = text;
-        }
 
-        try {
-            AsyncTask.execute(() -> {
-                int result_count;
-                if (SEARCH_COURSES) {
-                    result_count = searchCourses(text);
-                } else {
-                    result_count = searchUsers(text);
-                }
-                if (result_count < SEARCH_LIMIT) {
-                    loadMore.setVisibility(View.INVISIBLE);
-                } else {
-                    loadMore.setVisibility(View.VISIBLE);
-                }
-            });
-        } catch (Exception e) {
-            Log.e("Search", e.toString());
-            resultsLayout.removeAllViews();
+            try {
+                AsyncTask.execute(() -> {
+                    int result_count;
+                    if (SEARCH_COURSES) {
+                        result_count = searchCourses(text);
+                    } else {
+                        result_count = searchUsers(text);
+                    }
+                    if (result_count < SEARCH_LIMIT) {
+                        loadMore.setVisibility(View.INVISIBLE);
+                    } else {
+                        loadMore.setVisibility(View.VISIBLE);
+                    }
+                });
+            } catch (Exception e) {
+                Log.e("Search", e.toString());
+                resultsLayout.removeAllViews();
+            }
         }
     }
 
@@ -135,6 +131,13 @@ public class SearchStudentFragment extends Fragment {
                 results.addAll(courses);
                 for (CourseSearchResult course : courses) {
                     View view = course.createView(getLayoutInflater(), getActivity());
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
+                        }
+                    });
+
                     resultsLayout.addView(view);
                 }
             });
@@ -149,9 +152,15 @@ public class SearchStudentFragment extends Fragment {
         try {
             List<UserSearchResult> users = SearchController.searchUsers(text, getContext());
             getActivity().runOnUiThread(() -> {
-//                results.addAll(users);
+                results.addAll(users);
                 for (UserSearchResult user : users) {
                     View view = user.createView(getLayoutInflater(), getActivity());
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ((IActivity) getActivity()).replaceFragment(new ProfileFragment(user.Id), true);
+                        }
+                    });
                     resultsLayout.addView(view);
                 }
             });
