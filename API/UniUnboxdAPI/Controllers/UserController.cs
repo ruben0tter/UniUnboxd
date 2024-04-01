@@ -39,23 +39,6 @@ namespace UniUnboxdAPI.Controllers
             return Ok(professor);
         }
 
-        [HttpPut("student")]
-        [Authorize(Roles = "Student")]
-        public async Task<IActionResult> PutStudent([FromBody] StudentEditModel model)
-        {
-            if (!await userService.DoesStudentExist(model.Id))
-                return BadRequest("This student does not exist.");
-            
-            if (!JWTValidation.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.Id))
-                return BadRequest("Incorrect user.");
-
-            Student student = await userService.GetStudent(model.Id);
-            userService.UpdateStudent(student, model);
-            await userService.PutStudent(student);
-
-            return Ok("Student successfully updated");
-        }
-
         [HttpGet("get-assigned-professor")]
         [Authorize(Roles = "University")]
         public async Task<IActionResult> GetAssignedProfessorByEmail([FromQuery(Name = "email")] string email)
@@ -76,6 +59,70 @@ namespace UniUnboxdAPI.Controllers
             var professors = await userService.GetAssignedProfessors(courseId);
 
             return Ok(professors);
+        }
+
+        [HttpGet("followed-students")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetFollowedStudents()
+        {
+            int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            try
+            {
+                var models = await userService.GetFollowedStudents(userId);
+                return Ok(models);
+            }
+            catch
+            {
+                return BadRequest("Could not get followed students.");
+            }
+        }
+        
+        [HttpGet("followers")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetFollowers()
+        {
+            int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            try
+            {
+                var models = await userService.GetFollowers(userId);
+                return Ok(models);
+            }
+            catch
+            {
+                return BadRequest("Could not get followed students.");
+            }
+        }
+
+        [HttpGet("student-list-item")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetStudentListItem([FromQuery(Name = "id")] int id)
+        {
+            try
+            {
+                var model = await userService.GetStudentListItem(id);
+                return Ok(model);
+            }
+            catch
+            {
+                return BadRequest("Could not get user.");
+            }
+        }
+        
+        [HttpPut("student")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> PutStudent([FromBody] StudentEditModel model)
+        {
+            if (!await userService.DoesStudentExist(model.Id))
+                return BadRequest("This student does not exist.");
+            
+            if (!JWTValidation.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.Id))
+                return BadRequest("Incorrect user.");
+
+            Student student = await userService.GetStudent(model.Id);
+            userService.UpdateStudent(student, model);
+            await userService.PutStudent(student);
+            
+            return Ok("Student successfully updated");
         }
         
         [HttpPut("set-device-token")]

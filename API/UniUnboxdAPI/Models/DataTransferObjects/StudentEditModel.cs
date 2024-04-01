@@ -6,6 +6,7 @@ public class StudentEditModel
     public required string Name { get; set; }
     public required string Image { get; set; }
     
+    public required NotificationSettingsModel NotificationSettings { get; set; }
     //TODO: add notification settings
     //TODO: add verification application
 }

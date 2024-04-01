@@ -44,6 +44,7 @@ public class UserRepository {
         
         public async Task<Student> GetStudentAndConnectedData(int id)
             => await dbContext.Students.Where(i => i.Id == id)
+                .Include(i => i.NotificationSettings)
                 .Include(i => i.Following)
                 .Include(i => i.Followers)
                 .Include(i => i.Reviews)!

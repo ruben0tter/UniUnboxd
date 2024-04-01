@@ -182,7 +182,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         } else {
                             //TODO: see how to show a toast
 
-                            Log.d("Err", "" + con.getResponseCode());
+                            Log.d("ERR", "" + con.getResponseCode());
                         }
                     } catch (Exception e) {
                         Log.e("ERR", e.toString());

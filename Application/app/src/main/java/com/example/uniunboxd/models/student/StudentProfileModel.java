@@ -1,6 +1,5 @@
 package com.example.uniunboxd.models.student;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
@@ -33,12 +31,14 @@ public class StudentProfileModel {
     public List<StudentListItem> Following;
     public List<StudentListItem> Followers;
     public List<StudentReviewListItem> Reviews;
+    public final NotificationSettings NotificationSettings;
     private boolean isFollowing = false;
 
     @JsonCreator
     public StudentProfileModel(@JsonProperty("id") int Id, @JsonProperty("name") String Name, @JsonProperty("universityName") String UniversityName,
                                @JsonProperty("profilePic") String Image, @JsonProperty("following") List<StudentListItem> Following,
-                               @JsonProperty("followers") List<StudentListItem> Followers, @JsonProperty("reviews") List<StudentReviewListItem> Reviews) {
+                               @JsonProperty("followers") List<StudentListItem> Followers, @JsonProperty("reviews") List<StudentReviewListItem> Reviews,
+                               @JsonProperty("notificationSettings") NotificationSettings NotificationSettings) {
         this.Id = Id;
         this.Name = Name;
         this.Image = Image;
@@ -46,6 +46,7 @@ public class StudentProfileModel {
         this.Followers = Followers;
         this.Reviews = Reviews;
         this.UniversityName = UniversityName;
+        this.NotificationSettings = NotificationSettings;
     }
 
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f){
@@ -66,6 +67,7 @@ public class StudentProfileModel {
         if(Image != null)
             image.setImageBitmap(ImageHandler.decodeImageString(Image));
 
+        int userId = Integer.parseInt(JWTValidation.getTokenProperty(f.getActivity(), "sub"));
         if(!Following.isEmpty())
             for (StudentListItem x : Following) {
                 following.addView(x.createView(inflater, container, savedInstanceState, f));
@@ -73,7 +75,7 @@ public class StudentProfileModel {
 
         if(!Followers.isEmpty())
             for (StudentListItem x : Followers) {
-                if(x.ID == Id)
+                if(x.ID == userId)
                     isFollowing = true;
                 followers.addView(x.createView(inflater, container, savedInstanceState, f));
             }
@@ -83,7 +85,6 @@ public class StudentProfileModel {
                 reviews.addView(x.createView(inflater, container, savedInstanceState));
             }
 
-        int userId = Integer.parseInt(JWTValidation.getTokenProperty(f.getActivity(), "sub"));
 
         if(isFollowing) {
             followAction.setText("UNFOLLOW");
@@ -100,11 +101,20 @@ public class StudentProfileModel {
                                 try {
                                     HttpURLConnection con = UserController.unfollow(Id, f.getActivity());
                                     if (con.getResponseCode() == 200) {
-                                        followAction.setText("FOLLOW");
-                                        StudentListItem followingUser = Followers.stream().filter(x -> x.ID == Id).findFirst().get();
-                                        Followers.remove(followingUser);
-                                        followers.removeView(followingUser.createView(inflater, container, savedInstanceState, f));
                                         isFollowing = false;
+                                        f.getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                followAction.setText("FOLLOW");
+                                                followers.removeAllViews();
+                                                for (StudentListItem x : Followers) {
+                                                    followers.addView(x.createView(inflater, container, savedInstanceState, f));
+                                                }
+                                            }
+                                        });
+
+                                        StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
+                                        Followers.remove(followingUser);
                                     } else {
                                         Log.d("STUDENT", "" + con.getResponseCode());
                                     }
@@ -116,11 +126,16 @@ public class StudentProfileModel {
                                 try {
                                     HttpURLConnection con = UserController.follow(Id, f.getActivity());
                                     if (con.getResponseCode() == 200) {
-                                        followAction.setText("UNFOLLOW");
-                                        StudentListItem followingUser = new StudentListItem(Id, Name, Image);
-                                        Followers.add(followingUser);
-                                        followers.addView(followingUser.createView(inflater, container, savedInstanceState, f));
                                         isFollowing = true;
+                                        StudentListItem user = UserController.getStudentListItem(userId, f.getActivity());
+                                        Followers.add(user);
+                                        f.getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                followAction.setText("UNFOLLOW");
+                                                followers.addView(user.createView(inflater, container, savedInstanceState, f));
+                                            }
+                                        });
                                     } else {
                                         Log.d("STUDENT", "" + con.getResponseCode());
                                     }

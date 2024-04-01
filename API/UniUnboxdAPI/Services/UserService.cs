@@ -166,18 +166,29 @@ namespace UniUnboxdAPI.Services
             return studentProfileModel;
         }
         
-        private static StudentProfileModel CreateStudentProfileModel(Student student)
+        private StudentProfileModel CreateStudentProfileModel(Student student)
             => new ()
             {
                 Id = student.Id,
                 ProfilePic = student.Image,
                 Name = student.UserName,
                 UniversityName = "",
-                Reviews = new List<StudentProfileReview>()
-                
+                Reviews = new List<StudentProfileReview>(),
+                NotificationSettings = MakeNotificationSettingsModel(student.NotificationSettings, student.Id)
             };
-        
-        private static StudentProfileReview CreateStudentProfileReview(Review review)
+
+        private NotificationSettingsModel MakeNotificationSettingsModel(NotificationSettings ns, int id)
+            => new()
+            {
+                StudentId = id,
+                ReceivesFollowersReviewMail = ns.ReceivesFollowersReviewMail,
+                ReceivesFollowersReviewPush = ns.ReceivesFollowersReviewPush,
+                ReceivesNewReplyMail = ns.ReceivesNewReplyMail,
+                ReceivesNewReplyPush = ns.ReceivesNewReplyPush,
+                ReceivesNewFollowerMail = ns.ReceivesNewFollowerMail,
+                ReceivesNewFollowerPush = ns.ReceivesNewFollowerPush
+            };
+        private StudentProfileReview CreateStudentProfileReview(Review review)
             => new ()
             {
                 Id = review.Id,
@@ -244,6 +255,15 @@ namespace UniUnboxdAPI.Services
         {
             student.UserName = model.Name;
             student.Image = model.Image;
+            student.NotificationSettings = new()
+            {
+                ReceivesFollowersReviewMail = model.NotificationSettings.ReceivesFollowersReviewMail,
+                ReceivesFollowersReviewPush = model.NotificationSettings.ReceivesFollowersReviewPush,
+                ReceivesNewReplyMail = model.NotificationSettings.ReceivesNewReplyMail,
+                ReceivesNewReplyPush = model.NotificationSettings.ReceivesNewReplyPush,
+                ReceivesNewFollowerMail = model.NotificationSettings.ReceivesNewFollowerMail,
+                ReceivesNewFollowerPush = model.NotificationSettings.ReceivesNewFollowerPush
+            };
         }
 
         public async Task PutStudent(Student student)
@@ -257,5 +277,43 @@ namespace UniUnboxdAPI.Services
 
         public async Task<bool> DoesProfessorExist(string email)
             => await userRepository.DoesProfessorExist(email);
+
+        public async Task<List<StudentGridModel>> GetFollowedStudents(int userId)
+        {
+            List<StudentGridModel> models = new List<StudentGridModel>();
+            var followedStudents = await userRepository.GetFollowing(userId);
+            foreach (var x in followedStudents)
+            {
+                models.Add(CreateStudentGridModel(x));
+            }
+
+            return models;
+        }
+        
+        public async Task<List<StudentGridModel>> GetFollowers(int userId)
+        {
+            List<StudentGridModel> models = new List<StudentGridModel>();
+            var followedStudents = await userRepository.GetFollowers(userId);
+            foreach (var x in followedStudents)
+            {
+                models.Add(CreateStudentGridModel(x));
+            }
+
+            return models;
+        }
+
+        private StudentGridModel CreateStudentGridModel(Student student)
+            => new()
+            {
+                Id = student.Id,
+                Name = student.UserName!,
+                Image = student.Image
+            };
+
+        public async Task<StudentGridModel> GetStudentListItem(int id)
+        {
+            Student student = await userRepository.GetStudent(id);
+            return CreateStudentGridModel(student);
+        }
     }
 }

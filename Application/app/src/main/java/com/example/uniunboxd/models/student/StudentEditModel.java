@@ -4,11 +4,12 @@ public class StudentEditModel {
     public final int Id;
     public String Name;
     public String Image;
-
+    public NotificationSettings NotificationSettings;
 
     public StudentEditModel(StudentProfileModel student) {
         Id = student.Id;
         Image = student.Image;
         Name = student.Name;
+        NotificationSettings = student.NotificationSettings;
     }
 }

@@ -220,7 +220,7 @@
                 app:layout_constraintVertical_bias="0.69" />
 
             <CheckBox
-                android:id="@+id/checkbox_example1"
+                android:id="@+id/follower_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -233,7 +233,7 @@
                 app:layout_constraintVertical_bias="0.25" />
 
             <CheckBox
-                android:id="@+id/checkbox_example5"
+                android:id="@+id/activity_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -246,7 +246,7 @@
                 app:layout_constraintVertical_bias="0.679" />
 
             <CheckBox
-                android:id="@+id/checkbox_example2"
+                android:id="@+id/follower_push"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -259,7 +259,7 @@
                 app:layout_constraintVertical_bias="0.25" />
 
             <CheckBox
-                android:id="@+id/checkbox_example4"
+                android:id="@+id/reply_push"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -272,7 +272,7 @@
                 app:layout_constraintVertical_bias="0.466" />
 
             <CheckBox
-                android:id="@+id/checkbox_example6"
+                android:id="@+id/activity_push"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -285,7 +285,7 @@
                 app:layout_constraintVertical_bias="0.682" />
 
             <CheckBox
-                android:id="@+id/checkbox_example3"
+                android:id="@+id/reply_mail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"

@@ -46,10 +46,11 @@ public class StudentProfileFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        if(Student != null) {
-            view = Student.createView(inflater, container, savedInstanceState, this);
+        if(Student == null) {
+            Log.e("ERR", "Something went wrong.");
         }
 
+        view = Student.createView(inflater, container, savedInstanceState, this);
         ImageButton editBtn = view.findViewById(R.id.editButton);
 
         editBtn.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +63,17 @@ public class StudentProfileFragment extends Fragment {
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
         if(userId != ID) {
             editBtn.setVisibility(View.GONE);
+        }
+
+        if(Student.Following == null || Student.Following.size() == 0) {
+            view.findViewById(R.id.Following).setVisibility(View.GONE);
+            view.findViewById(R.id.listFollowing).setVisibility(View.GONE);
+            view.findViewById(R.id.listFollowingLinear).setVisibility(View.GONE);
+        }
+        if(Student.Followers == null || Student.Followers.size() == 0) {
+            view.findViewById(R.id.Followers).setVisibility(View.GONE);
+            view.findViewById(R.id.listFollowers).setVisibility(View.GONE);
+            view.findViewById(R.id.listFollowersLinear).setVisibility(View.GONE);
         }
         return view;
     }

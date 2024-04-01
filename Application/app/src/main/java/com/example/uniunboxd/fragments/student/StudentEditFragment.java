@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -27,9 +28,11 @@ import com.example.uniunboxd.models.student.StudentEditModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.ImageHandler;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 public class StudentEditFragment extends Fragment {
@@ -87,12 +90,17 @@ public class StudentEditFragment extends Fragment {
                     public void run() {
                         try {
                             Model.Name = name.getText().toString();
+                            UpdateNotificationSettings(view);
                             HttpURLConnection con = UserController.putStudent(Model, getActivity());
                             if (con.getResponseCode() == 200) {
                                 ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id));
                             } else {
-                                //TODO: see how to show a toast
-                                Log.d("DEB", "" + con.getResponseCode());
+                                BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                                StringBuilder st = new StringBuilder();
+                                String line;
+                                while((line = br.readLine()) != null)
+                                    st.append(line);
+                                Log.e("ERR", "" + st);
                             }
                         } catch (Exception e) {
                             Log.e("ERR", e.toString());
@@ -103,7 +111,9 @@ public class StudentEditFragment extends Fragment {
             }
         });
 
-        //TODO: set Notification settings
+        SetUpNotificationSettings(view);
+
+
         //TODO: set verification
         return view;
     }
@@ -133,6 +143,49 @@ public class StudentEditFragment extends Fragment {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
             image.setImageBitmap(bitmap);
         }
+    }
 
+    private void SetUpNotificationSettings(View view){
+
+        CheckBox followerMail = view.findViewById(R.id.follower_mail);
+        CheckBox followerPush = view.findViewById(R.id.follower_push);
+        CheckBox replyMail = view.findViewById(R.id.reply_mail);
+        CheckBox replyPush = view.findViewById(R.id.reply_push);
+        CheckBox activityMail = view.findViewById(R.id.activity_mail);
+        CheckBox activityPush = view.findViewById(R.id.activity_push);
+
+        if(Model.NotificationSettings.ReceivesNewFollowerMail)
+            followerMail.setChecked(true);
+
+        if(Model.NotificationSettings.ReceivesNewFollowerPush)
+            followerPush.setChecked(true);
+
+        if(Model.NotificationSettings.ReceivesNewReplyMail)
+            replyMail.setChecked(true);
+
+        if(Model.NotificationSettings.ReceivesNewReplyPush)
+            replyPush.setChecked(true);
+
+        if(Model.NotificationSettings.ReceivesFollowersReviewMail)
+            activityMail.setChecked(true);
+
+        if(Model.NotificationSettings.ReceivesFollowersReviewPush)
+            activityPush.setChecked(true);
+    }
+
+    private void UpdateNotificationSettings(View view){
+        CheckBox followerMail = view.findViewById(R.id.follower_mail);
+        CheckBox followerPush = view.findViewById(R.id.follower_push);
+        CheckBox replyMail = view.findViewById(R.id.reply_mail);
+        CheckBox replyPush = view.findViewById(R.id.reply_push);
+        CheckBox activityMail = view.findViewById(R.id.activity_mail);
+        CheckBox activityPush = view.findViewById(R.id.activity_push);
+
+        Model.NotificationSettings.ReceivesFollowersReviewMail = activityMail.isChecked();
+        Model.NotificationSettings.ReceivesFollowersReviewPush = activityPush.isChecked();
+        Model.NotificationSettings.ReceivesNewReplyMail = replyMail.isChecked();
+        Model.NotificationSettings.ReceivesNewReplyPush = replyPush.isChecked();
+        Model.NotificationSettings.ReceivesNewFollowerMail = followerMail.isChecked();
+        Model.NotificationSettings.ReceivesNewFollowerPush = followerPush.isChecked();
     }
 }
