@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.models.professor.ProfessorEditModel;
 import com.example.uniunboxd.models.professor.ProfessorProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
@@ -53,12 +55,20 @@ public class ProfessorProfileFragment extends Fragment {
         }
 
         ImageButton editBtn = view.findViewById(R.id.editButton);
+        TextView signOutBtn = view.findViewById(R.id.signOut);
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ProfessorEditModel professorEditModel = MakeProfessorEditModel(Professor);
                 ((IActivity) getActivity()).replaceFragment(new ProfessorEditFragment(professorEditModel));
+            }
+        });
+        signOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JWTValidation.deleteToken(getActivity());
+                ((IActivity) getActivity()).replaceActivity(MainActivity.class);
             }
         });
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));

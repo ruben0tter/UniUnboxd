@@ -25,7 +25,6 @@ import androidx.fragment.app.FragmentManager;
 import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.models.course.AssignedProfessorModel;
 import com.example.uniunboxd.models.course.CourseCreationModel;
@@ -75,7 +74,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
 
         Button saveChangesBtn = view.findViewById(R.id.saveChanges);
         ImageButton imageBtn = view.findViewById(R.id.courseImage_edit);
-        ImageButton bannerBtn = view.findViewById(R.id.change_banner_button);
+        ImageButton bannerBtn = view.findViewById(R.id.courseBanner_edit);
         ImageView deleteBtn = view.findViewById(R.id.deleteButton);
         ImageButton searchBtn = view.findViewById(R.id.searchButton);
 
