@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
-
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -37,12 +35,7 @@ public class AssignedProfessorModel {
         name.setText(Name);
         email.setText(Email);
         AssignedProfessorModel model = this;
-        unassignProfessor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                f.RemoveAssignedProfessor(model, view);
-            }
-        });
+        unassignProfessor.setOnClickListener(v -> f.RemoveAssignedProfessor(model, view));
         return view;
     }
 }

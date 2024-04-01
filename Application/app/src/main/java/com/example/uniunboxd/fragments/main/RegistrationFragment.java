@@ -91,22 +91,19 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         RegisterModel model = createRegisterModel();
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection response = RegistrationController.register(model);
-                    Log.d("DEB", ""+response.getResponseCode());
-                    //TODO: Fix notification system.
-                    //sendNotification(readMessage(response.getErrorStream()));
-                    if (response.getResponseCode() == 200) {
-                        redirectToSignIn();
-                    }
-                } catch (Exception e) {
-                    Log.e("APP", "Failed to register user: " + e.toString());
+        AsyncTask.execute(() -> {
+            try {
+                HttpURLConnection response = RegistrationController.register(model);
+                Log.d("DEB", "" + response.getResponseCode());
+                //TODO: Fix notification system.
+                //sendNotification(readMessage(response.getErrorStream()));
+                if (response.getResponseCode() == 200) {
+                    redirectToSignIn();
                 }
-
+            } catch (Exception e) {
+                Log.e("APP", "Failed to register user: " + e.toString());
             }
+
         });
     }
 

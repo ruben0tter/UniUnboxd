@@ -51,15 +51,12 @@ public class AssignedCourseModel {
         courseCode.setText(Code);
         professorName.setText("Professor: " + Professor);
 
-        if(Image != null && !Image.equals("string"))
+        if (Image != null && !Image.equals("string"))
             courseImage.setImageBitmap(ImageHandler.decodeImageString(Image));
         else
             courseImage.setImageResource(R.drawable.app_logo);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id), true);
-            }
+        view.setOnClickListener(v -> {
+            ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id), true);
         });
         return view;
     }

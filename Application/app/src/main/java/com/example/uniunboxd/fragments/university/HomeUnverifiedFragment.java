@@ -62,21 +62,13 @@ public class HomeUnverifiedFragment extends Fragment {
 
         for (int i = 0; i < btnUploads.length; i++) {
             int finalI = i;
-            btnUploads[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FileSystemChooser.ChoosePDF(f, PICKFILE_RESULT_CODE + finalI);
-                }
-            });
+            btnUploads[i].setOnClickListener(v -> FileSystemChooser.ChoosePDF(f, PICKFILE_RESULT_CODE + finalI));
         }
 
 
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                JWTValidation.deleteToken(getActivity());
-                ((IActivity) getActivity()).replaceActivity(MainActivity.class);
-            }
+        signOut.setOnClickListener(v -> {
+            JWTValidation.deleteToken(getActivity());
+            ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         });
 
         return view;
