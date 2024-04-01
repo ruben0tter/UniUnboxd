@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/replyUser"
-        android:layout_width="wrap_content"
+        android:layout_width="300"
         android:layout_height="50dp"
         android:fontFamily="@font/k2d"
         android:text="[Reply User]"

@@ -22,10 +22,10 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="140dp"
+                android:layout_height="136dp"
                 android:scaleType="centerCrop"
-                
+
                 android:src="@drawable/ic_launcher_background"
                 android:textColor="@android:color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -36,21 +36,9 @@
                 app:layout_constraintVertical_bias="0.363"
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
 
-            <TextView
-                android:id="@+id/ProfileImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="124dp"
-                android:textColor="@android:color/black"
-                android:text="[Profile Image]]"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="1.0" />
-
             <ImageView
 
+                android:id="@+id/editImageBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -75,22 +63,23 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.36"
+                app:layout_constraintHorizontal_bias="0.389"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/image"
                 app:layout_constraintVertical_bias="0.0" />
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
                 android:layout_width="202dp"
                 android:layout_height="37dp"
-                android:paddingStart="10dp"
                 android:background="@drawable/edit_text_field"
                 android:hint="current name"
-                android:textSize="20dp"
+                android:paddingStart="10dp"
                 android:textColor="@android:color/black"
+                android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.619"
+                app:layout_constraintHorizontal_bias="0.165"
                 app:layout_constraintStart_toEndOf="@+id/universityName"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.94" />
@@ -132,7 +121,7 @@
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.777"
+                app:layout_constraintHorizontal_bias="0.459"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.939" />
@@ -158,9 +147,9 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_email_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.642"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/checkbox_example1"
+                app:layout_constraintHorizontal_bias="0.633"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_example1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -174,9 +163,9 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_phone_iphone_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.868"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/checkbox_example2"
+                app:layout_constraintHorizontal_bias="0.847"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_example2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -306,7 +295,7 @@
 
 
             <TextView
-                android:id="@+id/Followers"
+                android:id="@+id/verification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Verification"
@@ -333,23 +322,23 @@
                 android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.058"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.678" />
+                app:layout_constraintVertical_bias="0.642" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#C82424"
-                android:paddingStart="10dp"
+                android:padding="10dp"
                 android:text="Upload file"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.055"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.156" />
@@ -361,7 +350,7 @@
                 android:background="#C82424"
                 android:text="Get Verified"
                 android:textColor="#FFFFFF"
-                android:paddingStart="10dp"
+                android:padding="10dp"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

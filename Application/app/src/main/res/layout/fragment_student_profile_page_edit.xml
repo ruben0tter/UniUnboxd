@@ -36,19 +36,6 @@
                 app:layout_constraintVertical_bias="0.363"
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
 
-            <TextView
-                android:id="@+id/ProfileImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="124dp"
-                android:textColor="@android:color/black"
-                android:text="[Profile Image]]"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="1.0" />
-
             <ImageView
 
                 android:id="@+id/editImageBtn"
@@ -160,9 +147,9 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_email_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/checkbox_example1"
                 app:layout_constraintHorizontal_bias="0.633"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_example1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -176,9 +163,9 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_phone_iphone_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/checkbox_example2"
                 app:layout_constraintHorizontal_bias="0.847"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_example2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -308,7 +295,7 @@
 
 
             <TextView
-                android:id="@+id/Followers"
+                android:id="@+id/verification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Verification"
@@ -322,6 +309,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/verificationBox"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:background="@drawable/bottom_border">
@@ -335,23 +323,23 @@
                 android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.069"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.66" />
+                app:layout_constraintVertical_bias="0.642" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#C82424"
-                android:paddingStart="10dp"
+                android:padding="10dp"
                 android:text="Upload file"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.055"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.156" />
@@ -363,7 +351,7 @@
                 android:background="#C82424"
                 android:text="Get Verified"
                 android:textColor="#FFFFFF"
-                android:paddingStart="10dp"
+                android:padding="10dp"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

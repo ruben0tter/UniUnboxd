@@ -10,9 +10,11 @@
         android:layout_height="100dp"
         android:gravity="center"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <Space
             android:layout_width="wrap_content"
@@ -34,6 +36,7 @@
 
         <TextView
             android:id="@+id/application_text"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Application" />
@@ -46,12 +49,12 @@
         <Button
             android:id="@+id/view_documents_button"
             android:layout_width="50dp"
-            android:layout_height="51dp"
+            android:layout_height="50dp"
             android:backgroundTint="#38a"
-            android:textColor="#fff"
             android:padding="0dp"
-            android:textSize="18sp"
-            android:text="📄" />
+            android:text="📄"
+            android:textColor="#fff"
+            android:textSize="18sp" />
 
         <Space
             android:layout_width="wrap_content"
@@ -61,12 +64,12 @@
         <Button
             android:id="@+id/accept_button"
             android:layout_width="50dp"
-            android:layout_height="51dp"
+            android:layout_height="50dp"
             android:backgroundTint="#3c3"
-            android:textSize="20sp"
             android:padding="0dp"
+            android:text="✔"
             android:textColor="#fff"
-            android:text="✔" />
+            android:textSize="20sp" />
 
         <Space
             android:layout_width="wrap_content"
@@ -76,12 +79,12 @@
         <Button
             android:id="@+id/reject_button"
             android:layout_width="50dp"
-            android:layout_height="51dp"
+            android:layout_height="50dp"
             android:backgroundTint="#c33"
-            android:textSize="23sp"
             android:padding="0dp"
+            android:text="✗"
             android:textColor="#fff"
-            android:text="✗" />
+            android:textSize="23sp" />
 
         <Space
             android:layout_width="wrap_content"

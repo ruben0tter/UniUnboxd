@@ -51,7 +51,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            tools:ignore="ExtraText">
+            tools:ignore="ExtraText"
+            android:background="@drawable/bottom_border">
 
             <TextView
                 android:id="@+id/name"
@@ -77,11 +78,12 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/followActionButton"
                 android:layout_marginTop="15dp"
+                android:padding="5dp"
                 android:layout_marginBottom="15dp"
-                android:layout_width="93dp"
+                android:layout_width="120dp"
                 android:layout_height="33dp"
                 android:background="#C82424"
-                android:text="Follow"
+                android:text="FOLLOW"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp" />
         </LinearLayout>
@@ -96,6 +98,8 @@
         <TextView
             android:id="@+id/Following"
             android:fontFamily="@font/k2d"
+            android:textSize="18dp"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,6 +129,8 @@
 
             <TextView
                 android:id="@+id/Followers"
+                android:textSize="18dp"
+                android:textStyle="bold"
                 android:fontFamily="@font/k2d"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
@@ -162,6 +168,8 @@
 
             <TextView
                 android:id="@+id/textView"
+                android:textSize="18dp"
+                android:textStyle="bold"
                 android:fontFamily="@font/k2d"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
