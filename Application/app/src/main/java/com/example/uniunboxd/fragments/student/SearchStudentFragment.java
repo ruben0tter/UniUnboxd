@@ -159,7 +159,7 @@ public class SearchStudentFragment extends Fragment {
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            ((IActivity) getActivity()).replaceFragment(new ProfileFragment(user.Id), true);
+                            ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(user.Id), true);
                         }
                     });
                     resultsLayout.addView(view);

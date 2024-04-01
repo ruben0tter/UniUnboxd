@@ -52,6 +52,17 @@ namespace UniUnboxdAPI.Controllers
 
             return Ok(reviews);
         }
+        
+        [HttpGet("friends-that-reviewed")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetLatestReviewsByFriends([FromQuery(Name = "courseId")] int courseId)
+        {
+            var userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            var reviews = await reviewService.GetAllFriendsThatReviewed(userId, courseId);
+
+            return Ok(reviews);
+        }
 
 
         [HttpPost]

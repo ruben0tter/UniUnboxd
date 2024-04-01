@@ -61,6 +61,18 @@ namespace UniUnboxdAPI.Services
             ICollection<Review> reviews = await reviewRepository.GetLatestReviewsByFriends(id);
             return CreateReviewGridModelCollection(reviews);
         }
+        
+        /// <summary>
+        /// Gets all friends of a user that have reviewed a course.
+        /// </summary>
+        /// <param name="id">Provided student id.</param>
+        /// <param name="id">Provided course id.</param>
+        /// <returns>The latest reviews by friends of the provided student.</returns>
+        public async Task<ICollection<ReviewGridModel>> GetAllFriendsThatReviewed(int userId, int courseId)
+        {
+            ICollection<Student> friends = await reviewRepository.GetAllFriendsThatReviewed(userId, courseId);
+            return CreateReviewGridModelCollection(reviews);
+        }
 
         /// <summary>
         /// Check whether there exists a student with the provided id.
@@ -310,5 +322,13 @@ namespace UniUnboxdAPI.Services
                 StudentImage = i.Student.Image!,
                 Rating = i.Rating
             }).ToList();
+
+        private StudentGridModel CreateStudentGridModel(Student student)
+            => new()
+            {
+                Id = student.Id,
+                Name = student.UserName!,
+                Image = student.Image
+            };
     }
 }
