@@ -57,7 +57,7 @@ public class StudentProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 StudentEditModel studentEditModel = new StudentEditModel(Student);
-                ((IActivity) getActivity()).replaceFragment(new StudentEditFragment(studentEditModel));
+                ((IActivity) getActivity()).replaceFragment(new StudentEditFragment(studentEditModel), true);
             }
         });
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));

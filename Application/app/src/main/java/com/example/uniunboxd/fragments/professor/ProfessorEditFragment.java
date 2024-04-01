@@ -60,7 +60,7 @@ public class ProfessorEditFragment extends Fragment {
                             HttpURLConnection response = UserController.putProfessor(Professor, getActivity());
                             if (response.getResponseCode() == 200) {
                                 // TODO: Show notification with "Review successfully created."
-                                ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id));
+                                ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id), true);
                             } else {
                                 // TODO: Show notification with error message.
                             }
@@ -74,7 +74,7 @@ public class ProfessorEditFragment extends Fragment {
         editImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileSystemChooser.ChooseImage(f);
+                FileSystemChooser.ChooseImage(f, 1);
             }
         });
 

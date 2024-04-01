@@ -75,7 +75,7 @@ public class CourseFragment extends Fragment{
                 @Override
                 public void onClick(View v) {
                     CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner, new ArrayList<>());
-                    ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel));
+                    ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel), true);
                 }
             });
             String role = JWTValidation.getTokenProperty(getActivity(), "typ");

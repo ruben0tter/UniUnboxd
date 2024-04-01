@@ -63,7 +63,7 @@ public class ReviewListItem {
         comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((IActivity) v.getContext()).replaceFragment(new ReviewFragment(Id));
+                ((IActivity) v.getContext()).replaceFragment(new ReviewFragment(Id), true);
             }
         });
         if(role.equals("University"))

@@ -46,7 +46,7 @@ public class StudentListItem {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((IActivity) f.getActivity()).replaceFragment(new StudentProfileFragment(ID));
+                ((IActivity) f.getActivity()).replaceFragment(new StudentProfileFragment(ID), true);
             }
         });
 

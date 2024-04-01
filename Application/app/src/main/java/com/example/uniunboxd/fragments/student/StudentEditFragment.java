@@ -93,7 +93,7 @@ public class StudentEditFragment extends Fragment {
                             UpdateNotificationSettings(view);
                             HttpURLConnection con = UserController.putStudent(Model, getActivity());
                             if (con.getResponseCode() == 200) {
-                                ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id));
+                                ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id), true);
                             } else {
                                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                                 StringBuilder st = new StringBuilder();

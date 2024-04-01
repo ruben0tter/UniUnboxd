@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import com.example.uniunboxd.API.SearchController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.CourseFragment;
 import com.example.uniunboxd.models.CourseSearchResult;
 
 import java.util.ArrayList;

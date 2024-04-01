@@ -61,7 +61,7 @@ public class ProfessorProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ProfessorEditModel professorEditModel = MakeProfessorEditModel(Professor);
-                ((IActivity) getActivity()).replaceFragment(new ProfessorEditFragment(professorEditModel));
+                ((IActivity) getActivity()).replaceFragment(new ProfessorEditFragment(professorEditModel), true);
             }
         });
         signOutBtn.setOnClickListener(new View.OnClickListener() {

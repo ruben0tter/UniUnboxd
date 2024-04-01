@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -45,7 +45,7 @@ public class UserSearchResult {
         View view = inflater.inflate(R.layout.search_result_user, null);
 
         view.setOnClickListener(l -> {
-            ((IActivity) activity).replaceFragment(new ProfileFragment(Id), true);
+            ((IActivity) activity).replaceFragment(new StudentProfileFragment(Id), true);
         });
 
         ((TextView) view.findViewById(R.id.username)).setText(UserName);

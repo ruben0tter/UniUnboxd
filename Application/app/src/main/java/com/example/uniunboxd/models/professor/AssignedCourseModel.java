@@ -58,7 +58,7 @@ public class AssignedCourseModel {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id));
+                ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id), true);
             }
         });
         return view;
