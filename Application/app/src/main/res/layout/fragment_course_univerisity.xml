@@ -4,52 +4,86 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.student.CourseFragment">
+    tools:context=".fragments.university.CourseFragment">
 
     <LinearLayout
         android:id = "@+id/reviewPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="0dp">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="384dp"
+            android:layout_height="449dp"
             android:background="@drawable/bottom_border">
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="@+id/courseBanner"
+                app:layout_constraintEnd_toEndOf="@+id/courseBanner"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
 
                 android:id="@+id/courseBanner"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="250dp"
                 android:contentDescription="@string/course_banner"
                 android:scaleType="fitXY"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/courseImage"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/baseline_image_24" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/fading_image"
+                app:layout_constraintBottom_toBottomOf="@+id/courseBanner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/courseBanner"
+                app:layout_constraintVertical_bias="1.0" />
 
             <ImageView
                 android:id="@+id/courseImage"
+                android:layout_marginEnd="10dp"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginBottom="72dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.704"
+                app:layout_constraintTop_toBottomOf="@+id/courseBanner"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/baseline_image_24" />
 
             <TextView
                 android:id="@+id/courseName"
-                android:layout_width="119dp"
-                android:layout_height="24dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="172dp"
+                android:layout_height="38dp"
+                android:fontFamily="@font/k2d"
+                android:padding="0dp"
                 android:text="[Course Name]"
+                android:textColor="@color/black"
+                android:textSize="25dp"
                 app:layout_constraintBottom_toBottomOf="@+id/courseBanner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -61,16 +95,20 @@
                 android:id="@+id/courseCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="[Course Code]"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.597" />
+                app:layout_constraintVertical_bias="0.718" />
 
             <TextView
                 android:id="@+id/universityName"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="[University]"
@@ -79,24 +117,29 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/courseBanner"
-                app:layout_constraintVertical_bias="0.698" />
+                app:layout_constraintVertical_bias="0.625" />
 
             <TextView
                 android:id="@+id/professor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="[Professor]"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/courseBanner"
-                app:layout_constraintVertical_bias="0.797" />
+                app:layout_constraintVertical_bias="0.813" />
 
             <TextView
                 android:id="@+id/description"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginEnd="10dp"
                 android:text="[Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.]"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/courseImage"
@@ -107,13 +150,94 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         <TextView
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="Ratings"
             android:textSize="18sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Non-Anonymous"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <RatingBar
+                android:id="@+id/ratingBarNonAnonymous"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="3.2"
+                android:stepSize="0.1"
+                android:theme="@style/RatingBar" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="20dp"
+                android:text="3.2"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bottom_border"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="5dp"
+                android:text="Anonymous"
+                android:textColor="@color/black"
+
+                android:textSize="14sp" />
+
+            <RatingBar
+                android:id="@+id/ratingBarAnonymous"
+                android:layout_marginBottom="5dp"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="2.9"
+                android:stepSize="0.1"
+                android:theme="@style/RatingBar" />
+
+            <TextView
+                android:layout_marginBottom="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="2.9"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,30 +245,6 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <RatingBar
-                android:id="@+id/ratingBarNonAnonymous"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="3.2"
-                android:stepSize="0.1"
-                android:isIndicator="true"
-                android:progressTint="@color/yellow"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="3.2"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Non-Anonymous"
-                android:layout_marginStart="16dp"
-                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -154,34 +254,12 @@
             android:gravity="center_vertical"
             android:background="@drawable/bottom_border">
 
-            <RatingBar
-                android:id="@+id/ratingBarAnonymous"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="2.9"
-                android:stepSize="0.1"
-                android:isIndicator="true"
-                android:progressTint="@color/yellow"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="2.9"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Anonymous"
-                android:layout_marginStart="16dp"
-                android:textSize="14sp"/>
-
         </LinearLayout>
 
         <TextView
+            android:textColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reviews"
@@ -189,13 +267,25 @@
             android:textStyle="bold"/>
 
         <LinearLayout
+            android:id="@+id/yourReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/reviewList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/load"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/TUeRed"

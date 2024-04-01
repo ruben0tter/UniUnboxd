@@ -11,4 +11,5 @@ public class Course : Base
     public double AverageRating { get; set; }
     public required List<Review> Reviews { get; set; }
     public required University University { get; set; }
+    public ICollection<CourseProfessorAssignment> AssignedProfessors { get; set; }
 }

@@ -26,7 +26,7 @@ namespace UniUnboxdAPI.Controllers
             User user = registrationService.CreateUser(model);
 
             if(await registrationService.CreateAccount(user, model.Password))
-                return Ok("Account created succesfully.");
+                return Ok("Account created successfully.");
 
             return BadRequest("Failed to create user. Please try again later.");
         }

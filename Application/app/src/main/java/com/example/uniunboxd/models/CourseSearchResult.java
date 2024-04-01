@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.CourseFragment;
+import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

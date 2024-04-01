@@ -14,7 +14,8 @@ import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityStudentBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
-import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.StudentProfileFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.fragments.student.SearchStudentFragment;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -42,6 +43,7 @@ public class StudentActivity extends IActivity {
     }
 
     public void setNavigationMenu() {
+        int userId = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.home) {
@@ -49,7 +51,7 @@ public class StudentActivity extends IActivity {
             } else if (itemId == R.id.search) {
                 replaceFragment(new SearchStudentFragment(), false);
             } else if (itemId == R.id.profile) {
-                replaceFragment(new ProfileFragment(), false);
+                replaceFragment(new StudentProfileFragment(userId), true);
             }
             fragmentHistory.removeAllElements();
             return true;

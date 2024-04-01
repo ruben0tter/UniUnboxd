@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.ProfileFragment;
 import com.example.uniunboxd.fragments.student.ReviewFragment;
+import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -75,7 +75,7 @@ public class FriendReview implements View.OnClickListener {
         if (v.getId() == R.id.courseName || v.getId() == R.id.courseImage) {
             ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
         } else if (v.getId() == R.id.studentName || v.getId() == R.id.studentImage) {
-            ((IActivity) fragment.getActivity()).replaceFragment(new ProfileFragment(StudentId), true);
+            ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(StudentId), true);
         }
     }
 }

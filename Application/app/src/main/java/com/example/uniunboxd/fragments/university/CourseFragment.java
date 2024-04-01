@@ -1,13 +1,15 @@
-package com.example.uniunboxd.fragments.student;
+package com.example.uniunboxd.fragments.university;
+
+import static android.view.View.GONE;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
@@ -15,14 +17,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.API.ReviewController;
-import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.models.Application;
-import com.example.uniunboxd.models.CourseRetrievalModel;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.models.course.CourseEditModel;
+import com.example.uniunboxd.models.course.CourseRetrievalModel;
 import com.example.uniunboxd.models.ReviewListItem;
+import com.example.uniunboxd.utilities.JWTValidation;
 
-import java.net.HttpURLConnection;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -30,7 +32,7 @@ public class CourseFragment extends Fragment{
 
     private final int ID;
     private final int NUM_REVIEWS_TO_LOAD = 5;
-    private CourseRetrievalModel Course = null;
+    public CourseRetrievalModel Course = null;
 
     public CourseFragment(int id) {
         this.ID = id;
@@ -57,16 +59,29 @@ public class CourseFragment extends Fragment{
 
         if(Course != null) {
             view = Course.createView(inflater, container, savedInstanceState);
-        }
-        if(view != null) {
-            Button load = (Button) view.findViewById(R.id.load);
+
+            Button loadBtn = (Button) view.findViewById(R.id.load);
             LinearLayout reviewList = view.findViewById(R.id.reviewList);
-            load.setOnClickListener(new View.OnClickListener() {
+
+            ImageButton editBtn = view.findViewById(R.id.editButton);
+            loadBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     load(reviewList, inflater, container, savedInstanceState);
                 }
             });
+
+            editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner, new ArrayList<>());
+                    ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel), true);
+                }
+            });
+            String role = JWTValidation.getTokenProperty(getActivity(), "typ");
+            int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+            if(role.equals("Student") || !Course.AssignedProfessors.contains(userId))
+                editBtn.setVisibility(GONE);
         }
         return view;
     }
@@ -98,28 +113,31 @@ public class CourseFragment extends Fragment{
             }
         });
     }
-}
 
-class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
+    class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
 
-    private final int ID;
-    private final int NUM_OF_REVIEWS_TO_LOAD;
+        private final int ID;
+        private final int NUM_OF_REVIEWS_TO_LOAD;
 
-    public GetCourseInformationAsyncTask(int id, int numReviewsToLoad) {
-        ID = id;
-        NUM_OF_REVIEWS_TO_LOAD = numReviewsToLoad;
-    }
-
-    @Override
-    protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
-        CourseRetrievalModel course = null;
-        try{
-            course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
-        } catch(Exception ioe) {
-            Log.e("ERR", "Couldn't get course" + ioe.toString());
+        public GetCourseInformationAsyncTask(int id, int numReviewsToLoad) {
+            ID = id;
+            NUM_OF_REVIEWS_TO_LOAD = numReviewsToLoad;
         }
-        return course;
+
+        @Override
+        protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
+            CourseRetrievalModel course = null;
+            try{
+                course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
+            } catch(Exception ioe) {
+                Log.e("ERR", "Couldn't get course" + ioe.toString());
+            }
+
+            Course = course;
+            return course;
+        }
     }
 }
+
 
 

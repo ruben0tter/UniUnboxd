@@ -26,6 +26,7 @@ import com.example.uniunboxd.DTO.ReplyModel;
 import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.models.review.Reply;
 import com.example.uniunboxd.models.review.Review;
 import com.example.uniunboxd.utilities.JWTValidation;
@@ -224,7 +225,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 
     private void redirectToProfile() {
         if (!review.IsAnonymous) {
-            ((IActivity) getActivity()).replaceFragment(new ProfileFragment(review.Student.Id), true);
+            ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(review.Student.Id), true);
         }
     }
 

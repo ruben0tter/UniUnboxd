@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,6 +54,6 @@ public class Reply implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new ProfileFragment(User.Id), true);
+        ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(User.Id), true);
     }
 }

@@ -123,7 +123,7 @@ namespace UniUnboxdAPI.Controllers
 
                 await reviewService.UpdateAverageRatingAfterPut(review.Course.Id, review.Rating, oldRating);
 
-                return Ok("Succesfully updated review.");
+                return Ok("Successfully updated review.");
             }
             catch (Exception ex)
             {
@@ -200,7 +200,7 @@ namespace UniUnboxdAPI.Controllers
 
                 await reviewService.UpdateAverageRatingAfterDelete(review.Course.Id, review.Rating);
 
-                return Ok("Succesfully deleted review.");
+                return Ok("Successfully deleted review.");
             }
             catch (Exception ex)
             {

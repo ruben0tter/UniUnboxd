@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import com.example.uniunboxd.databinding.ActivityMainBinding;
 import com.example.uniunboxd.fragments.main.AuthenticationFragment;
+import com.example.uniunboxd.fragments.student.StudentEditFragment;
+import com.example.uniunboxd.models.student.StudentEditModel;
+import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.Objects;
@@ -18,6 +21,7 @@ public class MainActivity extends IActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+//        replaceFragment(new StudentEditFragment(new StudentEditModel(new StudentProfileModel(3, "Name", "Uni", "string", null, null, null))));
         setupInitialFragment();
     }
 
@@ -30,7 +34,7 @@ public class MainActivity extends IActivity {
             } else if (Objects.equals(type, "University")) {
                 replaceActivity(UniversityActivity.class);
             } else if (Objects.equals(type, "Professor")) {
-                // TODO: Add Professor Activity
+                replaceActivity(ProfessorActivity.class);
             }
         } else {
             replaceFragment(new AuthenticationFragment(), false);

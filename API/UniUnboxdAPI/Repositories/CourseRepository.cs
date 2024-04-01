@@ -21,19 +21,23 @@ namespace UniUnboxdAPI.Repositories
             => await dbContext.Courses.AnyAsync(c => c.Id == id);
 
         public async Task<Course> GetCourse(int id)
-            => await dbContext.Courses.Where(i => i.Id == id).FirstAsync();
+            => await dbContext.Courses.Where(i => i.Id == id)
+                .Include(i => i.University)
+                .Include(i => i.AssignedProfessors).FirstAsync();
 
         public async Task<Course> GetCourseAndConnectedData(int id, int numOfReviews)
             => await dbContext.Courses.Where(i => i.Id == id)
                                     .Include(i => i.University)
-                                    .Include(i => i.Reviews.Take(numOfReviews))
+                                    .Include(i => i.Reviews)
                                     .ThenInclude(i => i.Student)
+                                    .Include(i => i.AssignedProfessors)
                                     .FirstAsync();
 
         public async Task PostCourse(Course course)
         {
             await dbContext.Courses.AddAsync(course);
             await dbContext.SaveChangesAsync();
+            
         }
 
         public async Task UpdateAverageRatingAfterPost(int id, double addedRating)
@@ -81,5 +85,25 @@ namespace UniUnboxdAPI.Repositories
             => await dbContext.Courses.Where(i => i.University.Id == id)
                         .OrderByDescending(i => i.LastModificationTime)
                         .Take(4).ToListAsync();
+
+        public async Task PutCourse(Course course)
+        {
+            dbContext.Courses.Update(course);
+            await dbContext.SaveChangesAsync();
+        }
+        public async Task DeleteCourse(Course course)
+        {
+            dbContext.Courses.Remove(course);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<Course>> GetAssignedCourses(int professorId)
+            => await dbContext.Courses.Where(i => i.AssignedProfessors
+                .Any(i => i.Professor.Id == professorId))
+                .ToListAsync();
+
+        public async Task<bool> DoesProfessorAssignmentExist(int courseId, int professorId)
+            => await dbContext.CourseProfessorAssignments.AnyAsync(i => i.ProfessorId == professorId 
+                                                                        && i.CourseId == courseId);
     }
 }

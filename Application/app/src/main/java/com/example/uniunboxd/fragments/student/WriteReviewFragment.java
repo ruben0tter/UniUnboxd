@@ -20,6 +20,7 @@ import com.example.uniunboxd.DTO.CourseModel;
 import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 
 import java.net.HttpURLConnection;
@@ -64,7 +65,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         // Buttons
         Button post = (Button) view.findViewById(R.id.postButton);
         post.setOnClickListener(this);
-        Button delete = (Button) view.findViewById(R.id.deleteButton);
+        Button delete = (Button) view.findViewById(R.id.searchButton);
         delete.setOnClickListener(this);
 
         if (review == null) {

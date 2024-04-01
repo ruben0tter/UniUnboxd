@@ -61,19 +61,29 @@ namespace UniUnboxdAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ProfessorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UniversityId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfessorId");
-
                     b.HasIndex("UniversityId");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.CourseProfessorAssignment", b =>
+                {
+                    b.Property<int>("ProfessorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProfessorId", "CourseId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseProfessorAssignments");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
@@ -329,10 +339,6 @@ namespace UniUnboxdAPI.Migrations
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
                 {
-                    b.HasOne("UniUnboxdAPI.Models.Professor", null)
-                        .WithMany("AssignedCourses")
-                        .HasForeignKey("ProfessorId");
-
                     b.HasOne("UniUnboxdAPI.Models.University", "University")
                         .WithMany("Courses")
                         .HasForeignKey("UniversityId")
@@ -340,6 +346,25 @@ namespace UniUnboxdAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("University");
+                });
+
+            modelBuilder.Entity("UniUnboxdAPI.Models.CourseProfessorAssignment", b =>
+                {
+                    b.HasOne("UniUnboxdAPI.Models.Course", "Course")
+                        .WithMany("AssignedProfessors")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UniUnboxdAPI.Models.Professor", "Professor")
+                        .WithMany("AssignedCourses")
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Follow", b =>
@@ -481,6 +506,8 @@ namespace UniUnboxdAPI.Migrations
 
             modelBuilder.Entity("UniUnboxdAPI.Models.Course", b =>
                 {
+                    b.Navigation("AssignedProfessors");
+
                     b.Navigation("Reviews");
                 });
 
