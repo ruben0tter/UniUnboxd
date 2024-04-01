@@ -174,7 +174,8 @@ namespace UniUnboxdAPI.Services
                 Name = student.UserName,
                 UniversityName = "",
                 Reviews = new List<StudentProfileReview>(),
-                NotificationSettings = MakeNotificationSettingsModel(student.NotificationSettings, student.Id)
+                NotificationSettings = MakeNotificationSettingsModel(student.NotificationSettings, student.Id),
+                VerificationStatus = student.VerificationStatus
             };
 
         private NotificationSettingsModel MakeNotificationSettingsModel(NotificationSettings ns, int id)
@@ -314,6 +315,18 @@ namespace UniUnboxdAPI.Services
         {
             Student student = await userRepository.GetStudent(id);
             return CreateStudentGridModel(student);
+        }
+
+        public async Task<List<UniversityNameModel>> GetUniversities()
+        {
+            var models = new List<UniversityNameModel>();
+            var universities = await userRepository.GetUniversities();
+            foreach(var x in universities)
+            {
+                models.Add(new UniversityNameModel() { Id = x.Id, Name = x.UserName });
+            }
+
+            return models;
         }
     }
 }

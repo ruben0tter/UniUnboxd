@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".fragments.student.StudentEditFragment">
 
     <LinearLayout
         android:id = "@+id/reviewList"
@@ -35,19 +35,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.363"
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
-
-            <TextView
-                android:id="@+id/ProfileImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="124dp"
-                android:textColor="@android:color/black"
-                android:text="[Profile Image]]"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="1.0" />
 
             <ImageView
 
@@ -308,7 +295,7 @@
 
 
             <TextView
-                android:id="@+id/Followers"
+                android:id="@+id/verification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Verification"
@@ -322,6 +309,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/verificationBox"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:background="@drawable/bottom_border">

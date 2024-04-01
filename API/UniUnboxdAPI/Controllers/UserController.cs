@@ -39,6 +39,22 @@ namespace UniUnboxdAPI.Controllers
             return Ok(professor);
         }
 
+        [HttpGet("get-universities")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetUniversities()
+        {
+            try
+            {
+                List<UniversityNameModel> universities = await userService.GetUniversities();
+                return Ok(universities);
+            }
+            catch
+            {
+             return BadRequest("Could not get universities.");
+            }
+
+        }
+
         [HttpGet("get-assigned-professor")]
         [Authorize(Roles = "University")]
         public async Task<IActionResult> GetAssignedProfessorByEmail([FromQuery(Name = "email")] string email)

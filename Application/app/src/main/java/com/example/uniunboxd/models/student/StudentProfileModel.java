@@ -32,13 +32,15 @@ public class StudentProfileModel {
     public List<StudentListItem> Followers;
     public List<StudentReviewListItem> Reviews;
     public final NotificationSettings NotificationSettings;
+    public int VerificationStatus;
     private boolean isFollowing = false;
 
     @JsonCreator
     public StudentProfileModel(@JsonProperty("id") int Id, @JsonProperty("name") String Name, @JsonProperty("universityName") String UniversityName,
                                @JsonProperty("profilePic") String Image, @JsonProperty("following") List<StudentListItem> Following,
                                @JsonProperty("followers") List<StudentListItem> Followers, @JsonProperty("reviews") List<StudentReviewListItem> Reviews,
-                               @JsonProperty("notificationSettings") NotificationSettings NotificationSettings) {
+                               @JsonProperty("notificationSettings") NotificationSettings NotificationSettings,
+                               @JsonProperty("verificationStatus") int VerificationStatus) {
         this.Id = Id;
         this.Name = Name;
         this.Image = Image;
@@ -47,6 +49,7 @@ public class StudentProfileModel {
         this.Reviews = Reviews;
         this.UniversityName = UniversityName;
         this.NotificationSettings = NotificationSettings;
+        this.VerificationStatus = VerificationStatus;
     }
 
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f){
@@ -62,7 +65,9 @@ public class StudentProfileModel {
         LinearLayout reviews = view.findViewById(R.id.listReviewsLinear);
 
         name.setText(Name);
-        universityName.setText("Enrolled at" + UniversityName);
+        universityName.setText("Enrolled at: " + (UniversityName.isEmpty() ?
+                                                    "[not verified]"
+                                                    : UniversityName));
 
         if(Image != null)
             image.setImageBitmap(ImageHandler.decodeImageString(Image));

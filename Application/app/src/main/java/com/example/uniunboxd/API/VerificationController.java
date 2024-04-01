@@ -13,7 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,5 +92,20 @@ public class VerificationController {
             Log.d("PLS-code", "" + con.getResponseCode());
             throw new IOException("Failed to accept/reject application");
         }
+    }
+
+    public static HttpURLConnection sendApplication(List<byte[]> files, int universityId, FragmentActivity f) throws Exception {
+        JSONObject json = new JSONObject();
+        JSONArray jsonData = new JSONArray();
+        for (byte[] file : files) {
+            String base64 = Base64.encodeToString(file, Base64.DEFAULT);
+            jsonData.put(base64);
+        }
+        json.put("verificationData", jsonData);
+        json.put("targetUniversityId", universityId);
+
+        HttpURLConnection con = APIClient.post("verify/request", json.toString(), JWTValidation.getToken(f));
+
+        return con;
     }
 }
