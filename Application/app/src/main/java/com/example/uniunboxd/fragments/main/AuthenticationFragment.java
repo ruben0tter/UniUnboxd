@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,6 +22,7 @@ import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.activities.StudentActivity;
 import com.example.uniunboxd.activities.UniversityActivity;
 import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.utilities.MessageHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -89,9 +89,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
                         Log.i("JWT", token);
                         redirectToHomePage();
                     } else {
-                        //TODO: Fix notification system.
-                        //sendNotification(readMessage(response.getErrorStream()));
-                        Log.e("JWT", readMessage(response.getErrorStream()));
+                        MessageHandler.showToastFromBackground(getActivity(), response.getErrorStream());
                     }
                 } catch (Exception e) {
                     Log.e("APP", "Failed to authenticate user: " + e.toString());
@@ -131,10 +129,6 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("token", token);
         edit.apply();
-    }
-
-    private void sendNotification(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     private void redirectToHomePage() {

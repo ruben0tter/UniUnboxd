@@ -1,5 +1,6 @@
 package com.example.uniunboxd.fragments.student;
 
+import android.app.AlertDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -153,23 +154,25 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         if (review == null) {
             ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
         } else {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
-                        if (response.getResponseCode() == 200) {
-                            // TODO: Show notification with "Review successfully deleted."
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
-                        } else {
-                            // TODO: Show notification with error message.
-                        }
-                    } catch (Exception e) {
-                        Log.e("APP", "Failed to delete review: " + e);
-                    }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
+            builder.setTitle("Are you sure you want to delete the review?");
 
+            builder.setPositiveButton("Yes", (dialog, which) -> AsyncTask.execute(() -> {
+                try {
+                    HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
+                    if (response.getResponseCode() == 200) {
+                        // TODO: Show notification with "Review successfully deleted."
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
+                    } else {
+                        // TODO: Show notification with error message.
+                    }
+                } catch (Exception e) {
+                    Log.e("APP", "Failed to delete review: " + e);
                 }
-            });
+
+            }));
+            builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
+            builder.show();
         }
     }
 

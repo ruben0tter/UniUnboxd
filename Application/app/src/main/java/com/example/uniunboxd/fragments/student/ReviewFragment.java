@@ -131,7 +131,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
                 flagReview.setVisibility(View.GONE);
             }
 
-            if(userType.equals("Student")) {
+            if(userType.equals("Student") && userId != review.Student.Id) {
                 likeReview.setOnClickListener(this);
                 if(review.StudentLikes.contains(userId)) {
                     isReviewLiked = true;
@@ -174,7 +174,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         } else if (id == R.id.like) {
             changeLikeStatus();
         } else if (id == R.id.flagReview) {
-            changeFlagReview();
+            flagReview();
         }
     }
 
@@ -294,7 +294,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void changeFlagReview() {
+    private void flagReview() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
         builder.setTitle("Flag Review");
 
