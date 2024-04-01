@@ -19,6 +19,7 @@
             android:layout_height="240dp"
             android:background="@drawable/bottom_border">
 
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/professorImage"
                 android:layout_width="150dp"
@@ -27,23 +28,39 @@
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.487"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:shapeAppearanceOverlay="@style/roundedImageView" />
+                app:shapeAppearanceOverlay="@style/roundedImageView"/>
+
+            <ImageButton
+                android:id="@+id/professorImageEditButton"
+                android:layout_width="48dp"
+                android:layout_height="46dp"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/baseline_camera_alt_24"
+                app:layout_constraintBottom_toBottomOf="@+id/professorImage"
+                app:layout_constraintEnd_toEndOf="@+id/professorImage"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/professorImage"
+                app:layout_constraintTop_toTopOf="@+id/professorImage"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/professorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Juan the professor"
+                android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/professorImage"
-                app:layout_constraintHorizontal_bias="0.38"
+                app:layout_constraintHorizontal_bias="0.476"
                 app:layout_constraintStart_toStartOf="@+id/professorImage"
-                app:layout_constraintTop_toBottomOf="@+id/professorImage" />
+                app:layout_constraintTop_toBottomOf="@+id/professorImage"
+                app:layout_constraintVertical_bias="0.142" />
 
             <TextView
                 android:id="@+id/universityName"
@@ -51,21 +68,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Works at: [University]"
+                android:textColor="@color/black"
                 android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/professorName"
+                app:layout_constraintHorizontal_bias="0.606"
                 app:layout_constraintStart_toStartOf="@+id/professorName"
-                app:layout_constraintTop_toBottomOf="@+id/professorName" />
+                app:layout_constraintTop_toBottomOf="@+id/professorName"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageButton
                 android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="328dp"
                 android:backgroundTint="@android:color/transparent"
                 android:src="@drawable/baseline_edit_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/signOut"
@@ -83,8 +106,12 @@
                 android:textColor="@android:color/white"
                 android:textSize="13sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="0.996"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -105,6 +132,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="Your Courses"
                 android:textSize="18dp"
                 android:textStyle="bold"

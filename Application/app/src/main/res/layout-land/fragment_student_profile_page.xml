@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".fragments.StudentProfileFragment">
 
     <LinearLayout
-        android:id = "@+id/reviewList"
+        android:id="@+id/pageScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,8 +17,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp"
+            android:layout_height="124dp"
             android:background="@drawable/bottom_border">
+
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image"
@@ -28,80 +29,89 @@
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.487"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
                 app:shapeAppearanceOverlay="@style/roundedImageView" />
+
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/transparent"
+                android:src="@drawable/baseline_edit_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            tools:ignore="ExtraText"
+            android:background="@drawable/bottom_border">
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="124dp"
+                android:fontFamily="@font/k2d"
                 android:text="Juan"
+                android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/saveChanges"
-                app:layout_constraintEnd_toEndOf="@+id/image"
-                app:layout_constraintHorizontal_bias="0.507"
-                app:layout_constraintStart_toStartOf="@+id/image"
-                app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="0.0" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/universityName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:fontFamily="@font/k2d"
+                android:gravity="center_vertical"
                 android:text="Enrolled at: [University]"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/saveChanges"
-                app:layout_constraintEnd_toEndOf="@+id/name"
-                app:layout_constraintStart_toStartOf="@+id/name"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
+                android:textColor="@color/black"
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/saveChanges"
-                android:layout_width="88dp"
-                android:layout_height="28dp"
+                android:id="@+id/followActionButton"
+                android:layout_marginTop="15dp"
+                android:padding="5dp"
+                android:layout_marginBottom="15dp"
+                android:layout_width="120dp"
+                android:layout_height="33dp"
                 android:background="#C82424"
-                android:text="Follow"
+                android:text="FOLLOW"
                 android:textColor="#FFFFFF"
-                android:textSize="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="0.971" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textSize="20dp" />
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-            <TextView
-                android:id="@+id/Following"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Following"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/Following"
+            android:fontFamily="@font/k2d"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Following" />
+
         <HorizontalScrollView
+            android:id="@+id/listFollowing"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bottom_border">
 
 
-
             <LinearLayout
+                android:id = "@+id/listFollowingLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -117,6 +127,10 @@
 
             <TextView
                 android:id="@+id/Followers"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/k2d"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Followers"
@@ -128,13 +142,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <HorizontalScrollView
+            android:id="@+id/listFollowers"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bottom_border">
 
 
-
             <LinearLayout
+                android:id="@+id/listFollowersLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -151,6 +166,10 @@
 
             <TextView
                 android:id="@+id/textView"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/k2d"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recents"
@@ -163,6 +182,8 @@
 
             <TextView
                 android:id="@+id/textView4"
+                android:fontFamily="@font/k2d"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Reviews"
@@ -177,12 +198,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
+            android:id="@+id/listReviews"
             android:layout_width="match_parent"
-            android:layout_height="100dp" >
-
+            android:layout_height="wrap_content">
 
 
             <LinearLayout
+                android:id="@+id/listReviewsLinear"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">

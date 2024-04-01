@@ -53,7 +53,7 @@ public class UserRepository {
         
         public async Task<Professor> GetProfessorAndConnectedData(int id)
             => await dbContext.Professors.Where(i => i.Id == id)
-                .Include(i => i.AssignedCourses)
+                .Include(i => i.AssignedCourses)!
                 .ThenInclude(i => i.Course)
                 .ThenInclude(i => i.University)
                 .FirstAsync(); 
@@ -87,7 +87,7 @@ public class UserRepository {
 
         public async Task UnfollowStudent(int unfollowingStudentId, int unfollowedStudentId)
         {
-            dbContext.Follows.Remove(dbContext.Follows.Where(i => i.FollowingStudentId == unfollowingStudentId  && i.FollowedStudentId == unfollowedStudentId).First());
+            dbContext.Follows.Remove(dbContext.Follows.First(i => i.FollowingStudentId == unfollowingStudentId  && i.FollowedStudentId == unfollowedStudentId));
             await dbContext.SaveChangesAsync();
         }
 
@@ -154,4 +154,7 @@ public class UserRepository {
             }
             
         }
-    }
+        public async Task<List<University>> GetUniversities()
+            => await dbContext.Universities.ToListAsync();
+}
+

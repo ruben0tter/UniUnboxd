@@ -94,6 +94,7 @@
             <TextView
                 android:id="@+id/courseCode"
                 android:layout_width="wrap_content"
+                android:maxWidth="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="[Course Code]"
@@ -110,6 +111,7 @@
                 android:layout_marginStart="10dp"
                 android:textColor="@color/black"
                 android:layout_width="wrap_content"
+                android:maxWidth="300dp"
                 android:layout_height="wrap_content"
                 android:text="[University]"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -122,6 +124,7 @@
             <TextView
                 android:id="@+id/professor"
                 android:layout_width="wrap_content"
+                android:maxWidth="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:text="[Professor]"
@@ -138,7 +141,7 @@
                 android:layout_marginStart="10dp"
                 android:textColor="@color/black"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:text="[Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.]"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -158,6 +161,7 @@
             android:text="Ratings"
             android:textSize="18sp"
             android:textStyle="bold" />
+
 
         <LinearLayout
             android:layout_marginTop="10dp"
@@ -211,7 +215,6 @@
                 android:layout_marginBottom="5dp"
                 android:text="Anonymous"
                 android:textColor="@color/black"
-
                 android:textSize="14sp" />
 
             <RatingBar
@@ -238,23 +241,36 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:textColor="@color/black"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reviewed by"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bottom_border">
+            </LinearLayout>
+
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:background="@drawable/bottom_border">
-
-        </LinearLayout>
 
         <TextView
             android:textColor="@color/black"
@@ -267,11 +283,73 @@
             android:textStyle="bold"/>
 
         <LinearLayout
-            android:id="@+id/yourReviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:visibility="visible"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Everyone"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.003"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:text="Your Review"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.284"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveChanges"
+                android:layout_width="131dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="60dp"
+                android:background="#C82424"
+                android:text="Write Review"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.871"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4"
+                app:layout_constraintVertical_bias="1.0" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bottom_border">
         </LinearLayout>
 
         <LinearLayout

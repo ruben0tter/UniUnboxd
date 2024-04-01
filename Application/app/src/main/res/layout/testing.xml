@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,251 +8,160 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/homeHeader"
+        <TextView
+            android:id="@+id/courseName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/k2d"
+            android:text="[Course Name]"
+            android:textColor="#000000"
+            android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintEnd_toStartOf="@+id/courseImage"
+            app:layout_constraintHorizontal_bias="0.133"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.018">
-
-            <ImageView
-                android:id="@+id/app_logo"
-                android:layout_width="52dp"
-                android:layout_height="46dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/app_logo" />
-
-            <TextView
-                android:id="@+id/app_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/k2d"
-                android:text="UniUnboxd"
-                android:textColor="@color/TUeRed"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/app_logo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/app_logo"
-                app:layout_constraintTop_toTopOf="@id/app_logo"
-                app:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintVertical_bias="0.125" />
 
         <TextView
-            android:id="@+id/signOut"
+            android:id="@+id/courseCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_red"
             android:fontFamily="@font/k2d"
-            android:text="Sign Out"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="13sp"
-            android:gravity="center"
-            android:padding="3dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="@+id/homeHeader"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.66"
-            app:layout_constraintStart_toEndOf="@+id/homeHeader"
-            app:layout_constraintTop_toTopOf="@+id/homeHeader"
-            app:layout_constraintVertical_bias="0.5" />
-
-        <View
-            android:id="@+id/line_separator_bottom"
-            android:layout_width="330dp"
-            android:layout_height="1.5dp"
-            android:background="@color/red"
+            android:text="[Course Code]"
+            android:textColor="#000000"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_separator"
-            app:layout_constraintVertical_bias="0.33" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/courseName"
+            app:layout_constraintTop_toBottomOf="@+id/courseName"
+            app:layout_constraintVertical_bias="0.0" />
 
-        <View
-            android:id="@+id/line_separator"
-            android:layout_width="330dp"
-            android:layout_height="1.5dp"
-            android:background="@color/red"
+        <ImageView
+            android:id="@+id/courseImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginEnd="28dp"
+            android:src="@drawable/app_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homeHeader"
-            app:layout_constraintVertical_bias="0.013" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.081" />
 
+        <View
+            android:id="@+id/line"
+            android:layout_width="330dp"
+            android:layout_height="1dp"
+            android:background="#C82424"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/courseImage"
+            app:layout_constraintVertical_bias="0.034" />
 
         <TextView
-            android:id="@+id/popular_courses_text"
+            android:id="@+id/ratingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:fontFamily="@font/k2d"
-            android:text="Popular Courses"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
+            android:text="Rating"
+            android:textColor="#000000"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_separator"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/line"
+            app:layout_constraintVertical_bias="0.05" />
 
-        <TextView
-            android:id="@+id/new_from_friends"
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="235dp"
+            android:layout_height="50dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:theme="@style/RatingBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.45"
+            app:layout_constraintStart_toEndOf="@+id/ratingText"
+            app:layout_constraintTop_toBottomOf="@+id/line"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <EditText
+            android:id="@+id/comment"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
+            android:background="@drawable/edit_text_field"
+            android:gravity="top"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rating"
+            app:layout_constraintVertical_bias="0.075" />
+
+        <CheckBox
+            android:id="@+id/isAnonymous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
             android:fontFamily="@font/k2d"
-            android:text="New From Friends"
-            android:textColor="@color/black"
-            android:textSize="25dp"
+            android:text="Post Anonymously"
+            android:theme="@style/MyCheckBox"
+            android:textSize="15sp"
+            android:buttonTint="@color/light_grey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.22"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/comment"
+            app:layout_constraintVertical_bias="0.094" />
+
+        <Button
+            android:id="@+id/postButton"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="52dp"
+            android:background="@drawable/button_red"
+            android:fontFamily="@font/k2d"
+            android:padding="5dp"
+            android:text="Post Review"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/isAnonymous"
+            app:layout_constraintVertical_bias="0.403" />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:background="@drawable/button_red"
+            android:fontFamily="@font/k2d"
+            android:padding="5dp"
+            android:text="Delete Review"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.158"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <View
-            android:id="@+id/line_separator_bottom_2"
-            android:layout_width="330dp"
-            android:layout_height="1.5dp"
-            android:background="@color/red"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_separator"
-            app:layout_constraintVertical_bias="0.7" />
-
-        <TextView
-            android:id="@+id/popular_with_friends"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/k2d"
-            android:text="Popular With Friends"
-            android:textColor="@color/black"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.195"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line_separator_bottom_2"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/line_separator_bottom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popular_courses_text">
-
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.00">
-
-                <LinearLayout
-                    android:id="@+id/popularCourses"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/line_separator_bottom_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/new_from_friends">
-
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.00">
-
-                <LinearLayout
-                    android:id="@+id/newFromFriends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/popular_with_friends">
-
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scrollbars="none"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.00">
-
-                <LinearLayout
-                    android:id="@+id/popularCoursesWithFriends"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal" />
-            </HorizontalScrollView>
-
-        </LinearLayout>
-
+            app:layout_constraintHorizontal_bias="0.441"
+            app:layout_constraintStart_toEndOf="@+id/postButton"
+            app:layout_constraintTop_toBottomOf="@+id/isAnonymous"
+            app:layout_constraintVertical_bias="0.402" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,9 +24,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.API.UserController;
+import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.models.student.StudentEditModel;
+import com.example.uniunboxd.models.student.UniversityNameModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.ImageHandler;
 
@@ -34,10 +38,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentEditFragment extends Fragment {
 
+    private ArrayList<String> UniversityNames = new ArrayList<>();
     private StudentEditModel Model;
+    private List<byte[]> file = new ArrayList<>();
+
+    private List<UniversityNameModel> Universities;
 
     public StudentEditFragment(StudentEditModel studentEditModel) {
         Model = studentEditModel;
@@ -53,6 +63,32 @@ public class StudentEditFragment extends Fragment {
         EditText name = view.findViewById(R.id.name);
         ImageView editImageBtn = view.findViewById(R.id.editImageBtn);
         Button saveChangesBtn = view.findViewById(R.id.saveChanges);
+        Button uploadBtn = view.findViewById(R.id.upload);
+        Button verifyBtn = view.findViewById(R.id.getVerified);
+        AutoCompleteTextView universitySearch = view.findViewById(R.id.universityAutoCompleteTextView);
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Universities = UserController.GetUniversities(getActivity());
+                    for(UniversityNameModel x : Universities){
+                        UniversityNames.add(x.Name);
+                    }
+                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, UniversityNames);
+                    (getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            universitySearch.setAdapter(arrayAdapter);
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.e("ERR", "Could not get universities.");
+                }
+            }
+        });
+
+
 
         name.setText(Model.Name);
 
@@ -111,10 +147,66 @@ public class StudentEditFragment extends Fragment {
             }
         });
 
+        uploadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileSystemChooser.ChoosePDF(f, 3);
+            }
+        });
+
+        verifyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            String universityName = universitySearch.getText().toString();
+                            int id = -1;
+                            for(UniversityNameModel university : Universities) {
+                                if(university.Name.equals(universityName)) {
+                                    id = university.Id;
+                                    break;
+                                }
+                            }
+                            if(id == -1){
+                                return;
+                            }
+                            HttpURLConnection con = VerificationController.sendApplication(file, id, getActivity());
+                            if(con.getResponseCode() != 200){
+                                BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                                StringBuilder st = new StringBuilder();
+                                String line;
+                                while((line = br.readLine()) != null)
+                                    st.append(line);
+                                Log.e("DEB", "" + st);
+                                return;
+                            }
+                            Model.VerificationStatus = 1;
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    view.findViewById(R.id.verification).setVisibility(View.GONE);
+                                    view.findViewById(R.id.verificationBox).setVisibility(View.GONE);
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+            }
+        });
+
         SetUpNotificationSettings(view);
 
+        if(Model.VerificationStatus != 0){
+            view.findViewById(R.id.verification).setVisibility(View.GONE);
+            view.findViewById(R.id.verificationBox).setVisibility(View.GONE);
+        }
 
-        //TODO: set verification
         return view;
     }
 
@@ -130,7 +222,17 @@ public class StudentEditFragment extends Fragment {
             cameraImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             Model.Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        } else {
+        }
+        else if (requestCode == 3){
+            Uri uri = data.getData();
+            try {
+                file.add(FileSystemChooser.readTextFromUri(uri, getActivity()));
+            } catch (IOException e) {
+                //TODO: deal with this better
+                throw new RuntimeException(e);
+            }
+        }
+        else {
             Uri uri = data.getData();
 
             byte[] bitmapdata = null;
@@ -143,6 +245,7 @@ public class StudentEditFragment extends Fragment {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
             image.setImageBitmap(bitmap);
         }
+
     }
 
     private void SetUpNotificationSettings(View view){

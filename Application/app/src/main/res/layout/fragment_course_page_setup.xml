@@ -7,13 +7,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/courseSetup"
@@ -205,18 +201,37 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/k2d"/>
 
-        <EditText
-            android:id="@+id/SelectedProf"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_field"
-            android:hint="juan@gmail.com"
-            android:padding="10dp"
-            android:textSize="18sp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/k2d"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/SelectedProf"
+                android:layout_width="235dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_field"
+                android:fontFamily="@font/k2d"
+                android:hint="juan@gmail.com"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/searchButton"
+                android:layout_width="46dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="60dp"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="delete"
+                android:focusable="true"
+                android:src="@drawable/baseline_search_24"/>
+
+        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/assignedProfessorsList"
             android:layout_width="match_parent"
             android:layout_height="79dp"
             android:orientation="vertical"/>
@@ -224,7 +239,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/deleteCourse"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Delete course?"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/k2d" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="46dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="60dp"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="delete"
+                android:focusable="true"
+                android:src="@drawable/baseline_delete_24"/>
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/saveChanges"
@@ -234,69 +272,10 @@
             android:text="SAVE CHANGES"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.095"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.972" />
-
-        <ImageButton
-            android:id="@+id/searchButton"
-            android:layout_width="60dp"
-            android:layout_height="52dp"
-            android:layout_marginEnd="60dp"
-            android:backgroundTint="@android:color/transparent"
-            android:clickable="true"
-            android:contentDescription="delete"
-            android:focusable="true"
-            android:src="@drawable/baseline_search_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/courseName_courseDescription_edit"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.809" />
-
-        <ImageView
-
-            android:id="@+id/deleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:contentDescription="delete"
-            android:focusable="true"
             android:padding="10dp"
-            android:src="@drawable/baseline_delete_24"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/saveChanges"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/saveChanges"
-            app:layout_constraintTop_toTopOf="@+id/saveChanges"
-            app:layout_constraintVertical_bias="0.583" />
-
-        <LinearLayout
-            android:layout_width="360dp"
-            android:layout_height="79dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.899">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/assignedProfessorsList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
-        </LinearLayout>
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="@font/k2d"/>
 
     </LinearLayout>
 </ScrollView>

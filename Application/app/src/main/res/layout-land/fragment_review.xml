@@ -153,12 +153,11 @@
 
             <TextView
                 android:id="@+id/profileName"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="@font/k2d"
-                android:gravity="center"
                 android:text="[Review Author]"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -186,12 +185,11 @@
 
             <TextView
                 android:id="@+id/courseName"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="@font/k2d"
-                android:gravity="center"
                 android:text="[Course Name]"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -237,7 +235,7 @@
 
             <TextView
                 android:id="@+id/reviewComment"
-                android:layout_width="350dp"
+                android:layout_width="600dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/k2d"
                 android:text="[Comment] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since."
