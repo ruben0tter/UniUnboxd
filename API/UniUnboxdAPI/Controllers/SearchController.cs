@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Services;
+using UniUnboxdAPI.Utilities;
 
 public class SearchOptions {
     public string Search { get; set; } = "";
@@ -26,6 +27,14 @@ namespace UniUnboxdAPI.Controllers
             if (query.Search == "") {
                 return BadRequest("Search query cannot be empty");
             }
+
+            string role = JWTValidation.GetRole(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (role == "University") {
+                int uniUserID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+                query.UniversityId = uniUserID;
+            }
+
             var courses = await searchService.GetCourses(query);
 
             if (courses == null) {
