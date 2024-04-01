@@ -44,8 +44,11 @@ public class UserSearchResult extends SearchResult{
     public View createView(LayoutInflater inflater, Activity activity) {
         View view = inflater.inflate(R.layout.search_result_user, null);
 
-        view.setOnClickListener(l -> {
-            ((IActivity) activity).replaceFragment(new StudentProfileFragment(Id), true);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((IActivity) activity).replaceFragment(new StudentProfileFragment(Id), true);
+            }
         });
 
         ((TextView) view.findViewById(R.id.username)).setText(UserName);

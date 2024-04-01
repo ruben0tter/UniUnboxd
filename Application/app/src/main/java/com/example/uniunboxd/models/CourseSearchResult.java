@@ -37,7 +37,7 @@ public class CourseSearchResult extends SearchResult{
                               @JsonProperty("professor") String professor,
                               @JsonProperty("image") String image,
                               @JsonProperty("anonymousRating") int anonRating,
-                              @JsonProperty("nonAnonymousRating") int nonaRating) {
+                              @JsonProperty("nonanonymousRating") int nonaRating) {
         Id = id;
         Name = name;
         Code = code;

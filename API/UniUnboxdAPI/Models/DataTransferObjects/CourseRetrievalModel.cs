@@ -14,6 +14,7 @@ public class CourseRetrievalModel
     public double AnonymousRating { get; set; }
     public double NonanonymousRating { get; set; }
     public ICollection<CourseReviewModel>? Reviews { get; set; }
+    public CourseReviewModel? YourReview { get; set; }
     public ICollection<int>? AssignedProfessors { get; set; }
     
     public ICollection<StudentGridModel>? FriendsThatReviewed { get; set; }

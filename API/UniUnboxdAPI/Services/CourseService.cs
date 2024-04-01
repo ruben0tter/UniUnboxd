@@ -143,7 +143,8 @@ namespace UniUnboxdAPI.Services
                 UniversityId = course.University.Id,
                 UniversityName = course.University.UserName,
                 AssignedProfessors = course.AssignedProfessors.Select(x => x.ProfessorId).ToList(),
-                FriendsThatReviewed = null
+                FriendsThatReviewed = null,
+                YourReview = null
             };
         
         private CourseReviewModel CreateCourseReviewModel(Review review, int courseId) 

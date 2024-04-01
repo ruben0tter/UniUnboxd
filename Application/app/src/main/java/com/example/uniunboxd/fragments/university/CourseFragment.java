@@ -62,7 +62,7 @@ public class CourseFragment extends Fragment {
         }
 
         if (Course != null) {
-            view = Course.createView(inflater, container, savedInstanceState);
+            view = Course.createView(inflater, container, getActivity());
 
             Button loadBtn = (Button) view.findViewById(R.id.load);
             LinearLayout reviewList = view.findViewById(R.id.reviewList);
@@ -95,10 +95,6 @@ public class CourseFragment extends Fragment {
                 visualiseReviews(inflater, container, reviewListView);
             } catch (Exception e) {
                 Log.e("APP", e.toString());
-            }
-
-            for (StudentListItem reviewer : Course.FriendsThatReviewed) {
-                reviewedBy.addView(reviewer.createView(inflater, container, getActivity()));
             }
         });
     }

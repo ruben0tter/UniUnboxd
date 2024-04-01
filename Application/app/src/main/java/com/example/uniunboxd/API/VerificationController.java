@@ -25,6 +25,7 @@ public class VerificationController {
         try {
             HttpURLConnection con = APIClient.get("verify/pending?startID=" + startID, JWTValidation.getToken(f));
 
+            Log.d("BRUH", con.getResponseCode() + "");
             String body = APIClient.readStream(con.getInputStream());
 
             Log.d("APP", body);

@@ -102,6 +102,7 @@ public class SearchUniversityFragment extends Fragment {
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            // TODO: Make it so we forget query
                             ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
                         }
                     });

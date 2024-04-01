@@ -3,6 +3,7 @@ package com.example.uniunboxd.fragments.student;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -41,7 +44,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private boolean isReviewLiked = false;
 
     private ConstraintLayout reviewPage;
-    private ConstraintLayout repliesPage;
+    private NestedScrollView repliesPage;
     private LinearLayout replies;
 
     private TextView reviewTab;
