@@ -78,7 +78,7 @@ namespace UniUnboxdAPI.Controllers
 
                 await reviewService.PostReview(review);
 
-                await reviewService.UpdateAverageRatingAfterPost(review.Course.Id, review.Rating);
+                await reviewService.UpdateAverageRatingAfterPost(review.Course.Id, review.Rating, review.IsAnonymous);
 
                 reviewService.NotifyFollowers(review);
 
@@ -116,12 +116,13 @@ namespace UniUnboxdAPI.Controllers
             try
             {
                 double oldRating = review.Rating;
+                bool oldIsAnon = review.IsAnonymous;
 
                 reviewService.UpdateReview(review, model);
 
                 await reviewService.PutReview(review);
 
-                await reviewService.UpdateAverageRatingAfterPut(review.Course.Id, review.Rating, oldRating);
+                await reviewService.UpdateAverageRatingAfterPut(review.Course.Id, review.Rating, oldRating, review.IsAnonymous, oldIsAnon);
 
                 return Ok("Successfully updated review.");
             }
@@ -196,9 +197,10 @@ namespace UniUnboxdAPI.Controllers
 
             try
             {
+                bool oldIsAnon = review.IsAnonymous;
                 await reviewService.DeleteReview(review);
 
-                await reviewService.UpdateAverageRatingAfterDelete(review.Course.Id, review.Rating);
+                await reviewService.UpdateAverageRatingAfterDelete(review.Course.Id, review.Rating, oldIsAnon);
 
                 return Ok("Successfully deleted review.");
             }

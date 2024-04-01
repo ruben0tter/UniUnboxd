@@ -7,9 +7,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -18,6 +21,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,6 +46,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentEditFragment extends Fragment {
+
+    private static int CAMERA_CODE = 1;
+    private static int IMAGE_PICKER_CODE = 2;
+    private static int FILE_PICKER_CODE = 3;
 
     private ArrayList<String> UniversityNames = new ArrayList<>();
     private StudentEditModel Model;
@@ -98,23 +106,38 @@ public class StudentEditFragment extends Fragment {
         if (fileSystemPermission != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
 
+        PopupMenu dropDownMenu = new PopupMenu(getActivity(), editImageBtn);
+        Menu menu = dropDownMenu.getMenu();
+        menu.add(0, 0, 0, "Camera");
+        menu.add(0,1,0,"Files");
 
         Fragment f = this;
+        dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case 0:
+                        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 1);
+
+                        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_DENIED) {
+                            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(cameraIntent, CAMERA_CODE);
+                        }
+                        return true;
+                    case 1:
+                        FileSystemChooser.ChooseImage(f, IMAGE_PICKER_CODE);
+                        return true;
+                }
+                return false;
+            }
+        });
+
         editImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 1);
-
-                if(ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
-                        != PackageManager.PERMISSION_DENIED)
-                {
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, 1);
-                }
-//                if(fileSystemPermission != PackageManager.PERMISSION_GRANTED){
-//                    FileSystemChooser.ChooseImage(f, 7);
-//                }
+                dropDownMenu.show();
             }
         });
 
@@ -214,7 +237,7 @@ public class StudentEditFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ImageView image = this.getView().findViewById(R.id.image);
-        if (requestCode == 1) {
+        if (requestCode == CAMERA_CODE) {
             Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
             image.setImageBitmap(cameraImage);
 
@@ -223,16 +246,19 @@ public class StudentEditFragment extends Fragment {
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             Model.Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
         }
-        else if (requestCode == 3){
+        else if (requestCode == FILE_PICKER_CODE){
             Uri uri = data.getData();
             try {
+                //null file, so that it only keeps the most recent.
+                if(file.size() > 0)
+                    file = new ArrayList<>();
                 file.add(FileSystemChooser.readTextFromUri(uri, getActivity()));
             } catch (IOException e) {
                 //TODO: deal with this better
                 throw new RuntimeException(e);
             }
         }
-        else {
+        else if (requestCode == IMAGE_PICKER_CODE){
             Uri uri = data.getData();
 
             byte[] bitmapdata = null;

@@ -71,7 +71,6 @@ namespace UniUnboxdAPI.Services
             => await userRepository.DoesStudentExist(studentId);
 
         
-        //TODO: Change the implementations to use the method in the course service.
         /// <summary>
         /// Check whether there exists a course with the provided id.
         /// </summary>
@@ -168,8 +167,8 @@ namespace UniUnboxdAPI.Services
         /// <param name="courseId">Provided course id.</param>
         /// <param name="rating">Provided new rating.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
-        public async Task UpdateAverageRatingAfterPost(int courseId, double rating)
-            => await courseRepository.UpdateAverageRatingAfterPost(courseId, rating);
+        public async Task UpdateAverageRatingAfterPost(int courseId, double rating, bool isAnon)
+            => await courseRepository.UpdateAverageRatingAfterPost(courseId, rating, isAnon);
 
         /// <summary>
         /// Gets a Review object that is attached to the provided id.
@@ -242,7 +241,7 @@ namespace UniUnboxdAPI.Services
         /// <param name="addedRating">Provided new rating.</param>
         /// <param name="removedRating">Provided old rating.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
-        public async Task UpdateAverageRatingAfterPut(int courseId, double addedRating, double removedRating)
+        public async Task UpdateAverageRatingAfterPut(int courseId, double addedRating, double removedRating, bool addedRatingIsAnon, bool removedRatingIsAnon)
             => await courseRepository.UpdateAverageRatingAfterPut(courseId, addedRating, removedRating);
 
         /// <summary>
@@ -259,8 +258,8 @@ namespace UniUnboxdAPI.Services
         /// <param name="courseId">Provided course id.</param>
         /// <param name="removedRating">Provided removed rating.</param>
         /// <returns>No object or value is returned by this method when it completes.</returns>
-        public async Task UpdateAverageRatingAfterDelete(int courseId, double removedRating)
-            => await courseRepository.UpdateAverageRatingAfterDelete(courseId, removedRating);
+        public async Task UpdateAverageRatingAfterDelete(int courseId, double removedRating, bool isAnon)
+            => await courseRepository.UpdateAverageRatingAfterDelete(courseId, removedRating, isAnon);
 
         private static ReviewPageModel CreateReviewPageModel(Review review)
             => new()

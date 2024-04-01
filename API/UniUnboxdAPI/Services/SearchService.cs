@@ -56,7 +56,8 @@ namespace UniUnboxdAPI.Services
                 UniversityId = course.University?.Id ?? -1,
                 Professor = course.Professor,
                 Image = course.Image,
-                AverageRating = course.AverageRating
+                AnonymousRating = course.AnonymousRating,
+                NonanonymousRating = course.NonanonymousRating
             };
         }
 

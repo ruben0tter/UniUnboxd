@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -140,11 +139,11 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         int id = view.getId();
         if (id == R.id.saveChanges) {
             //TODO: fix these ID's
-            ConstraintLayout layout = (ConstraintLayout) view.getParent();
-            EditText name = (EditText) layout.getViewById(R.id.courseName_courseName_edit);
-            EditText code = (EditText) layout.getViewById(R.id.courseName_courseCode_edit);
-            EditText description = (EditText) layout.getViewById(R.id.courseDescription_edit);
-            EditText professor = (EditText) layout.getViewById(R.id.courseName_courseDescription_edit);
+            LinearLayout layout = (LinearLayout) view.getParent();
+            EditText name = (EditText) layout.findViewById(R.id.courseName_courseName_edit);
+            EditText code = (EditText) layout.findViewById(R.id.courseName_courseCode_edit);
+            EditText description = (EditText) layout.findViewById(R.id.courseDescription_edit);
+            EditText professor = (EditText) layout.findViewById(R.id.courseName_courseDescription_edit);
 
             AsyncTask.execute(new Runnable() {
                 @Override
@@ -190,9 +189,10 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                 }
 
             });
-        } else if (id == R.id.courseImage_edit) {
+        }
+        else if (id == R.id.courseImage_edit) {
             FileSystemChooser.ChooseImage(f, imageCode);
-        } else if (id == R.id.unassign_professor_button) {
+        } else if (id == R.id.courseBanner_edit) {
             FileSystemChooser.ChooseImage(f, bannerCode);
         } else if (id == R.id.deleteButton) {
             if (Course != null) {
@@ -216,7 +216,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
         }
         else if (id == R.id.searchButton) {
-            ConstraintLayout layout = (ConstraintLayout) view.getParent();
+            LinearLayout layout = (LinearLayout) view.getParent();
             EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
             String email = professorToAssign.getText().toString();
             AsyncTask.execute(new Runnable() {
@@ -228,7 +228,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT);
+                                    Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show();
                                 }
                             });
                             return;
@@ -236,8 +236,12 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                if(assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
+                                    Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 assignedProfessors.add(assignedProfessorModel);
-                                LinearLayout assignedProfessorsList = layout.findViewById(R.id.assignedProfessorsList);
+                                LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
                                 assignedProfessorsList.addView( assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
                             }
                         });
