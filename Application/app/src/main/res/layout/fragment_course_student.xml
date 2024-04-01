@@ -229,7 +229,7 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/everyone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Everyone"
@@ -241,7 +241,7 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/yourReview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Your Review"

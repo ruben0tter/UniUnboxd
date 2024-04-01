@@ -2,6 +2,7 @@ package com.example.uniunboxd.fragments.university;
 
 import static android.view.View.GONE;
 
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -32,6 +34,9 @@ import java.util.concurrent.ExecutionException;
 public class CourseFragment extends Fragment{
 
     private final int ID;
+
+    TextView yourReview;
+    TextView everyone;
     private final int NUM_REVIEWS_TO_LOAD = 5;
     public CourseRetrievalModel Course = null;
 
@@ -83,6 +88,25 @@ public class CourseFragment extends Fragment{
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
             if(role.equals("Student") || !Course.AssignedProfessors.contains(userId))
                 editBtn.setVisibility(GONE);
+
+            yourReview = view.findViewById(R.id.yourReview);
+            yourReview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    everyone.setTypeface(Typeface.DEFAULT);
+                    yourReview.setTypeface(Typeface.DEFAULT_BOLD);
+                    // TODO: Rerender.
+                }
+            });
+            everyone = view.findViewById(R.id.everyone);
+            everyone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    everyone.setTypeface(Typeface.DEFAULT_BOLD);
+                    yourReview.setTypeface(Typeface.DEFAULT);
+                    // TODO: Rerender.
+                }
+            });
         }
         return view;
     }
@@ -98,16 +122,7 @@ public class CourseFragment extends Fragment{
                 try {
                     List<ReviewListItem> newReviews = ReviewController.getReviewListItems(lastID, Course.Id, 5, getActivity());
                     Course.Reviews.addAll(newReviews);
-                    for (ReviewListItem item : newReviews) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-
-                            public void run() {
-                                View appView = item.createView(inflater, container);
-                                reviewListView.addView(appView);
-                            }
-                        });
-                    }
+                    visualiseReviews(inflater, container, reviewListView);
                 } catch (Exception e) {
                     Log.e("APP", e.toString());
                 }
@@ -117,6 +132,19 @@ public class CourseFragment extends Fragment{
                 }
             }
         });
+    }
+
+    private void visualiseReviews(LayoutInflater inflater, ViewGroup container, LinearLayout reviewListView) {
+        for (ReviewListItem item : Course.Reviews) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+
+                public void run() {
+                    View appView = item.createView(inflater, container);
+                    reviewListView.addView(appView);
+                }
+            });
+        }
     }
 
     class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
