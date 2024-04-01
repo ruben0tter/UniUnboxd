@@ -236,7 +236,8 @@ namespace UniUnboxdAPI.Services
                 => new()
                 {
                     Id = course.Id,
-                    Rating = course.AverageRating,
+                    AnonymousRating = course.AnonymousRating,
+                    NonanonymousRating = course.NonanonymousRating,
                     Name = course.Name,
                     Code = course.Code,
                     Professor = course.Professor,

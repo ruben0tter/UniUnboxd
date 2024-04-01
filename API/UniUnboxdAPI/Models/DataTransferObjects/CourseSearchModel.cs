@@ -9,5 +9,6 @@ public class CourseSearchModel
     public required int UniversityId { get; set; }
     public required string Professor { get; set; }
     public string? Image { get; set; }
-    public double AverageRating { get; set; }
+    public double AnonymousRating { get; set; }
+    public double NonanonymousRating { get; set; }
 }

@@ -40,26 +40,61 @@ namespace UniUnboxdAPI.Repositories
             
         }
 
-        public async Task UpdateAverageRatingAfterPost(int id, double addedRating)
+        public async Task UpdateAverageRatingAfterPost(int id, double addedRating, bool isAnon)
         {
             var course = await GetCourse(id);
-            var reviewCount = await dbContext.Reviews.Where(i => i.Course.Id == id).CountAsync();
-            course.AverageRating = ((reviewCount - 1) * course.AverageRating + addedRating) / reviewCount;
+            var reviewAnonCount = await dbContext.Reviews.Where(i => i.Course.Id == id && i.IsAnonymous).CountAsync();
+            var reviewNonanonCount = await dbContext.Reviews.Where(i => i.Course.Id == id && !i.IsAnonymous).CountAsync();
+            if (isAnon)
+                course.AnonymousRating =
+                    ((reviewAnonCount - 1) * course.AnonymousRating + addedRating) / reviewAnonCount;
+            else
+                course.NonanonymousRating = ((reviewNonanonCount - 1) * course.NonanonymousRating + addedRating) /
+                                            reviewNonanonCount;
             await dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateAverageRatingAfterPut(int id, double addedRating, double removedRating)
         {
             var course = await GetCourse(id);
-            var reviewCount = await dbContext.Reviews.Where(i => i.Course.Id == id).CountAsync();
-            course.AverageRating = (reviewCount * course.AverageRating - removedRating + addedRating) / reviewCount;
+            double reviewAnonSum = 0;
+            double reviewNonanonSum = 0;
+            int reviewAnonCount = 0;
+            int reviewNonanonCount = 0;
+            
+            foreach (var x in dbContext.Reviews.Include(i => i.Course))
+            {
+                if (x.Course.Id != id)
+                    continue;
+                if (x.IsAnonymous)
+                {
+                    reviewAnonCount++;
+                    reviewAnonSum += x.Rating;
+                    continue;
+                }
+                reviewNonanonCount++;
+                reviewNonanonSum += x.Rating;
+            }
+
+            course.AnonymousRating = reviewAnonSum / reviewAnonCount;
+            course.NonanonymousRating = reviewNonanonSum / reviewNonanonCount;
+                
             await dbContext.SaveChangesAsync();
         }
-        public async Task UpdateAverageRatingAfterDelete(int id, double removedRating)
+        public async Task UpdateAverageRatingAfterDelete(int id, double removedRating, bool isAnon)
         {
             var course = await GetCourse(id);
-            var reviewCount = await dbContext.Reviews.Where(i => i.Course.Id == id).CountAsync();
-            course.AverageRating = reviewCount > 0 ? ((reviewCount + 1) * course.AverageRating - removedRating) / reviewCount : 0.0;
+            var reviewAnonCount = await dbContext.Reviews.Where(i => i.Course.Id == id && i.IsAnonymous).CountAsync();
+            var reviewNonanonCount = await dbContext.Reviews.Where(i => i.Course.Id == id && !i.IsAnonymous).CountAsync();
+            if (isAnon)
+                course.AnonymousRating = reviewAnonCount > 0
+                    ? ((reviewAnonCount + 1) * course.AnonymousRating - removedRating) / reviewAnonCount
+                    : 0.0;
+            else
+                course.NonanonymousRating = reviewNonanonCount > 0
+                    ? ((reviewNonanonCount + 1) * course.NonanonymousRating - removedRating) / reviewNonanonCount
+                    : 0.0;
+            
             await dbContext.SaveChangesAsync();
         }
 

@@ -86,7 +86,7 @@ public class CourseFragment extends Fragment{
             });
             String role = JWTValidation.getTokenProperty(getActivity(), "typ");
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-            if(role.equals("Student") || !Course.AssignedProfessors.contains(userId))
+            if(role.equals("Student") || (role.equals("Professor") && !Course.AssignedProfessors.contains(userId)))
                 editBtn.setVisibility(GONE);
 
             yourReview = view.findViewById(R.id.yourReview);

@@ -25,6 +25,8 @@ public class CourseRetrievalModel {
     public final int Id;
     public final String Name;
     public final String Code;
+    public final double AnonymousRating;
+    public final double NonanonymousRating;
     public final String Description;
     public final String Professor;
     public final String Image;
@@ -37,7 +39,8 @@ public class CourseRetrievalModel {
 
     @JsonCreator
     public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name")String name,
-                                @JsonProperty("code") String code, @JsonProperty("description") String description,
+                                @JsonProperty("code") String code, @JsonProperty("anonymousRating") double anonymousRating,
+                                @JsonProperty("nonanonymousRating") double nonanonymousRating, @JsonProperty("description") String description,
                                 @JsonProperty("professor") String professor, @JsonProperty("image") String image,
                                 @JsonProperty("banner") String banner, @JsonProperty("universityId") int universityId,
                                 @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName,
@@ -46,6 +49,8 @@ public class CourseRetrievalModel {
         Id = id;
         Name = name;
         Code = code;
+        AnonymousRating = anonymousRating;
+        NonanonymousRating = nonanonymousRating;
         Description = description;
         Professor = professor;
         Image = image;
