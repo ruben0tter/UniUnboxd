@@ -192,7 +192,7 @@
             android:fontFamily="@font/k2d"/>
 
         <TextView
-            android:id="@+id/selectedProfessor_courseSetup"
+            android:id="@+id/selectedProfessorLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select Professor"
@@ -201,18 +201,37 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/k2d"/>
 
-        <EditText
-            android:id="@+id/SelectedProf"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_field"
-            android:hint="juan@gmail.com"
-            android:padding="10dp"
-            android:textSize="18sp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/k2d"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/SelectedProf"
+                android:layout_width="235dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_field"
+                android:fontFamily="@font/k2d"
+                android:hint="juan@gmail.com"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/searchButton"
+                android:layout_width="46dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="60dp"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="delete"
+                android:focusable="true"
+                android:src="@drawable/baseline_search_24"/>
+
+        </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/assignedProfessorsList"
             android:layout_width="match_parent"
             android:layout_height="79dp"
             android:orientation="vertical"/>

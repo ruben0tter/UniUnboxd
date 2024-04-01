@@ -71,7 +71,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
                 android:layout_width="202dp"
-                android:layout_height="37dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_field"
                 android:hint="current name"
                 android:paddingStart="10dp"
@@ -147,9 +147,9 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_email_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/checkbox_example1"
                 app:layout_constraintHorizontal_bias="0.633"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_example1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -163,9 +163,9 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_phone_iphone_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/checkbox_example2"
                 app:layout_constraintHorizontal_bias="0.847"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/checkbox_example2"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -316,30 +316,30 @@
 
             <AutoCompleteTextView
                 android:id="@+id/universityAutoCompleteTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:hint="Enter university name"
                 android:inputType="text"
                 android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.069"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.66" />
+                app:layout_constraintVertical_bias="0.642" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/upload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#C82424"
-                android:paddingStart="10dp"
+                android:padding="10dp"
                 android:text="Upload file"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.055"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.156" />
@@ -351,7 +351,7 @@
                 android:background="#C82424"
                 android:text="Get Verified"
                 android:textColor="#FFFFFF"
-                android:paddingStart="10dp"
+                android:padding="10dp"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
