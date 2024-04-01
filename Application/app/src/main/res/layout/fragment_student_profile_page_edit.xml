@@ -71,7 +71,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
                 android:layout_width="202dp"
-                android:layout_height="37dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_field"
                 android:hint="current name"
                 android:paddingStart="10dp"
@@ -316,7 +316,7 @@
 
             <AutoCompleteTextView
                 android:id="@+id/universityAutoCompleteTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:hint="Enter university name"
                 android:inputType="text"

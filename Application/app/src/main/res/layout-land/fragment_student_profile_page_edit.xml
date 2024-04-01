@@ -66,7 +66,7 @@
                 app:layout_constraintHorizontal_bias="0.389"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/image"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.272" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
@@ -82,7 +82,7 @@
                 app:layout_constraintHorizontal_bias="0.165"
                 app:layout_constraintStart_toEndOf="@+id/universityName"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.94" />
+                app:layout_constraintVertical_bias="0.924" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -315,7 +315,7 @@
 
             <AutoCompleteTextView
                 android:id="@+id/universityAutoCompleteTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:hint="Enter university name"
                 android:inputType="text"
@@ -345,6 +345,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/getVerified"
+                android:padding="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="37dp"
                 android:background="#C82424"
