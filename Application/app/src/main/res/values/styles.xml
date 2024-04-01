@@ -5,5 +5,10 @@
         <item name="colorControlNormal">#C82424</item>
     </style>
 
+    <style name="FlagReview" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/TUeRed</item>
+        <item name="colorControlNormal">@color/TUeRed</item>
+        <item name="colorControlActivated">@color/TUeRed</item>
+    </style>
 
 </resources>

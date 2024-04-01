@@ -1,5 +1,6 @@
 package com.example.uniunboxd.fragments.student;
 
+import android.app.AlertDialog;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.example.uniunboxd.API.ReplyController;
 import com.example.uniunboxd.API.ReviewController;
 import com.example.uniunboxd.DTO.CourseModel;
+import com.example.uniunboxd.DTO.FlagReviewModel;
 import com.example.uniunboxd.DTO.ReplyModel;
 import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.R;
@@ -38,6 +40,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private Review review;
     private boolean isReviewTabActive = false;
     private boolean isReviewLiked = false;
+    private String m_Text = "";
 
     private ConstraintLayout reviewPage;
     private ConstraintLayout repliesPage;
@@ -85,6 +88,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         replyPost.setOnClickListener(this);
         ImageView editReview = view.findViewById(R.id.editReview);
         editReview.setOnClickListener(this);
+        ImageView flagReview = view.findViewById(R.id.flagReview);
+        flagReview.setOnClickListener(this);
         likeReview = view.findViewById(R.id.like);
 
         // Extra
@@ -120,9 +125,13 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 
             if(review.Student.Id != userId) {
                 editReview.setVisibility(View.GONE);
+                flagReview.setVisibility(View.VISIBLE);
+            } else {
+                editReview.setVisibility(View.VISIBLE);
+                flagReview.setVisibility(View.GONE);
             }
 
-            if(userType.equals("Student")) {
+            if(userType.equals("Student") && userId != review.Student.Id) {
                 likeReview.setOnClickListener(this);
                 if(review.StudentLikes.contains(userId)) {
                     isReviewLiked = true;
@@ -164,6 +173,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             redirectToEditReview();
         } else if (id == R.id.like) {
             changeLikeStatus();
+        } else if (id == R.id.flagReview) {
+            flagReview();
         }
     }
 
@@ -281,6 +292,30 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             }
 
         });
+    }
+
+    private void flagReview() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
+        builder.setTitle("Flag Review");
+
+        View viewInflated= LayoutInflater.from(getContext()).inflate(R.layout.flag_review_message_pop_up, (ViewGroup) getView(), false);
+// Set up the input
+        final EditText message = viewInflated.findViewById(R.id.messageInput);
+        builder.setView(viewInflated);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", (dialog, which) -> AsyncTask.execute(() -> {
+            try {
+                HttpURLConnection con = ReviewController.flagReview(new FlagReviewModel(review.Id, message.getText().toString()), getActivity());
+
+                Log.i("Flag Review", "Code: " + con.getResponseCode());
+            } catch (Exception e) {
+                Log.e("APP", "Failed to register like change: " + e.toString());
+            }
+
+        }));
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+        builder.show();
     }
 }
 
