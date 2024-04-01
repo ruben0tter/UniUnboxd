@@ -1,5 +1,6 @@
 package com.example.uniunboxd.fragments.university;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -40,6 +42,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateCourseFragment extends Fragment implements View.OnClickListener {
+
+    private final String MESSAGE_DELETE = "Confirm Deleting Course?";
+    private final String MESSAGE_CANCEL = "Confirm Cancel Creating Course?";
+
     private LayoutInflater inflater;
     private ViewGroup container;
     private Bundle savedInstanceState;
@@ -131,14 +137,68 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         Fragment f = FragmentManager.findFragment(view);
         int id = view.getId();
         if (id == R.id.saveChanges) {
-            //TODO: fix these ID's
-            LinearLayout layout = (LinearLayout) view.getParent();
-            EditText name = (EditText) layout.findViewById(R.id.courseName_courseName_edit);
-            EditText code = (EditText) layout.findViewById(R.id.courseName_courseCode_edit);
-            EditText description = (EditText) layout.findViewById(R.id.courseDescription_edit);
-            EditText professor = (EditText) layout.findViewById(R.id.courseName_courseDescription_edit);
+            saveChangesButtonLogic(view, f);
+        }
+        else if (id == R.id.courseImage_edit) {
+            FileSystemChooser.ChooseImage(f, imageCode);
+        } else if (id == R.id.courseBanner_edit) {
+            FileSystemChooser.ChooseImage(f, bannerCode);
+        } else if (id == R.id.deleteButton) {
+            String message = Course != null ? MESSAGE_DELETE : MESSAGE_CANCEL;
+            buildConfirmationPopup(message);
+        }
+        else if (id == R.id.searchButton) {
+            searchButtonLogic(view, f);
+        }
+    }
 
-            AsyncTask.execute(() -> {
+    private void searchButtonLogic(View view, Fragment f) {
+        LinearLayout layout = (LinearLayout) view.getParent();
+        EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
+        String email = professorToAssign.getText().toString();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    AssignedProfessorModel assignedProfessorModel = UserController.getAssignedProfessorByEmail(email, getActivity());
+                    if(assignedProfessorModel == null){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return;
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
+                                Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            assignedProfessors.add(assignedProfessorModel);
+                            LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
+                            assignedProfessorsList.addView( assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.e("ERR", "Could not get assigned professor model.");
+                }
+            }
+        });
+        professorToAssign.setText("");
+    }
+    private void saveChangesButtonLogic(View view, Fragment f){
+        LinearLayout layout = (LinearLayout) view.getParent();
+        EditText name = (EditText) layout.findViewById(R.id.courseName_courseName_edit);
+        EditText code = (EditText) layout.findViewById(R.id.courseName_courseCode_edit);
+        EditText description = (EditText) layout.findViewById(R.id.courseDescription_edit);
+        EditText professor = (EditText) layout.findViewById(R.id.courseName_courseDescription_edit);
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
                 int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
                 if (Course == null) {
                     CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
@@ -153,7 +213,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                             BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
                             StringBuilder st = new StringBuilder();
                             String line;
-                            while ((line = br.readLine()) != null)
+                            while((line = br.readLine()) != null)
                                 st.append(line);
                             Log.e("DEB", "" + st);
                         }
@@ -177,14 +237,38 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                 } catch (Exception e) {
                     Log.e("ERR", e.toString());
                 }
-            });
-        } else if (id == R.id.courseImage_edit) {
-            FileSystemChooser.ChooseImage(f, imageCode);
-        } else if (id == R.id.courseBanner_edit) {
-            FileSystemChooser.ChooseImage(f, bannerCode);
-        } else if (id == R.id.deleteButton) {
-            if (Course != null) {
-                AsyncTask.execute(() -> {
+            }
+
+        });
+    }
+
+    private void buildConfirmationPopup(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(true);
+        builder.setTitle("Confirmation");
+        builder.setMessage(message);
+        builder.setPositiveButton("Confirm",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteCourseLogic();
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void deleteCourseLogic() {
+        if (Course != null) {
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
                     try {
                         HttpURLConnection con = CourseController.deleteCourse(Course.Id, getActivity());
                         if (con.getResponseCode() == 200) {
@@ -195,38 +279,11 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                     } catch (Exception e) {
                         Log.e("ERR", e.toString());
                     }
-                });
-                //TODO: Check if this redirection is correct.
-            }
-            ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
-        } else if (id == R.id.searchButton) {
-            LinearLayout layout = (LinearLayout) view.getParent();
-            EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
-            String email = professorToAssign.getText().toString();
-            AsyncTask.execute(() -> {
-                try {
-                    AssignedProfessorModel assignedProfessorModel = UserController.getAssignedProfessorByEmail(email, getActivity());
-                    if (assignedProfessorModel == null) {
-                        getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show());
-                        return;
-                    }
-                    getActivity().runOnUiThread(() -> {
-                        if (assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
-                            Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        assignedProfessors.add(assignedProfessorModel);
-                        LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
-                        assignedProfessorsList.addView(assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
-                    });
-                } catch (IOException e) {
-                    Log.e("ERR", "Could not get assigned professor model.");
                 }
             });
-            professorToAssign.setText("");
         }
+        ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

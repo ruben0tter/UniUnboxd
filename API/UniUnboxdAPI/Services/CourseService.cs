@@ -136,6 +136,8 @@ namespace UniUnboxdAPI.Services
                 Code = course.Code,
                 Banner = course.Banner,
                 Description = course.Description,
+                AnonymousRating = course.AnonymousRating,
+                NonanonymousRating = course.NonanonymousRating,
                 Image = course.Image,
                 Name = course.Name,
                 Professor = course.Professor,

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.uniunboxd.DTO.CourseModel;
@@ -29,8 +30,8 @@ public class CourseRetrievalModel {
     public final int Id;
     public final String Name;
     public final String Code;
-    public final double AnonymousRating;
-    public final double NonanonymousRating;
+    public final float AnonymousRating;
+    public final float NonanonymousRating;
     public final String Description;
     public final String Professor;
     public final String Image;
@@ -44,9 +45,9 @@ public class CourseRetrievalModel {
     public final ReviewListItem YourReview;
 
     @JsonCreator
-    public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name") String name,
-                                @JsonProperty("code") String code, @JsonProperty("anonymousRating") double anonymousRating,
-                                @JsonProperty("nonanonymousRating") double nonanonymousRating, @JsonProperty("description") String description,
+    public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name")String name,
+                                @JsonProperty("code") String code, @JsonProperty("anonymousRating") float anonymousRating,
+                                @JsonProperty("nonanonymousRating") float nonanonymousRating, @JsonProperty("description") String description,
                                 @JsonProperty("professor") String professor, @JsonProperty("image") String image,
                                 @JsonProperty("banner") String banner, @JsonProperty("universityId") int universityId,
                                 @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName,
@@ -79,8 +80,15 @@ public class CourseRetrievalModel {
         TextView universityName = view.findViewById(R.id.universityName);
         ImageView image = view.findViewById(R.id.courseImage);
         ImageView banner = view.findViewById(R.id.courseBanner);
-        LinearLayout reviewedBy = view.findViewById(R.id.friendsThatReviewed);
+        RatingBar anonRatingBar = view.findViewById(R.id.ratingBarAnonymous);
+        RatingBar nonanonRatingBar = view.findViewById(R.id.ratingBarNonAnonymous);
+        TextView anonRatingNum = view.findViewById(R.id.anonymous_rating_number);
+        TextView nonanonRatingNum = view.findViewById(R.id.non_anonymous_rating_number);
 
+        anonRatingBar.setRating(AnonymousRating);
+        nonanonRatingBar.setRating(NonanonymousRating);
+        anonRatingNum.setText(""+AnonymousRating);
+        nonanonRatingNum.setText(""+NonanonymousRating);
         name.setText(Name);
         code.setText(Code);
         professor.setText(Professor);
