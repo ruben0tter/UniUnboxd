@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -41,7 +42,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private boolean isReviewLiked = false;
 
     private ConstraintLayout reviewPage;
-    private ConstraintLayout repliesPage;
+    private NestedScrollView repliesPage;
     private LinearLayout replies;
 
     private TextView reviewTab;

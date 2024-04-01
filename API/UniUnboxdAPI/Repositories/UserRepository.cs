@@ -105,6 +105,7 @@ public class UserRepository {
             dbContext.Students.Update(student);
             await dbContext.SaveChangesAsync();
         }
+
         public async Task<ICollection<Student>> GetFollowers(int id)
             => await dbContext.Follows.Where(i => i.FollowedStudent.Id == id).Select(i => i.FollowingStudent).ToListAsync();
 

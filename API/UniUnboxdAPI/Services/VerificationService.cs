@@ -39,6 +39,7 @@ namespace UniUnboxdAPI.Services
             var verificationApplication = CreateVerificationApplicationModel(request, user, null);
 
             await verificationRepository.AddApplication(verificationApplication);
+            await userRepository.SetVerificationStatus(user, VerificationStatus.Pending);
 
             return true;
         }
