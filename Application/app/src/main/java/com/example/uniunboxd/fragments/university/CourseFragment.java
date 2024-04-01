@@ -2,7 +2,6 @@ package com.example.uniunboxd.fragments.university;
 
 import static android.view.View.GONE;
 
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,9 +20,9 @@ import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.API.ReviewController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.models.ReviewListItem;
 import com.example.uniunboxd.models.course.CourseEditModel;
 import com.example.uniunboxd.models.course.CourseRetrievalModel;
-import com.example.uniunboxd.models.ReviewListItem;
 import com.example.uniunboxd.models.student.StudentListItem;
 import com.example.uniunboxd.utilities.JWTValidation;
 
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class CourseFragment extends Fragment{
+public class CourseFragment extends Fragment {
 
     private final int ID;
 
@@ -62,7 +61,7 @@ public class CourseFragment extends Fragment{
             throw new RuntimeException(e);
         }
 
-        if(Course != null) {
+        if (Course != null) {
             view = Course.createView(inflater, container, savedInstanceState);
 
             Button loadBtn = (Button) view.findViewById(R.id.load);
@@ -70,84 +69,50 @@ public class CourseFragment extends Fragment{
             LinearLayout reviewedBy = view.findViewById(R.id.friendsThatReviewed);
 
             ImageButton editBtn = view.findViewById(R.id.editButton);
-            loadBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    load(reviewList, reviewedBy, inflater, container);
-                }
-            });
+            loadBtn.setOnClickListener(v -> load(reviewList, reviewedBy, inflater, container));
 
-            editBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner, new ArrayList<>());
-                    ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel), true);
-                }
+            editBtn.setOnClickListener(v -> {
+                CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner, new ArrayList<>());
+                ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel), true);
             });
             String role = JWTValidation.getTokenProperty(getActivity(), "typ");
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-            if(role.equals("Student") || (role.equals("Professor") && !Course.AssignedProfessors.contains(userId)))
+            if (role.equals("Student") || (role.equals("Professor") && !Course.AssignedProfessors.contains(userId)))
                 editBtn.setVisibility(GONE);
-
-            yourReview = view.findViewById(R.id.yourReview);
-            yourReview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    everyone.setTypeface(Typeface.DEFAULT);
-                    yourReview.setTypeface(Typeface.DEFAULT_BOLD);
-                    // TODO: Rerender.
-                }
-            });
-            everyone = view.findViewById(R.id.everyone);
-            everyone.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    everyone.setTypeface(Typeface.DEFAULT_BOLD);
-                    yourReview.setTypeface(Typeface.DEFAULT);
-                    // TODO: Rerender.
-                }
-            });
         }
         return view;
     }
 
-    private void load(LinearLayout reviewListView, LinearLayout reviewedBy, LayoutInflater inflater, ViewGroup container){
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                int lastID = 0;
-                if (!Course.Reviews.isEmpty()) {
-                    lastID = Course.Reviews.get(Course.Reviews.size() - 1).Id;
-                }
-                try {
-                    List<ReviewListItem> newReviews = ReviewController.getReviewListItems(lastID, Course.Id, 5, getActivity());
-                    Course.Reviews.addAll(newReviews);
-                    visualiseReviews(inflater, container, reviewListView);
-                } catch (Exception e) {
-                    Log.e("APP", e.toString());
-                }
+    private void load(LinearLayout reviewListView, LinearLayout reviewedBy, LayoutInflater inflater, ViewGroup container) {
+        AsyncTask.execute(() -> {
+            int lastID = 0;
+            if (!Course.Reviews.isEmpty()) {
+                lastID = Course.Reviews.get(Course.Reviews.size() - 1).Id;
+            }
+            try {
+                List<ReviewListItem> newReviews = ReviewController.getReviewListItems(lastID, Course.Id, 5, getActivity());
+                Course.Reviews.addAll(newReviews);
+                visualiseReviews(inflater, container, reviewListView);
+            } catch (Exception e) {
+                Log.e("APP", e.toString());
+            }
 
-                for(StudentListItem reviewer: Course.FriendsThatReviewed) {
-                    reviewedBy.addView(reviewer.createView(inflater, container, getActivity()));
-                }
+            for (StudentListItem reviewer : Course.FriendsThatReviewed) {
+                reviewedBy.addView(reviewer.createView(inflater, container, getActivity()));
             }
         });
     }
 
     private void visualiseReviews(LayoutInflater inflater, ViewGroup container, LinearLayout reviewListView) {
         for (ReviewListItem item : Course.Reviews) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-
-                public void run() {
-                    View appView = item.createView(inflater, container);
-                    reviewListView.addView(appView);
-                }
+            getActivity().runOnUiThread(() -> {
+                View appView = item.createView(inflater, container);
+                reviewListView.addView(appView);
             });
         }
     }
 
-    class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel>{
+    class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel> {
 
         private final int ID;
         private final int NUM_OF_REVIEWS_TO_LOAD;
@@ -160,9 +125,9 @@ public class CourseFragment extends Fragment{
         @Override
         protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
             CourseRetrievalModel course = null;
-            try{
+            try {
                 course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
-            } catch(Exception ioe) {
+            } catch (Exception ioe) {
                 Log.e("ERR", "Couldn't get course" + ioe.toString());
             }
 
