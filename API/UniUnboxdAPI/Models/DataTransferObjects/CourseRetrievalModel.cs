@@ -12,4 +12,5 @@ public class CourseRetrievalModel
     public required int UniversityId { get; set; }
     public string? UniversityName { get; set; }
     public ICollection<CourseReviewModel>? Reviews { get; set; }
+    public ICollection<int>? AssignedProfessors { get; set; }
 }

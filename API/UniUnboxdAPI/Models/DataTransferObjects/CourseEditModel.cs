@@ -9,4 +9,6 @@ public class CourseEditModel
     public required string Professor { get; set; }
     public string? Image { get; set; }
     public string? Banner { get; set; } 
+    
+    public required List<AssignedProfessorModel> AssignedProfessors { get; set; }
 }

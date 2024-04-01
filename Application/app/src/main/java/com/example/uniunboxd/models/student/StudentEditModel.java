@@ -5,6 +5,7 @@ public class StudentEditModel {
     public String Name;
     public String Image;
 
+
     public StudentEditModel(StudentProfileModel student) {
         Id = student.Id;
         Image = student.Image;

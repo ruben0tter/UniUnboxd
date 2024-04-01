@@ -4,15 +4,18 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.uniunboxd.models.CourseCreationModel;
-import com.example.uniunboxd.models.CourseEditModel;
-import com.example.uniunboxd.models.CourseRetrievalModel;
-import com.example.uniunboxd.models.home.OverviewCourse;
+import com.example.uniunboxd.models.course.AssignedProfessorModel;
+import com.example.uniunboxd.models.course.CourseCreationModel;
+import com.example.uniunboxd.models.course.CourseEditModel;
+import com.example.uniunboxd.models.course.CourseRetrievalModel;
 import com.example.uniunboxd.models.home.PopularCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.models.home.OverviewCourse;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -22,6 +25,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CourseController {
@@ -147,7 +151,15 @@ public class CourseController {
         json.put("image", model.Image);
         json.put("banner", model.Banner);
         json.put("universityId", model.UniversityID);
-
+        JSONArray assignedProfessors = new JSONArray();
+        for(AssignedProfessorModel x : model.AssignedProfessors){
+            JSONObject assignedProfessor = new JSONObject();
+            assignedProfessor.put("id", x.Id);
+            assignedProfessor.put("name", x.Name);
+            assignedProfessor.put("email", x.Email);
+            assignedProfessors.put(assignedProfessor);
+        }
+        json.put("assignedProfessors", assignedProfessors);
         return APIClient.post("Course", json.toString(), JWTValidation.getToken(f));
     }
     public static HttpURLConnection putCourse(CourseEditModel course, FragmentActivity f) throws Exception{
@@ -159,7 +171,15 @@ public class CourseController {
         json.put("professor", course.Professor);
         json.put("image", course.Image);
         json.put("banner", course.Banner);
-
+        JSONArray assignedProfessors = new JSONArray();
+        for(AssignedProfessorModel x : course.AssignedProfessors){
+            JSONObject assignedProfessor = new JSONObject();
+            assignedProfessor.put("id", x.Id);
+            assignedProfessor.put("name", x.Name);
+            assignedProfessor.put("email", x.Email);
+            assignedProfessors.put(assignedProfessor);
+        }
+        json.put("assignedProfessors", assignedProfessors);
         return APIClient.put("Course", json.toString(), JWTValidation.getToken(f));
     }
 

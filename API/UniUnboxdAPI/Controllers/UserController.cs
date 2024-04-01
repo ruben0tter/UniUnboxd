@@ -55,30 +55,20 @@ namespace UniUnboxdAPI.Controllers
 
             return Ok("Student successfully updated");
         }
-        
-        
-        [HttpPut("professor")]
-        [Authorize(Roles = "Professor")]
-        public async Task<IActionResult> PutProfessor([FromBody] ProfessorEditModel model)
+
+        [HttpGet("get-assigned-professor")]
+        [Authorize(Roles = "University")]
+        public async Task<IActionResult> GetAssignedProfessorByEmail([FromQuery(Name = "email")] string email)
         {
-            if (!await userService.DoesProfessorExist(model.Id))
-                return BadRequest("This professor user does not exist.");
-            
-            if (!JWTValidation.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.Id))
-                return BadRequest("Incorrect user.");
-
-            Professor professor = await userService.GetProfessor(model.Id);
-
-            userService.UpdateProfessor(professor, model);
-            await userService.PutProfessor(professor);
-
-            return Ok("Professor was updated successfully.");
+            if (!await userService.DoesProfessorExist(email)) 
+                return BadRequest("Professor does not exist.");
+            AssignedProfessorModel model = await userService.getAssignedProfessor(email);
+            return Ok(model);
         }
-        
         
         [HttpGet("get-assigned-professors")]
         [Authorize(Roles = "University")]
-        public async Task<IActionResult> GetAssignedProfessors([FromQuery(Name = "courseId")] int courseId)
+        public async Task<IActionResult> GetAssignedProfessors([FromQuery(Name = "id")] int courseId)
         {
             if (!await userService.DoesCourseExist(courseId))
                 return BadRequest("Course does not exist.");
@@ -105,6 +95,24 @@ namespace UniUnboxdAPI.Controllers
             return Ok();
         }
 
+        [HttpPut("professor")]
+        [Authorize(Roles = "Professor")]
+        public async Task<IActionResult> PutProfessor([FromBody] ProfessorEditModel model)
+        {
+            if (!await userService.DoesProfessorExist(model.Id))
+                return BadRequest("This professor user does not exist.");
+            
+            if (!JWTValidation.IsUserValidated(HttpContext.User.Identity as ClaimsIdentity, model.Id))
+                return BadRequest("Incorrect user.");
+
+            Professor professor = await userService.GetProfessor(model.Id);
+
+            userService.UpdateProfessor(professor, model);
+            await userService.PutProfessor(professor);
+
+            return Ok("Professor was updated successfully.");
+        }
+        
         [HttpPut("follow")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> Follow([FromQuery(Name = "id")] int followedStudentId)
@@ -148,52 +156,6 @@ namespace UniUnboxdAPI.Controllers
             Student unfollowedStudent = await userService.GetStudent(unfollowedStudentId);
 
             await userService.UnfollowStudent(unfollowingStudent, unfollowedStudent);
-            return Ok();
-        }
-
-        [HttpPut("assign-professor")]
-        [Authorize(Roles = "University")]
-        public async Task<IActionResult> AssignProfessor([FromQuery(Name = "professor")] int professorId, [FromQuery(Name="course")] int courseId)
-        {
-            
-            if (!await userService.DoesCourseExist(courseId))
-                return BadRequest("Course does not exist.");
-
-            Course course = await userService.GetCourse(courseId);
-            
-            if (!await userService.DoesProfessorExist(professorId))
-                    return BadRequest("Professor does not exist.");
-        
-            Professor professor = await userService.GetProfessor(professorId);
-
-            if (await userService.DoesCourseProfessorAssignmentExist(courseId, professorId))
-                return BadRequest("Professor is already assigned to this course.");
-            
-            await userService.AssignProfessor(professor, course);
-
-            return Ok();
-        }
-        
-        [HttpPut("dismiss-professor")]
-        [Authorize(Roles = "University")]
-        public async Task<IActionResult> DismissProfessor([FromQuery(Name = "professor")] int professorId, [FromQuery(Name="course")] int courseId)
-        {
-            
-            if (!await userService.DoesCourseExist(courseId))
-                return BadRequest("Course does not exist.");
-
-            Course course = await userService.GetCourse(courseId);
-            
-            if (!await userService.DoesProfessorExist(professorId))
-                return BadRequest("Professor does not exist.");
-        
-            Professor professor = await userService.GetProfessor(professorId);
-
-            if (!await userService.DoesCourseProfessorAssignmentExist(courseId, professorId))
-                return BadRequest("Professor is not assigned to this course.");
-            
-            await userService.DismissProfessor(professor, course);
-
             return Ok();
         }
     }

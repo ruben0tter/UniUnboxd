@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.databinding.ActivityMainBinding;
 import com.example.uniunboxd.fragments.main.AuthenticationFragment;
+import com.example.uniunboxd.fragments.student.StudentEditFragment;
+import com.example.uniunboxd.models.student.StudentEditModel;
+import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
 
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements IActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+//        replaceFragment(new StudentEditFragment(new StudentEditModel(new StudentProfileModel(3, "Name", "Uni", "string", null, null, null))));
         setupInitialFragment();
     }
 

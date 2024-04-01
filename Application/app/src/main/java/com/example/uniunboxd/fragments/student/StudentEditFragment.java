@@ -1,6 +1,7 @@
 package com.example.uniunboxd.fragments.student;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -13,25 +14,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.models.CourseCreationModel;
 import com.example.uniunboxd.models.student.StudentEditModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.ImageHandler;
-import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.concurrent.ExecutionException;
 
 public class StudentEditFragment extends Fragment {
 
@@ -42,8 +41,7 @@ public class StudentEditFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_student_profile_page_edit, container, false);
@@ -55,15 +53,29 @@ public class StudentEditFragment extends Fragment {
 
         name.setText(Model.Name);
 
-        if(Model.Image != null)
-            image.setImageBitmap(ImageHandler.decodeImageString(Model.Image));
+        if (Model.Image != null) image.setImageBitmap(ImageHandler.decodeImageString(Model.Image));
+
+        int fileSystemPermission = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (fileSystemPermission != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+
 
         Fragment f = this;
         editImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, 1);
+                if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 1);
+
+                if(ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_DENIED)
+                {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, 1);
+                }
+//                if(fileSystemPermission != PackageManager.PERMISSION_GRANTED){
+//                    FileSystemChooser.ChooseImage(f, 7);
+//                }
             }
         });
 
@@ -73,15 +85,14 @@ public class StudentEditFragment extends Fragment {
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-                        try{
+                        try {
                             Model.Name = name.getText().toString();
                             HttpURLConnection con = UserController.putStudent(Model, getActivity());
-                            if(con.getResponseCode() == 200){
+                            if (con.getResponseCode() == 200) {
                                 ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id));
-                            }
-                            else{
+                            } else {
                                 //TODO: see how to show a toast
-                                Log.d("DEB", ""+con.getResponseCode());
+                                Log.d("DEB", "" + con.getResponseCode());
                             }
                         } catch (Exception e) {
                             Log.e("ERR", e.toString());
@@ -96,6 +107,7 @@ public class StudentEditFragment extends Fragment {
         //TODO: set verification
         return view;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -106,20 +118,20 @@ public class StudentEditFragment extends Fragment {
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             cameraImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            byte[] byteArray = byteArrayOutputStream .toByteArray();
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
             Model.Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
         } else {
-        Uri uri = data.getData();
+            Uri uri = data.getData();
 
-        byte[] bitmapdata = null;
-        try {
-            bitmapdata = FileSystemChooser.readTextFromUri(uri, getActivity());
-        } catch (IOException e) {
-            Log.e("ERR", e.toString());
-        }
-        Model.Image = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-        image.setImageBitmap(bitmap);
+            byte[] bitmapdata = null;
+            try {
+                bitmapdata = FileSystemChooser.readTextFromUri(uri, getActivity());
+            } catch (IOException e) {
+                Log.e("ERR", e.toString());
+            }
+            Model.Image = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+            image.setImageBitmap(bitmap);
         }
 
     }

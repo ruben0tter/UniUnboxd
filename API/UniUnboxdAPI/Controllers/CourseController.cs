@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -94,6 +95,14 @@ namespace UniUnboxdAPI.Controllers
 
             await courseService.PostCourse(course);
 
+            foreach (var x in creationModel.AssignedProfessors)
+            {
+                if (await courseService.DoesProfessorAssignmentExist(course.Id, x.Id))
+                    continue;
+                var result = await AssignProfessor(course.Id, x.Id);
+                if (result.Equals(BadRequest()))
+                    return BadRequest("Could not make professor assignment.");
+            }
             return Ok("Course was created successfully.");
         }
 
@@ -103,7 +112,7 @@ namespace UniUnboxdAPI.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest("Model state is invalid.");
-            //TODO: update for professor users.
+            
             int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (!(await courseService.DoesUniversityExist(userId) || await courseService.DoesProfessorExist(userId)))
@@ -115,16 +124,73 @@ namespace UniUnboxdAPI.Controllers
             Course course = await courseService.GetCourse(model.Id);
             try
             {
+                if(course.AssignedProfessors != null)
+                    foreach (var x in course.AssignedProfessors)
+                    {
+                        if (model.AssignedProfessors.All(i => i.Id != x.ProfessorId))
+                            await DismissProfessor(x.ProfessorId, x.CourseId);
+                    }
+                
                 await courseService.UpdateCourse(course, model);
                 await courseService.PutCourse(course);
-
-                return Ok("Succesfully updated course.");
+                foreach (var x in model.AssignedProfessors)
+                {
+                    if (!await courseService.DoesProfessorAssignmentExist(course.Id, x.Id))
+                        await AssignProfessor(x.Id, course.Id);
+                }
+                
+                return Ok("Successfully updated course.");
             }
             catch (Exception e)
             {
                 return BadRequest("Something went wrong when updating a course.\nThe following exception was thrown:\n" + e.Message);
             }
         }
+        [HttpPut("assign-professor")]
+        [Authorize(Roles = "University")]
+        public async Task<IActionResult> AssignProfessor([FromQuery(Name = "professor")] int professorId, [FromQuery(Name="course")] int courseId)
+        {
+            
+            if (!await courseService.DoesCourseExist(courseId))
+                return BadRequest("Course does not exist.");
+
+            Course course = await courseService.GetCourse(courseId);
+            
+            if (!await courseService.DoesProfessorExist(professorId))
+                return BadRequest("Professor does not exist.");
+        
+            Professor professor = await courseService.GetProfessor(professorId);
+
+            if (await courseService.DoesProfessorAssignmentExist(courseId, professorId))
+                return BadRequest("Professor is already assigned to this course.");
+            
+            await courseService.AssignProfessor(professor, course);
+
+            return Ok();
+        }
+        
+        [HttpPut("dismiss-professor")]
+        [Authorize(Roles = "University")]
+        public async Task<IActionResult> DismissProfessor([FromQuery(Name = "professor")] int professorId, [FromQuery(Name="course")] int courseId)
+        {
+            
+            if (!await courseService.DoesCourseExist(courseId))
+                return BadRequest("Course does not exist.");
+
+            Course course = await courseService.GetCourse(courseId);
+            
+            if (!await courseService.DoesProfessorExist(professorId))
+                return BadRequest("Professor does not exist.");
+        
+            Professor professor = await courseService.GetProfessor(professorId);
+
+            if (!await courseService.DoesProfessorAssignmentExist(courseId, professorId))
+                return BadRequest("Professor is not assigned to this course.");
+            
+            await courseService.DismissProfessor(professor, course);
+
+            return Ok();
+        }        
         
         [HttpDelete]
         [Authorize(Roles = "University")]

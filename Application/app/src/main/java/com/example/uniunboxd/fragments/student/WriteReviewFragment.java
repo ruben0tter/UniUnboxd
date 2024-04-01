@@ -65,7 +65,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         // Buttons
         Button post = (Button) view.findViewById(R.id.postButton);
         post.setOnClickListener(this);
-        Button delete = (Button) view.findViewById(R.id.deleteButton);
+        Button delete = (Button) view.findViewById(R.id.searchButton);
         delete.setOnClickListener(this);
 
         if (review == null) {

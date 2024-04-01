@@ -54,13 +54,13 @@ namespace UniUnboxdAPI.Data
             modelBuilder.Entity<CourseProfessorAssignment>()
                 .HasOne(i => i.Professor)
                 .WithMany(i => i.AssignedCourses)
-                .HasForeignKey(i => i.CourseId)
+                .HasForeignKey(i => i.ProfessorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CourseProfessorAssignment>()
                 .HasOne(i => i.Course)
                 .WithMany(i => i.AssignedProfessors)
-                .HasForeignKey(i => i.ProfessorId)
+                .HasForeignKey(i => i.CourseId);
                 
             modelBuilder.Entity<NotificationSettings>()
                .HasKey(i => i.StudentId);

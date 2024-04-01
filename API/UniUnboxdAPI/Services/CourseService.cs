@@ -44,9 +44,7 @@ namespace UniUnboxdAPI.Services
         /// </summary>
         /// <param name="course"> The course to be added.</param>
         public async Task PostCourse(Course course)
-        {
-            await courseRepository.PostCourse(course);
-        }
+            => await courseRepository.PostCourse(course);
 
         /// <summary>
         /// Creates a Course object from the given CourseCreationModel creationModel.
@@ -143,7 +141,8 @@ namespace UniUnboxdAPI.Services
                 Professor = course.Professor,
                 Reviews = new List<CourseReviewModel>(),
                 UniversityId = course.University.Id,
-                UniversityName = course.University.UserName
+                UniversityName = course.University.UserName,
+                AssignedProfessors = course.AssignedProfessors.Select(x => x.ProfessorId).ToList()
             };
         
         private CourseReviewModel CreateCourseReviewModel(Review review, int courseId) 
@@ -215,5 +214,29 @@ namespace UniUnboxdAPI.Services
                 Professor = i.Professor,
                 Image = i.Image
             }).ToList();
+
+        public async Task<bool> DoesProfessorAssignmentExist(int courseId, int professorId)
+            => await courseRepository.DoesProfessorAssignmentExist(courseId, professorId);
+        
+        public async Task AssignProfessor(Professor professor, Course course)
+        {
+            var courseProfessorAssignment = CreateCourseProfessorAssignment(professor, course);
+            await userRepository.AssignProfessorToCourse(courseProfessorAssignment);
+        }
+        
+        public async Task DismissProfessor(Professor professor, Course course)
+        {
+            var courseProfessorAssignment = await userRepository.GetProfessorAssignment(professor.Id, course.Id);
+            await userRepository.DismissProfessorFromCourse(courseProfessorAssignment);        
+        }
+        public async Task<Professor> GetProfessor(int professorId)
+            => await userRepository.GetProfessor(professorId);
+        
+        private CourseProfessorAssignment CreateCourseProfessorAssignment(Professor professor, Course course)
+            => new()
+            {
+                Professor = professor,
+                Course = course
+            };
     }
 }

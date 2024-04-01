@@ -1,4 +1,4 @@
-package com.example.uniunboxd.models;
+package com.example.uniunboxd.models.course;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.models.ReviewListItem;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,13 +31,15 @@ public class CourseRetrievalModel {
     public final int UniversityId;
     public final String UniversityName;
     public final List<ReviewListItem> Reviews;
+    public final List<Integer> AssignedProfessors;
 
     @JsonCreator
     public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name")String name,
                                 @JsonProperty("code") String code, @JsonProperty("description") String description,
                                 @JsonProperty("professor") String professor, @JsonProperty("image") String image,
                                 @JsonProperty("banner") String banner, @JsonProperty("universityId") int universityId,
-                                @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName) {
+                                @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName,
+                                @JsonProperty("assignedProfessors") List<Integer> assignedProfessors) {
         Id = id;
         Name = name;
         Code = code;
@@ -47,6 +50,7 @@ public class CourseRetrievalModel {
         UniversityId = universityId;
         Reviews = reviews;
         UniversityName = universityName;
+        AssignedProfessors = assignedProfessors;
     }
 
     public View createView(LayoutInflater inflater, ViewGroup container,

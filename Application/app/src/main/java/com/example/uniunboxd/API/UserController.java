@@ -4,11 +4,13 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.uniunboxd.models.course.AssignedProfessorModel;
 import com.example.uniunboxd.models.professor.ProfessorEditModel;
 import com.example.uniunboxd.models.professor.ProfessorProfileModel;
 import com.example.uniunboxd.models.student.StudentEditModel;
 import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONObject;
@@ -20,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class UserController {
     public static HttpURLConnection setDeviceToken(String deviceToken, FragmentActivity f) throws Exception {
@@ -35,6 +38,63 @@ public class UserController {
 
     public static HttpURLConnection unfollow(int id, FragmentActivity f) throws Exception {
         return APIClient.put("User/unfollow?id=" + id, null, JWTValidation.getToken(f));
+    }
+
+    public static List<AssignedProfessorModel> getAssignedProfessors(int id, FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("User/get-assigned-professors?id=" + id, JWTValidation.getToken(f));
+        Log.i("APP", "Code: " + con.getResponseCode());
+
+        StringBuilder body = new StringBuilder();
+
+        if (con.getResponseCode() == 200) {
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("ERR", e.toString());
+            }
+        } else {
+            String test = readMessage(con.getErrorStream());
+            Log.d("PLS", test);
+        }
+
+        Log.d("APP1", body.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<AssignedProfessorModel>>(){});
+    }
+
+    public static AssignedProfessorModel getAssignedProfessorByEmail(String email, FragmentActivity f) throws IOException {
+        HttpURLConnection con = APIClient.get("User/get-assigned-professor?email="+email, JWTValidation.getToken(f));
+        Log.i("APP", "Code:" + con.getResponseCode());
+        StringBuilder body = new StringBuilder();
+
+        if (con.getResponseCode() == 200) {
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("ERR", e.toString());
+            }
+        } else {
+            String test = readMessage(con.getErrorStream());
+            Log.d("PLS", test);
+            return null;
+        }
+
+        Log.d("APP1", body.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.readValue(body.toString(), AssignedProfessorModel.class);
+
     }
 
     public static ProfessorProfileModel getProfessorProfile(int id, FragmentActivity f) throws IOException {

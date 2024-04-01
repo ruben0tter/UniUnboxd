@@ -121,4 +121,14 @@ public class UserRepository {
             dbContext.CourseProfessorAssignments.Remove(courseProfessorAssignment);
             await dbContext.SaveChangesAsync();        
         }
+
+        public async Task<Professor> GetProfessor(string email)
+            => await dbContext.Professors.Where(i => i.NormalizedEmail == email.ToUpper()).FirstAsync();
+
+        public async Task<bool> DoesProfessorExist(string email)
+            => await dbContext.Professors.AnyAsync(i => i.NormalizedEmail == email.ToUpper());
+
+        public async Task<CourseProfessorAssignment> GetProfessorAssignment(int professorId, int courseId)
+            => await dbContext.CourseProfessorAssignments.FirstAsync(i =>
+                        i.Professor.Id == professorId && i.Course.Id == courseId);
 }

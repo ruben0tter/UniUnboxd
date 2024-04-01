@@ -115,22 +115,18 @@ namespace UniUnboxdAPI.Services
             List<AssignedProfessorModel> models = new List<AssignedProfessorModel>();
             foreach (var professor in professors)
             {
-                models.Add(new AssignedProfessorModel
-                {
-                    Id = professor.Id,
-                    Name = professor.UserName,
-                    Email = professor.Email,
-                    Image = professor.Image
-                });
+                models.Add(MakeAssignedProfessorModel(professor));
             }
             return models;
         }
 
-        public async Task DismissProfessor(Professor professor, Course course)
-        {
-            var courseProfessorAssignment = CreateCourseProfessorAssignment(professor, course);
-            await userRepository.DismissProfessorFromCourse(courseProfessorAssignment);        
-        }
+        private AssignedProfessorModel MakeAssignedProfessorModel(Professor professor)
+            => new()
+            {
+                Id = professor.Id,
+                Name = professor.UserName,
+                Email = professor.Email
+            };
     
         public async Task<StudentProfileModel> GetStudentAndConnectedData(int id)
         {
@@ -252,5 +248,14 @@ namespace UniUnboxdAPI.Services
 
         public async Task PutStudent(Student student)
             => await userRepository.PutStudent(student);
+
+        public async Task<AssignedProfessorModel> getAssignedProfessor(string email)
+        {
+            var professor = await userRepository.GetProfessor(email);
+            return MakeAssignedProfessorModel(professor);
+        }
+
+        public async Task<bool> DoesProfessorExist(string email)
+            => await userRepository.DoesProfessorExist(email);
     }
 }

@@ -19,12 +19,12 @@ import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.API.ReviewController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.models.CourseEditModel;
-import com.example.uniunboxd.models.CourseRetrievalModel;
+import com.example.uniunboxd.models.course.CourseEditModel;
+import com.example.uniunboxd.models.course.CourseRetrievalModel;
 import com.example.uniunboxd.models.ReviewListItem;
 import com.example.uniunboxd.utilities.JWTValidation;
-import com.example.uniunboxd.utilities.Redirection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -74,12 +74,13 @@ public class CourseFragment extends Fragment{
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner);
+                    CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner, new ArrayList<>());
                     ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel));
                 }
             });
             String role = JWTValidation.getTokenProperty(getActivity(), "typ");
-            if(role.equals("Student"))
+            int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+            if(role.equals("Student") || !Course.AssignedProfessors.contains(userId))
                 editBtn.setVisibility(GONE);
         }
         return view;
