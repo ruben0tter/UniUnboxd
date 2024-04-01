@@ -1,5 +1,6 @@
 package com.example.uniunboxd.fragments.university;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -41,6 +43,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateCourseFragment extends Fragment implements View.OnClickListener {
+
+    private final String MESSAGE_DELETE = "Confirm Deleting Course?";
+    private final String MESSAGE_CANCEL = "Confirm Cancel Creating Course?";
+
     private LayoutInflater inflater;
     private ViewGroup container;
     private Bundle savedInstanceState;
@@ -138,122 +144,153 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         Fragment f = FragmentManager.findFragment(view);
         int id = view.getId();
         if (id == R.id.saveChanges) {
-            //TODO: fix these ID's
-            LinearLayout layout = (LinearLayout) view.getParent();
-            EditText name = (EditText) layout.findViewById(R.id.courseName_courseName_edit);
-            EditText code = (EditText) layout.findViewById(R.id.courseName_courseCode_edit);
-            EditText description = (EditText) layout.findViewById(R.id.courseDescription_edit);
-            EditText professor = (EditText) layout.findViewById(R.id.courseName_courseDescription_edit);
-
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-                    if (Course == null) {
-                        CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
-                                code.getText().toString(), description.getText().toString(),
-                                professor.getText().toString(), imageEnc, bannerEnc, universityId, assignedProfessors);
-                        try {
-                            HttpURLConnection con = CourseController.postCourse(course, getActivity());
-                            if (con.getResponseCode() == 200) {
-                                ((IActivity) f.getActivity()).replaceFragment(new UniversityHomeFragment(), true);
-                            } else {
-                                //TODO: see how to show a toast
-                                BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                                StringBuilder st = new StringBuilder();
-                                String line;
-                                while((line = br.readLine()) != null)
-                                    st.append(line);
-                                Log.e("DEB", "" + st);
-                            }
-                        } catch (Exception e) {
-                            Log.e("ERR", e.toString());
-                        }
-                        return;
-                    }
-                    CourseEditModel course = new CourseEditModel(Course.Id, name.getText().toString(),
-                            code.getText().toString(), description.getText().toString(),
-                            professor.getText().toString(), imageEnc, bannerEnc, assignedProfessors);
-                    try {
-                        HttpURLConnection con = CourseController.putCourse(course, getActivity());
-                        if (con.getResponseCode() == 200) {
-                            ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Course.Id), true);
-                        } else {
-                            //TODO: see how to show a toast
-
-                            Log.d("ERR", "" + con.getResponseCode());
-                        }
-                    } catch (Exception e) {
-                        Log.e("ERR", e.toString());
-                    }
-                }
-
-            });
+            saveChangesButtonLogic(view, f);
         }
         else if (id == R.id.courseImage_edit) {
             FileSystemChooser.ChooseImage(f, imageCode);
         } else if (id == R.id.courseBanner_edit) {
             FileSystemChooser.ChooseImage(f, bannerCode);
         } else if (id == R.id.deleteButton) {
-            if (Course != null) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            HttpURLConnection con = CourseController.deleteCourse(Course.Id, getActivity());
-                            if (con.getResponseCode() == 200) {
-                                Log.d("DEB", "Deleted the course.");
-                            } else {
-                                Log.e("ERR", "" + con.getResponseCode());
-                            }
-                        } catch (Exception e) {
-                            Log.e("ERR", e.toString());
-                        }
-                    }
-                });
-                //TODO: Check if this redirection is correct.
-            }
-            ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
+            String message = Course != null ? MESSAGE_DELETE : MESSAGE_CANCEL;
+            buildConfirmationPopup(message);
         }
         else if (id == R.id.searchButton) {
-            LinearLayout layout = (LinearLayout) view.getParent();
-            EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
-            String email = professorToAssign.getText().toString();
+            searchButtonLogic(view, f);
+        }
+    }
+
+    private void searchButtonLogic(View view, Fragment f) {
+        LinearLayout layout = (LinearLayout) view.getParent();
+        EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
+        String email = professorToAssign.getText().toString();
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    AssignedProfessorModel assignedProfessorModel = UserController.getAssignedProfessorByEmail(email, getActivity());
+                    if(assignedProfessorModel == null){
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return;
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
+                                Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            assignedProfessors.add(assignedProfessorModel);
+                            LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
+                            assignedProfessorsList.addView( assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.e("ERR", "Could not get assigned professor model.");
+                }
+            }
+        });
+        professorToAssign.setText("");
+    }
+    private void saveChangesButtonLogic(View view, Fragment f){
+        LinearLayout layout = (LinearLayout) view.getParent();
+        EditText name = (EditText) layout.findViewById(R.id.courseName_courseName_edit);
+        EditText code = (EditText) layout.findViewById(R.id.courseName_courseCode_edit);
+        EditText description = (EditText) layout.findViewById(R.id.courseDescription_edit);
+        EditText professor = (EditText) layout.findViewById(R.id.courseName_courseDescription_edit);
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+                if (Course == null) {
+                    CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
+                            code.getText().toString(), description.getText().toString(),
+                            professor.getText().toString(), imageEnc, bannerEnc, universityId, assignedProfessors);
+                    try {
+                        HttpURLConnection con = CourseController.postCourse(course, getActivity());
+                        if (con.getResponseCode() == 200) {
+                            ((IActivity) f.getActivity()).replaceFragment(new UniversityHomeFragment(), true);
+                        } else {
+                            //TODO: see how to show a toast
+                            BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+                            StringBuilder st = new StringBuilder();
+                            String line;
+                            while((line = br.readLine()) != null)
+                                st.append(line);
+                            Log.e("DEB", "" + st);
+                        }
+                    } catch (Exception e) {
+                        Log.e("ERR", e.toString());
+                    }
+                    return;
+                }
+                CourseEditModel course = new CourseEditModel(Course.Id, name.getText().toString(),
+                        code.getText().toString(), description.getText().toString(),
+                        professor.getText().toString(), imageEnc, bannerEnc, assignedProfessors);
+                try {
+                    HttpURLConnection con = CourseController.putCourse(course, getActivity());
+                    if (con.getResponseCode() == 200) {
+                        ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Course.Id), true);
+                    } else {
+                        //TODO: see how to show a toast
+
+                        Log.d("ERR", "" + con.getResponseCode());
+                    }
+                } catch (Exception e) {
+                    Log.e("ERR", e.toString());
+                }
+            }
+
+        });
+    }
+
+    private void buildConfirmationPopup(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(true);
+        builder.setTitle("Confirmation");
+        builder.setMessage(message);
+        builder.setPositiveButton("Confirm",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteCourseLogic();
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void deleteCourseLogic() {
+        if (Course != null) {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        AssignedProfessorModel assignedProfessorModel = UserController.getAssignedProfessorByEmail(email, getActivity());
-                        if(assignedProfessorModel == null){
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                            return;
+                        HttpURLConnection con = CourseController.deleteCourse(Course.Id, getActivity());
+                        if (con.getResponseCode() == 200) {
+                            Log.d("DEB", "Deleted the course.");
+                        } else {
+                            Log.e("ERR", "" + con.getResponseCode());
                         }
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
-                                    Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-                                assignedProfessors.add(assignedProfessorModel);
-                                LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
-                                assignedProfessorsList.addView( assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
-                            }
-                        });
-                    } catch (IOException e) {
-                        Log.e("ERR", "Could not get assigned professor model.");
+                    } catch (Exception e) {
+                        Log.e("ERR", e.toString());
                     }
                 }
             });
-            professorToAssign.setText("");
         }
+        ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -191,6 +191,7 @@
                 android:theme="@style/RatingBar" />
 
             <TextView
+                android:id="@+id/non_anonymous_rating_number"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
@@ -231,6 +232,7 @@
                 android:theme="@style/RatingBar" />
 
             <TextView
+                android:id="@+id/anonymous_rating_number"
                 android:layout_marginBottom="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
