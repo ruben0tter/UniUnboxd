@@ -249,7 +249,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="visible"
-            android:background="@drawable/bottom_border">
+            android:background="@drawable/bottom_border"
+            android:id="@+id/friendReviewsWrapper">
 
             <TextView
                 android:textColor="@color/black"
@@ -269,7 +270,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:id="@+id/friendsThatReviewed">
+                android:id="@+id/friendReviews">
             </LinearLayout>
         </LinearLayout>
 

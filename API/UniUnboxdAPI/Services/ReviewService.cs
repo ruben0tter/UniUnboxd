@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Models.DataTransferObjects.CoursePage;
@@ -322,8 +323,10 @@ namespace UniUnboxdAPI.Services
             => reviews.Select(i => new FriendReview()
             {
                 Id = i.Id,
+                Rating = i.Rating,
+                Name = i.Student.UserName!,
                 Image = i.Student.Image,
-                Rating = i.Rating
+                HasComment = !i.Comment.IsNullOrEmpty()
             }).ToList();
     }
 }

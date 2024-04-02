@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -23,7 +22,6 @@ import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.models.ReviewListItem;
 import com.example.uniunboxd.models.course.CourseEditModel;
 import com.example.uniunboxd.models.course.CourseRetrievalModel;
-import com.example.uniunboxd.models.student.StudentListItem;
 import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.ArrayList;
@@ -33,9 +31,6 @@ import java.util.concurrent.ExecutionException;
 public class CourseFragment extends Fragment {
 
     private final int ID;
-
-    TextView yourReview;
-    TextView everyone;
     private final int NUM_REVIEWS_TO_LOAD = 5;
     public CourseRetrievalModel Course = null;
 
@@ -66,10 +61,9 @@ public class CourseFragment extends Fragment {
 
             Button loadBtn = (Button) view.findViewById(R.id.load);
             LinearLayout reviewList = view.findViewById(R.id.reviewList);
-            LinearLayout reviewedBy = view.findViewById(R.id.friendsThatReviewed);
 
             ImageButton editBtn = view.findViewById(R.id.editButton);
-            loadBtn.setOnClickListener(v -> load(reviewList, reviewedBy, inflater, container));
+            loadBtn.setOnClickListener(v -> load(reviewList, inflater, container));
 
             editBtn.setOnClickListener(v -> {
                 CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner, new ArrayList<>());
@@ -83,7 +77,7 @@ public class CourseFragment extends Fragment {
         return view;
     }
 
-    private void load(LinearLayout reviewListView, LinearLayout reviewedBy, LayoutInflater inflater, ViewGroup container) {
+    private void load(LinearLayout reviewListView, LayoutInflater inflater, ViewGroup container) {
         AsyncTask.execute(() -> {
             int lastID = 0;
             if (!Course.Reviews.isEmpty()) {

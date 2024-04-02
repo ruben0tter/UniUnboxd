@@ -109,7 +109,7 @@ namespace UniUnboxdAPI.Controllers
             {
                 if (await courseService.DoesProfessorAssignmentExist(course.Id, x.Id))
                     continue;
-                var result = await AssignProfessor(course.Id, x.Id);
+                var result = await AssignProfessor(x.Id, course.Id);
                 if (result.Equals(BadRequest()))
                     return BadRequest("Could not make professor assignment.");
             }

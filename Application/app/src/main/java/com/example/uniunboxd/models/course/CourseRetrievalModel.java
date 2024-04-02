@@ -1,10 +1,7 @@
 package com.example.uniunboxd.models.course;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +11,13 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.uniunboxd.DTO.CourseModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.student.WriteReviewFragment;
 import com.example.uniunboxd.models.ReviewListItem;
-import com.example.uniunboxd.models.student.StudentListItem;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,8 +38,7 @@ public class CourseRetrievalModel {
     public final String UniversityName;
     public final List<ReviewListItem> Reviews;
     public final List<Integer> AssignedProfessors;
-    public final List<StudentListItem> FriendsThatReviewed;
-
+    public final List<FriendReviewModel> FriendReviews;
     public final ReviewListItem YourReview;
 
     @JsonCreator
@@ -52,7 +49,7 @@ public class CourseRetrievalModel {
                                 @JsonProperty("banner") String banner, @JsonProperty("universityId") int universityId,
                                 @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName,
                                 @JsonProperty("assignedProfessors") List<Integer> assignedProfessors,
-                                @JsonProperty("friendsThatReviewed") List<StudentListItem> friendsThatReviewed,
+                                @JsonProperty("friendReviews") List<FriendReviewModel> friendReviews,
                                 @JsonProperty("yourReview") ReviewListItem yourReview){
         Id = id;
         Name = name;
@@ -67,11 +64,11 @@ public class CourseRetrievalModel {
         Reviews = reviews;
         UniversityName = universityName;
         AssignedProfessors = assignedProfessors;
-        FriendsThatReviewed = friendsThatReviewed;
+        FriendReviews = friendReviews;
         YourReview = yourReview;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container, Activity activity) {
+    public View createView(LayoutInflater inflater, ViewGroup container, FragmentActivity activity) {
         View view = inflater.inflate(R.layout.fragment_course, container, false);
         TextView name = view.findViewById(R.id.courseName);
         TextView code = view.findViewById(R.id.courseCode);
@@ -124,11 +121,18 @@ public class CourseRetrievalModel {
             }
         });
 
-        Log.d("HELP", FriendsThatReviewed.size() + "");
+        LinearLayout friendReviewsWrapper = view.findViewById(R.id.friendReviewsWrapper);
 
-        for (StudentListItem reviewer : FriendsThatReviewed) {
-            Log.d("YUP", reviewer.Name);
-            reviewedBy.addView(reviewer.createView(inflater, container, activity));
+        if(FriendReviews == null || FriendReviews.size() == 0) {
+            friendReviewsWrapper.setVisibility(View.GONE);
+        } else {
+            friendReviewsWrapper.setVisibility(View.VISIBLE);
+
+            LinearLayout friendReviewsLayout = view.findViewById(R.id.friendReviews);
+
+            for (FriendReviewModel review : FriendReviews) {
+                friendReviewsLayout.addView(review.createView(inflater, container, activity));
+            }
         }
 
         Button btnWriteReview = view.findViewById(R.id.writeReview);
