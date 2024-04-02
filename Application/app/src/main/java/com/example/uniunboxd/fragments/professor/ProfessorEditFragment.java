@@ -30,6 +30,8 @@ import java.net.HttpURLConnection;
 public class ProfessorEditFragment extends Fragment {
     private ProfessorEditModel Professor;
 
+    public ProfessorEditFragment() {}
+
     public ProfessorEditFragment(ProfessorEditModel professor) {
         Professor = professor;
     }
@@ -43,6 +45,9 @@ public class ProfessorEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (Professor == null)
+            return null;
+
         View v = Professor.createView(inflater, container, savedInstanceState);
 
         TextView name = v.findViewById(R.id.professorNameEdit);

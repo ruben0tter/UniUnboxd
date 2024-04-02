@@ -30,8 +30,10 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     private EditText comment;
     private RatingBar rating;
     private CheckBox isAnonymous;
-    private final CourseModel course;
+    private CourseModel course;
     private ReviewModel review;
+
+    public WriteReviewFragment() {}
 
     public WriteReviewFragment(CourseModel course) {
         this.course = course;
@@ -50,6 +52,9 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(course == null)
+            return null;
+
         View view = inflater.inflate(R.layout.fragment_write_review, container, false);
 
         // Course Info

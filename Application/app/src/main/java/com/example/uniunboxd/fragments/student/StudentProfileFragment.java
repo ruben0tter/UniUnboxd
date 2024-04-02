@@ -22,8 +22,10 @@ import java.util.concurrent.ExecutionException;
 
 public class StudentProfileFragment extends Fragment {
 
-    private final int ID;
+    private int ID;
     private StudentProfileModel Student;
+
+    public StudentProfileFragment() {}
 
     public StudentProfileFragment(int id) {
         ID = id;
@@ -48,7 +50,7 @@ public class StudentProfileFragment extends Fragment {
         }
 
         if (Student == null) {
-            Log.e("ERR", "Something went wrong.");
+            return view;
         }
 
         view = Student.createView(inflater, container, savedInstanceState, this);

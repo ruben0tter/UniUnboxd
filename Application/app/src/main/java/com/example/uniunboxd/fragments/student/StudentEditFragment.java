@@ -54,6 +54,8 @@ public class StudentEditFragment extends Fragment {
 
     private List<UniversityNameModel> Universities;
 
+    public StudentEditFragment() {}
+
     public StudentEditFragment(StudentEditModel studentEditModel) {
         Model = studentEditModel;
     }
@@ -72,6 +74,9 @@ public class StudentEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        if (Model == null)
+            return null;
 
         View view = inflater.inflate(R.layout.fragment_student_profile_page_edit, container, false);
 

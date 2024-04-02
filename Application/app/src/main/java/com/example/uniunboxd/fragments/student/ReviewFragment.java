@@ -37,7 +37,7 @@ import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutionException;
 
 public class ReviewFragment extends Fragment implements View.OnClickListener {
-    private final int id;
+    private int id;
     private Review review;
     private boolean isReviewTabActive = false;
     private boolean isReviewLiked = false;
@@ -54,6 +54,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private TextView likeText;
     private TextView likeCount;
 
+    public ReviewFragment() {}
+
     public ReviewFragment(int id) {
         this.id = id;
     }
@@ -66,6 +68,9 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (id == 0)
+            return null;
+
         View view = inflater.inflate(R.layout.fragment_review, container, false);
 
         // Layouts

@@ -50,6 +50,7 @@ public class SearchStudentFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         search = view.findViewById(R.id.search);
