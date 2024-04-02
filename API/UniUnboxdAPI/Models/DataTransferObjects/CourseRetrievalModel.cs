@@ -18,6 +18,5 @@ public class CourseRetrievalModel
     public ICollection<CourseReviewModel>? Reviews { get; set; }
     public CourseReviewModel? YourReview { get; set; }
     public ICollection<int>? AssignedProfessors { get; set; }
-    
     public ICollection<FriendReview>? FriendReviews { get; set; }
 }

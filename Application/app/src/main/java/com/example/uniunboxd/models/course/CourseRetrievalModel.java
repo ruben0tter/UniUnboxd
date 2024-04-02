@@ -2,6 +2,10 @@ package com.example.uniunboxd.models.course;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+<<<<<<< Updated upstream
+=======
+import android.util.Log;
+>>>>>>> Stashed changes
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +46,7 @@ public class CourseRetrievalModel {
     public final ReviewListItem YourReview;
 
     @JsonCreator
-    public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name")String name,
+    public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name") String name,
                                 @JsonProperty("code") String code, @JsonProperty("anonymousRating") float anonymousRating,
                                 @JsonProperty("nonanonymousRating") float nonanonymousRating, @JsonProperty("description") String description,
                                 @JsonProperty("professor") String professor, @JsonProperty("image") String image,
@@ -84,8 +88,8 @@ public class CourseRetrievalModel {
 
         anonRatingBar.setRating(AnonymousRating);
         nonanonRatingBar.setRating(NonanonymousRating);
-        anonRatingNum.setText(""+AnonymousRating);
-        nonanonRatingNum.setText(""+NonanonymousRating);
+        anonRatingNum.setText("" + AnonymousRating);
+        nonanonRatingNum.setText("" + NonanonymousRating);
         name.setText(Name);
         code.setText(Code);
         professor.setText(Professor);
@@ -137,14 +141,9 @@ public class CourseRetrievalModel {
 
         Button btnWriteReview = view.findViewById(R.id.writeReview);
 
-        btnWriteReview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((IActivity) activity).replaceFragment(
-                        new WriteReviewFragment(new CourseModel(Id, Name, Code, Image))
-                ,true);
-            }
-        });
+        btnWriteReview.setOnClickListener(v -> ((IActivity) activity).replaceFragment(
+                new WriteReviewFragment(new CourseModel(Id, Name, Code, Image))
+                , true));
 
         return view;
     }

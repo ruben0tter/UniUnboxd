@@ -1,8 +1,10 @@
 package com.example.uniunboxd.models;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
@@ -14,11 +16,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.API.VerificationController;
 import com.example.uniunboxd.R;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Application {
     public final int ID;
@@ -68,8 +76,29 @@ public class Application {
         TextView label = view.findViewById(R.id.application_text);
         label.setText(NAME);
         Button btnDocuments = view.findViewById(R.id.view_documents_button);
+
+        AtomicInteger docIndex = new AtomicInteger();
+
         btnDocuments.setOnClickListener(v -> {
-            // TODO : Set to open / download files.
+            String file_b64 = FILES[docIndex.getAndIncrement() % FILES.length];
+            byte[] file = Base64.decode(file_b64, Base64.DEFAULT);
+
+            File outputDir = activity.getCacheDir();
+            File outputFile;
+            try {
+                outputFile = File.createTempFile("verificationDoc", ".pdf", outputDir);
+                FileOutputStream outputStream = new FileOutputStream(outputFile);
+                outputStream.write(file);
+                outputStream.close();
+            } catch (IOException e) {
+                Log.e("VERIF", "Failed to write file");
+                return;
+            }
+
+            Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", outputFile);
+            Intent shareIntent = new Intent(Intent.ACTION_VIEW, uri);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            activity.startActivity(Intent.createChooser(shareIntent, null));
         });
 
         try {
