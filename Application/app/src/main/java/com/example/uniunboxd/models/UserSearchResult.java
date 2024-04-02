@@ -19,20 +19,17 @@ public class UserSearchResult extends SearchResult{
     public final int Id;
     public final String UserName;
     public final String Image;
-    public final String University;
     public final int UserType;
 
     @JsonCreator
     public UserSearchResult(@JsonProperty("id") int id,
                             @JsonProperty("userName") String username,
                             @JsonProperty("image") String image,
-                            @JsonProperty("userType") int userType,
-                            @JsonProperty("university") String university) {
+                            @JsonProperty("userType") int userType) {
         Id = id;
         UserName = username;
         Image = image;
         UserType = userType;
-        University = university;
     }
 
     private static String[] USER_TYPES = new String[]{
@@ -53,7 +50,6 @@ public class UserSearchResult extends SearchResult{
 
         ((TextView) view.findViewById(R.id.username)).setText(UserName);
         ((TextView) view.findViewById(R.id.role)).setText(USER_TYPES[UserType]);
-        ((TextView) view.findViewById(R.id.university)).setText(University);
 
         if (Image != null) {
             ImageView image = view.findViewById(R.id.image);
@@ -62,7 +58,6 @@ public class UserSearchResult extends SearchResult{
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             image.setImageBitmap(decodedByte);
         }
-
 
         return view;
     }

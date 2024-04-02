@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.example.uniunboxd.API.SearchController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.fragments.professor.ProfessorProfileFragment;
 import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.models.CourseSearchResult;
 import com.example.uniunboxd.models.SearchResult;
@@ -154,7 +155,10 @@ public class SearchStudentFragment extends Fragment {
                 for (UserSearchResult user : users) {
                     View view = user.createView(getLayoutInflater(), getActivity());
                     view.setOnClickListener(v -> {
-                        ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(user.Id), true);
+                        if(user.UserType == 0)
+                            ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(user.Id), true);
+                        else
+                            ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(user.Id), true);
                     });
                     resultsLayout.addView(view);
                 }

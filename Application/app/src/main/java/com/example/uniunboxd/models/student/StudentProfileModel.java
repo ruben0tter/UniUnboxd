@@ -92,9 +92,9 @@ public class StudentProfileModel {
 
 
         if (isFollowing) {
-            followAction.setText("UNFOLLOW");
+            followAction.setText("Unfollow");
         } else {
-            followAction.setText("FOLLOW");
+            followAction.setText("Follow");
         }
         followAction.setOnClickListener(v -> AsyncTask.execute(() -> {
             if (isFollowing) {
@@ -103,7 +103,7 @@ public class StudentProfileModel {
                     if (con.getResponseCode() == 200) {
                         isFollowing = false;
                         f.getActivity().runOnUiThread(() -> {
-                            followAction.setText("FOLLOW");
+                            followAction.setText("Follow");
                             followers.removeAllViews();
                             for (StudentListItem x : Followers) {
                                 followers.addView(x.createView(inflater, container, f.getActivity()));
@@ -126,7 +126,7 @@ public class StudentProfileModel {
                         StudentListItem user = UserController.getStudentListItem(userId, f.getActivity());
                         Followers.add(user);
                         f.getActivity().runOnUiThread(() -> {
-                            followAction.setText("UNFOLLOW");
+                            followAction.setText("Unfollow");
                             followers.addView(user.createView(inflater, container, f.getActivity()));
                         });
                     } else {

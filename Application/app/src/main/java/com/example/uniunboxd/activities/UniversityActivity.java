@@ -11,6 +11,7 @@ import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
 import com.example.uniunboxd.fragments.university.SearchUniversityFragment;
 import com.example.uniunboxd.fragments.university.UniversityHomeFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.utilities.StackHandler;
 
 import java.util.Objects;
 
@@ -29,8 +30,14 @@ public class UniversityActivity extends IActivity {
 
         getOnBackPressedDispatcher().addCallback(backPressed);
 
-        status = JWTValidation.getTokenProperty(this, "verified");
-        initialise();
+        StackHandler stackHandler = StackHandler.getInstance();
+        if(stackHandler.stack != null) {
+            fragmentHistory = stackHandler.stack;
+            goBack();
+        } else {
+            status = JWTValidation.getTokenProperty(this, "verified");
+            initialise();
+        }
     }
 
     public void initialise() {

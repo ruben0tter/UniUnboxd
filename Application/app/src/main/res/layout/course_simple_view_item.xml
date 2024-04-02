@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:numStars="5"
             android:rating="3"
-            android:progressTint="@color/yellow"/>
+            android:theme="@style/RatingBar"/>
 
         <TextView
             android:id="@+id/non_anonymous_label"
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:numStars="5"
             android:rating="4"
-            android:progressTint="@color/yellow"/>
+            android:theme="@style/RatingBar"/>
     </LinearLayout>
 
 </RelativeLayout>

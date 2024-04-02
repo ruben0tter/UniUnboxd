@@ -1,5 +1,6 @@
 package com.example.uniunboxd.activities;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.OnBackPressedCallback;
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.utilities.Redirection;
+import com.example.uniunboxd.utilities.StackHandler;
 
 import java.util.List;
 import java.util.Stack;
@@ -64,5 +66,18 @@ public abstract class IActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Save the state
+        Fragment f = getVisibleFragment();
+        if (f != null) {
+            fragmentHistory.push(f);
+        }
+
+        StackHandler stackHandler = StackHandler.getInstance();
+        stackHandler.setStack(fragmentHistory);
     }
 }

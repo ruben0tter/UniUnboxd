@@ -98,31 +98,9 @@ namespace UniUnboxdAPI.Services
             SendEmail(newReplyMail);
         }
 
-        // TODO: Implement function for student users.
-        // What is the difference between this and the next one?
-        public void SendVerificationStatusChangeNotification(Student student, VerificationApplication application)
-        {
-            var verificationStatusChangedMail = new MimeMessage();
-
-            verificationStatusChangedMail.From.Add(uniUnboxdEmail);
-            verificationStatusChangedMail.To.Add(new MailboxAddress(student.UserName, student.Email));
-            verificationStatusChangedMail.Subject = "The status of your verification application has changed.";
-
-            var builder = new BodyBuilder
-            {
-                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(student)
-            };
-            verificationStatusChangedMail.Body = builder.ToMessageBody();
-
-            SendEmail(verificationStatusChangedMail);
-        }
-
         public void SendVerificationStatusChangeNotification(Student student)
-        {
-            SendVerificationStatusChangeNotification((User) student);
-        }
+            => SendVerificationStatusChangeNotification((User) student);
 
-        //TODO: Implement function for university users.
         public void SendVerificationStatusChangeNotification(User user)
         {
             var verificationStatusChangedMail = new MimeMessage();

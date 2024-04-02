@@ -3,9 +3,6 @@ package com.example.uniunboxd.activities;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityProfessorBinding;
@@ -13,6 +10,7 @@ import com.example.uniunboxd.fragments.professor.ProfessorProfileFragment;
 import com.example.uniunboxd.fragments.professor.SearchProfessorFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 import com.example.uniunboxd.utilities.Redirection;
+import com.example.uniunboxd.utilities.StackHandler;
 
 public class ProfessorActivity extends IActivity {
     ActivityProfessorBinding binding;
@@ -24,10 +22,18 @@ public class ProfessorActivity extends IActivity {
         binding = ActivityProfessorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        getOnBackPressedDispatcher().addCallback(backPressed);
+
         setNavigationMenu();
 
-        int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
-        replaceFragment(new ProfessorProfileFragment(id), true);
+        StackHandler stackHandler = StackHandler.getInstance();
+        if(stackHandler.stack != null) {
+            fragmentHistory = stackHandler.stack;
+            goBack();
+        } else {
+            int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
+            replaceFragment(new ProfessorProfileFragment(id), true);
+        }
     }
 
     @Override

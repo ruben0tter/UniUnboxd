@@ -63,7 +63,7 @@ namespace UniUnboxdAPI.Services
 
         private async Task<UserSearchModel> CreateUserSearchModel(User user)
         {
-            String? image = await userRepository.GetImageOf(user.Id, user.UserType);
+            string? image = await userRepository.GetImageOf(user.Id, user.UserType);
 
             return new UserSearchModel
             {

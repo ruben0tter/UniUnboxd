@@ -12,22 +12,26 @@ namespace UniUnboxdAPI.Repositories
     {
         public async Task<List<Course>> GetCourses(SearchOptions options)
             => await dbContext.Courses.Where(i => i.Name.Contains(options.Search) || i.Code == options.Search)
+                                    .Include(i => i.University)
                                     .Skip(options.Start ?? throw new ArgumentNullException(nameof(options.Start)))
                                     .Take(options.Count ?? throw new ArgumentNullException(nameof(options.Count)))
                                     .ToListAsync();
 
         public async Task<List<Course>> GetAllCourses(SearchOptions options)
             => await dbContext.Courses.Where(i => i.Name.Contains(options.Search) || i.Code == options.Search)
+                                    .Include(i => i.University)
                                     .ToListAsync();
 
         public async Task<List<Course>> GetCoursesFromUni(SearchOptions options)
             => await dbContext.Courses.Where(i => i.University.Id == options.UniversityId && (i.Name.Contains(options.Search) || i.Code == options.Search))
+                                    .Include(i => i.University)
                                     .Skip(options.Start ?? throw new ArgumentNullException(nameof(options.Start)))
                                     .Take(options.Count ?? throw new ArgumentNullException(nameof(options.Count)))
                                     .ToListAsync();
 
         public async Task<List<Course>> GetAllCoursesFromUni(SearchOptions options)
             => await dbContext.Courses.Where(i => i.University.Id == options.UniversityId && (i.Name.Contains(options.Search) || i.Code == options.Search))
+                                    .Include(i => i.University)
                                     .ToListAsync();
 
 

@@ -14,9 +14,10 @@ import com.example.uniunboxd.API.UserController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityStudentBinding;
 import com.example.uniunboxd.fragments.student.HomeFragment;
+import com.example.uniunboxd.fragments.student.SearchStudentFragment;
 import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
-import com.example.uniunboxd.fragments.student.SearchStudentFragment;
+import com.example.uniunboxd.utilities.StackHandler;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.net.HttpURLConnection;
@@ -37,7 +38,13 @@ public class StudentActivity extends IActivity {
 
         getOnBackPressedDispatcher().addCallback(backPressed);
 
-        replaceFragment(new HomeFragment(), false);
+        StackHandler stackHandler = StackHandler.getInstance();
+        if(stackHandler.stack != null) {
+            fragmentHistory = stackHandler.stack;
+            goBack();
+        } else {
+            replaceFragment(new HomeFragment(), false);
+        }
 
         askNotificationPermission();
     }

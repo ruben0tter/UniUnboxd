@@ -16,7 +16,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="449dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bottom_border">
 
             <ImageView
@@ -95,62 +95,66 @@
             <TextView
                 android:id="@+id/courseCode"
                 android:layout_width="wrap_content"
-                android:maxWidth="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:maxWidth="300dp"
                 android:text="[Course Code]"
                 android:textColor="@color/black"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.718" />
+                app:layout_constraintTop_toBottomOf="@+id/courseName"
+                app:layout_constraintVertical_bias="0.05" />
 
             <TextView
                 android:id="@+id/universityName"
-                android:layout_marginStart="10dp"
-                android:textColor="@color/black"
                 android:layout_width="wrap_content"
-                android:maxWidth="300dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:maxWidth="300dp"
                 android:text="[University]"
+                android:textColor="@color/black"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/courseBanner"
-                app:layout_constraintVertical_bias="0.625" />
+                app:layout_constraintTop_toBottomOf="@+id/courseCode"
+                app:layout_constraintVertical_bias="0.10" />
 
             <TextView
                 android:id="@+id/professor"
                 android:layout_width="wrap_content"
-                android:maxWidth="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:maxWidth="300dp"
                 android:text="[Professor]"
                 android:textColor="@color/black"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/courseBanner"
-                app:layout_constraintVertical_bias="0.813" />
+                app:layout_constraintTop_toBottomOf="@+id/universityName"
+                app:layout_constraintVertical_bias="0.10" />
 
             <TextView
                 android:id="@+id/description"
-                android:layout_marginStart="10dp"
-                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:text="[Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.]"
+                android:textColor="@color/black"
+                android:textSize="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/courseImage"
-                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/courseBanner"
-                app:layout_constraintVertical_bias="1" />
+                app:layout_constraintTop_toBottomOf="@+id/professor"
+                app:layout_constraintVertical_bias="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -286,19 +290,19 @@
             android:textStyle="bold" />
 
         <LinearLayout
+            android:id="@+id/reviewHeaders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:background="@drawable/bottom_border"
             android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            android:paddingBottom="5dp"
-            android:background="@drawable/bottom_border"
-            >
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/everyone"
@@ -330,10 +334,11 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/writeReview"
-                android:layout_width="131dp"
-                android:layout_height="37dp"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
                 android:layout_marginStart="60dp"
-                android:background="#C82424"
+                android:background="@drawable/button_red"
+                android:padding="5dp"
                 android:text="Write Review"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
@@ -345,30 +350,30 @@
                 app:layout_constraintVertical_bias="1.0" />
         </LinearLayout>
 
-
         <LinearLayout
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/reviewList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"/>
-
-            <Button
-                android:id="@+id/load"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/TUeRed"
-                android:text="Load Reviews"
-                android:textColor="@color/white"/>
+                android:orientation="vertical" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/load"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/button_red"
+            android:text="Load Reviews"
+            android:textColor="@color/white" />
     </LinearLayout>
 </ScrollView>

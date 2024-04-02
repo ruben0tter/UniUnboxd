@@ -90,7 +90,7 @@ namespace UniUnboxdAPI.Services
         public async Task<CourseReviewModel> GetCourseReviewByStudent(int courseId, int studentId)
         {
             var review = await reviewRepository.GetCourseReviewByStudent(courseId, studentId);
-            return CreateCourseReviewModel(review, courseId);
+            return review != null ? CreateCourseReviewModel(review, courseId) : null;
 
         }
 

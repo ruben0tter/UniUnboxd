@@ -23,7 +23,7 @@ public class StudentReviewListItem {
     public final StudentReviewCourse Course;
     @JsonCreator
     public StudentReviewListItem(@JsonProperty("id") int ID, @JsonProperty("rating") float Rating,
-                                 @JsonProperty("comment") String Comment, @JsonProperty("course") StudentReviewCourse course) {
+                                 @JsonProperty("comment") String Comment, @JsonProperty("studentProfileReviewCourse") StudentReviewCourse course) {
         this.ID = ID;
         this.Rating = Rating;
         this.Comment = Comment;

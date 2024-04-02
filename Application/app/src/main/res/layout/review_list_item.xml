@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:isIndicator="true"
             android:numStars="5"
-            android:progressTint="@color/yellow"
+            android:theme="@style/RatingBar"
             android:rating="2.9"
             android:stepSize="0.1"
             app:layout_constraintBottom_toTopOf="@+id/ReviewListItem_Comment"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:gravity="center"
+            android:gravity="left"
             android:padding="16dp"
             android:text="Clickable Text 1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -54,6 +54,7 @@
 
         <TextView
             android:id="@+id/ReviewListItem_PosterName"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"

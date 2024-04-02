@@ -4,10 +4,8 @@ import android.os.Bundle;
 
 import com.example.uniunboxd.databinding.ActivityMainBinding;
 import com.example.uniunboxd.fragments.main.AuthenticationFragment;
-import com.example.uniunboxd.fragments.student.StudentEditFragment;
-import com.example.uniunboxd.models.student.StudentEditModel;
-import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.utilities.StackHandler;
 
 import java.util.Objects;
 
@@ -21,8 +19,13 @@ public class MainActivity extends IActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        replaceFragment(new StudentEditFragment(new StudentEditModel(new StudentProfileModel(3, "Name", "Uni", "string", null, null, null))));
-        setupInitialFragment();
+        StackHandler stackHandler = StackHandler.getInstance();
+        if(stackHandler.stack != null) {
+            fragmentHistory = stackHandler.stack;
+            goBack();
+        } else {
+            setupInitialFragment();
+        }
     }
 
     private void setupInitialFragment() {
