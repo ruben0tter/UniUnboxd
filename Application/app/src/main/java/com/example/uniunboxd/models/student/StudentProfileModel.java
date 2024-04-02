@@ -87,7 +87,7 @@ public class StudentProfileModel {
 
         if (!Reviews.isEmpty())
             for (StudentReviewListItem x : Reviews) {
-                reviews.addView(x.createView(inflater, container, savedInstanceState));
+                reviews.addView(x.createView(inflater, container, savedInstanceState, f));
             }
 
 

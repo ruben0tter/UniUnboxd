@@ -8,7 +8,11 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.fragments.student.ReviewFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,7 +34,7 @@ public class StudentReviewListItem {
         this.Course = course;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f) {
         View view = inflater.inflate(R.layout.profile_review_item, container, false);
         RatingBar rating = view.findViewById(R.id.ratingBar);
         TextView courseCode = view.findViewById(R.id.courseCode);
@@ -45,6 +49,12 @@ public class StudentReviewListItem {
             courseImage.setImageBitmap(ImageHandler.decodeImageString(Course.Image));
         comment.setText(Comment);
 
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((IActivity) f.getActivity()).replaceFragment(new ReviewFragment(ID), true);
+            }
+        });
         return view;
     }
 }
