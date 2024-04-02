@@ -30,6 +30,24 @@
         android:scaleY="1.1"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/reviewHeader"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/reviewHeader"
+        app:layout_constraintTop_toTopOf="@+id/reviewHeader">
+
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/flagReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/flag"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/reviewHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/reviewHeader"

@@ -6,6 +6,7 @@ using MimeKit;
 using System.Net.Mail;
 using System.Reflection.Emit;
 using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 using UniUnboxdAPI.Utilities;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
@@ -137,6 +138,23 @@ namespace UniUnboxdAPI.Services
             verificationStatusChangedMail.Body = builder.ToMessageBody();
 
             SendEmail(verificationStatusChangedMail);
+        }
+
+        public void sendFlagReviewNotification(FlagReviewModel model, int userId)
+        {
+            var flagReviewEmail = new MimeMessage();
+
+            flagReviewEmail.From.Add(uniUnboxdEmail);
+            flagReviewEmail.To.Add(uniUnboxdEmail);
+            flagReviewEmail.Subject = "A review has been flagged.";
+
+            var builder = new BodyBuilder
+            {
+                HtmlBody = NotificationBodyGenerator.FlagReviewNotificationBody(model, userId)
+            };
+            flagReviewEmail.Body = builder.ToMessageBody();
+
+            SendEmail(flagReviewEmail);
         }
 
         private async Task SendEmail(MimeMessage email)
