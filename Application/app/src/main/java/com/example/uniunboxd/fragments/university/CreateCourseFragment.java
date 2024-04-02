@@ -124,7 +124,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             });
             deleteBtn.setOnClickListener(this);
         } else {
-            deleteBtn.setVisibility(View.GONE);
+            view.findViewById(R.id.deleteWrapper).setVisibility(View.GONE);
             view.findViewById(R.id.searchButton).setVisibility(View.GONE);
             view.findViewById(R.id.SelectedProf).setVisibility(View.GONE);
             view.findViewById(R.id.selectedProfessorLabel).setVisibility(View.GONE);

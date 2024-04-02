@@ -38,7 +38,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:backgroundTint="@color/main_red"
-                    android:text="Courses"
+                    android:text="Course"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -50,7 +50,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:backgroundTint="@color/main_red"
-                    android:text="Users"
+                    android:text="User"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="16sp" />

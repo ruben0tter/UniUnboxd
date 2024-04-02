@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.R;
@@ -53,8 +54,14 @@ public class ProfessorProfileModel {
         }
         LinearLayout listAssignedCourses = view.findViewById(R.id.listAssignedCourses);
 
-        for(AssignedCourseModel x : AssignedCourses) {
-            listAssignedCourses.addView(x.createView(inflater, container, savedInstanceState, f));
+        if (AssignedCourses == null || AssignedCourses.isEmpty()) {
+            universityName.setVisibility(View.GONE);
+            ConstraintLayout coursesHeaderWrapper = view.findViewById(R.id.coursesHeaderWrapper);
+            coursesHeaderWrapper.setVisibility(View.GONE);
+        } else {
+            for(AssignedCourseModel x : AssignedCourses) {
+                listAssignedCourses.addView(x.createView(inflater, container, savedInstanceState, f));
+            }
         }
         return view;
     }
