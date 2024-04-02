@@ -18,6 +18,7 @@ import com.example.uniunboxd.API.RegistrationController;
 import com.example.uniunboxd.DTO.RegisterModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.utilities.MessageHandler;
 
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
@@ -94,14 +95,14 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         AsyncTask.execute(() -> {
             try {
                 HttpURLConnection response = RegistrationController.register(model);
-                Log.d("DEB", "" + response.getResponseCode());
-                //TODO: Fix notification system.
-                //sendNotification(readMessage(response.getErrorStream()));
+
                 if (response.getResponseCode() == 200) {
                     redirectToSignIn();
+                } else {
+                    MessageHandler.showToastFromBackground(getActivity(), response.getErrorStream());
                 }
             } catch (Exception e) {
-                Log.e("APP", "Failed to register user: " + e.toString());
+                Log.e("APP", "Failed to register user: " + e);
             }
 
         });

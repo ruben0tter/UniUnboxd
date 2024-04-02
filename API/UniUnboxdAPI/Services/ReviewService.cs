@@ -147,6 +147,9 @@ namespace UniUnboxdAPI.Services
             }
         }
 
+        public void FlagReview(FlagReviewModel model, int userId)
+            => mailService.sendFlagReviewNotification(model, userId);
+
         /// <summary>
         /// Get next n reviews for a course.
         /// </summary>
@@ -197,6 +200,7 @@ namespace UniUnboxdAPI.Services
             review.Rating = model.Rating;
             review.Comment = model.Comment;
             review.IsAnonymous = model.IsAnonymous;
+            review.LastModificationTime = DateTime.Now;
         }
 
         /// <summary>

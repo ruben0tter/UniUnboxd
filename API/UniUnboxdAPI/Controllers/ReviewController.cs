@@ -8,6 +8,7 @@ using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
+using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 
 namespace UniUnboxdAPI.Controllers
 {
@@ -88,6 +89,19 @@ namespace UniUnboxdAPI.Controllers
             {
                 return BadRequest("Something went wrong when creating a review.\nThe following exception was thrown:\n" + ex.Message);
             }
+        }
+
+        [HttpPost("flag-review")]
+        [Authorize(Roles = "Student, Professor")]
+        public async Task<IActionResult> FlagReview([FromBody] FlagReviewModel model)
+        {
+            int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (!await reviewService.DoesReviewExist(model.ReviewId))
+                return BadRequest("Given review does not exist.");
+
+            reviewService.FlagReview(model, userId);
+            return Ok("Succesfully flagged review");
         }
 
         [HttpPut]
