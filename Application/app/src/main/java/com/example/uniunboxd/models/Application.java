@@ -30,14 +30,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Application {
     public final int ID;
-    public final String NAME;
+    public final String EMAIL;
     public final String PFP;
     public final String[] FILES;
 
-    public Application(@JsonProperty("userId") int id, @JsonProperty("name") String name, @JsonProperty("image") String pfp,
+    public Application(@JsonProperty("userId") int id, @JsonProperty("email") String email, @JsonProperty("image") String pfp,
                        @JsonProperty("verificationData") String[] files) {
         ID = id;
-        NAME = name;
+        EMAIL = email;
         PFP = pfp;
         FILES = files;
     }

@@ -78,7 +78,7 @@ namespace UniUnboxdAPI.Services
             return new() {
                 VerificationData = application.VerificationData,
                 UserId = application.UserId,
-                Name = user.UserName,
+                Email = user.Email,
                 Image = image
             };
         }

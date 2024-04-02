@@ -36,9 +36,9 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/professorImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="fitCenter"
 
                 android:src="@drawable/ic_launcher_background"
                 android:textColor="@android:color/black"
