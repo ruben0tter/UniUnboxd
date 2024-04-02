@@ -78,7 +78,7 @@
             <TextView
                 android:id="@+id/courseName"
                 android:layout_marginStart="10dp"
-                android:layout_width="172dp"
+                android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:fontFamily="@font/k2d"
                 android:padding="0dp"

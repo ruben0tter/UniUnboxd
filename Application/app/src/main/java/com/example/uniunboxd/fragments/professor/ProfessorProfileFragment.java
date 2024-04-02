@@ -68,6 +68,7 @@ public class ProfessorProfileFragment extends Fragment {
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
         if (userId != ID) {
             editBtn.setVisibility(View.GONE);
+            signOutBtn.setVisibility(View.GONE);
         }
         return view;
     }
