@@ -63,7 +63,12 @@ namespace UniUnboxdAPI.Services
 
             VerificationApplication[] applications = await verificationRepository.GetNextApplications(user, startID, 10);
 
-            return await Task.WhenAll(applications.Select(CreatePendingVerificationModel));
+            List<PendingVerificationsModel> result = [];
+            foreach (VerificationApplication app in applications) {
+                result.Add(await CreatePendingVerificationModel(app));
+            }
+
+            return result.ToArray();
         }
 
         private async Task<PendingVerificationsModel> CreatePendingVerificationModel(VerificationApplication application) {
