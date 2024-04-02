@@ -2,10 +2,7 @@ package com.example.uniunboxd.models.course;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-<<<<<<< Updated upstream
-=======
 import android.util.Log;
->>>>>>> Stashed changes
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
