@@ -12,14 +12,23 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class FileSystemChooser {
-    static final int PICKFILE_RESULT_CODE = 1;
-    public static void ChoosePDF(Fragment f){
+
+    public static void ChoosePDF(Fragment f) {
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
         chooseFile.setType("application/pdf");
         f.startActivityForResult(
                 Intent.createChooser(chooseFile, "Choose a file"),
-                PICKFILE_RESULT_CODE
+                1
+        );
+    }
+    public static void ChoosePDF(Fragment f, int code){
+        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+        chooseFile.setType("application/pdf");
+        f.startActivityForResult(
+                Intent.createChooser(chooseFile, "Choose a file"),
+                code
         );
     }
 
@@ -29,7 +38,7 @@ public class FileSystemChooser {
         chooseFile.setType("*/*");
         f.startActivityForResult(
                 Intent.createChooser(chooseFile, "Choose a file"),
-                PICKFILE_RESULT_CODE
+                1
         );
     }
 

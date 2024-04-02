@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.ProfileFragment;
+import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,7 +28,7 @@ public class Reply implements View.OnClickListener {
     }
 
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f, boolean isLastReply) {
-        View view =  inflater.inflate(R.layout.reply, container, false);
+        View view = inflater.inflate(R.layout.reply, container, false);
 
         ImageView image = view.findViewById(R.id.replyImage);
         image.setOnClickListener(this);
@@ -36,13 +36,13 @@ public class Reply implements View.OnClickListener {
         user.setOnClickListener(this);
         TextView text = view.findViewById(R.id.replyText);
 
-        if(User.Image != null) {
+        if (User.Image != null) {
             image.setImageBitmap(ImageHandler.decodeImageString(User.Image));
         }
         user.setText(User.Name);
         text.setText(Text);
 
-        if(isLastReply) {
+        if (isLastReply) {
             View replyDivider = view.findViewById(R.id.replyDivider);
             replyDivider.setVisibility(View.GONE);
         }
@@ -54,6 +54,6 @@ public class Reply implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new ProfileFragment(User.Id));
+        ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(User.Id), true);
     }
 }

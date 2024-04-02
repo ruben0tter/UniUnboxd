@@ -95,17 +95,19 @@ builder.Services.AddTransient<RegistrationService>();
 builder.Services.AddTransient<AuthenticationService>();
 builder.Services.AddTransient<ReviewService>();
 builder.Services.AddTransient<CourseService>();
+builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ReplyService>();
+builder.Services.AddTransient<SearchService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<MailService>();
 builder.Services.AddTransient<PushNotificationService>();
-
 // Repositories
 builder.Services.AddTransient<VerificationRepository>();
 builder.Services.AddTransient<ReviewRepository>();
 builder.Services.AddTransient<CourseRepository>();
 builder.Services.AddTransient<UserRepository>();
 builder.Services.AddTransient<ReplyRepository>();
+builder.Services.AddTransient<SearchRepository>();
 
 // Push Notifications Dependency
 FirebaseApp.Create(new AppOptions()

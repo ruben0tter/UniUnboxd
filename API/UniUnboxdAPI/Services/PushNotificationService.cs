@@ -54,14 +54,14 @@ namespace UniUnboxdAPI.Services
         }
 
         //TODO: Implement function
-        public void SendVerificationStatusChangeNotification(Student student, VerificationApplication application)
+        public void SendVerificationStatusChangeNotification(Student student)
         {
             var message = new Message()
             {
                 Notification = new Notification
                 {
                     Title = "The status of your verification application has changed.",
-                    Body = NotificationBodyGenerator.VerificationStatusChangeBody(application.UserToBeVerified.VerificationStatus)
+                    Body = NotificationBodyGenerator.VerificationStatusChangeBody(student)
                 },
                 Token = student.DeviceToken
             };

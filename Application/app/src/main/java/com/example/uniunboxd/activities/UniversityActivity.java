@@ -3,24 +3,20 @@ package com.example.uniunboxd.activities;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityUniversityBinding;
-import com.example.uniunboxd.fragments.student.SearchFragment;
+import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
+import com.example.uniunboxd.fragments.university.SearchUniversityFragment;
 import com.example.uniunboxd.fragments.university.UniversityHomeFragment;
-import com.example.uniunboxd.fragments.university.ApplicationsFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
-import com.example.uniunboxd.utilities.Redirection;
 
 import java.util.Objects;
 
-public class UniversityActivity extends AppCompatActivity implements IActivity {
+public class UniversityActivity extends IActivity {
+
+    String status;
 
     ActivityUniversityBinding binding;
 
@@ -31,72 +27,32 @@ public class UniversityActivity extends AppCompatActivity implements IActivity {
         binding = ActivityUniversityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        replaceFragment(getCorrectHomeFragment());
+        getOnBackPressedDispatcher().addCallback(backPressed);
 
-        /*
-        UserState state = new UserState("userToken");
-        replaceFragment(state.getHomeFragment());
-        setUserState(state);
-        */
+        status = JWTValidation.getTokenProperty(this, "verified");
+        initialise();
     }
 
-    private Fragment getCorrectHomeFragment() {
-        String state = JWTValidation.getTokenProperty(this, "verified");
+    public void initialise() {
+        if (Objects.equals(status, "Verified")) {
+            binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.home) {
+                    replaceFragment(new UniversityHomeFragment(), false);
+                } else if (itemId == R.id.search) {
+                    replaceFragment(new SearchUniversityFragment(), false);
+                } else if (itemId == R.id.applications) {
+                    replaceFragment(new ApplicationsFragment(), false);
+                }
+                fragmentHistory.removeAllElements();
+                return true;
+            });
 
-        if (Objects.equals(state, "Unverified")) {
+            replaceFragment(new UniversityHomeFragment(), false);
+        } else {
             binding.bottomNavigationView.setVisibility(View.GONE);
-            return new HomeUnverifiedFragment();
-        } else if (Objects.equals(state, "Pending")) {
-            binding.bottomNavigationView.setVisibility(View.GONE);
-            return new HomeSubmittedFragment();
-        } else if (Objects.equals(state, "Verified")) {
-            // TODO: Add the University Home Fragment
-            setNavigationMenu();
-            return new UniversityHomeFragment();
+            replaceFragment(Objects.equals(status, "Submitted") ?
+                    new HomeSubmittedFragment() : new HomeUnverifiedFragment(), false);
         }
-
-        return null;
     }
-
-    public void setNavigationMenu() {
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(getCorrectHomeFragment());
-            } else if (itemId == R.id.search) {
-                // TODO: Set to University Search Fragment
-                replaceFragment(new SearchFragment());
-            } else if (itemId == R.id.applications) {
-                replaceFragment(new ApplicationsFragment());
-            }
-            return true;
-        });
-    }
-
-    public void replaceActivity(Class<? extends AppCompatActivity> activity) {
-        Redirection.replaceActivity(this, activity);
-    }
-
-    public void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.commit();
-    }
-
-    /*
-        public void setUserState(UserState strategy) {
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(strategy.getHomeFragment());
-            } else if (itemId == R.id.search) {
-                replaceFragment(strategy.getSearchFragment());
-            } else if (itemId == R.id.profile) {
-                replaceFragment(strategy.getProfileFragment());
-            }
-            return true;
-        });
-    }
-     */
 }

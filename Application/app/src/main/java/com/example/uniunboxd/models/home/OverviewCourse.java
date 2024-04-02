@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.fragments.student.CourseFragment;
+import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,6 +33,7 @@ public class OverviewCourse implements View.OnClickListener {
         Professor = professor;
         Image = image;
     }
+
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.fragment_uni_home_page_courses, container, false);
 
@@ -56,8 +57,9 @@ public class OverviewCourse implements View.OnClickListener {
         return view;
 
     }
+
     @Override
     public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id));
+        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true);
     }
 }

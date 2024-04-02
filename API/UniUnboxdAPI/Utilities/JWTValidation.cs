@@ -39,5 +39,21 @@ namespace UniUnboxdAPI.Utilities
 
             return int.Parse(claim.Value);
         }
+
+        /// <summary>
+        /// Get the role of the user contained in the provided Claims from the JWT.
+        /// </summary>
+        /// <param name="identity">Claims contained in the JWT</param>
+        /// <returns>The role of the user.</returns>
+        public static string GetRole(ClaimsIdentity? identity)
+        {
+            if (identity == null) return "";
+
+            var claim = identity.FindFirst(ClaimTypes.Role);
+
+            if (claim == null) return "";
+
+            return claim.Value;
+        }
     }
 }

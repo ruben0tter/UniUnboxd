@@ -1,4 +1,7 @@
-package com.example.uniunboxd.models;
+package com.example.uniunboxd.models.course;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CourseCreationModel {
     public final String Name;
@@ -11,7 +14,9 @@ public class CourseCreationModel {
     public final String Banner;
     public final int UniversityID;
 
-    public CourseCreationModel(String name, String code, String description, String professor, String image, String banner, int universityID) {
+    public List<AssignedProfessorModel> AssignedProfessors;
+
+    public CourseCreationModel(String name, String code, String description, String professor, String image, String banner, int universityID, List<AssignedProfessorModel> assignedProfessors) {
         Name = name;
         Code = code;
         Description = description;
@@ -19,5 +24,6 @@ public class CourseCreationModel {
         Image = image;
         Banner = banner;
         UniversityID = universityID;
+        AssignedProfessors = assignedProfessors;
     }
 }

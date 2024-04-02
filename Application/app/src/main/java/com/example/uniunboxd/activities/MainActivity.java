@@ -2,17 +2,16 @@ package com.example.uniunboxd.activities;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import com.example.uniunboxd.databinding.ActivityMainBinding;
 import com.example.uniunboxd.fragments.main.AuthenticationFragment;
+import com.example.uniunboxd.fragments.student.StudentEditFragment;
+import com.example.uniunboxd.models.student.StudentEditModel;
+import com.example.uniunboxd.models.student.StudentProfileModel;
 import com.example.uniunboxd.utilities.JWTValidation;
-import com.example.uniunboxd.utilities.Redirection;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements IActivity {
+public class MainActivity extends IActivity {
     ActivityMainBinding binding;
 
     @Override
@@ -22,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements IActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+//        replaceFragment(new StudentEditFragment(new StudentEditModel(new StudentProfileModel(3, "Name", "Uni", "string", null, null, null))));
         setupInitialFragment();
     }
 
@@ -34,18 +34,10 @@ public class MainActivity extends AppCompatActivity implements IActivity {
             } else if (Objects.equals(type, "University")) {
                 replaceActivity(UniversityActivity.class);
             } else if (Objects.equals(type, "Professor")) {
-                // TODO: Add Professor Activity
+                replaceActivity(ProfessorActivity.class);
             }
         } else {
-            replaceFragment(new AuthenticationFragment());
+            replaceFragment(new AuthenticationFragment(), false);
         }
-    }
-
-    public void replaceActivity(Class<? extends AppCompatActivity> activity) {
-        Redirection.replaceActivity(this, activity);
-    }
-
-    public void replaceFragment(Fragment fragment) {
-        Redirection.replaceFragment(this, fragment);
     }
 }

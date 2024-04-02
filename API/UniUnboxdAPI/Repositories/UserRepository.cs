@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
+using UniUnboxdAPI.Models.DataTransferObjects;
 
-namespace UniUnboxdAPI.Repositories
-{
-    /// <summary>
-    /// Handles all calls to database in regard to User model.
-    /// </summary>
-    public class UserRepository
-    {
+namespace UniUnboxdAPI.Repositories;
+
+/// <summary>
+/// Handles all calls to database in regard to User model.
+/// </summary>
+public class UserRepository {
         private readonly UniUnboxdDbContext dbContext;
 
         public UserRepository(UniUnboxdDbContext dbContext)
@@ -41,7 +41,31 @@ namespace UniUnboxdAPI.Repositories
 
         public async Task<bool> DoesProfessorExist(int id)
             => await dbContext.Professors.AnyAsync(c => c.Id == id);
-
+        
+        public async Task<Student> GetStudentAndConnectedData(int id)
+            => await dbContext.Students.Where(i => i.Id == id)
+                .Include(i => i.NotificationSettings)
+                .Include(i => i.Following)
+                .Include(i => i.Followers)
+                .Include(i => i.Reviews)!
+                .ThenInclude(i => i.Course)
+                .FirstAsync(); 
+        
+        public async Task<Professor> GetProfessorAndConnectedData(int id)
+            => await dbContext.Professors.Where(i => i.Id == id)
+                .Include(i => i.AssignedCourses)!
+                .ThenInclude(i => i.Course)
+                .ThenInclude(i => i.University)
+                .FirstAsync(); 
+        
+        public async Task<bool> SetVerificationStatus(User user, VerificationStatus status)
+        {
+            user.VerificationStatus = status;
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+        
         public async Task SetDeviceToken(int studentId, string deviceToken)
         {
             var student = await GetStudent(studentId);
@@ -63,8 +87,76 @@ namespace UniUnboxdAPI.Repositories
 
         public async Task UnfollowStudent(int unfollowingStudentId, int unfollowedStudentId)
         {
-            dbContext.Follows.Remove(dbContext.Follows.Where(i => i.FollowingStudentId == unfollowingStudentId  && i.FollowedStudentId == unfollowedStudentId).First());
+            dbContext.Follows.Remove(dbContext.Follows.First(i => i.FollowingStudentId == unfollowingStudentId  && i.FollowedStudentId == unfollowedStudentId));
             await dbContext.SaveChangesAsync();
         }
-    }
+
+        public async Task<Professor> GetProfessor(int id)
+            => await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
+
+        public async Task PutProfessor(Professor professor)
+        {
+            dbContext.Professors.Update(professor);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task PutStudent(Student student)
+        {
+            dbContext.Students.Update(student);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<Student>> GetFollowers(int id)
+            => await dbContext.Follows.Where(i => i.FollowedStudent.Id == id).Select(i => i.FollowingStudent).ToListAsync();
+
+        public async Task<ICollection<Student>> GetFollowing(int id)
+            => await dbContext.Follows.Where(i => i.FollowingStudent.Id == id).Select(i => i.FollowedStudent)
+                .ToListAsync();
+
+        public async Task<List<Professor>> GetAssignedProfessors(int id)
+            => await dbContext.Professors.Where(i => i.AssignedCourses.Any(i => i.Course.Id == id)).ToListAsync();
+
+        public async Task AssignProfessorToCourse(CourseProfessorAssignment courseProfessorAssignment)
+        {
+            dbContext.CourseProfessorAssignments.Add(courseProfessorAssignment);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> CourseProfessorAssignmentExist(int courseId, int professorId)
+            => await dbContext.CourseProfessorAssignments.AnyAsync(i =>
+                i.Professor.Id == professorId && i.Course.Id == courseId);
+
+        public async Task DismissProfessorFromCourse(CourseProfessorAssignment courseProfessorAssignment)
+        {
+            dbContext.CourseProfessorAssignments.Remove(courseProfessorAssignment);
+            await dbContext.SaveChangesAsync();        
+        }
+
+        public async Task<Professor> GetProfessor(string email)
+            => await dbContext.Professors.Where(i => i.NormalizedEmail == email.ToUpper()).FirstAsync();
+
+        public async Task<bool> DoesProfessorExist(string email)
+            => await dbContext.Professors.AnyAsync(i => i.NormalizedEmail == email.ToUpper());
+
+        public async Task<CourseProfessorAssignment> GetProfessorAssignment(int professorId, int courseId)
+            => await dbContext.CourseProfessorAssignments.FirstAsync(i =>
+                        i.Professor.Id == professorId && i.Course.Id == courseId);
+        public async Task<String?> GetImageOf(int id, UserType type)
+        {
+            if(type == UserType.Student)
+            {
+                Student result = await dbContext.Students.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            }
+            else if (type == UserType.Professor)
+            {
+                Professor result = await dbContext.Professors.Where(i => i.Id == id).FirstAsync();
+                return result.Image;
+            } else {
+                return null;
+            }
+        }
+        public async Task<List<University>> GetUniversities()
+            => await dbContext.Universities.ToListAsync();
 }
+

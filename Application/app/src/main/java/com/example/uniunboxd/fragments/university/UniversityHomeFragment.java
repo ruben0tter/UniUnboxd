@@ -1,7 +1,5 @@
 package com.example.uniunboxd.fragments.university;
 
-import static com.example.uniunboxd.utilities.Redirection.replaceFragment;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +16,8 @@ import com.example.uniunboxd.API.CourseController;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.activities.MainActivity;
-import com.example.uniunboxd.fragments.student.CourseFragment;
 import com.example.uniunboxd.models.home.OverviewCourse;
 import com.example.uniunboxd.utilities.JWTValidation;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -77,7 +72,7 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
             JWTValidation.deleteToken(getActivity());
             ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         } else if (v.getId() == R.id.addCourses) {
-            ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment());
+            ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(), true);
         }
     }
 
