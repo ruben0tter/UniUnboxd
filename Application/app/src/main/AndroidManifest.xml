@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -44,6 +45,7 @@
         </activity>
 
         <service
+            android:permission="android.permission.POST_NOTIFICATIONS"
             android:name=".utilities.NotificationService"
             android:enabled="true"
             android:exported="true">

@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
-    id("org.sonarqube") version "4.4.1.3373"
+    id("org.sonarqube") version "3.5.0.2730"
 }
 
 android {
@@ -36,15 +36,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-}
-
-sonar {
-    properties {
-        property("sonar.projectKey", "UniUnboxd")
-        property("sonar.projectName", "UniUnboxd")
-        property("sonar.host.url", "http://localhost:9000")
-        property("sonar.token", "sqp_89f78b93b4741928626abb5553c4365f98a9ebd0")
     }
 }
 
