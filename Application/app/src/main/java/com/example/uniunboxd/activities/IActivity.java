@@ -36,6 +36,8 @@ public abstract class IActivity extends AppCompatActivity {
 
     public void replaceActivity(Class<? extends AppCompatActivity> activity) {
         Redirection.replaceActivity(this, activity);
+        StackHandler stackHandler = StackHandler.getInstance();
+        stackHandler.stack = null;
     }
 
     public Stack<Fragment> fragmentHistory = new Stack<>();

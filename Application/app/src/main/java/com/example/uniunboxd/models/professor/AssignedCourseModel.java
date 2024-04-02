@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -18,38 +19,43 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AssignedCourseModel {
     public final int Id;
-    public final double Rating;
+    public final float AnonymousRating;
+    public final float NonAnonymousRating;
     public final String Name;
     public final String Code;
-    public final String Professor;
+    public final String University;
     public final String Image;
 
     @JsonCreator
     public AssignedCourseModel(@JsonProperty("id") int Id,
-                               @JsonProperty("rating") double Rating,
+                               @JsonProperty("anonymousRating") float AnonymousRating,
+                               @JsonProperty("nonanonymousRating") float NonAnonymousRating,
                                @JsonProperty("name") String Name,
                                @JsonProperty("code") String Code,
-                               @JsonProperty("professor") String Professor,
+                               @JsonProperty("university") String University,
                                @JsonProperty("image") String Image) {
         this.Id = Id;
-        this.Rating = Rating;
+        this.AnonymousRating = AnonymousRating;
+        this.NonAnonymousRating = NonAnonymousRating;
         this.Name = Name;
         this.Code = Code;
-        this.Professor = Professor;
+        this.University = University;
         this.Image = Image;
     }
 
     public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f) {
-        View view = inflater.inflate(R.layout.course_simple_view_item, container, false);
+        View view = inflater.inflate(R.layout.search_result_course, container, false);
 
-        TextView courseName = view.findViewById(R.id.course_name);
-        TextView courseCode = view.findViewById(R.id.course_code);
-        TextView professorName = view.findViewById(R.id.professor_name);
-        ImageView courseImage = view.findViewById(R.id.course_image);
+        TextView courseName = view.findViewById(R.id.course);
+        TextView courseCode = view.findViewById(R.id.code);
+        TextView university = view.findViewById(R.id.university);
+        ImageView courseImage = view.findViewById(R.id.image);
+        RatingBar anonRating = view.findViewById(R.id.anonRating);
+        RatingBar nonAnonRating = view.findViewById(R.id.nonAnonRating);
 
         courseName.setText(Name);
         courseCode.setText(Code);
-        professorName.setText("Professor: " + Professor);
+        university.setText(University);
 
         if (Image != null && !Image.equals("string"))
             courseImage.setImageBitmap(ImageHandler.decodeImageString(Image));

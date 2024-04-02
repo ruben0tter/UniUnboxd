@@ -27,7 +27,7 @@ public class ProfessorActivity extends IActivity {
         setNavigationMenu();
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if(stackHandler.stack != null) {
+        if(stackHandler.stack != null && !stackHandler.stack.empty()) {
             fragmentHistory = stackHandler.stack;
             goBack();
         } else {
@@ -45,10 +45,10 @@ public class ProfessorActivity extends IActivity {
             int itemId = item.getItemId();
             if (itemId == R.id.profile) {
                 int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
-                replaceFragment(new ProfessorProfileFragment(id), true);
+                replaceFragment(new ProfessorProfileFragment(id), false);
             } else if (itemId == R.id.search) {
                 //TODO: Link professor search
-                replaceFragment(new SearchProfessorFragment(), true);
+                replaceFragment(new SearchProfessorFragment(), false);
             }
             return true;
         });

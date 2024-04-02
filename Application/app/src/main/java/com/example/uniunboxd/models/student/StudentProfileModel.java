@@ -102,16 +102,20 @@ public class StudentProfileModel {
                     HttpURLConnection con = UserController.unfollow(Id, f.getActivity());
                     if (con.getResponseCode() == 200) {
                         isFollowing = false;
+                        StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
+                        Followers.remove(followingUser);
                         f.getActivity().runOnUiThread(() -> {
                             followAction.setText("Follow");
                             followers.removeAllViews();
                             for (StudentListItem x : Followers) {
                                 followers.addView(x.createView(inflater, container, f.getActivity()));
                             }
+                            if (Followers.isEmpty())  {
+                                view.findViewById(R.id.Followers).setVisibility(View.GONE);
+                                view.findViewById(R.id.listFollowers).setVisibility(View.GONE);
+                                view.findViewById(R.id.listFollowersLinear).setVisibility(View.GONE);
+                            }
                         });
-
-                        StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
-                        Followers.remove(followingUser);
                     } else {
                         Log.d("STUDENT", "" + con.getResponseCode());
                     }
@@ -128,6 +132,9 @@ public class StudentProfileModel {
                         f.getActivity().runOnUiThread(() -> {
                             followAction.setText("Unfollow");
                             followers.addView(user.createView(inflater, container, f.getActivity()));
+                            view.findViewById(R.id.Followers).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.listFollowers).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.listFollowersLinear).setVisibility(View.VISIBLE);
                         });
                     } else {
                         Log.d("STUDENT", "" + con.getResponseCode());

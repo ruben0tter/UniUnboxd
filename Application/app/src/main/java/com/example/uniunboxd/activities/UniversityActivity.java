@@ -31,7 +31,7 @@ public class UniversityActivity extends IActivity {
         getOnBackPressedDispatcher().addCallback(backPressed);
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if(stackHandler.stack != null) {
+        if(stackHandler.stack != null && !stackHandler.stack.empty()) {
             fragmentHistory = stackHandler.stack;
             goBack();
         } else {

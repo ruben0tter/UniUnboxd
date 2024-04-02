@@ -240,7 +240,7 @@ namespace UniUnboxdAPI.Services
                     NonanonymousRating = course.NonanonymousRating,
                     Name = course.Name,
                     Code = course.Code,
-                    Professor = course.Professor,
+                    University = course.University.UserName,
                     Image = course.Image
                 };
                 

@@ -50,7 +50,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.05"
-            app:srcCompat="@drawable/baseline_image_24" />
+            android:background="@drawable/app_logo" />
 
         <TextView
             android:id="@+id/ReviewListItem_PosterName"
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="false"
-            android:text="[User]"
+            android:text="Anonymous"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.872"

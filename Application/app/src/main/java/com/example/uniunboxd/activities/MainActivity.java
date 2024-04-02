@@ -20,7 +20,7 @@ public class MainActivity extends IActivity {
         setContentView(binding.getRoot());
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if(stackHandler.stack != null) {
+        if(stackHandler.stack != null && !stackHandler.stack.empty()) {
             fragmentHistory = stackHandler.stack;
             goBack();
         } else {

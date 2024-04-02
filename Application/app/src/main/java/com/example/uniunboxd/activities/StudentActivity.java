@@ -39,7 +39,7 @@ public class StudentActivity extends IActivity {
         getOnBackPressedDispatcher().addCallback(backPressed);
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if(stackHandler.stack != null) {
+        if(stackHandler.stack != null && !stackHandler.stack.empty()) {
             fragmentHistory = stackHandler.stack;
             goBack();
         } else {
@@ -58,7 +58,7 @@ public class StudentActivity extends IActivity {
             } else if (itemId == R.id.search) {
                 replaceFragment(new SearchStudentFragment(), false);
             } else if (itemId == R.id.profile) {
-                replaceFragment(new StudentProfileFragment(userId), true);
+                replaceFragment(new StudentProfileFragment(userId), false);
             }
             fragmentHistory.removeAllElements();
             return true;
