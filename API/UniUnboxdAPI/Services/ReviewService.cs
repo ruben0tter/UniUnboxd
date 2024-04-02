@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
+using UniUnboxdAPI.Models.DataTransferObjects.CoursePage;
 using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 using UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage;
 using UniUnboxdAPI.Repositories;
@@ -61,17 +62,12 @@ namespace UniUnboxdAPI.Services
             ICollection<Review> reviews = await reviewRepository.GetLatestReviewsByFriends(id);
             return CreateReviewGridModelCollection(reviews);
         }
-        
-        /// <summary>
-        /// Gets all friends of a user that have reviewed a course.
-        /// </summary>
-        /// <param name="id">Provided student id.</param>
-        /// <param name="id">Provided course id.</param>
-        /// <returns>The latest reviews by friends of the provided student.</returns>
-        public async Task<ICollection<StudentGridModel>> GetAllFriendsThatReviewed(int userId, int courseId)
+
+        //TODO: Move to CourseService
+        public async Task<ICollection<FriendReview>> GetAllFriendsThatReviewed(int userId, int courseId)
         {
-            ICollection<Student> friends = await reviewRepository.GetAllFriendsThatReviewed(userId, courseId);
-            return CreateStudentGridModelCollection(friends);
+            var friendReviews = await reviewRepository.GetAllFriendsThatReviewed(userId, courseId);
+            return CreateFriendReviewModelCollection(friendReviews);
         }
 
         /// <summary>
@@ -322,12 +318,12 @@ namespace UniUnboxdAPI.Services
                 Rating = i.Rating
             }).ToList();
 
-        private ICollection<StudentGridModel> CreateStudentGridModelCollection(ICollection<Student> students)
-            => students.Select(i => new StudentGridModel()
+        private static ICollection<FriendReview> CreateFriendReviewModelCollection(ICollection<Review> reviews)
+            => reviews.Select(i => new FriendReview()
             {
                 Id = i.Id,
-                Name = i.UserName!,
-                Image = i.Image
+                Image = i.Student.Image,
+                Rating = i.Rating
             }).ToList();
     }
 }

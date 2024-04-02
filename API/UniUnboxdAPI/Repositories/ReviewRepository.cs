@@ -24,16 +24,12 @@ namespace UniUnboxdAPI.Repositories
             => await dbContext.Reviews.AnyAsync(i => i.Student.Id == studentId && i.Course.Id == courseId);
 
         public async Task<Review> GetReview(int id)
-               => await dbContext.Reviews.Where(i => i.Id == id).FirstAsync();
+            => await dbContext.Reviews.Where(i => i.Id == id).FirstAsync();
 
-        public async Task<ICollection<Student>> GetAllFriendsThatReviewed(int studentId, int courseId)
-        {
-            var relevantFollows = await dbContext.Follows.Where(i => i.FollowingStudentId == studentId)
-                .Select(i => i.FollowedStudentId)
-                .ToListAsync();
-
-            return await dbContext.Students.Where(i => relevantFollows.Contains(i.Id)).ToListAsync();
-        }
+        public async Task<ICollection<Review>> GetAllFriendsThatReviewed(int studentId, int courseId)
+            => await dbContext.Reviews
+                .Where(i => i.Course.Id == courseId && i.Student.Followers!.Any(i => i.FollowingStudentId == studentId) && !i.IsAnonymous)
+                .Include(i => i.Student).ToListAsync();
         
         public async Task<Review?> GetReviewAndConnectedData(int id)
             => await dbContext.Reviews.Where(i => i.Id == id)
@@ -45,6 +41,10 @@ namespace UniUnboxdAPI.Repositories
                                         .Include(i => i.Likes)
                                         .ThenInclude(i => i.Student)
                                         .FirstAsync();
+
+        public async Task<Review> GetCourseReviewByStudent(int courseId, int studentId)
+            => await dbContext.Reviews.Where(i => i.Course.Id == courseId && i.Student.Id == studentId)
+                                        .Include(i => i.Student).FirstAsync();
 
         public async Task<ICollection<Review>> GetLatestReviewsByFriends(int id)
             => await dbContext.Reviews.Where(i => i.Student.Followers!.Any(i => i.FollowingStudentId == id) 

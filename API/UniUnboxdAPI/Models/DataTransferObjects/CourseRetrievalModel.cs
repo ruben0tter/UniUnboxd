@@ -1,3 +1,5 @@
+using UniUnboxdAPI.Models.DataTransferObjects.CoursePage;
+
 namespace UniUnboxdAPI.Models.DataTransferObjects;
 
 public class CourseRetrievalModel
@@ -17,5 +19,5 @@ public class CourseRetrievalModel
     public CourseReviewModel? YourReview { get; set; }
     public ICollection<int>? AssignedProfessors { get; set; }
     
-    public ICollection<StudentGridModel>? FriendsThatReviewed { get; set; }
+    public ICollection<FriendReview>? FriendReviews { get; set; }
 }

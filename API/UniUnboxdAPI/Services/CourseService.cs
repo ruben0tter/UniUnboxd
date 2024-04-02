@@ -15,11 +15,13 @@ namespace UniUnboxdAPI.Services
     {
         private readonly CourseRepository courseRepository;
         private readonly UserRepository userRepository;
+        private readonly ReviewRepository reviewRepository;
 
-        public CourseService(CourseRepository courseRepository, UserRepository userRepository)
+        public CourseService(CourseRepository courseRepository, UserRepository userRepository, ReviewRepository reviewRepository)
         {
             this.courseRepository = courseRepository;
             this.userRepository = userRepository;
+            this.reviewRepository = reviewRepository;
         }
 
         /// <summary>
@@ -85,6 +87,13 @@ namespace UniUnboxdAPI.Services
             return courseRetrievalModel;
         }
 
+        public async Task<CourseReviewModel> GetCourseReviewByStudent(int courseId, int studentId)
+        {
+            var review = await reviewRepository.GetCourseReviewByStudent(courseId, studentId);
+            return CreateCourseReviewModel(review, courseId);
+
+        }
+
         /// <summary>
         /// Gets the popular courses amongst all universities of the last 7 days.
         /// </summary>
@@ -145,7 +154,7 @@ namespace UniUnboxdAPI.Services
                 UniversityId = course.University.Id,
                 UniversityName = course.University.UserName,
                 AssignedProfessors = course.AssignedProfessors.Select(x => x.ProfessorId).ToList(),
-                FriendsThatReviewed = null,
+                FriendReviews = null,
                 YourReview = null
             };
         

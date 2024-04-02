@@ -30,8 +30,8 @@ namespace UniUnboxdAPI.Controllers
             if (role == "Student")
             {
                 int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
-                model.FriendsThatReviewed = await reviewService.GetAllFriendsThatReviewed(userId, courseId);
-                model.YourReview = await reviewService.GetReviewByStudentId(userId, courseId);
+                model.FriendReviews = await reviewService.GetAllFriendsThatReviewed(userId, courseId);
+                model.YourReview = await courseService.GetCourseReviewByStudent(courseId, userId);
             }
 
             return Ok(model);
