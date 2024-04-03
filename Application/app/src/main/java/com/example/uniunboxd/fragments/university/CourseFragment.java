@@ -30,9 +30,11 @@ import java.util.concurrent.ExecutionException;
 
 public class CourseFragment extends Fragment {
 
-    private final int ID;
+    private int ID;
     private final int NUM_REVIEWS_TO_LOAD = 5;
     public CourseRetrievalModel Course = null;
+
+    public CourseFragment() {}
 
     public CourseFragment(int id) {
         this.ID = id;
@@ -69,8 +71,10 @@ public class CourseFragment extends Fragment {
                 CourseEditModel editModel = new CourseEditModel(Course.Id, Course.Name, Course.Code, Course.Description, Course.Professor, Course.Image, Course.Banner, new ArrayList<>());
                 ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel), true);
             });
+
             String role = JWTValidation.getTokenProperty(getActivity(), "typ");
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+
             if (role.equals("Student") || (role.equals("Professor") && !Course.AssignedProfessors.contains(userId)))
                 editBtn.setVisibility(GONE);
         }

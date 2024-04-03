@@ -54,13 +54,27 @@ public class StudentEditFragment extends Fragment {
 
     private List<UniversityNameModel> Universities;
 
+    public StudentEditFragment() {}
+
     public StudentEditFragment(StudentEditModel studentEditModel) {
         Model = studentEditModel;
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        if (Model == null)
+            return null;
 
         View view = inflater.inflate(R.layout.fragment_student_profile_page_edit, container, false);
 
@@ -103,9 +117,6 @@ public class StudentEditFragment extends Fragment {
         dropDownMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case 0:
-                    if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA}, 1);
-
                     if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
                             != PackageManager.PERMISSION_DENIED) {
                         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);

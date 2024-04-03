@@ -22,8 +22,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image"
-                android:layout_width="140dp"
-                android:layout_height="136dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:scaleType="centerCrop"
 
                 android:src="@drawable/ic_launcher_background"
@@ -147,9 +147,8 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_email_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/checkbox_example1"
-                app:layout_constraintHorizontal_bias="0.633"
-                app:layout_constraintStart_toStartOf="@+id/checkbox_example1"
+                app:layout_constraintEnd_toEndOf="@+id/follower_mail"
+                app:layout_constraintStart_toStartOf="@+id/follower_mail"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -163,9 +162,8 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_phone_iphone_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/checkbox_example2"
-                app:layout_constraintHorizontal_bias="0.847"
-                app:layout_constraintStart_toStartOf="@+id/checkbox_example2"
+                app:layout_constraintEnd_toEndOf="@+id/follower_push"
+                app:layout_constraintStart_toStartOf="@+id/follower_push"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -311,7 +309,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@drawable/bottom_border">
+            android:background="@drawable/bottom_border"
+            android:id="@+id/verificationBox">
 
             <AutoCompleteTextView
                 android:id="@+id/universityAutoCompleteTextView"

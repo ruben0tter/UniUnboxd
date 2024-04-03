@@ -75,15 +75,14 @@ namespace UniUnboxdAPI.Controllers
         [Route("set")]
         public async Task<IActionResult> SetVerification([FromBody] AcceptRejectModel request)
         {
-            // TODO: Add check to see whether University is attached to the application.
-            // int uniUserID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             bool result;
 
             if(request.AcceptedOrRejected)
-                result = await verificationService.AcceptApplication(request);
+                result = await verificationService.AcceptApplication(request, userId);
             else
-                result = await verificationService.RejectApplication(request);
+                result = await verificationService.RejectApplication(request, userId);
 
             if (result == false)
                 return BadRequest();

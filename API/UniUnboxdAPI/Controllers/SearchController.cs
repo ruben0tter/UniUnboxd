@@ -19,7 +19,7 @@ namespace UniUnboxdAPI.Controllers
     public class SearchController(SearchService searchService) : ControllerBase
     {
         [HttpGet]
-        [Authorize(Roles = "Student, University")]
+        [Authorize]
         [Route("Course")]
         public async Task<IActionResult> SearchCourses([FromQuery] SearchOptions query)
         {
@@ -45,7 +45,7 @@ namespace UniUnboxdAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Student, Professor")]
         [Route("User")]
         public async Task<IActionResult> SearchUsers([FromQuery] SearchOptions query)
         {

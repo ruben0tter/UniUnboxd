@@ -28,13 +28,13 @@
 
         <activity
             android:name=".activities.UniversityActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".activities.StudentActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".activities.ProfessorActivity"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".activities.MainActivity"
             android:exported="true">

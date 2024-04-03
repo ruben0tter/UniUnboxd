@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -40,14 +37,13 @@ import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutionException;
 
 public class ReviewFragment extends Fragment implements View.OnClickListener {
-    private final int id;
+    private int id;
     private Review review;
     private boolean isReviewTabActive = false;
     private boolean isReviewLiked = false;
-    private String m_Text = "";
 
-    private ConstraintLayout reviewPage;
-    private NestedScrollView repliesPage;
+    private NestedScrollView reviewPage;
+    private ConstraintLayout repliesPage;
     private LinearLayout replies;
 
     private TextView reviewTab;
@@ -57,6 +53,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private ImageView likeReview;
     private TextView likeText;
     private TextView likeCount;
+
+    public ReviewFragment() {}
 
     public ReviewFragment(int id) {
         this.id = id;
@@ -70,6 +68,9 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (id == 0)
+            return null;
+
         View view = inflater.inflate(R.layout.fragment_review, container, false);
 
         // Layouts
@@ -145,11 +146,6 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
                 likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
 
                 likeText.setVisibility(View.GONE);
-
-                ConstraintSet cs = new ConstraintSet();
-                cs.clone(reviewPage);
-                cs.setHorizontalBias(R.id.likeCount, (float) 0.02);
-                cs.applyTo(reviewPage);
             }
         }
 
@@ -228,9 +224,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 
     private void addReply(Reply reply) {
         // Replace bottom reply divider.
-        View lastReply = replies.getChildAt(replies.getChildCount() - 1);
-        View replyDivider = lastReply.findViewById(R.id.replyDivider);
-        replyDivider.setVisibility(View.VISIBLE);
+        if (replies.getChildCount() != 0) {
+            View lastReply = replies.getChildAt(replies.getChildCount() - 1);
+            View replyDivider = lastReply.findViewById(R.id.replyDivider);
+            replyDivider.setVisibility(View.VISIBLE);
+        }
 
         // Place newly posted reply.
         LayoutInflater inflater = LayoutInflater.from(getActivity());

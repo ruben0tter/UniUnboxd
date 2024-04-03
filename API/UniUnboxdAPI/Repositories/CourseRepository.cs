@@ -46,7 +46,7 @@ namespace UniUnboxdAPI.Repositories
             var reviewAnonCount = await dbContext.Reviews.Where(i => i.Course.Id == id && i.IsAnonymous).CountAsync();
             var reviewNonanonCount = await dbContext.Reviews.Where(i => i.Course.Id == id && !i.IsAnonymous).CountAsync();
             if (isAnon)
-                course.AnonymousRating =
+                course.AnonymousRating = 
                     ((reviewAnonCount - 1) * course.AnonymousRating + addedRating) / reviewAnonCount;
             else
                 course.NonanonymousRating = ((reviewNonanonCount - 1) * course.NonanonymousRating + addedRating) /
@@ -76,8 +76,8 @@ namespace UniUnboxdAPI.Repositories
                 reviewNonanonSum += x.Rating;
             }
 
-            course.AnonymousRating = reviewAnonSum / reviewAnonCount;
-            course.NonanonymousRating = reviewNonanonSum / reviewNonanonCount;
+            course.AnonymousRating = reviewAnonCount == 0 ? 0 : reviewAnonSum / reviewAnonCount;
+            course.NonanonymousRating = reviewNonanonCount == 0 ? 0 : reviewNonanonSum / reviewNonanonCount;
                 
             await dbContext.SaveChangesAsync();
         }

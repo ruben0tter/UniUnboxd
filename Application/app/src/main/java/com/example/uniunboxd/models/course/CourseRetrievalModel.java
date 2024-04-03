@@ -2,7 +2,6 @@ package com.example.uniunboxd.models.course;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,13 @@ import android.widget.TextView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.uniunboxd.DTO.CourseModel;
+import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.student.WriteReviewFragment;
 import com.example.uniunboxd.models.ReviewListItem;
 import com.example.uniunboxd.utilities.ImageHandler;
+import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -105,6 +106,8 @@ public class CourseRetrievalModel {
 
         TextView yourReview = view.findViewById(R.id.yourReview);
         TextView everyone = view.findViewById(R.id.everyone);
+        everyone.setTypeface(Typeface.DEFAULT_BOLD);
+        yourReview.setTypeface(Typeface.DEFAULT);
 
         yourReview.setOnClickListener(v -> {
             if (yourReview.getTypeface() == Typeface.DEFAULT) {
@@ -136,11 +139,31 @@ public class CourseRetrievalModel {
             }
         }
 
-        Button btnWriteReview = view.findViewById(R.id.writeReview);
+        String attachedUniversity = JWTValidation.getTokenProperty(activity, "university");
 
-        btnWriteReview.setOnClickListener(v -> ((IActivity) activity).replaceFragment(
-                new WriteReviewFragment(new CourseModel(Id, Name, Code, Image))
-                , true));
+        LinearLayout reviewHeaders = view.findViewById(R.id.reviewHeaders);
+
+        if (attachedUniversity == null || UniversityId != Integer.parseInt(attachedUniversity)) {
+            reviewHeaders.setVisibility(View.GONE);
+        } else {
+            reviewHeaders.setVisibility((View.VISIBLE));
+
+            Button writeReview = view.findViewById(R.id.writeReview);
+
+            if (YourReview == null) {
+                yourReview.setVisibility(View.INVISIBLE);
+                writeReview.setText("Write Review");
+                writeReview.setOnClickListener(v -> ((IActivity) activity).replaceFragment(
+                        new WriteReviewFragment(new CourseModel(Id, Name, Code, Image)), true));
+            } else {
+                yourReview.setVisibility(View.VISIBLE);
+                writeReview.setText("Edit Review");
+                writeReview.setOnClickListener(v -> ((IActivity) activity).replaceFragment(
+                        new WriteReviewFragment(new CourseModel(Id, Name, Code, Image),
+                                new ReviewModel(YourReview.Id, YourReview.Rating , YourReview.Comment, YourReview.IsAnonymous, Id)),
+                        true));
+            }
+        }
 
         return view;
     }

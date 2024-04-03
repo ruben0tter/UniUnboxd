@@ -3,6 +3,7 @@ package com.example.uniunboxd.utilities;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 
 import androidx.fragment.app.Fragment;
 
@@ -33,9 +34,9 @@ public class FileSystemChooser {
     }
 
     public static void ChooseImage(Fragment f){
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent chooseFile = new Intent(Intent.ACTION_PICK);
         chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-        chooseFile.setType("*/*");
+        chooseFile.setType("image/*");
         f.startActivityForResult(
                 Intent.createChooser(chooseFile, "Choose a file"),
                 1
@@ -43,13 +44,8 @@ public class FileSystemChooser {
     }
 
     public static void ChooseImage(Fragment f, int code) {
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-        chooseFile.setType("*/*");
-        f.startActivityForResult(
-                Intent.createChooser(chooseFile, "Choose a file"),
-                code
-        );
+        Intent chooseFile = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        f.startActivityForResult(chooseFile, code);
     }
 
     public static byte[] readTextFromUri(Uri uri, Activity activity) throws IOException {

@@ -87,14 +87,14 @@ public class StudentProfileModel {
 
         if (!Reviews.isEmpty())
             for (StudentReviewListItem x : Reviews) {
-                reviews.addView(x.createView(inflater, container, savedInstanceState));
+                reviews.addView(x.createView(inflater, container, savedInstanceState, f));
             }
 
 
         if (isFollowing) {
-            followAction.setText("UNFOLLOW");
+            followAction.setText("Unfollow");
         } else {
-            followAction.setText("FOLLOW");
+            followAction.setText("Follow");
         }
         followAction.setOnClickListener(v -> AsyncTask.execute(() -> {
             if (isFollowing) {
@@ -102,16 +102,20 @@ public class StudentProfileModel {
                     HttpURLConnection con = UserController.unfollow(Id, f.getActivity());
                     if (con.getResponseCode() == 200) {
                         isFollowing = false;
+                        StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
+                        Followers.remove(followingUser);
                         f.getActivity().runOnUiThread(() -> {
-                            followAction.setText("FOLLOW");
+                            followAction.setText("Follow");
                             followers.removeAllViews();
                             for (StudentListItem x : Followers) {
                                 followers.addView(x.createView(inflater, container, f.getActivity()));
                             }
+                            if (Followers.isEmpty())  {
+                                view.findViewById(R.id.Followers).setVisibility(View.GONE);
+                                view.findViewById(R.id.listFollowers).setVisibility(View.GONE);
+                                view.findViewById(R.id.listFollowersLinear).setVisibility(View.GONE);
+                            }
                         });
-
-                        StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
-                        Followers.remove(followingUser);
                     } else {
                         Log.d("STUDENT", "" + con.getResponseCode());
                     }
@@ -126,8 +130,11 @@ public class StudentProfileModel {
                         StudentListItem user = UserController.getStudentListItem(userId, f.getActivity());
                         Followers.add(user);
                         f.getActivity().runOnUiThread(() -> {
-                            followAction.setText("UNFOLLOW");
+                            followAction.setText("Unfollow");
                             followers.addView(user.createView(inflater, container, f.getActivity()));
+                            view.findViewById(R.id.Followers).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.listFollowers).setVisibility(View.VISIBLE);
+                            view.findViewById(R.id.listFollowersLinear).setVisibility(View.VISIBLE);
                         });
                     } else {
                         Log.d("STUDENT", "" + con.getResponseCode());

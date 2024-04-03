@@ -79,7 +79,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         Button saveChangesBtn = view.findViewById(R.id.saveChanges);
         ImageButton imageBtn = view.findViewById(R.id.courseImage_edit);
         ImageButton bannerBtn = view.findViewById(R.id.courseBanner_edit);
-        ImageView deleteBtn = view.findViewById(R.id.deleteButton);
+        Button deleteBtn = view.findViewById(R.id.deleteButton);
         ImageButton searchBtn = view.findViewById(R.id.searchButton);
 
         CreateCourseFragment f = this;
@@ -124,7 +124,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             });
             deleteBtn.setOnClickListener(this);
         } else {
-            deleteBtn.setVisibility(View.GONE);
+            view.findViewById(R.id.deleteWrapper).setVisibility(View.GONE);
             view.findViewById(R.id.searchButton).setVisibility(View.GONE);
             view.findViewById(R.id.SelectedProf).setVisibility(View.GONE);
             view.findViewById(R.id.selectedProfessorLabel).setVisibility(View.GONE);

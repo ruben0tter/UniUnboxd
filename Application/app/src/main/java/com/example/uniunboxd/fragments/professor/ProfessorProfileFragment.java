@@ -23,9 +23,11 @@ import com.example.uniunboxd.utilities.JWTValidation;
 import java.util.concurrent.ExecutionException;
 
 public class ProfessorProfileFragment extends Fragment {
-    private final int ID;
+    private int ID;
     private final int NUM_COURSES_TO_LOAD = 5;
     protected ProfessorProfileModel Professor;
+
+    public ProfessorProfileFragment() {}
 
     public ProfessorProfileFragment(int id) {
         ID = id;
@@ -41,6 +43,9 @@ public class ProfessorProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        if (ID == 0)
+            return null;
 
         View view = null;
         GetProfessorInformationAsyncTask asyncGetTask = new GetProfessorInformationAsyncTask(ID, NUM_COURSES_TO_LOAD);
@@ -68,6 +73,7 @@ public class ProfessorProfileFragment extends Fragment {
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
         if (userId != ID) {
             editBtn.setVisibility(View.GONE);
+            signOutBtn.setVisibility(View.GONE);
         }
         return view;
     }

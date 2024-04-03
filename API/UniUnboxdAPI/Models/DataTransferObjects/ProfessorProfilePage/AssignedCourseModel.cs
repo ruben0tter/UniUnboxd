@@ -7,6 +7,6 @@ public class AssignedCourseModel
     public required double NonanonymousRating { get; set; }
     public required string Name { get; set; }
     public required string Code { get; set; }
-    public required string Professor { get; set; }
+    public required string University { get; set; }
     public string? Image { get; set; }
 }
