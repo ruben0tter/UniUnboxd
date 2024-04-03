@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="15dp"
+    android:layout_marginStart="10dp">
+
+    <ImageView
+        android:id="@+id/courseImage"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courseName"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/app_logo" />
+
+    <TextView
+        android:id="@+id/courseName"
+        android:layout_width="110dp"
+        android:layout_height="30dp"
+        android:fontFamily="@font/k2d"
+        android:text="[Course Name]"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:clickable="true"
+        android:focusable="true"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="5dp"
+        app:autoSizeMaxTextSize="20dp"
+        app:autoSizeStepGranularity="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/studentImage"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/app_logo"
+        android:layout_marginTop="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/courseImage"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/courseImage"
+        app:layout_constraintTop_toBottomOf="@+id/courseImage"
+        app:layout_constraintVertical_bias="0."
+        app:shapeAppearanceOverlay="@style/circleImageView" />
+
+    <TextView
+        android:id="@+id/studentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="[Friend]"
+        android:textSize="10dp"
+        android:textColor="@color/black"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/courseImage"
+        app:layout_constraintHorizontal_bias="0.33"
+        app:layout_constraintStart_toEndOf="@+id/studentImage"
+        app:layout_constraintTop_toBottomOf="@+id/courseImage"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="0.65"
+        android:scaleY="0.65"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:stepSize="0.1"
+        android:theme="@style/RatingBar"
+        android:foregroundGravity="left"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/studentImage"
+        app:layout_constraintTop_toBottomOf="@+id/studentName"
+        app:layout_constraintVertical_bias="1.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

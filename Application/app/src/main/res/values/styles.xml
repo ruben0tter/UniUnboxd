@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">#C82424</item>
+    </style>
+
+    <style name="FlagReview" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/TUeRed</item>
+        <item name="colorControlNormal">@color/TUeRed</item>
+        <item name="colorControlActivated">@color/TUeRed</item>
+    </style>
+
+</resources>

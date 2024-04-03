@@ -1,0 +1,84 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="16dp"
+        android:maxHeight="110dp"
+        android:src="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/course"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/image"
+        android:layout_alignTop="@id/image"
+        android:text="Course Name 1"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/image"
+        android:layout_below="@id/image"
+        android:text="Course Code 1"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/university"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/image"
+        android:layout_below="@id/code"
+        android:text="Professor: [Professor name]"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <LinearLayout
+        android:id="@+id/rating_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/image"
+        android:layout_below="@id/university"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/anonymous_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Anonymous"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RatingBar
+            android:id="@+id/anonRating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="3"
+            android:progressTint="@color/yellow"/>
+
+        <TextView
+            android:id="@+id/non_anonymous_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Non-Anonymous"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <RatingBar
+            android:id="@+id/nonAnonRating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="4"
+            android:progressTint="@color/yellow"/>
+    </LinearLayout>
+
+</RelativeLayout>

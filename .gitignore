@@ -1,0 +1,12 @@
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# IDEs
+.idea/
+*~
+# General
+log/
+*.log

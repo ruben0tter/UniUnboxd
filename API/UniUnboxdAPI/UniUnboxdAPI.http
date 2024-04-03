@@ -1,0 +1,6 @@
+@UniUnboxdAPI_HostAddress = http://localhost:5148
+
+GET {{UniUnboxdAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

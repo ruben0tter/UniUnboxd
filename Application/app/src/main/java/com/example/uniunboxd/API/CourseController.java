@@ -1,0 +1,202 @@
+package com.example.uniunboxd.API;
+
+import android.util.Log;
+
+import androidx.fragment.app.FragmentActivity;
+
+import com.example.uniunboxd.models.course.AssignedProfessorModel;
+import com.example.uniunboxd.models.course.CourseCreationModel;
+import com.example.uniunboxd.models.course.CourseEditModel;
+import com.example.uniunboxd.models.course.CourseRetrievalModel;
+import com.example.uniunboxd.models.home.PopularCourse;
+import com.example.uniunboxd.utilities.JWTValidation;
+import com.example.uniunboxd.models.home.OverviewCourse;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+public class CourseController {
+    public static CourseRetrievalModel getCourseById(int id, int numOfReviews, FragmentActivity f) throws IOException {
+        HttpURLConnection con = APIClient.get("Course?id=" + id + "&numReviews=" + numOfReviews, JWTValidation.getToken(f));
+
+        Log.i("APP", "Code: " + con.getResponseCode());
+
+        StringBuilder body = new StringBuilder();
+
+        if (con.getResponseCode() == 200) {
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("ERR", e.toString());
+            }
+        } else {
+            String test = readMessage(con.getErrorStream());
+            Log.d("PLS", test);
+        }
+
+        Log.d("APP1", body.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.readValue(body.toString(), CourseRetrievalModel.class);
+    }
+
+    public static List<PopularCourse> getPopularCourses(FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/popular", JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
+    }
+
+    public static List<PopularCourse> getPopularCoursesByUniversity(int id, FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/popular-by-university?id=" + id, JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
+    }
+
+    public static List<PopularCourse> getPopularCoursesByFriends(FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/popular-by-friends", JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<PopularCourse>>(){});
+    }
+
+    public static List<OverviewCourse> getLastEditedCoursesByUniversity(FragmentActivity f) throws IOException{
+        HttpURLConnection con = APIClient.get("Course/last-edited", JWTValidation.getToken(f));
+        StringBuilder body = new StringBuilder();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        if (con.getResponseCode() == 200) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
+                String responseLine;
+                while ((responseLine = br.readLine()) != null) {
+                    body.append(responseLine);
+                }
+            } catch(Exception e) {
+                Log.e("Its over", "Once again");
+            }
+        } else {
+            Log.d("It's over", "we are not making it out");
+        }
+
+        return objectMapper.readValue(body.toString(), new TypeReference<List<OverviewCourse>>(){});
+    }
+
+    public static HttpURLConnection postCourse(CourseCreationModel model, FragmentActivity f) throws Exception{
+        JSONObject json = new JSONObject();
+        json.put("name", model.Name);
+        json.put("code", model.Code);
+        json.put("description", model.Description);
+        json.put("professor", model.Professor);
+        json.put("image", model.Image);
+        json.put("banner", model.Banner);
+        json.put("universityId", model.UniversityID);
+        JSONArray assignedProfessors = new JSONArray();
+        for(AssignedProfessorModel x : model.AssignedProfessors){
+            JSONObject assignedProfessor = new JSONObject();
+            assignedProfessor.put("id", x.Id);
+            assignedProfessor.put("name", x.Name);
+            assignedProfessor.put("email", x.Email);
+            assignedProfessors.put(assignedProfessor);
+        }
+        json.put("assignedProfessors", assignedProfessors);
+        return APIClient.post("Course", json.toString(), JWTValidation.getToken(f));
+    }
+    public static HttpURLConnection putCourse(CourseEditModel course, FragmentActivity f) throws Exception{
+        JSONObject json = new JSONObject();
+        json.put("id", course.Id);
+        json.put("name", course.Name);
+        json.put("code", course.Code);
+        json.put("description", course.Description);
+        json.put("professor", course.Professor);
+        json.put("image", course.Image);
+        json.put("banner", course.Banner);
+        JSONArray assignedProfessors = new JSONArray();
+        for(AssignedProfessorModel x : course.AssignedProfessors){
+            JSONObject assignedProfessor = new JSONObject();
+            assignedProfessor.put("id", x.Id);
+            assignedProfessor.put("name", x.Name);
+            assignedProfessor.put("email", x.Email);
+            assignedProfessors.put(assignedProfessor);
+        }
+        json.put("assignedProfessors", assignedProfessors);
+        return APIClient.put("Course", json.toString(), JWTValidation.getToken(f));
+    }
+
+    private static String readMessage(InputStream content) throws IOException{
+        StringBuilder textBuilder = new StringBuilder();
+        try (Reader reader = new BufferedReader(new InputStreamReader
+                (content, StandardCharsets.UTF_8))) {
+            int c = 0;
+            while ((c = reader.read()) != -1) {
+                textBuilder.append((char) c);
+            }
+        }
+
+        return textBuilder.toString().replace("\"", "");
+    }
+
+    public static HttpURLConnection deleteCourse(int id, FragmentActivity f) throws IOException{
+        return APIClient.delete("Course?id=" + id, JWTValidation.getToken(f));
+    }
+}
