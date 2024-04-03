@@ -32,7 +32,7 @@ public class ProfessorActivity extends IActivity {
             goBack();
         } else {
             int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
-            replaceFragment(new ProfessorProfileFragment(id), true);
+            replaceFragment(new ProfessorProfileFragment(id), false);
         }
     }
 

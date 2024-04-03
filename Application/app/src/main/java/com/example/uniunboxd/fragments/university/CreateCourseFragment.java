@@ -79,7 +79,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         Button saveChangesBtn = view.findViewById(R.id.saveChanges);
         ImageButton imageBtn = view.findViewById(R.id.courseImage_edit);
         ImageButton bannerBtn = view.findViewById(R.id.courseBanner_edit);
-        ImageView deleteBtn = view.findViewById(R.id.deleteButton);
+        Button deleteBtn = view.findViewById(R.id.deleteButton);
         ImageButton searchBtn = view.findViewById(R.id.searchButton);
 
         CreateCourseFragment f = this;

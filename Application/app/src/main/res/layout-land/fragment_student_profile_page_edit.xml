@@ -147,9 +147,8 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_email_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/checkbox_example1"
-                app:layout_constraintHorizontal_bias="0.633"
-                app:layout_constraintStart_toStartOf="@+id/checkbox_example1"
+                app:layout_constraintEnd_toEndOf="@+id/follower_mail"
+                app:layout_constraintStart_toStartOf="@+id/follower_mail"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
@@ -163,9 +162,8 @@
                 android:focusable="true"
                 android:src="@drawable/baseline_phone_iphone_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/checkbox_example2"
-                app:layout_constraintHorizontal_bias="0.847"
-                app:layout_constraintStart_toStartOf="@+id/checkbox_example2"
+                app:layout_constraintEnd_toEndOf="@+id/follower_push"
+                app:layout_constraintStart_toStartOf="@+id/follower_push"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.05" />
 
