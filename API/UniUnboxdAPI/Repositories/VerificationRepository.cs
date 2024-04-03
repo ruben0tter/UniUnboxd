@@ -29,6 +29,21 @@ namespace UniUnboxdAPI.Repositories
         public async Task<bool> SetVerificationStatus(User user, VerificationStatus status)
         {
             user.VerificationStatus = status;
+
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task SetUniversity(User user, int universityId)
+        {
+            user.UniversityId = universityId;
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> RemoveApplication(int userId)
+        {
+            var applications = await dbContext.Applications.Where(a => a.UserId == userId).ToArrayAsync();
+            dbContext.Applications.RemoveRange(applications);
             await dbContext.SaveChangesAsync();
             return true;
         }

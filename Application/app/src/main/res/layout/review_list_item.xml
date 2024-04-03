@@ -6,13 +6,13 @@
     android:background="@drawable/bottom_border">
 
         <RatingBar
-            android:id="@+id/ReviewListItem_RatingBar"
+            android:id="@+id/RatingBar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:isIndicator="true"
             android:numStars="5"
-            android:progressTint="@color/yellow"
+            android:theme="@style/RatingBar"
             android:rating="2.9"
             android:stepSize="0.1"
             app:layout_constraintBottom_toTopOf="@+id/ReviewListItem_Comment"
@@ -24,12 +24,11 @@
 
         <TextView
             android:id="@+id/ReviewListItem_Comment"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
+            android:gravity="left"
             android:padding="16dp"
             android:text="Clickable Text 1"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -42,21 +41,24 @@
 
         <ImageView
             android:id="@+id/ReviewListItem_PosterIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:textColor="@color/black"
+            android:layout_height="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.98"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.05"
-            app:srcCompat="@drawable/baseline_image_24" />
+            android:src="@drawable/app_logo" />
 
         <TextView
             android:id="@+id/ReviewListItem_PosterName"
+            android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="[User]"
+            android:clickable="false"
+            android:text="Anonymous"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.872"

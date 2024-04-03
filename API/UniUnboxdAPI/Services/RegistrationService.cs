@@ -33,7 +33,8 @@ namespace UniUnboxdAPI.Services
             return model.Type switch
             {
                 UserType.University => CreateUserModel<University>(model),
-                _ => CreateStudentModel(model)
+                UserType.Professor => CreateUserModel<Professor>(model),
+                UserType.Student => CreateStudentModel(model)
             };
         }
 

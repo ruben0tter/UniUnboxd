@@ -3,6 +3,7 @@ package com.example.uniunboxd.utilities;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.provider.MediaStore;
 
 import androidx.fragment.app.Fragment;
 
@@ -12,35 +13,39 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class FileSystemChooser {
-    static final int PICKFILE_RESULT_CODE = 1;
-    public static void ChoosePDF(Fragment f){
+
+    public static void ChoosePDF(Fragment f) {
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
         chooseFile.setType("application/pdf");
         f.startActivityForResult(
                 Intent.createChooser(chooseFile, "Choose a file"),
-                PICKFILE_RESULT_CODE
+                1
         );
     }
-
-    public static void ChooseImage(Fragment f){
+    public static void ChoosePDF(Fragment f, int code){
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-        chooseFile.setType("*/*");
-        f.startActivityForResult(
-                Intent.createChooser(chooseFile, "Choose a file"),
-                PICKFILE_RESULT_CODE
-        );
-    }
-
-    public static void ChooseImage(Fragment f, int code) {
-        Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-        chooseFile.setType("*/*");
+        chooseFile.setType("application/pdf");
         f.startActivityForResult(
                 Intent.createChooser(chooseFile, "Choose a file"),
                 code
         );
+    }
+
+    public static void ChooseImage(Fragment f){
+        Intent chooseFile = new Intent(Intent.ACTION_PICK);
+        chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
+        chooseFile.setType("image/*");
+        f.startActivityForResult(
+                Intent.createChooser(chooseFile, "Choose a file"),
+                1
+        );
+    }
+
+    public static void ChooseImage(Fragment f, int code) {
+        Intent chooseFile = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        f.startActivityForResult(chooseFile, code);
     }
 
     public static byte[] readTextFromUri(Uri uri, Activity activity) throws IOException {

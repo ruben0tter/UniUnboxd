@@ -21,6 +21,7 @@ import com.example.uniunboxd.DTO.CourseModel;
 import com.example.uniunboxd.DTO.ReviewModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 
 import java.net.HttpURLConnection;
@@ -29,8 +30,10 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     private EditText comment;
     private RatingBar rating;
     private CheckBox isAnonymous;
-    private final CourseModel course;
+    private CourseModel course;
     private ReviewModel review;
+
+    public WriteReviewFragment() {}
 
     public WriteReviewFragment(CourseModel course) {
         this.course = course;
@@ -49,7 +52,10 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_write_review, container, false);
+        if(course == null)
+            return null;
+
+        View view = inflater.inflate(R.layout.fragment_write_review, container, false);
 
         // Course Info
         TextView courseName = (TextView) view.findViewById(R.id.courseName);
@@ -65,7 +71,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         // Buttons
         Button post = (Button) view.findViewById(R.id.postButton);
         post.setOnClickListener(this);
-        Button delete = (Button) view.findViewById(R.id.deleteButton);
+        Button delete = (Button) view.findViewById(R.id.searchButton);
         delete.setOnClickListener(this);
 
         if (review == null) {
@@ -106,22 +112,19 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         if (review == null) {
             ReviewModel model = createReviewModel();
 
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        HttpURLConnection response = ReviewController.postReview(model, getActivity());
-                        if (response.getResponseCode() == 200) {
-                            // TODO: Show notification with "Review successfully created."
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
-                        } else {
-                            // TODO: Show notification with error message.
-                        }
-                    } catch (Exception e) {
-                        Log.e("APP", "Failed to post review: " + e);
+            AsyncTask.execute(() -> {
+                try {
+                    HttpURLConnection response = ReviewController.postReview(model, getActivity());
+                    if (response.getResponseCode() == 200) {
+                        // TODO: Show notification with "Review successfully created."
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
+                    } else {
+                        // TODO: Show notification with error message.
                     }
-
+                } catch (Exception e) {
+                    Log.e("APP", "Failed to post review: " + e);
                 }
+
             });
         } else {
             putReview();
@@ -131,28 +134,25 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     private void putReview() {
         updateReviewModel();
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection response = ReviewController.putReview(review, getActivity());
-                    if (response.getResponseCode() == 200) {
-                        // TODO: Show notification with "Review successfully updated."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
-                    } else {
-                        // TODO: Show notification with error message.
-                    }
-                } catch (Exception e) {
-                    Log.e("APP", "Failed to put review: " + e);
+        AsyncTask.execute(() -> {
+            try {
+                HttpURLConnection response = ReviewController.putReview(review, getActivity());
+                if (response.getResponseCode() == 200) {
+                    // TODO: Show notification with "Review successfully updated."
+                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
+                } else {
+                    // TODO: Show notification with error message.
                 }
-
+            } catch (Exception e) {
+                Log.e("APP", "Failed to put review: " + e);
             }
+
         });
     }
 
     private void deleteReview() {
         if (review == null) {
-            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
+            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
             builder.setTitle("Are you sure you want to delete the review?");
@@ -162,7 +162,7 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                     HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
                     if (response.getResponseCode() == 200) {
                         // TODO: Show notification with "Review successfully deleted."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id));
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                     } else {
                         // TODO: Show notification with error message.
                     }

@@ -2,7 +2,6 @@ package com.example.uniunboxd.models;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.uniunboxd.R;
+import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.fragments.student.ReviewFragment;
+import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -34,24 +36,30 @@ public class ReviewListItem {
         CourseId = courseId;
         Poster = poster;
     }
-    public View createView(LayoutInflater inflater, ViewGroup container,
-                                    Bundle savedInstanceState) {
+
+    public View createView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.review_list_item, container, false);
         TextView comment = view.findViewById(R.id.ReviewListItem_Comment);
-        RatingBar ratingBar = view.findViewById(R.id.ReviewListItem_RatingBar);
+        RatingBar ratingBar = view.findViewById(R.id.RatingBar);
         TextView posterName = view.findViewById(R.id.ReviewListItem_PosterName);
         ImageView posterIcon = view.findViewById(R.id.ReviewListItem_PosterIcon);
-        
+
         comment.setText(Comment);
-        if(Poster != null) {
+        if (Poster != null) {
             posterName.setText(Poster.UserName);
-            if(Poster.Image != null && !Poster.Image.equals("")) {
+            if (Poster.Image != null && !Poster.Image.equals("")) {
                 byte[] iconData = Base64.decode(Poster.Image, Base64.DEFAULT);
                 Bitmap bannerBitmap = BitmapFactory.decodeByteArray(iconData, 0, iconData.length);
                 posterIcon.setImageBitmap(bannerBitmap);
             }
         }
         ratingBar.setRating(Rating);
+        String role = JWTValidation.getTokenProperty(view.getContext(), "typ");
+        comment.setOnClickListener(v -> {
+            ((IActivity) v.getContext()).replaceFragment(new ReviewFragment(Id), true);
+        });
+        if (role.equals("University"))
+            comment.setClickable(false);
         return view;
     }
 

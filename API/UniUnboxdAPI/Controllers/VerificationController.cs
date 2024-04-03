@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
@@ -10,7 +11,7 @@ namespace UniUnboxdAPI.Controllers
     [Route("api/verify")]
     [ApiController]
     [Authorize]
-    public class VerificationController(VerificationService verificationService) : ControllerBase
+    public class VerificationController(VerificationService verificationService, MailService mailService, PushNotificationService notificationService) : ControllerBase
     {
         [HttpPost]
         [Authorize(Roles = "Student, University")]
@@ -18,11 +19,22 @@ namespace UniUnboxdAPI.Controllers
         public async Task<IActionResult> RequestVerification([FromBody] VerificationModel request)
         {
             int userID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            string role = JWTValidation.GetRole(HttpContext.User.Identity as ClaimsIdentity);
 
-            if (!await verificationService.DoesUniversityExist(request.TargetUniversityId))
-                return BadRequest("Given university does not exist.");
+            Console.WriteLine("Requesting verification for user: " + userID);
 
-            var result = await verificationService.RequestVerification(request, userID);
+            bool? result = null;
+
+            if (role.Equals("Student"))
+            {
+                if (!await verificationService.DoesUniversityExist(request.TargetUniversityId))
+                    return BadRequest("Given university does not exist.");
+
+                result = await verificationService.RequestStudentVerification(request, userID);
+            } else if (role.Equals("University"))
+            {
+                result = await verificationService.RequestUniversityVerification(request, userID);
+            }
 
             if (result == null)
                 return BadRequest();
@@ -63,16 +75,14 @@ namespace UniUnboxdAPI.Controllers
         [Route("set")]
         public async Task<IActionResult> SetVerification([FromBody] AcceptRejectModel request)
         {
-            // TODO: Add check to see whether University is attached to the application.
-            
-            // int userID = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+            int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             bool result;
 
             if(request.AcceptedOrRejected)
-                result = await verificationService.AcceptApplication(request);
+                result = await verificationService.AcceptApplication(request, userId);
             else
-                result = await verificationService.RejectApplication(request);
+                result = await verificationService.RejectApplication(request, userId);
 
             if (result == false)
                 return BadRequest();

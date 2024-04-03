@@ -109,7 +109,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     private void redirectToSignIn() {
-        ((IActivity) getActivity()).replaceFragment(new AuthenticationFragment());
+        ((IActivity) getActivity()).replaceFragment(new AuthenticationFragment(), false);
     }
 
     private boolean arePasswordsEqual() {

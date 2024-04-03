@@ -7,6 +7,6 @@ namespace UniUnboxdAPI.Services
         public void SendNewFollowerNotification(Student studentFollowing, Student studentFollowed);
         public void SendNewReviewNotification(Student receiver, Review review);
         public void SendNewReplyNotification(Reply reply);
-        public void SendVerificationStatusChangeNotification(Student student, VerificationApplication application);
+        public void SendVerificationStatusChangeNotification(Student student);
     }
 }

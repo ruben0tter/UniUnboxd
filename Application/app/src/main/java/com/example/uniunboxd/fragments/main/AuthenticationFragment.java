@@ -19,6 +19,7 @@ import com.example.uniunboxd.API.AuthenticationController;
 import com.example.uniunboxd.DTO.AuthenticationModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
+import com.example.uniunboxd.activities.ProfessorActivity;
 import com.example.uniunboxd.activities.StudentActivity;
 import com.example.uniunboxd.activities.UniversityActivity;
 import com.example.uniunboxd.utilities.JWTValidation;
@@ -46,7 +47,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_authentication, container, false);
+        View view = inflater.inflate(R.layout.fragment_authentication, container, false);
 
         // Inputs
         email = (EditText) view.findViewById(R.id.email_input);
@@ -61,6 +62,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
 
         return view;
     }
+
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.sign_in_button) {
@@ -94,7 +96,6 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
                 } catch (Exception e) {
                     Log.e("APP", "Failed to authenticate user: " + e.toString());
                 }
-
             }
         });
     }
@@ -132,14 +133,14 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
     }
 
     private void redirectToHomePage() {
-        String userType = JWTValidation.getTokenProperty(getActivity(),"typ");
+        String userType = JWTValidation.getTokenProperty(getActivity(), "typ");
 
         if (Objects.equals(userType, "Student")) {
             ((IActivity) getActivity()).replaceActivity(StudentActivity.class);
         } else if (Objects.equals(userType, "University")) {
             ((IActivity) getActivity()).replaceActivity(UniversityActivity.class);
         } else if (Objects.equals(userType, "Professor")) {
-            //TODO: Redirect to Professor Home Page.
+            ((IActivity) getActivity()).replaceActivity(ProfessorActivity.class);
         }
     }
 
