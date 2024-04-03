@@ -111,7 +111,7 @@ namespace UniUnboxdAPI.Services
 
             var builder = new BodyBuilder
             {
-                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(user)
+                HtmlBody = NotificationBodyGenerator.VerificationStatusChangeBody(user.VerificationStatus)
             };
             verificationStatusChangedMail.Body = builder.ToMessageBody();
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using UniUnboxdAPITests.TestUtilities;
 
 namespace UniUnboxdAPITests.Services
@@ -12,22 +11,19 @@ namespace UniUnboxdAPITests.Services
 
         public AuthenticationServiceTest()
         {
-            var dbContext = DatabaseUtil.CreateDbContext();
+            var dbContext = DatabaseUtil.CreateDbContext("AuthenticationService");
             userManager = DatabaseUtil.CreateUserManager(dbContext);
             var userRepository = new UserRepository(dbContext);
             authenticationService = new AuthenticationService(userManager, userRepository);
             JWTConfiguration.Init(ConfigurationUtil.CreateConfiguration());
-
-            CreateTestUser().Wait();
         }
 
-        private async Task CreateTestUser()
+        [ClassInitialize]
+        public static void Init(TestContext context)
         {
-            var email = "authentication@gmail.com";
-
-            if (!await userManager.Users.AnyAsync(i => i.Email == email))
-                await userManager.CreateAsync(new User { UserName = "test", Email = email }, "test");
-
+            var dbContext = DatabaseUtil.CreateDbContext("AuthenticationService");
+            var userManager = DatabaseUtil.CreateUserManager(dbContext);
+            userManager.CreateAsync(new User { UserName = "test", Email = "authentication@gmail.com" }, "test").Wait();
         }
 
         [TestMethod]
@@ -69,12 +65,11 @@ namespace UniUnboxdAPITests.Services
         [TestMethod]
         public async Task GetUserTest()
         {
-            var id = (await userManager.FindByEmailAsync("authentication@gmail.com"))!.Id;
-            var user = await authenticationService.GetUser(id);
+            var user = await authenticationService.GetUser(1);
 
             Assert.IsNotNull(user);
-            Assert.AreEqual(user.Id, id);
-            Assert.AreEqual(user.Email, "authentication@gmail.com");
+            Assert.AreEqual(1, user.Id);
+            Assert.AreEqual("authentication@gmail.com", user.Email);
         }
 
         [TestMethod]

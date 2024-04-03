@@ -61,7 +61,7 @@ namespace UniUnboxdAPI.Services
                 Notification = new Notification
                 {
                     Title = "The status of your verification application has changed.",
-                    Body = NotificationBodyGenerator.VerificationStatusChangeBody(student)
+                    Body = NotificationBodyGenerator.VerificationStatusChangeBody(student.VerificationStatus)
                 },
                 Token = student.DeviceToken
             };

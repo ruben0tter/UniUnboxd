@@ -11,7 +11,7 @@ namespace UniUnboxdAPITests.Services
 
         public RegistrationServiceTest()
         {
-            var dbContext = DatabaseUtil.CreateDbContext();
+            var dbContext = DatabaseUtil.CreateDbContext("RegistrationService");
             userManager = DatabaseUtil.CreateUserManager(dbContext);
             var mailService = new MailService(ConfigurationUtil.CreateConfiguration());
             registrationService = new RegistrationService(userManager, mailService);
@@ -24,9 +24,9 @@ namespace UniUnboxdAPITests.Services
             var user = registrationService.CreateUser(model);
 
             Assert.IsInstanceOfType(user, typeof(Student));
-            Assert.AreEqual(user.UserName, "student");
-            Assert.AreEqual(user.Email, "student@gmail.com");
-            Assert.AreEqual(user.UserType, UserType.Student);
+            Assert.AreEqual("student", user.UserName);
+            Assert.AreEqual("student@gmail.com", user.Email);
+            Assert.AreEqual(UserType.Student, user.UserType);
             Assert.IsNotNull(user.SecurityStamp);
             Assert.IsNotNull(user.CreationTime);
             Assert.IsNotNull(user.LastModificationTime);
@@ -40,9 +40,9 @@ namespace UniUnboxdAPITests.Services
             var user = registrationService.CreateUser(model);
 
             Assert.IsInstanceOfType(user, typeof(University));
-            Assert.AreEqual(user.UserName, "university");
-            Assert.AreEqual(user.Email, "university@gmail.com");
-            Assert.AreEqual(user.UserType, UserType.University);
+            Assert.AreEqual("university", user.UserName);
+            Assert.AreEqual("university@gmail.com", user.Email);
+            Assert.AreEqual(UserType.University, user.UserType);
             Assert.IsNotNull(user.SecurityStamp);
             Assert.IsNotNull(user.CreationTime);
             Assert.IsNotNull(user.LastModificationTime);
@@ -57,9 +57,9 @@ namespace UniUnboxdAPITests.Services
             var user = registrationService.CreateUser(model);
 
             Assert.IsInstanceOfType(user, typeof(Professor));
-            Assert.AreEqual(user.UserName, "professor");
-            Assert.AreEqual(user.Email, "professor@gmail.com");
-            Assert.AreEqual(user.UserType, UserType.Professor);
+            Assert.AreEqual("professor", user.UserName);
+            Assert.AreEqual("professor@gmail.com", user.Email);
+            Assert.AreEqual(UserType.Professor, user.UserType);
             Assert.IsNotNull(user.SecurityStamp);
             Assert.IsNotNull(user.CreationTime);
             Assert.IsNotNull(user.LastModificationTime);

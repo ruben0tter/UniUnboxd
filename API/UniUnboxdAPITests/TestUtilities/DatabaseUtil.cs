@@ -1,22 +1,17 @@
-﻿using Google;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace UniUnboxdAPITests.TestUtilities
 {
     internal class DatabaseUtil
     {
-        public static UniUnboxdDbContext CreateDbContext()
-            => new(new DbContextOptionsBuilder<UniUnboxdDbContext>().UseInMemoryDatabase("UniUnboxd").Options);
+        public static UniUnboxdDbContext CreateDbContext(string name)
+            => new(new DbContextOptionsBuilder<UniUnboxdDbContext>().UseInMemoryDatabase(name).Options);
 
         // Source: https://github.com/dotnet/aspnetcore/blob/main/src/Identity/test/Shared/MockHelpers.cs
         public static UserManager<User> CreateUserManager(UniUnboxdDbContext db)
