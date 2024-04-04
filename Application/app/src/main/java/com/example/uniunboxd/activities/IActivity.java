@@ -30,7 +30,6 @@ public abstract class IActivity extends AppCompatActivity {
             Log.e("GoBack", "Fragment history is empty");
             return;
         }
-        Log.d("GoBack", "going back");
         replaceFragment(fragmentHistory.pop(), false);
     }
 
@@ -44,12 +43,8 @@ public abstract class IActivity extends AppCompatActivity {
 
     public void replaceFragment(Fragment fragment, boolean remember) {
         if (remember) {
-            Log.d("GoBack", "adding to history");
             Fragment f = getVisibleFragment();
-            if (f == null) {
-                Log.e("NIG", "failed to get current fragment");
-            }
-            fragmentHistory.push(f);
+            if (f != null) fragmentHistory.push(f);
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -29,7 +29,7 @@ import java.util.List;
 
 public class SearchStudentFragment extends Fragment {
 
-    private List<SearchResult> results = new ArrayList<>();
+    private final List<SearchResult> results = new ArrayList<>();
     private boolean SEARCH_COURSES = true;
 
     private String currentQuery = "";
@@ -143,7 +143,7 @@ public class SearchStudentFragment extends Fragment {
             });
             return courses.size();
         } catch (Exception e) {
-            Log.e("APP", "failed to search courses: " + e.toString());
+            Log.e("APP", "failed to search courses: " + e);
         }
         return 0;
     }
@@ -156,7 +156,7 @@ public class SearchStudentFragment extends Fragment {
                 for (UserSearchResult user : users) {
                     View view = user.createView(getLayoutInflater(), getActivity());
                     view.setOnClickListener(v -> {
-                        if(user.UserType == 0)
+                        if (user.UserType == 0)
                             ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(user.Id), true);
                         else
                             ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(user.Id), true);
@@ -166,7 +166,7 @@ public class SearchStudentFragment extends Fragment {
             });
             return users.size();
         } catch (Exception e) {
-            Log.e("APP", "failed to search courses: " + e.toString());
+            Log.e("APP", "failed to search courses: " + e);
         }
         return 0;
     }

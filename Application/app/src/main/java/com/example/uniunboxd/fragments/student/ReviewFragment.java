@@ -33,7 +33,6 @@ import com.example.uniunboxd.models.review.Reply;
 import com.example.uniunboxd.models.review.Review;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutionException;
 
 public class ReviewFragment extends Fragment implements View.OnClickListener {
@@ -54,7 +53,8 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private TextView likeText;
     private TextView likeCount;
 
-    public ReviewFragment() {}
+    public ReviewFragment() {
+    }
 
     public ReviewFragment(int id) {
         this.id = id;
@@ -281,17 +281,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private void applyLikeStatus() {
         AsyncTask.execute(() -> {
             try {
-                if (isReviewLiked) {
-                    ReviewController.like(review.Id, getActivity());
-                } else {
-                    HttpURLConnection con = ReviewController.unlike(review.Id, getActivity());
-
-                    Log.i("LIKE", con.getResponseMessage());
-                }
+                if (isReviewLiked) ReviewController.like(review.Id, getActivity());
+                else ReviewController.unlike(review.Id, getActivity());
             } catch (Exception e) {
-                Log.e("APP", "Failed to register like change: " + e.toString());
+                Log.e("APP", "Failed to register like change: " + e);
             }
-
         });
     }
 
@@ -299,7 +293,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
         builder.setTitle("Flag Review");
 
-        View viewInflated= LayoutInflater.from(getContext()).inflate(R.layout.flag_review_message_pop_up, (ViewGroup) getView(), false);
+        View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.flag_review_message_pop_up, (ViewGroup) getView(), false);
 // Set up the input
         final EditText message = viewInflated.findViewById(R.id.messageInput);
         builder.setView(viewInflated);
@@ -307,11 +301,9 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
 // Set up the buttons
         builder.setPositiveButton("OK", (dialog, which) -> AsyncTask.execute(() -> {
             try {
-                HttpURLConnection con = ReviewController.flagReview(new FlagReviewModel(review.Id, message.getText().toString()), getActivity());
-
-                Log.i("Flag Review", "Code: " + con.getResponseCode());
+                ReviewController.flagReview(new FlagReviewModel(review.Id, message.getText().toString()), getActivity());
             } catch (Exception e) {
-                Log.e("APP", "Failed to register like change: " + e.toString());
+                Log.e("APP", "Failed to register like change: " + e);
             }
 
         }));
@@ -334,7 +326,7 @@ class ReviewInformation extends AsyncTask<FragmentActivity, Void, Review> {
         try {
             review = ReviewController.getReview(id, fragmentActivities[0]);
         } catch (Exception e) {
-            Log.e("ERR", "Couldn't get review" + e.toString());
+            Log.e("ERR", "Couldn't get review" + e);
         }
         return review;
     }
@@ -354,7 +346,7 @@ class ReplyPost extends AsyncTask<FragmentActivity, Void, Reply> {
         try {
             reply = ReplyController.postReply(model, fragmentActivities[0]);
         } catch (Exception e) {
-            Log.e("ERR", "Couldn't get reply" + e.toString());
+            Log.e("ERR", "Couldn't get reply" + e);
         }
         return reply;
     }

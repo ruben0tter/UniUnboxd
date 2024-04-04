@@ -7,12 +7,17 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 
 public class RegistrationController {
-    public static HttpURLConnection register(RegisterModel model) throws Exception {
+    public RegistrationController() {
+
+    }
+
+    public static void register(RegisterModel model) throws Exception {
         JSONObject json = new JSONObject();
         json.put("email", model.email);
         json.put("password", model.password);
         json.put("type", model.userType);
 
-        return APIClient.post("Registration", json.toString(), null);
+        HttpURLConnection con = APIClient.post("Registration", json.toString(), null);
+        APIClient.processResponse(con, null);
     }
 }

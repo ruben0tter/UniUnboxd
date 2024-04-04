@@ -25,12 +25,12 @@ import com.example.uniunboxd.models.professor.ProfessorEditModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 
 public class ProfessorEditFragment extends Fragment {
     private ProfessorEditModel Professor;
 
-    public ProfessorEditFragment() {}
+    public ProfessorEditFragment() {
+    }
 
     public ProfessorEditFragment(ProfessorEditModel professor) {
         Professor = professor;
@@ -58,13 +58,8 @@ public class ProfessorEditFragment extends Fragment {
         saveChangesBtn.setOnClickListener(v1 -> AsyncTask.execute(() -> {
             Professor.Name = name.getText().toString();
             try {
-                HttpURLConnection response = UserController.putProfessor(Professor, getActivity());
-                if (response.getResponseCode() == 200) {
-                    // TODO: Show notification with "Review successfully created."
-                    ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id), true);
-                } else {
-                    // TODO: Show notification with error message.
-                }
+                UserController.putProfessor(Professor, getActivity());
+                ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id), true);
             } catch (Exception e) {
                 Log.e("APP", "Failed to post review: " + e);
             }
@@ -92,5 +87,4 @@ public class ProfessorEditFragment extends Fragment {
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
         image.setImageBitmap(bitmap);
     }
-
 }

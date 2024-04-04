@@ -20,7 +20,6 @@ import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.net.HttpURLConnection;
 import java.util.List;
 
 public class StudentProfileModel {
@@ -99,46 +98,38 @@ public class StudentProfileModel {
         followAction.setOnClickListener(v -> AsyncTask.execute(() -> {
             if (isFollowing) {
                 try {
-                    HttpURLConnection con = UserController.unfollow(Id, f.getActivity());
-                    if (con.getResponseCode() == 200) {
-                        isFollowing = false;
-                        StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
-                        Followers.remove(followingUser);
-                        f.getActivity().runOnUiThread(() -> {
-                            followAction.setText("Follow");
-                            followers.removeAllViews();
-                            for (StudentListItem x : Followers) {
-                                followers.addView(x.createView(inflater, container, f.getActivity()));
-                            }
-                            if (Followers.isEmpty())  {
-                                view.findViewById(R.id.Followers).setVisibility(View.GONE);
-                                view.findViewById(R.id.listFollowers).setVisibility(View.GONE);
-                                view.findViewById(R.id.listFollowersLinear).setVisibility(View.GONE);
-                            }
-                        });
-                    } else {
-                        Log.d("STUDENT", "" + con.getResponseCode());
-                    }
+                    UserController.unfollow(Id, f.getActivity());
+                    isFollowing = false;
+                    StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
+                    Followers.remove(followingUser);
+                    f.getActivity().runOnUiThread(() -> {
+                        followAction.setText("Follow");
+                        followers.removeAllViews();
+                        for (StudentListItem x : Followers) {
+                            followers.addView(x.createView(inflater, container, f.getActivity()));
+                        }
+                        if (Followers.isEmpty()) {
+                            view.findViewById(R.id.Followers).setVisibility(View.GONE);
+                            view.findViewById(R.id.listFollowers).setVisibility(View.GONE);
+                            view.findViewById(R.id.listFollowersLinear).setVisibility(View.GONE);
+                        }
+                    });
                 } catch (Exception e) {
                     Log.e("ERR", e.toString());
                 }
             } else {
                 try {
-                    HttpURLConnection con = UserController.follow(Id, f.getActivity());
-                    if (con.getResponseCode() == 200) {
-                        isFollowing = true;
-                        StudentListItem user = UserController.getStudentListItem(userId, f.getActivity());
-                        Followers.add(user);
-                        f.getActivity().runOnUiThread(() -> {
-                            followAction.setText("Unfollow");
-                            followers.addView(user.createView(inflater, container, f.getActivity()));
-                            view.findViewById(R.id.Followers).setVisibility(View.VISIBLE);
-                            view.findViewById(R.id.listFollowers).setVisibility(View.VISIBLE);
-                            view.findViewById(R.id.listFollowersLinear).setVisibility(View.VISIBLE);
-                        });
-                    } else {
-                        Log.d("STUDENT", "" + con.getResponseCode());
-                    }
+                    UserController.follow(Id, f.getActivity());
+                    isFollowing = true;
+                    StudentListItem user = UserController.getStudentListItem(userId, f.getActivity());
+                    Followers.add(user);
+                    f.getActivity().runOnUiThread(() -> {
+                        followAction.setText("Unfollow");
+                        followers.addView(user.createView(inflater, container, f.getActivity()));
+                        view.findViewById(R.id.Followers).setVisibility(View.VISIBLE);
+                        view.findViewById(R.id.listFollowers).setVisibility(View.VISIBLE);
+                        view.findViewById(R.id.listFollowersLinear).setVisibility(View.VISIBLE);
+                    });
                 } catch (Exception e) {
                     Log.e("ERR", e.toString());
                 }

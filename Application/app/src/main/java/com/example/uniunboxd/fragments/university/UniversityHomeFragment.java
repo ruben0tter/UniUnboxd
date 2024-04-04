@@ -82,7 +82,7 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
             try {
                 return CourseController.getLastEditedCoursesByUniversity(fragmentActivities[0]);
             } catch (Exception e) {
-                Log.e("ERR", "Couldn't get review" + e.toString());
+                Log.e("ERR", "Couldn't get review" + e);
                 return null;
             }
         }

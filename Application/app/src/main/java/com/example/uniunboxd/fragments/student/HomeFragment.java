@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         PopularCoursesByFriendsInformation popularCoursesByFriendsInformation = new PopularCoursesByFriendsInformation();
 
         String attachedUniversityId = JWTValidation.getTokenProperty(getActivity(), "university");
-        if(attachedUniversityId == null) {
+        if (attachedUniversityId == null) {
             popularCoursesInformation = new PopularCoursesInformation();
         } else {
             popularCoursesInformation = new PopularCoursesInformation(Integer.parseInt(attachedUniversityId));
@@ -72,19 +72,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
 
         if (popularCourses != null) {
-            for(PopularCourse c : popularCourses) {
+            for (PopularCourse c : popularCourses) {
                 popularCoursesLayout.addView(c.createView(inflater, container, this));
             }
         }
 
         if (newFromFriends != null) {
-            for(FriendReview r : newFromFriends) {
+            for (FriendReview r : newFromFriends) {
                 newFromFriendsLayout.addView(r.createView(inflater, container, this));
             }
         }
 
         if (popularCoursesWithFriends != null) {
-            for(PopularCourse c : popularCoursesWithFriends) {
+            for (PopularCourse c : popularCoursesWithFriends) {
                 popularCoursesWithFriendsLayout.addView(c.createView(inflater, container, this));
             }
         }
@@ -92,6 +92,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return view;
 
     }
+
     @Override
     public void onClick(View view) {
         JWTValidation.deleteToken(getActivity());
@@ -112,15 +113,15 @@ class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<P
 
     @Override
     protected List<PopularCourse> doInBackground(FragmentActivity... fragmentActivities) {
-        try{
-            if(id == 0) {
+        try {
+            if (id == 0) {
                 return CourseController.getPopularCourses(fragmentActivities[0]);
             } else {
                 return CourseController.getPopularCoursesByUniversity(id, fragmentActivities[0]);
             }
 
-        } catch(Exception e) {
-            Log.e("ERR", "Couldn't get review" + e.toString());
+        } catch (Exception e) {
+            Log.e("ERR", "Couldn't get review" + e);
             return null;
         }
     }
@@ -129,11 +130,11 @@ class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<P
 class LatestReviewsByFriendsInformation extends AsyncTask<FragmentActivity, Void, List<FriendReview>> {
     @Override
     protected List<FriendReview> doInBackground(FragmentActivity... fragmentActivities) {
-        try{
+        try {
             return ReviewController.getLatestReviewsByFriends(fragmentActivities[0]);
 
-        } catch(Exception e) {
-            Log.e("ERR", "Couldn't get review" + e.toString());
+        } catch (Exception e) {
+            Log.e("ERR", "Couldn't get review" + e);
             return null;
         }
     }
@@ -142,11 +143,11 @@ class LatestReviewsByFriendsInformation extends AsyncTask<FragmentActivity, Void
 class PopularCoursesByFriendsInformation extends AsyncTask<FragmentActivity, Void, List<PopularCourse>> {
     @Override
     protected List<PopularCourse> doInBackground(FragmentActivity... fragmentActivities) {
-        try{
+        try {
             return CourseController.getPopularCoursesByFriends(fragmentActivities[0]);
 
-        } catch(Exception e) {
-            Log.e("ERR", "Couldn't get review" + e.toString());
+        } catch (Exception e) {
+            Log.e("ERR", "Couldn't get review" + e);
             return null;
         }
     }

@@ -52,7 +52,7 @@ public class CourseRetrievalModel {
                                 @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName,
                                 @JsonProperty("assignedProfessors") List<Integer> assignedProfessors,
                                 @JsonProperty("friendReviews") List<FriendReviewModel> friendReviews,
-                                @JsonProperty("yourReview") ReviewListItem yourReview){
+                                @JsonProperty("yourReview") ReviewListItem yourReview) {
         Id = id;
         Name = name;
         Code = code;
@@ -86,8 +86,8 @@ public class CourseRetrievalModel {
 
         anonRatingBar.setRating(AnonymousRating);
         nonanonRatingBar.setRating(NonanonymousRating);
-        anonRatingNum.setText("" + AnonymousRating);
-        nonanonRatingNum.setText("" + NonanonymousRating);
+        anonRatingNum.setText(String.valueOf(AnonymousRating));
+        nonanonRatingNum.setText(String.valueOf(NonanonymousRating));
         name.setText(Name);
         code.setText(Code);
         professor.setText(Professor);
@@ -127,7 +127,7 @@ public class CourseRetrievalModel {
 
         LinearLayout friendReviewsWrapper = view.findViewById(R.id.friendReviewsWrapper);
 
-        if(FriendReviews == null || FriendReviews.size() == 0) {
+        if (FriendReviews == null || FriendReviews.size() == 0) {
             friendReviewsWrapper.setVisibility(View.GONE);
         } else {
             friendReviewsWrapper.setVisibility(View.VISIBLE);
@@ -160,7 +160,7 @@ public class CourseRetrievalModel {
                 writeReview.setText("Edit Review");
                 writeReview.setOnClickListener(v -> ((IActivity) activity).replaceFragment(
                         new WriteReviewFragment(new CourseModel(Id, Name, Code, Image),
-                                new ReviewModel(YourReview.Id, YourReview.Rating , YourReview.Comment, YourReview.IsAnonymous, Id)),
+                                new ReviewModel(YourReview.Id, YourReview.Rating, YourReview.Comment, YourReview.IsAnonymous, Id)),
                         true));
             }
         }

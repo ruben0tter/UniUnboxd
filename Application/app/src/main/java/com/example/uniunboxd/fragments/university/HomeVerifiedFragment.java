@@ -23,8 +23,8 @@ public class HomeVerifiedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_uni_verified, container, false);
-        Button createBtn = (Button) view.findViewById(R.id.createCourse);
-        Button signOut = (Button) view.findViewById(R.id.signOut);
+        Button createBtn = view.findViewById(R.id.createCourse);
+        Button signOut = view.findViewById(R.id.signOut);
 
         createBtn.setOnClickListener(v -> {
             Log.w("dasnjkads", "dnajskdas");

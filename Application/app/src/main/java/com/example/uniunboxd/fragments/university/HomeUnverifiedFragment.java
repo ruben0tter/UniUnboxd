@@ -33,17 +33,17 @@ public class HomeUnverifiedFragment extends Fragment {
     Button[] btnUploads = new Button[MAX_FILE_COUNT];
     Button signOut;
 
-    private byte[][] verificationFiles = new byte[MAX_FILE_COUNT][];
+    private final byte[][] verificationFiles = new byte[MAX_FILE_COUNT][];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_uni_unverified, container, false);
-        btnUploads[0] = (Button) view.findViewById(R.id.uploadFile1);
-        btnUploads[1] = (Button) view.findViewById(R.id.uploadFile2);
-        btnUploads[2] = (Button) view.findViewById(R.id.uploadFile3);
+        btnUploads[0] = view.findViewById(R.id.uploadFile1);
+        btnUploads[1] = view.findViewById(R.id.uploadFile2);
+        btnUploads[2] = view.findViewById(R.id.uploadFile3);
 
-        btnApply = (Button) view.findViewById(R.id.submitApplication);
-        signOut = (Button) view.findViewById(R.id.signOut);
+        btnApply = view.findViewById(R.id.submitApplication);
+        signOut = view.findViewById(R.id.signOut);
         btnApply.setEnabled(false);
 
         btnApply.setOnClickListener(v -> {
@@ -53,7 +53,7 @@ public class HomeUnverifiedFragment extends Fragment {
                     VerificationController.sendApplication(verificationFiles, getActivity());
                     reload();
                 } catch (Exception e) {
-                    Log.e("APP", "Failed to upload documents: " + e.toString());
+                    Log.e("APP", "Failed to upload documents: " + e);
                 }
             });
         });

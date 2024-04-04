@@ -25,7 +25,8 @@ public class StudentProfileFragment extends Fragment {
     private int ID;
     private StudentProfileModel Student;
 
-    public StudentProfileFragment() {}
+    public StudentProfileFragment() {
+    }
 
     public StudentProfileFragment(int id) {
         ID = id;
@@ -95,7 +96,7 @@ class GetStudentInformationAsyncTask extends AsyncTask<FragmentActivity, Void, S
         try {
             student = UserController.getStudent(ID, fragments[0]);
         } catch (Exception ioe) {
-            Log.e("ERR", "Couldn't get course" + ioe.toString());
+            Log.e("ERR", "Couldn't get course" + ioe);
         }
         return student;
     }

@@ -15,7 +15,7 @@ import com.example.uniunboxd.fragments.student.StudentProfileFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserSearchResult extends SearchResult{
+public class UserSearchResult extends SearchResult {
     public final int Id;
     public final String UserName;
     public final String Image;
@@ -32,7 +32,7 @@ public class UserSearchResult extends SearchResult{
         UserType = userType;
     }
 
-    private static String[] USER_TYPES = new String[]{
+    private static final String[] USER_TYPES = new String[]{
             "Student",
             "University",
             "Professor"
@@ -41,12 +41,7 @@ public class UserSearchResult extends SearchResult{
     public View createView(LayoutInflater inflater, Activity activity) {
         View view = inflater.inflate(R.layout.search_result_user, null);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((IActivity) activity).replaceFragment(new StudentProfileFragment(Id), true);
-            }
-        });
+        view.setOnClickListener(v -> ((IActivity) activity).replaceFragment(new StudentProfileFragment(Id), true));
 
         ((TextView) view.findViewById(R.id.username)).setText(UserName);
         ((TextView) view.findViewById(R.id.role)).setText(USER_TYPES[UserType]);

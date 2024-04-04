@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SearchUniversityFragment extends Fragment {
 
-    private List<CourseSearchResult> results = new ArrayList<>();
+    private final List<CourseSearchResult> results = new ArrayList<>();
 
     private String currentQuery = "";
     private SearchView search;
@@ -99,19 +99,16 @@ public class SearchUniversityFragment extends Fragment {
                 results.addAll(courses);
                 for (CourseSearchResult course : courses) {
                     View view = course.createView(getLayoutInflater(), getActivity());
-                    view.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // TODO: Make it so we forget query
-                            ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
-                        }
+                    view.setOnClickListener(v -> {
+                        // TODO: Make it so we forget query
+                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
                     });
                     resultsLayout.addView(view);
                 }
             });
             return courses.size();
         } catch (Exception e) {
-            Log.e("APP", "failed to search courses: " + e.toString());
+            Log.e("APP", "failed to search courses: " + e);
         }
         return 0;
     }

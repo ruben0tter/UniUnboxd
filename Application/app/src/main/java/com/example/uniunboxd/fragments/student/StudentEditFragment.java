@@ -34,27 +34,25 @@ import com.example.uniunboxd.models.student.UniversityNameModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.ImageHandler;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentEditFragment extends Fragment {
 
-    private static int CAMERA_CODE = 1;
-    private static int IMAGE_PICKER_CODE = 2;
-    private static int FILE_PICKER_CODE = 3;
+    private static final int CAMERA_CODE = 1;
+    private static final int IMAGE_PICKER_CODE = 2;
+    private static final int FILE_PICKER_CODE = 3;
 
-    private ArrayList<String> UniversityNames = new ArrayList<>();
+    private final ArrayList<String> UniversityNames = new ArrayList<>();
     private StudentEditModel Model;
     private List<byte[]> file = new ArrayList<>();
 
     private List<UniversityNameModel> Universities;
 
-    public StudentEditFragment() {}
+    public StudentEditFragment() {
+    }
 
     public StudentEditFragment(StudentEditModel studentEditModel) {
         Model = studentEditModel;
@@ -136,17 +134,8 @@ public class StudentEditFragment extends Fragment {
             try {
                 Model.Name = name.getText().toString();
                 UpdateNotificationSettings(view);
-                HttpURLConnection con = UserController.putStudent(Model, getActivity());
-                if (con.getResponseCode() == 200) {
-                    ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id), true);
-                } else {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                    StringBuilder st = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null)
-                        st.append(line);
-                    Log.e("ERR", "" + st);
-                }
+                UserController.putStudent(Model, getActivity());
+                ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id), true);
             } catch (Exception e) {
                 Log.e("ERR", e.toString());
             }
@@ -169,16 +158,9 @@ public class StudentEditFragment extends Fragment {
                 if (id == -1) {
                     return;
                 }
-                HttpURLConnection con = VerificationController.sendApplication(file, id, getActivity());
-                if (con.getResponseCode() != 200) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                    StringBuilder st = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null)
-                        st.append(line);
-                    Log.e("DEB", "" + st);
-                    return;
-                }
+
+                VerificationController.sendApplication(file.toArray(new byte[][]{}), id, getActivity());
+
                 Model.VerificationStatus = 1;
                 getActivity().runOnUiThread(() -> {
                     view.findViewById(R.id.verification).setVisibility(View.GONE);
@@ -209,15 +191,14 @@ public class StudentEditFragment extends Fragment {
             image.setImageBitmap(cameraImage);
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            cameraImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            cameraImage.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             Model.Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
         } else if (requestCode == FILE_PICKER_CODE) {
             Uri uri = data.getData();
             try {
                 //null file, so that it only keeps the most recent.
-                if (file.size() > 0)
-                    file = new ArrayList<>();
+                if (file.size() > 0) file = new ArrayList<>();
                 file.add(FileSystemChooser.readTextFromUri(uri, getActivity()));
             } catch (IOException e) {
                 //TODO: deal with this better

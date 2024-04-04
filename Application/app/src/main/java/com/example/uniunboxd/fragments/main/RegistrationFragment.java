@@ -18,9 +18,7 @@ import com.example.uniunboxd.API.RegistrationController;
 import com.example.uniunboxd.DTO.RegisterModel;
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.IActivity;
-import com.example.uniunboxd.utilities.MessageHandler;
 
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,17 +40,17 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_registration, container, false);
 
         // Inputs
-        email = (EditText) view.findViewById(R.id.email);
-        password = (EditText) view.findViewById(R.id.password);
-        repeatPassword = (EditText) view.findViewById(R.id.repeatPassword);
-        userType = (Spinner) view.findViewById(R.id.userType);
+        email = view.findViewById(R.id.email);
+        password = view.findViewById(R.id.password);
+        repeatPassword = view.findViewById(R.id.repeatPassword);
+        userType = view.findViewById(R.id.userType);
         fillDropDown();
 
         // Buttons
-        Button signUp = (Button) view.findViewById(R.id.signUp);
+        Button signUp = view.findViewById(R.id.signUp);
         signUp.setOnClickListener(this);
 
-        Button signIn = (Button) view.findViewById(R.id.signIn);
+        Button signIn = view.findViewById(R.id.signIn);
         signIn.setOnClickListener(this);
 
         return view;
@@ -94,17 +92,11 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         AsyncTask.execute(() -> {
             try {
-                HttpURLConnection response = RegistrationController.register(model);
-
-                if (response.getResponseCode() == 200) {
-                    redirectToSignIn();
-                } else {
-                    MessageHandler.showToastFromBackground(getActivity(), response.getErrorStream());
-                }
+                RegistrationController.register(model);
+                redirectToSignIn();
             } catch (Exception e) {
                 Log.e("APP", "Failed to register user: " + e);
             }
-
         });
     }
 

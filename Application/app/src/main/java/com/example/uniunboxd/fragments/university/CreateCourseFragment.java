@@ -1,6 +1,5 @@
 package com.example.uniunboxd.fragments.university;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,18 +33,11 @@ import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.ImageHandler;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateCourseFragment extends Fragment implements View.OnClickListener {
-
-    private final String MESSAGE_DELETE = "Confirm Deleting Course?";
-    private final String MESSAGE_CANCEL = "Confirm Cancel Creating Course?";
-
     private LayoutInflater inflater;
     private ViewGroup container;
     private Bundle savedInstanceState;
@@ -86,10 +78,10 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         if (Course != null) {
             ImageView image = view.findViewById(R.id.courseImage_image_courseSetup);
             ImageView banner = view.findViewById(R.id.courseBanner_image_courseSetup);
-            EditText name = (EditText) view.findViewById(R.id.courseName_courseName_edit);
-            EditText code = (EditText) view.findViewById(R.id.courseName_courseCode_edit);
-            EditText description = (EditText) view.findViewById(R.id.courseDescription_edit);
-            EditText professor = (EditText) view.findViewById(R.id.courseName_courseDescription_edit);
+            EditText name = view.findViewById(R.id.courseName_courseName_edit);
+            EditText code = view.findViewById(R.id.courseName_courseCode_edit);
+            EditText description = view.findViewById(R.id.courseDescription_edit);
+            EditText professor = view.findViewById(R.id.courseName_courseDescription_edit);
 
             if (Course.Image != null)
                 image.setImageBitmap(ImageHandler.decodeImageString(Course.Image));
@@ -112,14 +104,14 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         assignedProfessors = UserController.getAssignedProfessors(Course.Id, getActivity());
                         getActivity().runOnUiThread(() -> {
                             for (AssignedProfessorModel x : assignedProfessors) {
-                                View v = x.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f);
+                                View v = x.CreateView(inflater, container, savedInstanceState, f);
                                 assignedProfessorsList.addView(v);
                                 Course.AssignedProfessors.add(x);
                             }
                         });
                     }
                 } catch (IOException e) {
-                    Log.e("ERR", "Could not get assigned professors. Error: " + e.toString());
+                    Log.e("ERR", "Could not get assigned professors. Error: " + e);
                 }
             });
             deleteBtn.setOnClickListener(this);
@@ -138,16 +130,14 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         int id = view.getId();
         if (id == R.id.saveChanges) {
             saveChangesButtonLogic(view, f);
-        }
-        else if (id == R.id.courseImage_edit) {
+        } else if (id == R.id.courseImage_edit) {
             FileSystemChooser.ChooseImage(f, imageCode);
         } else if (id == R.id.courseBanner_edit) {
             FileSystemChooser.ChooseImage(f, bannerCode);
         } else if (id == R.id.deleteButton) {
-            String message = Course != null ? MESSAGE_DELETE : MESSAGE_CANCEL;
+            String message = Course != null ? "Confirm Deleting Course?" : "Confirm Cancel Creating Course?";
             buildConfirmationPopup(message);
-        }
-        else if (id == R.id.searchButton) {
+        } else if (id == R.id.searchButton) {
             searchButtonLogic(view, f);
         }
     }
@@ -156,134 +146,87 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         LinearLayout layout = (LinearLayout) view.getParent();
         EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
         String email = professorToAssign.getText().toString();
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    AssignedProfessorModel assignedProfessorModel = UserController.getAssignedProfessorByEmail(email, getActivity());
-                    if(assignedProfessorModel == null){
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+        AsyncTask.execute(() -> {
+            try {
+                AssignedProfessorModel assignedProfessorModel = UserController.getAssignedProfessorByEmail(email, getActivity());
+                if (assignedProfessorModel == null) {
+                    getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show());
+                    return;
+                }
+                getActivity().runOnUiThread(() -> {
+                    if (assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
+                        Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
-                                Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            assignedProfessors.add(assignedProfessorModel);
-                            LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
-                            assignedProfessorsList.addView( assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
-                        }
-                    });
-                } catch (IOException e) {
-                    Log.e("ERR", "Could not get assigned professor model.");
-                }
+                    assignedProfessors.add(assignedProfessorModel);
+                    LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
+                    assignedProfessorsList.addView(assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
+                });
+            } catch (IOException e) {
+                Log.e("ERR", "Could not get assigned professor model.");
             }
         });
         professorToAssign.setText("");
     }
-    private void saveChangesButtonLogic(View view, Fragment f){
+
+    private void saveChangesButtonLogic(View view, Fragment f) {
         LinearLayout layout = (LinearLayout) view.getParent();
-        EditText name = (EditText) layout.findViewById(R.id.courseName_courseName_edit);
-        EditText code = (EditText) layout.findViewById(R.id.courseName_courseCode_edit);
-        EditText description = (EditText) layout.findViewById(R.id.courseDescription_edit);
-        EditText professor = (EditText) layout.findViewById(R.id.courseName_courseDescription_edit);
+        EditText name = layout.findViewById(R.id.courseName_courseName_edit);
+        EditText code = layout.findViewById(R.id.courseName_courseCode_edit);
+        EditText description = layout.findViewById(R.id.courseDescription_edit);
+        EditText professor = layout.findViewById(R.id.courseName_courseDescription_edit);
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
-                if (Course == null) {
-                    CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
-                            code.getText().toString(), description.getText().toString(),
-                            professor.getText().toString(), imageEnc, bannerEnc, universityId, assignedProfessors);
-                    try {
-                        HttpURLConnection con = CourseController.postCourse(course, getActivity());
-                        if (con.getResponseCode() == 200) {
-                            ((IActivity) f.getActivity()).replaceFragment(new UniversityHomeFragment(), true);
-                        } else {
-                            //TODO: see how to show a toast
-                            BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-                            StringBuilder st = new StringBuilder();
-                            String line;
-                            while((line = br.readLine()) != null)
-                                st.append(line);
-                            Log.e("DEB", "" + st);
-                        }
-                    } catch (Exception e) {
-                        Log.e("ERR", e.toString());
-                    }
-                    return;
-                }
-                CourseEditModel course = new CourseEditModel(Course.Id, name.getText().toString(),
+        AsyncTask.execute(() -> {
+            int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
+            if (Course == null) {
+                CourseCreationModel course = new CourseCreationModel(name.getText().toString(),
                         code.getText().toString(), description.getText().toString(),
-                        professor.getText().toString(), imageEnc, bannerEnc, assignedProfessors);
+                        professor.getText().toString(), imageEnc, bannerEnc, universityId, assignedProfessors);
                 try {
-                    HttpURLConnection con = CourseController.putCourse(course, getActivity());
-                    if (con.getResponseCode() == 200) {
-                        ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Course.Id), true);
-                    } else {
-                        //TODO: see how to show a toast
-
-                        Log.d("ERR", "" + con.getResponseCode());
-                    }
+                    CourseController.postCourse(course, getActivity());
+                    ((IActivity) f.getActivity()).replaceFragment(new UniversityHomeFragment(), true);
                 } catch (Exception e) {
                     Log.e("ERR", e.toString());
                 }
+                return;
             }
-
+            CourseEditModel course = new CourseEditModel(Course.Id, name.getText().toString(),
+                    code.getText().toString(), description.getText().toString(),
+                    professor.getText().toString(), imageEnc, bannerEnc, assignedProfessors);
+            try {
+                CourseController.putCourse(course, getActivity());
+                ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Course.Id), true);
+            } catch (Exception e) {
+                Log.e("ERR", e.toString());
+            }
         });
     }
 
-    private void buildConfirmationPopup(String message){
+    private void buildConfirmationPopup(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(true);
         builder.setTitle("Confirmation");
         builder.setMessage(message);
-        builder.setPositiveButton("Confirm",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteCourseLogic();
-                    }
-                });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("Confirm", (dialog, which) -> deleteCourseLogic());
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss());
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void deleteCourseLogic() {
         if (Course != null) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        HttpURLConnection con = CourseController.deleteCourse(Course.Id, getActivity());
-                        if (con.getResponseCode() == 200) {
-                            Log.d("DEB", "Deleted the course.");
-                        } else {
-                            Log.e("ERR", "" + con.getResponseCode());
-                        }
-                    } catch (Exception e) {
-                        Log.e("ERR", e.toString());
-                    }
+            AsyncTask.execute(() -> {
+                try {
+                    CourseController.deleteCourse(Course.Id, getActivity());
+                } catch (Exception e) {
+                    Log.e("ERR", e.toString());
                 }
             });
         }
         ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

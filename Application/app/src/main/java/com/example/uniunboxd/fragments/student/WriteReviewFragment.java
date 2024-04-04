@@ -24,8 +24,6 @@ import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 
-import java.net.HttpURLConnection;
-
 public class WriteReviewFragment extends Fragment implements View.OnClickListener {
     private EditText comment;
     private RatingBar rating;
@@ -33,7 +31,8 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     private CourseModel course;
     private ReviewModel review;
 
-    public WriteReviewFragment() {}
+    public WriteReviewFragment() {
+    }
 
     public WriteReviewFragment(CourseModel course) {
         this.course = course;
@@ -52,26 +51,26 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(course == null)
+        if (course == null)
             return null;
 
         View view = inflater.inflate(R.layout.fragment_write_review, container, false);
 
         // Course Info
-        TextView courseName = (TextView) view.findViewById(R.id.courseName);
-        TextView courseCode = (TextView) view.findViewById(R.id.courseCode);
-        ImageView courseImage = (ImageView) view.findViewById(R.id.courseImage);
+        TextView courseName = view.findViewById(R.id.courseName);
+        TextView courseCode = view.findViewById(R.id.courseCode);
+        ImageView courseImage = view.findViewById(R.id.courseImage);
         setCourseInfo(courseName, courseCode, courseImage);
 
         // Inputs
-        comment = (EditText) view.findViewById(R.id.comment);
-        rating = (RatingBar) view.findViewById(R.id.rating);
-        isAnonymous = (CheckBox) view.findViewById(R.id.isAnonymous);
+        comment = view.findViewById(R.id.comment);
+        rating = view.findViewById(R.id.rating);
+        isAnonymous = view.findViewById(R.id.isAnonymous);
 
         // Buttons
-        Button post = (Button) view.findViewById(R.id.postButton);
+        Button post = view.findViewById(R.id.postButton);
         post.setOnClickListener(this);
-        Button delete = (Button) view.findViewById(R.id.searchButton);
+        Button delete = view.findViewById(R.id.searchButton);
         delete.setOnClickListener(this);
 
         if (review == null) {
@@ -114,13 +113,8 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
 
             AsyncTask.execute(() -> {
                 try {
-                    HttpURLConnection response = ReviewController.postReview(model, getActivity());
-                    if (response.getResponseCode() == 200) {
-                        // TODO: Show notification with "Review successfully created."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                    } else {
-                        // TODO: Show notification with error message.
-                    }
+                    ReviewController.postReview(model, getActivity());
+                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                 } catch (Exception e) {
                     Log.e("APP", "Failed to post review: " + e);
                 }
@@ -136,13 +130,8 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
 
         AsyncTask.execute(() -> {
             try {
-                HttpURLConnection response = ReviewController.putReview(review, getActivity());
-                if (response.getResponseCode() == 200) {
-                    // TODO: Show notification with "Review successfully updated."
-                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                } else {
-                    // TODO: Show notification with error message.
-                }
+                ReviewController.putReview(review, getActivity());
+                ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
             } catch (Exception e) {
                 Log.e("APP", "Failed to put review: " + e);
             }
@@ -159,13 +148,8 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
 
             builder.setPositiveButton("Yes", (dialog, which) -> AsyncTask.execute(() -> {
                 try {
-                    HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
-                    if (response.getResponseCode() == 200) {
-                        // TODO: Show notification with "Review successfully deleted."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                    } else {
-                        // TODO: Show notification with error message.
-                    }
+                    ReviewController.deleteReview(review.id, getActivity());
+                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                 } catch (Exception e) {
                     Log.e("APP", "Failed to delete review: " + e);
                 }

@@ -34,7 +34,8 @@ public class CourseFragment extends Fragment {
     private final int NUM_REVIEWS_TO_LOAD = 5;
     public CourseRetrievalModel Course = null;
 
-    public CourseFragment() {}
+    public CourseFragment() {
+    }
 
     public CourseFragment(int id) {
         this.ID = id;
@@ -61,7 +62,7 @@ public class CourseFragment extends Fragment {
         if (Course != null) {
             view = Course.createView(inflater, container, getActivity());
 
-            Button loadBtn = (Button) view.findViewById(R.id.load);
+            Button loadBtn = view.findViewById(R.id.load);
             LinearLayout reviewList = view.findViewById(R.id.reviewList);
 
             ImageButton editBtn = view.findViewById(R.id.editButton);
@@ -122,7 +123,7 @@ public class CourseFragment extends Fragment {
             try {
                 course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
             } catch (Exception ioe) {
-                Log.e("ERR", "Couldn't get course" + ioe.toString());
+                Log.e("ERR", "Couldn't get course" + ioe);
             }
 
             Course = course;

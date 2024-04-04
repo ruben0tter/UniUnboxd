@@ -25,6 +25,7 @@ public class StudentReviewListItem {
     public final String Comment;
 
     public final StudentReviewCourse Course;
+
     @JsonCreator
     public StudentReviewListItem(@JsonProperty("id") int ID, @JsonProperty("rating") float Rating,
                                  @JsonProperty("comment") String Comment, @JsonProperty("studentProfileReviewCourse") StudentReviewCourse course) {
@@ -45,16 +46,11 @@ public class StudentReviewListItem {
         rating.setRating(Rating);
         courseCode.setText(Course.Code);
         courseName.setText(Course.Name);
-        if(Course.Image != null)
+        if (Course.Image != null)
             courseImage.setImageBitmap(ImageHandler.decodeImageString(Course.Image));
         comment.setText(Comment);
 
-        comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((IActivity) f.getActivity()).replaceFragment(new ReviewFragment(ID), true);
-            }
-        });
+        comment.setOnClickListener(v -> ((IActivity) f.getActivity()).replaceFragment(new ReviewFragment(ID), true));
         return view;
     }
 }

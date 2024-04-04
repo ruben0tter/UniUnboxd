@@ -27,7 +27,8 @@ public class ProfessorProfileFragment extends Fragment {
     private final int NUM_COURSES_TO_LOAD = 5;
     protected ProfessorProfileModel Professor;
 
-    public ProfessorProfileFragment() {}
+    public ProfessorProfileFragment() {
+    }
 
     public ProfessorProfileFragment(int id) {
         ID = id;
@@ -100,7 +101,7 @@ class GetProfessorInformationAsyncTask extends AsyncTask<FragmentActivity, Void,
         try {
             professor = UserController.getProfessorProfile(ID, fragments[0]);
         } catch (Exception ioe) {
-            Log.e("ERR", "Couldn't get course" + ioe.toString());
+            Log.e("ERR", "Couldn't get course" + ioe);
         }
         return professor;
     }

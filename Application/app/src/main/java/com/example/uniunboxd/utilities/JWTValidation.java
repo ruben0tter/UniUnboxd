@@ -33,7 +33,7 @@ public class JWTValidation {
                 return null;
             }
         } catch (Throwable t) {
-            Log.e("JWT", "Could not parse malformed JSON: \"" + payload + "\"" + "\n\n" + t.toString());
+            Log.e("JWT", "Could not parse malformed JSON: \"" + payload + "\"" + "\n\n" + t);
         }
 
         return null;

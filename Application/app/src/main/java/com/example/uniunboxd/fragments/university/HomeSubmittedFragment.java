@@ -17,7 +17,7 @@ public class HomeSubmittedFragment extends HomeFragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_uni_submitted, container, false);
 
-        Button signOut = (Button) view.findViewById(R.id.signOut);
+        Button signOut = view.findViewById(R.id.signOut);
         signOut.setOnClickListener(this);
 
         return view;
