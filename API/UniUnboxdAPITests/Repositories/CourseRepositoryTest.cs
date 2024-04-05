@@ -91,7 +91,7 @@
         [TestMethod]
         public async Task GetPopularCourseOfLastWeekTest()
         {
-            var popularCourses = await courseRepository.GetPopularCourseOfLastWeek();
+            var popularCourses = await courseRepository.GetPopularCoursesOfLastWeek();
 
             Assert.IsNotNull(popularCourses);
             Assert.IsTrue(popularCourses.All(i => i.Reviews.Any(i => i.LastModificationTime > DateTime.Now.AddDays(-7))));

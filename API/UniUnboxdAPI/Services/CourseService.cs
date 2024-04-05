@@ -89,7 +89,7 @@ namespace UniUnboxdAPI.Services
         /// <returns>The popular courses of last week of all universities.</returns>
         public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeek()
         {
-            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeek();
+            ICollection<Course> courses = await courseRepository.GetPopularCoursesOfLastWeek();
             return CreateCourseGridModelCollection(courses);
         }
 

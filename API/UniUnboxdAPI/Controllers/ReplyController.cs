@@ -8,6 +8,11 @@ using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 
 namespace UniUnboxdAPI.Controllers
 {
+    /// <summary>
+    /// Controller to create replies within the database,
+    /// this can be done by both a student and a professor user.
+    /// </summary>
+    /// <param name="replyService"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class ReplyController(ReplyService replyService) : ControllerBase
