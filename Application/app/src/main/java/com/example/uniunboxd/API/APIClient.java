@@ -31,6 +31,9 @@ public class APIClient {
             byte[] input = body.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
+        catch(Exception e){
+            Log.e("AAAAAAA", e.toString());
+        }
 
         return con;
     }

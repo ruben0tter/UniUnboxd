@@ -24,8 +24,8 @@ public class ProfessorActivity extends IActivity {
         setNavigationMenu();
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if (stackHandler.empty()) {
-            fragmentHistory = stackHandler;
+        if (stackHandler.stack != null && !stackHandler.empty()) {
+            fragmentHistory = stackHandler.stack;
             goBack();
         } else {
             int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
@@ -43,6 +43,7 @@ public class ProfessorActivity extends IActivity {
                 //TODO: Link professor search
                 replaceFragment(new SearchProfessorFragment(), false);
             }
+            fragmentHistory.removeAllElements();
             return true;
         });
     }

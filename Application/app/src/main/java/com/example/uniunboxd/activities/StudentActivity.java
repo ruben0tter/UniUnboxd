@@ -35,8 +35,8 @@ public class StudentActivity extends IActivity {
         getOnBackPressedDispatcher().addCallback(backPressed);
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if (stackHandler.empty()) {
-            fragmentHistory = stackHandler;
+        if (stackHandler.stack != null && !stackHandler.empty()) {
+            fragmentHistory = stackHandler.stack;
             goBack();
         } else {
             replaceFragment(new HomeFragment(), false);
@@ -56,7 +56,7 @@ public class StudentActivity extends IActivity {
             } else if (itemId == R.id.profile) {
                 replaceFragment(new StudentProfileFragment(userId), false);
             }
-            fragmentHistory.clear();
+            fragmentHistory.removeAllElements();
             return true;
         });
     }

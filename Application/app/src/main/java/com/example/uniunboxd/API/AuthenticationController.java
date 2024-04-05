@@ -10,11 +10,11 @@ import org.json.JSONObject;
 import java.net.HttpURLConnection;
 
 public class AuthenticationController {
-    public AuthenticationController() {
+    private AuthenticationController() {
 
     }
 
-    private class AuthenticationResult {
+    public static class AuthenticationResult {
         String token;
 
         @JsonCreator

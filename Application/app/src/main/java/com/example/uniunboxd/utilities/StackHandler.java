@@ -9,11 +9,9 @@ public class StackHandler {
     // of type Singleton
     private static StackHandler stackHandler = null;
 
-    private Stack<Fragment> stack;
+    public Stack<Fragment> stack;
 
-    private StackHandler() {
-        stack = new Stack<>();
-    }
+    private StackHandler(){}
 
     public static synchronized StackHandler getInstance() {
         if (stackHandler == null)
@@ -40,5 +38,9 @@ public class StackHandler {
 
     public void clear() {
         stack.clear();
+    }
+
+    public void setStack(Stack<Fragment> stack) {
+        this.stack = stack;
     }
 }

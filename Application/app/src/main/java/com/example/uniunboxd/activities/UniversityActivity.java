@@ -31,8 +31,8 @@ public class UniversityActivity extends IActivity {
         getOnBackPressedDispatcher().addCallback(backPressed);
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if (stackHandler.empty()) {
-            fragmentHistory = stackHandler;
+        if (stackHandler.stack != null && !stackHandler.empty()) {
+            fragmentHistory = stackHandler.stack;
             goBack();
         } else {
             status = JWTValidation.getTokenProperty(this, "verified");
@@ -51,7 +51,7 @@ public class UniversityActivity extends IActivity {
                 } else if (itemId == R.id.applications) {
                     replaceFragment(new ApplicationsFragment(), false);
                 }
-                fragmentHistory.clear();
+                fragmentHistory.removeAllElements();
                 return true;
             });
 

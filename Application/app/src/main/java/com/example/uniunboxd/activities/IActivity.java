@@ -14,6 +14,7 @@ import com.example.uniunboxd.R;
 import com.example.uniunboxd.utilities.StackHandler;
 
 import java.util.List;
+import java.util.Stack;
 
 public abstract class IActivity extends AppCompatActivity {
 
@@ -24,8 +25,8 @@ public abstract class IActivity extends AppCompatActivity {
         }
     };
 
-    StackHandler fragmentHistory = StackHandler.getInstance();
 
+    public Stack<Fragment> fragmentHistory = new Stack<>();
     public void goBack() {
         if (fragmentHistory.empty()) {
             Log.e("GoBack", "Fragment history is empty");
@@ -37,13 +38,15 @@ public abstract class IActivity extends AppCompatActivity {
     public void replaceActivity(Class<? extends AppCompatActivity> activity) {
         Intent i = new Intent(this.getApplicationContext(), activity);
         this.startActivity(i);
-        fragmentHistory = null;
+        StackHandler stackHandler = StackHandler.getInstance();
+        stackHandler.stack = null;
     }
 
     public void replaceFragment(Fragment fragment, boolean remember) {
         if (remember) {
             Fragment f = getVisibleFragment();
-            if (f != null) fragmentHistory.push(f);
+            if (f != null)
+                fragmentHistory.push(f);
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -72,5 +75,8 @@ public abstract class IActivity extends AppCompatActivity {
         if (f != null) {
             fragmentHistory.push(f);
         }
+
+        StackHandler stackHandler = StackHandler.getInstance();
+        stackHandler.setStack(fragmentHistory);
     }
 }
