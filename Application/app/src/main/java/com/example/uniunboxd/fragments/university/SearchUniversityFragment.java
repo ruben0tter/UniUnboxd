@@ -36,11 +36,6 @@ public class SearchUniversityFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_uni, container, false);
 
@@ -48,6 +43,7 @@ public class SearchUniversityFragment extends Fragment {
         loadMore = view.findViewById(R.id.load_more_button);
         loadMore.setVisibility(View.INVISIBLE);
 
+        // Set the listener for the search view.
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String text) {
                 Log.e("APP", "searching for " + text);
@@ -79,6 +75,7 @@ public class SearchUniversityFragment extends Fragment {
                 AsyncTask.execute(() -> {
                     int result_count = searchCourses(text);
 
+                    // If there are less than SEARCH_LIMIT results, hide the load more button.
                     if (result_count < SEARCH_LIMIT) {
                         loadMore.setVisibility(View.INVISIBLE);
                     } else {
@@ -92,15 +89,16 @@ public class SearchUniversityFragment extends Fragment {
         }
     }
 
+    // Search for courses.
     private int searchCourses(String text) {
         try {
             List<CourseSearchResult> courses = SearchController.searchUniversity(text, getContext());
             getActivity().runOnUiThread(() -> {
                 results.addAll(courses);
+                // Add the courses to the view.
                 for (CourseSearchResult course : courses) {
                     View view = course.createView(getLayoutInflater(), getActivity());
                     view.setOnClickListener(v -> {
-                        // TODO: Make it so we forget query
                         ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.Id), true);
                     });
                     resultsLayout.addView(view);

@@ -16,6 +16,9 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The StudentReviewListItem class is a model for a student review list item.
+ */
 public class StudentReviewListItem {
     public final int ID;
 

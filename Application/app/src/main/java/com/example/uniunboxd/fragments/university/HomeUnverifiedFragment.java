@@ -20,8 +20,11 @@ import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-// TODO: Unwire this shit from HomeFragmemt
 public class HomeUnverifiedFragment extends Fragment {
+    
+    /**
+     * Necessary empty constructor.
+     */
     public HomeUnverifiedFragment() {
         // Empty constructor.
     }
@@ -35,6 +38,14 @@ public class HomeUnverifiedFragment extends Fragment {
 
     private final byte[][] verificationFiles = new byte[MAX_FILE_COUNT][];
 
+    /**
+     * Creates the view for the home unverified fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the home unverified fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_uni_unverified, container, false);
@@ -46,10 +57,12 @@ public class HomeUnverifiedFragment extends Fragment {
         signOut = view.findViewById(R.id.signOut);
         btnApply.setEnabled(false);
 
+        // Apply button
         btnApply.setOnClickListener(v -> {
             btnApply.setEnabled(false);
             AsyncTask.execute(() -> {
                 try {
+                    // Send the application to the API.
                     VerificationController.sendApplication(verificationFiles, getActivity());
                     reload();
                 } catch (Exception e) {
@@ -65,7 +78,6 @@ public class HomeUnverifiedFragment extends Fragment {
             btnUploads[i].setOnClickListener(v -> FileSystemChooser.ChoosePDF(f, PICKFILE_RESULT_CODE + finalI));
         }
 
-
         signOut.setOnClickListener(v -> {
             JWTValidation.deleteToken(getActivity());
             ((IActivity) getActivity()).replaceActivity(MainActivity.class);
@@ -74,6 +86,13 @@ public class HomeUnverifiedFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Handles the activity result.
+     *
+     * @param requestCode The request code.
+     * @param resultCode  The result code.
+     * @param data        The data.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -16,6 +16,9 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The AssignedCourseModel class is a model for an assigned course.
+ */
 public class AssignedCourseModel {
     public final int Id;
     public final float AnonymousRating;

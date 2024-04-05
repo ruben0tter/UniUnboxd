@@ -24,6 +24,9 @@ import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 
+/**
+ * WriteReviewFragment class that represents the write review screen.
+ */
 public class WriteReviewFragment extends Fragment implements View.OnClickListener {
     private EditText comment;
     private RatingBar rating;
@@ -31,23 +34,40 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     private CourseModel course;
     private ReviewModel review;
 
+    /**
+     * Necessary empty constructor.
+     */
     public WriteReviewFragment() {
     }
 
+    /**
+     * Constructor for the WriteReviewFragment class.
+     *
+     * @param course The course model.
+     */
     public WriteReviewFragment(CourseModel course) {
         this.course = course;
     }
 
+    /**
+     * Constructor for the WriteReviewFragment class.
+     *
+     * @param course The course model.
+     * @param review The review model.
+     */
     public WriteReviewFragment(CourseModel course, ReviewModel review) {
         this.course = course;
         this.review = review;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Creates the view for the write review fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the write review fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -18,6 +18,9 @@ import com.example.uniunboxd.models.Application;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ApplicationsFragment class that represents the applications screen.
+ */
 public class ApplicationsFragment extends Fragment {
     private final List<Application> applications = new ArrayList<>();
 
@@ -33,13 +36,22 @@ public class ApplicationsFragment extends Fragment {
         return listView;
     }
 
+    /**
+     * Loads the applications.
+     *
+     * @param inflater The layout inflater.
+     * @param layout   The parent layout.
+     */
     private void loadApplications(LayoutInflater inflater, LinearLayout layout) {
+        // Load applications in a separate thread.
         AsyncTask.execute(() -> {
             int lastID = 0;
+            // Get the last application ID.
             if (!applications.isEmpty()) {
                 lastID = applications.get(applications.size() - 1).ID;
             }
             try {
+                // Get the new applications that are pending with a request to the API.
                 List<Application> newApplications = VerificationController.getPendingApplications(lastID, getActivity());
                 applications.addAll(newApplications);
                 for (Application app : newApplications) {

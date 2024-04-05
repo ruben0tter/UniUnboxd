@@ -35,6 +35,9 @@ import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * ReviewFragment class that represents the review screen.
+ */
 public class ReviewFragment extends Fragment implements View.OnClickListener {
     private int id;
     private Review review;
@@ -53,9 +56,17 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private TextView likeText;
     private TextView likeCount;
 
+    /**
+     * Necessary empty constructor.
+     */
     public ReviewFragment() {
     }
 
+    /**
+     * Constructor for the ReviewFragment class.
+     *
+     * @param id The review's ID.
+     */
     public ReviewFragment(int id) {
         this.id = id;
     }
@@ -65,6 +76,14 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the review fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the review fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -121,12 +140,14 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             throw new RuntimeException(e);
         }
 
+        // Set review information.
         if (review != null) {
             review.createView(view, inflater, container, this);
 
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
             String userType = JWTValidation.getTokenProperty(getActivity(), "typ");
 
+            // If the user is not the author of the review, hide the edit button and show the flag button.
             if (review.Student.Id != userId) {
                 editReview.setVisibility(View.GONE);
                 flagReview.setVisibility(View.VISIBLE);
@@ -135,6 +156,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
                 flagReview.setVisibility(View.GONE);
             }
 
+            // If the user is a student and not the author of the review, show the like button.
             if (userType.equals("Student") && userId != review.Student.Id) {
                 likeReview.setOnClickListener(this);
                 if (review.StudentLikes.contains(userId)) {
@@ -154,6 +176,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Handles the click events for the review fragment.
+     *
+     * @param v The view.
+     */
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -236,6 +263,7 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void redirectToProfile() {
+        // If the review is not anonymous, redirect to the student's profile.
         if (!review.IsAnonymous) {
             ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(review.Student.Id), true);
         }
@@ -294,11 +322,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         builder.setTitle("Flag Review");
 
         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.flag_review_message_pop_up, (ViewGroup) getView(), false);
-// Set up the input
+        // Set up the input
         final EditText message = viewInflated.findViewById(R.id.messageInput);
         builder.setView(viewInflated);
 
-// Set up the buttons
+        // Set up the buttons
         builder.setPositiveButton("OK", (dialog, which) -> AsyncTask.execute(() -> {
             try {
                 ReviewController.flagReview(new FlagReviewModel(review.Id, message.getText().toString()), getActivity());

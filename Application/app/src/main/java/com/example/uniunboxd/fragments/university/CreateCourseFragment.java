@@ -37,6 +37,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CreateCourseFragment class that represents the create course screen.
+ */
 public class CreateCourseFragment extends Fragment implements View.OnClickListener {
     private LayoutInflater inflater;
     private ViewGroup container;
@@ -49,16 +52,32 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
     protected final CourseEditModel Course;
     public List<AssignedProfessorModel> assignedProfessors = new ArrayList<>();
 
+    /**
+     * Necessary empty constructor.
+     */
     public CreateCourseFragment() {
         Course = null;
     }
 
+    /**
+     * Constructor for the CreateCourseFragment class.
+     *
+     * @param course The course edit model.
+     */
     public CreateCourseFragment(CourseEditModel course) {
         this.Course = course;
         imageEnc = Course.Image;
         bannerEnc = Course.Banner;
     }
 
+    /**
+     * Creates the view for the create course fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the create course fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,6 +94,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         ImageButton searchBtn = view.findViewById(R.id.searchButton);
 
         CreateCourseFragment f = this;
+        // If the course is not null, set the course information.
         if (Course != null) {
             ImageView image = view.findViewById(R.id.courseImage_image_courseSetup);
             ImageView banner = view.findViewById(R.id.courseBanner_image_courseSetup);
@@ -96,6 +116,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         imageBtn.setOnClickListener(this);
         bannerBtn.setOnClickListener(this);
         searchBtn.setOnClickListener(this);
+        // If the user is a university, get the assigned professors.
         if (JWTValidation.getTokenProperty(this.getActivity(), "typ").equals("University")) {
             LinearLayout assignedProfessorsList = view.findViewById(R.id.assignedProfessorsList);
             AsyncTask.execute(() -> {
@@ -124,6 +145,11 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
+    /**
+     * Handles the on click events for the create course fragment.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
         Fragment f = FragmentManager.findFragment(view);
@@ -142,12 +168,14 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    
     private void searchButtonLogic(View view, Fragment f) {
         LinearLayout layout = (LinearLayout) view.getParent();
         EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
         String email = professorToAssign.getText().toString();
         AsyncTask.execute(() -> {
             try {
+                // Get the professor to assign by their email through the user controller in the API.
                 AssignedProfessorModel assignedProfessorModel = UserController.getAssignedProfessorByEmail(email, getActivity());
                 if (assignedProfessorModel == null) {
                     getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show());
@@ -159,6 +187,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         return;
                     }
                     assignedProfessors.add(assignedProfessorModel);
+                    // Add the assigned professor to the assigned professors list.
                     LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
                     assignedProfessorsList.addView(assignedProfessorModel.CreateView(inflater, container, (CreateCourseFragment) f));
                 });
@@ -169,6 +198,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         professorToAssign.setText("");
     }
 
+    // Save changes button logic
     private void saveChangesButtonLogic(View view, Fragment f) {
         LinearLayout layout = (LinearLayout) view.getParent();
         EditText name = layout.findViewById(R.id.courseName_courseName_edit);
@@ -176,6 +206,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         EditText description = layout.findViewById(R.id.courseDescription_edit);
         EditText professor = layout.findViewById(R.id.courseName_courseDescription_edit);
 
+        // If the course name, code, description, or professor is empty, show a toast message.
         AsyncTask.execute(() -> {
             int universityId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
             if (Course == null) {
@@ -190,6 +221,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                 }
                 return;
             }
+            // If the course is not null, update the course.
             CourseEditModel course = new CourseEditModel(Course.Id, name.getText().toString(),
                     code.getText().toString(), description.getText().toString(),
                     professor.getText().toString(), imageEnc, bannerEnc, assignedProfessors);
@@ -202,6 +234,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         });
     }
 
+    // Build confirmation popup
     private void buildConfirmationPopup(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(true);
@@ -210,6 +243,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         builder.setPositiveButton("Confirm", (dialog, which) -> deleteCourseLogic());
         builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss());
 
+        // Create and show the alert dialog.
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -227,6 +261,13 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         ((IActivity) getActivity()).replaceFragment(new UniversityHomeFragment(), true);
     }
 
+    /**
+     * Handles the on activity result for the create course fragment.
+     *
+     * @param requestCode The request code.
+     * @param resultCode  The result code.
+     * @param data        The data.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -251,6 +292,12 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         image.setImageBitmap(bitmap);
     }
 
+    /**
+     * Encodes the image or banner.
+     *
+     * @param data The data.
+     * @param code The code.
+     */
     public void encodeImageOrBanner(byte[] data, int code) {
         if (code == imageCode) {
             imageEnc = Base64.encodeToString(data, Base64.DEFAULT);
@@ -259,6 +306,12 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    /**
+     * Removes the assigned professor.
+     *
+     * @param assignedProfessorModel The assigned professor model.
+     * @param v                      The view.
+     */
     public void RemoveAssignedProfessor(AssignedProfessorModel assignedProfessorModel, View v) {
         LinearLayout linearLayout = getView().findViewById(R.id.assignedProfessorsList);
         linearLayout.removeView(v);

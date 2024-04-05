@@ -27,6 +27,9 @@ import com.example.uniunboxd.models.UserSearchResult;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SearchStudentFragment class that represents the search screen for students.
+ */
 public class SearchStudentFragment extends Fragment {
 
     private final List<SearchResult> results = new ArrayList<>();
@@ -48,6 +51,14 @@ public class SearchStudentFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the search student fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the search student fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -59,6 +70,7 @@ public class SearchStudentFragment extends Fragment {
         loadMore = view.findViewById(R.id.load_more_button);
         loadMore.setVisibility(View.INVISIBLE);
 
+        // Set the search view listener.
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             public boolean onQueryTextSubmit(String text) {
                 Log.e("APP", "searching for " + text);
@@ -75,6 +87,7 @@ public class SearchStudentFragment extends Fragment {
             }
         });
 
+        // Set the load more button listener.
         usersButton.setOnClickListener(v -> {
             SEARCH_COURSES = false;
             coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.black));
@@ -85,6 +98,7 @@ public class SearchStudentFragment extends Fragment {
             currentQuery = "";
         });
 
+        // Set the load more button listener.
         coursesButton.setOnClickListener(v -> {
             SEARCH_COURSES = true;
             coursesButton.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
@@ -99,6 +113,11 @@ public class SearchStudentFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Searches for the given text.
+     *
+     * @param text The text to search for.
+     */
     public void search(String text) {
         if (!currentQuery.equals(text)) {
             results.clear();
@@ -106,6 +125,7 @@ public class SearchStudentFragment extends Fragment {
             currentQuery = text;
 
             try {
+                // Search for the text in the background.
                 AsyncTask.execute(() -> {
                     int result_count;
                     if (SEARCH_COURSES) {

@@ -25,6 +25,9 @@ import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.Objects;
 
+/**
+ * AuthenticationFragment class that represents the authentication screen.
+ */
 public class AuthenticationFragment extends Fragment implements View.OnClickListener {
     private EditText email;
     private EditText password;
@@ -34,6 +37,14 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the authentication fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the authentication fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,8 +64,14 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         return view;
     }
 
+    /**
+     * Handles the click event for the sign in and sign up buttons.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
+        // Sign in.
         if (view.getId() == R.id.sign_in_button) {
             try {
                 signIn();
@@ -66,12 +83,17 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         }
     }
 
+    // Sign in the user.
     private void signIn() {
         AuthenticationModel model = createAuthenticationModel();
 
+        // Authenticate the user.
         AsyncTask.execute(() -> {
             try {
+                // Get the token from the API.
                 String token = AuthenticationController.authenticate(model);
+                
+                // Place the token in the shared preferences.
                 JWTValidation.placeToken(token, getActivity());
                 Log.i("JWT", token);
                 redirectToHomePage();
@@ -81,15 +103,18 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         });
     }
 
+    // Create the authentication model.
     private AuthenticationModel createAuthenticationModel() {
         return new AuthenticationModel(
                 email.getText().toString(),
                 password.getText().toString());
     }
 
+    // Redirect to the home page.
     private void redirectToHomePage() {
         String userType = JWTValidation.getTokenProperty(getActivity(), "typ");
 
+        // Redirect to the appropriate home page.
         if (Objects.equals(userType, "Student")) {
             ((IActivity) getActivity()).replaceActivity(StudentActivity.class);
         } else if (Objects.equals(userType, "University")) {
@@ -99,6 +124,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         }
     }
 
+    // Replace the fragment.
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

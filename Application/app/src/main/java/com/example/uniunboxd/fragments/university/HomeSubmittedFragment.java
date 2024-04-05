@@ -12,6 +12,9 @@ import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.fragments.student.HomeFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
 
+/**
+ * HomeSubmittedFragment class that represents the home screen for a university user that has submitted their application.
+ */
 public class HomeSubmittedFragment extends HomeFragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -23,6 +26,11 @@ public class HomeSubmittedFragment extends HomeFragment implements View.OnClickL
         return view;
     }
 
+    /**
+     * Handles the sign out button click event.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
         JWTValidation.deleteToken(getActivity());

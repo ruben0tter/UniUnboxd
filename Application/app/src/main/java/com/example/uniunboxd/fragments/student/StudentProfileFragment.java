@@ -20,14 +20,25 @@ import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * StudentProfileFragment class that represents the student profile screen.
+ */
 public class StudentProfileFragment extends Fragment {
 
     private int ID;
     private StudentProfileModel Student;
 
+    /**
+     * Necessary empty constructor.
+     */
     public StudentProfileFragment() {
     }
 
+    /**
+     * Constructor for the StudentProfileFragment class.
+     *
+     * @param id The student's ID.
+     */
     public StudentProfileFragment(int id) {
         ID = id;
     }
@@ -37,6 +48,14 @@ public class StudentProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the student profile fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the student profile fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,6 +64,7 @@ public class StudentProfileFragment extends Fragment {
         View view = null;
         GetStudentInformationAsyncTask asyncGetTask = new GetStudentInformationAsyncTask(ID, 7);
         try {
+            // Get the student information.
             Student = asyncGetTask.execute(getActivity()).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
@@ -57,6 +77,7 @@ public class StudentProfileFragment extends Fragment {
         view = Student.createView(inflater, container, this);
         ImageButton editBtn = view.findViewById(R.id.editButton);
 
+        // Edit button.
         editBtn.setOnClickListener(v -> {
             StudentEditModel studentEditModel = new StudentEditModel(Student);
             ((IActivity) getActivity()).replaceFragment(new StudentEditFragment(studentEditModel), true);
@@ -66,6 +87,7 @@ public class StudentProfileFragment extends Fragment {
             editBtn.setVisibility(View.GONE);
         }
 
+        // Hide the following and followers sections if there are no users you follow or followers.
         if (Student.Following == null || Student.Following.size() == 0) {
             view.findViewById(R.id.Following).setVisibility(View.GONE);
             view.findViewById(R.id.listFollowing).setVisibility(View.GONE);

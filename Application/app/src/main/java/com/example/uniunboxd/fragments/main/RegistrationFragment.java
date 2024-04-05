@@ -21,6 +21,9 @@ import com.example.uniunboxd.activities.IActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * RegistrationFragment class that represents the registration screen.
+ */
 public class RegistrationFragment extends Fragment implements View.OnClickListener {
 
     private EditText email;
@@ -33,6 +36,14 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the registration fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the registration fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,8 +66,14 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
+    /**
+     * Handles the click event.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
+        // Sign up.
         if (view.getId() == R.id.signUp) {
             try {
                 signUp();
@@ -68,6 +85,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    // Fill the drop down with user types.
     private void fillDropDown() {
         List<String> types = new ArrayList<>();
         types.add("Student");
@@ -81,7 +99,9 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         userType.setAdapter(adapter);
     }
 
+    // Sign up the user.
     private void signUp() {
+        // Check if the passwords are equal.
         if (!arePasswordsEqual()) {
             sendNotification("Passwords are not equal.");
             return;
@@ -89,9 +109,12 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
 
         RegisterModel model = createRegisterModel();
 
+        // Register the user.
         AsyncTask.execute(() -> {
             try {
+                // Register the user with the API.
                 RegistrationController.register(model);
+                // Redirect to the sign in screen.
                 redirectToSignIn();
             } catch (Exception e) {
                 getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), e.getMessage().replace("\"", ""), Toast.LENGTH_LONG).show());
@@ -100,13 +123,16 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
     }
 
     private void redirectToSignIn() {
+        // Redirect to the sign in screen by replacing the current fragment.
         ((IActivity) getActivity()).replaceFragment(new AuthenticationFragment(), false);
     }
 
+    // Check if the passwords are equal.
     private boolean arePasswordsEqual() {
         return password.getText().toString().equals(repeatPassword.getText().toString());
     }
 
+    // Create the register model.
     private RegisterModel createRegisterModel() {
         return new RegisterModel(
                 email.getText().toString(),
@@ -114,6 +140,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 userType.getSelectedItem().toString());
     }
 
+    // Send a notification.
     private void sendNotification(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }

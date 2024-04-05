@@ -27,11 +27,9 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
 
     List<OverviewCourse> overviewCourses;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Necessary empty constructor.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,6 +64,11 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         return view;
     }
 
+    /**
+     * Handles the sign out and add courses button click event.
+     *
+     * @param v The view.
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.signOut) {
@@ -76,10 +79,14 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         }
     }
 
+    /**
+     * AsyncTask to get the courses information.
+     */
     class CoursesInformation extends AsyncTask<FragmentActivity, Void, List<OverviewCourse>> {
         @Override
         protected List<OverviewCourse> doInBackground(FragmentActivity... fragmentActivities) {
             try {
+                // Get the last edited courses by university from the API.
                 return CourseController.getLastEditedCoursesByUniversity(fragmentActivities[0]);
             } catch (Exception e) {
                 Log.e("ERR", "Couldn't get review" + e);

@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+/**
+ * The StudentProfileModel class is a model for a student profile.
+ */
 public class StudentProfileModel {
     public final int Id;
     public String Name;

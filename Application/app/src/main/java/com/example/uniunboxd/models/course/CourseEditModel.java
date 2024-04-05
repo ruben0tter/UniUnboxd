@@ -3,6 +3,9 @@ package com.example.uniunboxd.models.course;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The CourseEditModel class is a model for a course edit.
+ */
 public class CourseEditModel {
     public final int Id;
     public final String Name;

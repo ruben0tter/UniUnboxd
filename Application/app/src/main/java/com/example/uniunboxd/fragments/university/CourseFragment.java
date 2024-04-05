@@ -28,24 +28,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * CourseFragment class that represents the course screen.
+ */
 public class CourseFragment extends Fragment {
 
     private int ID;
     private final int NUM_REVIEWS_TO_LOAD = 5;
     public CourseRetrievalModel Course = null;
 
+    /**
+     * Necessary empty constructor.
+     */
     public CourseFragment() {
     }
 
+    /**
+     * Constructor for the CourseFragment class.
+     *
+     * @param id The course's ID.
+     */
     public CourseFragment(int id) {
         this.ID = id;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Creates the view for the course fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the course fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -59,6 +73,7 @@ public class CourseFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
+        // If the course is not null, create the view.
         if (Course != null) {
             view = Course.createView(inflater, container, getActivity());
 
@@ -73,9 +88,11 @@ public class CourseFragment extends Fragment {
                 ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel), true);
             });
 
+            // Get role and user id from token.
             String role = JWTValidation.getTokenProperty(getActivity(), "typ");
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
 
+            // If the user is a student or a professor who is not assigned to the course, hide the edit button.
             if (role.equals("Student") || (role.equals("Professor") && !Course.AssignedProfessors.contains(userId)))
                 editBtn.setVisibility(GONE);
         }

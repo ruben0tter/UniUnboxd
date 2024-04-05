@@ -3,6 +3,9 @@ package com.example.uniunboxd.models.student;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The NotificationSettings class is a model for notification settings.
+ */
 public class NotificationSettings {
     public int StudentId;
     public boolean ReceivesFollowersReviewMail;

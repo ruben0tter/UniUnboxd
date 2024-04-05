@@ -18,6 +18,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
+/**
+ * The ProfessorProfileModel class is a model for a professor profile.
+ */
 public class ProfessorProfileModel {
     public final int Id;
     public final String Image;

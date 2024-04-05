@@ -12,6 +12,9 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The ProfessorEditModel class is a model for a professor edit.
+ */
 public class ProfessorEditModel {
     public int Id;
     public String Image;

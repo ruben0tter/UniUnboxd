@@ -3,6 +3,9 @@ package com.example.uniunboxd.models.student;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The UniversityNameModel class is a model for a university name.
+ */
 public class UniversityNameModel {
     public int Id;
     public String Name;

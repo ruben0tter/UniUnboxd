@@ -14,6 +14,9 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The StudentListItem class is a model for a student list item.
+ */
 public class StudentListItem {
     public final int ID;
     public final String Name;

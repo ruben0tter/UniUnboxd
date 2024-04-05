@@ -39,6 +39,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * StudentEditFragment class that represents the student edit screen.
+ */
 public class StudentEditFragment extends Fragment {
 
     private static final int CAMERA_CODE = 1;
@@ -67,6 +70,14 @@ public class StudentEditFragment extends Fragment {
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
     }
 
+    /**
+     * Creates the view for the student edit fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the student edit fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -84,12 +95,15 @@ public class StudentEditFragment extends Fragment {
         Button verifyBtn = view.findViewById(R.id.getVerified);
         AutoCompleteTextView universitySearch = view.findViewById(R.id.universityAutoCompleteTextView);
 
+        // Get universities.
         AsyncTask.execute(() -> {
             try {
+                // Make a request to get universities to the API.
                 Universities = UserController.GetUniversities(getActivity());
                 for (UniversityNameModel x : Universities) {
                     UniversityNames.add(x.Name);
                 }
+                // Set the adapter for the university search.
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, UniversityNames);
                 (getActivity()).runOnUiThread(() -> universitySearch.setAdapter(arrayAdapter));
             } catch (IOException e) {
@@ -142,11 +156,14 @@ public class StudentEditFragment extends Fragment {
 
         }));
 
+        // Set the on click listener to choose a file.
         uploadBtn.setOnClickListener(v -> FileSystemChooser.ChoosePDF(f, 3));
 
+        // Verify the student's application.
         verifyBtn.setOnClickListener(v -> AsyncTask.execute(() -> {
 
             try {
+                // Get the university ID.
                 String universityName = universitySearch.getText().toString();
                 int id = -1;
                 for (UniversityNameModel university : Universities) {
@@ -159,6 +176,7 @@ public class StudentEditFragment extends Fragment {
                     return;
                 }
 
+                // Send the application to the API.
                 VerificationController.sendApplication(file.toArray(new byte[][]{}), id, getActivity());
 
                 Model.VerificationStatus = 1;
@@ -182,6 +200,13 @@ public class StudentEditFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Handles the result of the file system chooser.
+     *
+     * @param requestCode The request code.
+     * @param resultCode  The result code.
+     * @param data        The data.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -197,11 +222,10 @@ public class StudentEditFragment extends Fragment {
         } else if (requestCode == FILE_PICKER_CODE) {
             Uri uri = data.getData();
             try {
-                //null file, so that it only keeps the most recent.
+                // null file, so that it only keeps the most recent.
                 if (file.size() > 0) file = new ArrayList<>();
                 file.add(FileSystemChooser.readTextFromUri(uri, getActivity()));
             } catch (IOException e) {
-                //TODO: deal with this better
                 throw new RuntimeException(e);
             }
         } else if (requestCode == IMAGE_PICKER_CODE) {
@@ -220,6 +244,7 @@ public class StudentEditFragment extends Fragment {
 
     }
 
+    // Set up the notification settings.
     private void SetUpNotificationSettings(View view) {
 
         CheckBox followerMail = view.findViewById(R.id.follower_mail);
@@ -248,6 +273,7 @@ public class StudentEditFragment extends Fragment {
             activityPush.setChecked(true);
     }
 
+    // Update the notification settings.
     private void UpdateNotificationSettings(View view) {
         CheckBox followerMail = view.findViewById(R.id.follower_mail);
         CheckBox followerPush = view.findViewById(R.id.follower_push);

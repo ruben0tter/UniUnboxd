@@ -1,5 +1,8 @@
 package com.example.uniunboxd.models.student;
 
+/**
+ * The StudentEditModel class is a model for a student edit.
+ */
 public class StudentEditModel {
     public final int Id;
     public String Name;

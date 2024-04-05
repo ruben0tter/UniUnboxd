@@ -11,6 +11,9 @@ import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The AssignedProfessorModel class is a model for an assigned professor.
+ */
 public class AssignedProfessorModel {
     public final int Id;
     public final String Name;

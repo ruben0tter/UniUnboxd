@@ -24,6 +24,9 @@ import com.example.uniunboxd.utilities.JWTValidation;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * HomeFragment class that represents the home screen.
+ */
 public class HomeFragment extends Fragment implements View.OnClickListener {
     LinearLayout popularCoursesLayout;
     LinearLayout newFromFriendsLayout;
@@ -38,6 +41,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the home fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the home fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,10 +67,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         LatestReviewsByFriendsInformation newFromFriendsInformation = new LatestReviewsByFriendsInformation();
         PopularCoursesByFriendsInformation popularCoursesByFriendsInformation = new PopularCoursesByFriendsInformation();
 
+        // Get your university's id from token.
         String attachedUniversityId = JWTValidation.getTokenProperty(getActivity(), "university");
         if (attachedUniversityId == null) {
+            // If the user is not attached to a university, get the popular courses from all universities.
             popularCoursesInformation = new PopularCoursesInformation();
         } else {
+            // If the user is attached to a university, get the popular courses from that university.
             popularCoursesInformation = new PopularCoursesInformation(Integer.parseInt(attachedUniversityId));
         }
 
@@ -71,6 +85,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             throw new RuntimeException(e);
         }
 
+        // Add popular courses, new reviews from friends, and popular courses with friends to the layout.
         if (popularCourses != null) {
             for (PopularCourse c : popularCourses) {
                 popularCoursesLayout.addView(c.createView(inflater, container, this));
@@ -93,13 +108,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    /**
+     * Handles the click event for the sign out button.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
+        // Sign out.
         JWTValidation.deleteToken(getActivity());
         ((IActivity) getActivity()).replaceActivity(MainActivity.class);
     }
 }
 
+// Async tasks to get popular courses, latest reviews from friends, and popular courses with friends.
 class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<PopularCourse>> {
     private final int id;
 
@@ -127,6 +149,7 @@ class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<P
     }
 }
 
+// Async tasks to get the latest reviews from friends and popular courses with friends.
 class LatestReviewsByFriendsInformation extends AsyncTask<FragmentActivity, Void, List<FriendReview>> {
     @Override
     protected List<FriendReview> doInBackground(FragmentActivity... fragmentActivities) {
@@ -140,6 +163,7 @@ class LatestReviewsByFriendsInformation extends AsyncTask<FragmentActivity, Void
     }
 }
 
+// Async tasks to get popular courses with friends.
 class PopularCoursesByFriendsInformation extends AsyncTask<FragmentActivity, Void, List<PopularCourse>> {
     @Override
     protected List<PopularCourse> doInBackground(FragmentActivity... fragmentActivities) {
