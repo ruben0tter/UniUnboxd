@@ -71,6 +71,7 @@ namespace UniUnboxdAPI.Repositories
             await dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
         /// Updates the average rating of a course after modifying a review.
         /// </summary>
         /// <param name="id">The ID of the course.</param>
