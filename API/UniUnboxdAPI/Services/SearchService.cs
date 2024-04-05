@@ -4,9 +4,16 @@ using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
+    /// <summary>
+    /// Service class for performing search operations.
+    /// </summary>
     public class SearchService(SearchRepository searchRepository, UserRepository userRepository)
     {
-
+        /// <summary>
+        /// Retrieves a list of courses based on the specified search options.
+        /// </summary>
+        /// <param name="options">The search options.</param>
+        /// <returns>A list of course search models.</returns>
         public async Task<List<CourseSearchModel>> GetCourses(SearchOptions options) {
             Func<SearchOptions, Task<List<Course>>> GetRelevantCourses;
 
@@ -21,6 +28,11 @@ namespace UniUnboxdAPI.Services
             return courses.Select(CreateCourseSearchModel).ToList();
         }
 
+        /// <summary>
+        /// Retrieves a list of users based on the specified search options.
+        /// </summary>
+        /// <param name="options">The search options.</param>
+        /// <returns>A list of user search models.</returns>
         public async Task<List<UserSearchModel>> GetUsers(SearchOptions options) {
             var users = await searchRepository.GetUsers(options);
 
@@ -31,6 +43,11 @@ namespace UniUnboxdAPI.Services
             return result;
         }
 
+        /// <summary>
+        /// Creates a course search model based on the specified course.
+        /// </summary>
+        /// <param name="course">The course.</param>
+        /// <returns>A course search model.</returns>
         private CourseSearchModel CreateCourseSearchModel(Course course)
         {
             return new CourseSearchModel
@@ -47,6 +64,11 @@ namespace UniUnboxdAPI.Services
             };
         }
 
+        /// <summary>
+        /// Creates a user search model based on the specified user.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <returns>A user search model.</returns>
         private async Task<UserSearchModel> CreateUserSearchModel(User user)
         {
             string? image = await userRepository.GetImageOf(user.Id, user.UserType);
