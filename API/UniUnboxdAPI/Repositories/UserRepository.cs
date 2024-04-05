@@ -9,8 +9,8 @@ namespace UniUnboxdAPI.Repositories;
 /// </summary>
 public class UserRepository(UniUnboxdDbContext dbContext)
 {
-    public async Task<User> GetUser(int id)
-        => await dbContext.Users.Where(i => i.Id == id).FirstAsync();
+    public async Task<User?> GetUser(int id)
+        => await dbContext.Users.Where(i => i.Id == id).FirstOrDefaultAsync();
 
     public async Task<User> GetUser(string email)
         => await dbContext.Users.Where(i => i.Email!.Equals(email)).FirstAsync();
