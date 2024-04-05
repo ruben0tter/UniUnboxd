@@ -51,13 +51,19 @@ public class HomeUnverifiedFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_uni_unverified, container, false);
+
+        // Initialize the upload buttons
         btnUploads[0] = view.findViewById(R.id.uploadFile1);
         btnUploads[1] = view.findViewById(R.id.uploadFile2);
         btnUploads[2] = view.findViewById(R.id.uploadFile3);
 
+        // Initialize the apply button and sign out button
         btnApply = view.findViewById(R.id.submitApplication);
         signOut = view.findViewById(R.id.signOut);
+
+        // Disable the apply button initially
         btnApply.setEnabled(false);
 
         // Apply button
@@ -76,11 +82,13 @@ public class HomeUnverifiedFragment extends Fragment {
 
         Fragment f = this;
 
+        // Set the listeners for the upload buttons
         for (int i = 0; i < btnUploads.length; i++) {
             int finalI = i;
             btnUploads[i].setOnClickListener(v -> FileSystemChooser.ChoosePDF(f, PICKFILE_RESULT_CODE + finalI));
         }
 
+        // Sign out button
         signOut.setOnClickListener(v -> {
             JWTValidation.deleteToken(getActivity());
             ((IActivity) getActivity()).replaceActivity(MainActivity.class);
@@ -100,16 +108,21 @@ public class HomeUnverifiedFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // Get the file from the file chooser
         int idx = requestCode - PICKFILE_RESULT_CODE;
         if (resultCode == Activity.RESULT_OK && (idx >= 0 && idx <= 2)) {
+            // Get the file from the file chooser
             Uri uri = data.getData();
             try {
+                // Read the file
                 verificationFiles[idx] = FileSystemChooser.readTextFromUri(uri, getActivity());
                 btnApply.setEnabled(true);
 
+                // Change the button text
                 Button btn = btnUploads[idx];
                 btn.setText("Change file");
             } catch (Exception err) {
+                // Log the error
                 Log.e("APP", "Failed to read file: " + err);
             }
         }
@@ -117,6 +130,7 @@ public class HomeUnverifiedFragment extends Fragment {
 
     private void reload() {
         try {
+            // Replace the fragment with the home submitted fragment.
             ((IActivity) getActivity()).replaceFragment(new HomeSubmittedFragment(), false);
         } catch (Exception e) {
             Log.d("ERR", "i dunno");
