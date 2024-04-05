@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
@@ -11,7 +10,7 @@ namespace UniUnboxdAPI.Controllers
     [Route("api/verify")]
     [ApiController]
     [Authorize]
-    public class VerificationController(VerificationService verificationService, MailService mailService, PushNotificationService notificationService) : ControllerBase
+    public class VerificationController(VerificationService verificationService) : ControllerBase
     {
         [HttpPost]
         [Authorize(Roles = "Student, University")]

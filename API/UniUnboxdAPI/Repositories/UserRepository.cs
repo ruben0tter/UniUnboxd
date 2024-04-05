@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
-using UniUnboxdAPI.Models.DataTransferObjects;
 
 namespace UniUnboxdAPI.Repositories;
 
@@ -138,7 +137,7 @@ public class UserRepository(UniUnboxdDbContext dbContext)
     public async Task<List<Professor>> GetAssignedProfessors(int id)
         => await dbContext.Professors.Where(i => i.AssignedCourses.Any(i => i.Course.Id == id)).ToListAsync();
 
-    public async Task<bool> CourseProfessorAssignmentExist(int courseId, int professorId)
+    public async Task<bool> DoesCourseProfessorAssignmentExist(int courseId, int professorId)
         => await dbContext.CourseProfessorAssignments.AnyAsync(i =>
             i.Professor.Id == professorId && i.Course.Id == courseId);
 

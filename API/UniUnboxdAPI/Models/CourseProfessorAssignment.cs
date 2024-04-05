@@ -1,5 +1,3 @@
-using System.Collections;
-
 namespace UniUnboxdAPI.Models;
 
 public class CourseProfessorAssignment

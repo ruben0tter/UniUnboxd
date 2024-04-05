@@ -1,10 +1,5 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.Extensions.Azure;
+﻿using MailKit.Security;
 using MimeKit;
-using System.Net.Mail;
-using System.Reflection.Emit;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 using UniUnboxdAPI.Utilities;

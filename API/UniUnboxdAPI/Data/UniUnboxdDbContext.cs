@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Hosting;
 using UniUnboxdAPI.Models;
 
 namespace UniUnboxdAPI.Data

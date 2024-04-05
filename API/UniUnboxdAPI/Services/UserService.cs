@@ -1,4 +1,3 @@
-using Microsoft.IdentityModel.Tokens;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
@@ -107,7 +106,7 @@ namespace UniUnboxdAPI.Services
             };
 
         public async Task<bool> DoesCourseProfessorAssignmentExist(int courseId, int professorId)
-            => await userRepository.CourseProfessorAssignmentExist(courseId, professorId);
+            => await userRepository.DoesCourseProfessorAssignmentExist(courseId, professorId);
 
         public async  Task<List<AssignedProfessorModel>> GetAssignedProfessors(int courseId)
         {
@@ -138,8 +137,6 @@ namespace UniUnboxdAPI.Services
                 university = await userRepository.GetUniversity(student.UniversityId);
             if(university != null)
                 studentProfileModel.UniversityName = university.UserName;
-            
-            // if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
 
             foreach (var review in student.Reviews.OrderByDescending(i => i.LastModificationTime))
                 studentProfileModel.Reviews.Add(CreateStudentProfileReview(review));
@@ -150,7 +147,7 @@ namespace UniUnboxdAPI.Services
                 studentProfileModel.Followers.Add(new StudentGridModel
                 {
                     Id = x.Id,
-                    Name = x.UserName,
+                    Name = x.UserName!,
                     Image = x.Image
                 });
             
@@ -159,7 +156,7 @@ namespace UniUnboxdAPI.Services
                 studentProfileModel.Following.Add(new StudentGridModel
                 {
                     Id = x.Id,
-                    Name = x.UserName,
+                    Name = x.UserName!,
                     Image = x.Image
                 });
             
@@ -171,7 +168,7 @@ namespace UniUnboxdAPI.Services
             {
                 Id = student.Id,
                 ProfilePic = student.Image,
-                Name = student.UserName,
+                Name = student.UserName!,
                 UniversityName = "",
                 Reviews = new List<StudentProfileReview>(),
                 NotificationSettings = MakeNotificationSettingsModel(student.NotificationSettings, student.Id),

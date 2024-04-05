@@ -1,6 +1,4 @@
-﻿using UniUnboxdAPITests.TestUtilities;
-
-namespace UniUnboxdAPITests.Repositories
+﻿namespace UniUnboxdAPITests.Repositories
 {
     [TestClass]
     public class UserRepositoryUniversityTest

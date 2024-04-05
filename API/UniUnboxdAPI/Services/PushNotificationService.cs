@@ -1,6 +1,4 @@
 ﻿using FirebaseAdmin.Messaging;
-using MimeKit;
-using System.Net.Http.Headers;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Utilities;
 

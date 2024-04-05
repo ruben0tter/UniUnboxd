@@ -6,3 +6,5 @@ global using UniUnboxdAPI.Models.DataTransferObjects;
 global using UniUnboxdAPI.Repositories;
 global using UniUnboxdAPI.Services;
 global using UniUnboxdAPI.Utilities;
+global using UniUnboxdAPITests.TestUtilities;
+global using Microsoft.EntityFrameworkCore;

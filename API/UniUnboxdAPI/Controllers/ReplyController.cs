@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;

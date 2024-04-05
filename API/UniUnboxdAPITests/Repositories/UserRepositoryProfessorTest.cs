@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using UniUnboxdAPITests.TestUtilities;
-
-namespace UniUnboxdAPITests.Repositories
+﻿namespace UniUnboxdAPITests.Repositories
 {
     [TestClass]
     public class UserRepositoryProfessorTest
@@ -174,6 +171,28 @@ namespace UniUnboxdAPITests.Repositories
             Assert.IsNotNull(professors);
             Assert.IsTrue(professors.Any());
             Assert.IsTrue(professors.Any(i => i.Id == 1));
+        }
+
+        [TestMethod]
+        public async Task DoesCourseProfessorAssignmentExistTestSuccesful()
+        {
+            var professorId = 1;
+            var courseId = 1;
+
+            var result = await userRepository.DoesCourseProfessorAssignmentExist(courseId, professorId);
+
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public async Task DoesCourseProfessorAssignmentExistTestUnsuccesful()
+        {
+            var professorId = 1;
+            var courseId = 999;
+
+            var result = await userRepository.DoesCourseProfessorAssignmentExist(courseId, professorId);
+
+            Assert.IsFalse(result);
         }
 
         [TestMethod]

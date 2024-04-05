@@ -1,26 +1,11 @@
 ﻿using UniUnboxdAPI.Models;
-using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
-    public class ReplyService
+    public class ReplyService(ReplyRepository replyRepository, ReviewRepository reviewRepository, UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService)
     {
-        private readonly ReplyRepository replyRepository;
-        private readonly ReviewRepository reviewRepository;
-        private readonly UserRepository userRepository;
-        private readonly MailService mailService;
-        private readonly PushNotificationService pushNotificationService;
-
-        public ReplyService(ReplyRepository replyRepository, ReviewRepository reviewRepository, UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService) 
-        { 
-            this.replyRepository = replyRepository;
-            this.reviewRepository = reviewRepository;
-            this.userRepository = userRepository;
-            this.mailService = mailService;
-            this.pushNotificationService = pushNotificationService;
-        }
 
         /// <summary>
         /// Check whether there exists a student with the provided id.

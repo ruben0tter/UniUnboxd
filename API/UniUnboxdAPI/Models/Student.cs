@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace UniUnboxdAPI.Models
+﻿namespace UniUnboxdAPI.Models
 {
     public class Student : User
     {

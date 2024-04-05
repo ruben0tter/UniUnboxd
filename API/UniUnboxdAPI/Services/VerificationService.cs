@@ -1,4 +1,3 @@
-using System.Diagnostics.Eventing.Reader;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
@@ -78,8 +77,8 @@ namespace UniUnboxdAPI.Services
             return new() {
                 VerificationData = application.VerificationData,
                 UserId = application.UserId,
-                Email = user.Email,
-                Image = image
+                Email = user.Email!,
+                Image = image!
             };
         }
 
@@ -90,7 +89,7 @@ namespace UniUnboxdAPI.Services
             if (user == null)
                 return false;
 
-            bool result = await verificationRepository.SetVerificationStatus(user, status);
+            bool result = await userRepository.SetVerificationStatus(user, status);
 
             if (status == VerificationStatus.Verified)
                 await verificationRepository.SetUniversity(user, universityId);

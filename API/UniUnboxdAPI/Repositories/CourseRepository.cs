@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using UniUnboxdAPI.Data;
 using UniUnboxdAPI.Models;
 
@@ -8,15 +7,8 @@ namespace UniUnboxdAPI.Repositories
     /// <summary>
     /// Handles all calls to database in regard to Course model.
     /// </summary>
-    public class CourseRepository
+    public class CourseRepository(UniUnboxdDbContext dbContext)
     {
-        private readonly UniUnboxdDbContext dbContext;
-
-        public CourseRepository(UniUnboxdDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
-
         public async Task<bool> DoesCourseExist(int id)
             => await dbContext.Courses.AnyAsync(c => c.Id == id);
 
@@ -25,7 +17,7 @@ namespace UniUnboxdAPI.Repositories
                 .Include(i => i.University)
                 .Include(i => i.AssignedProfessors).FirstAsync();
 
-        public async Task<Course> GetCourseAndConnectedData(int id, int numOfReviews)
+        public async Task<Course> GetCourseAndConnectedData(int id)
             => await dbContext.Courses.Where(i => i.Id == id)
                                     .Include(i => i.University)
                                     .Include(i => i.Reviews)
@@ -81,6 +73,7 @@ namespace UniUnboxdAPI.Repositories
                 
             await dbContext.SaveChangesAsync();
         }
+
         public async Task UpdateAverageRatingAfterDelete(int id, double removedRating, bool isAnon)
         {
             var course = await GetCourse(id);
@@ -136,9 +129,5 @@ namespace UniUnboxdAPI.Repositories
             => await dbContext.Courses.Where(i => i.AssignedProfessors
                 .Any(i => i.Professor.Id == professorId))
                 .ToListAsync();
-
-        public async Task<bool> DoesProfessorAssignmentExist(int courseId, int professorId)
-            => await dbContext.CourseProfessorAssignments.AnyAsync(i => i.ProfessorId == professorId 
-                                                                        && i.CourseId == courseId);
     }
 }

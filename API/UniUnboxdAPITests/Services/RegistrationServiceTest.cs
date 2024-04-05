@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using UniUnboxdAPITests.TestUtilities;
 
 namespace UniUnboxdAPITests.Services
 {

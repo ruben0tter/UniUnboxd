@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage
+﻿namespace UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage
 {
     public class ReviewGridModel
     {

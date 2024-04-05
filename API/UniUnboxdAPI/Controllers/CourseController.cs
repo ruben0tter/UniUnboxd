@@ -1,11 +1,8 @@
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
-using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
 
@@ -14,7 +11,7 @@ namespace UniUnboxdAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CourseController(CourseService courseService, ReviewService reviewService) : ControllerBase
+    public class CourseController(CourseService courseService) : ControllerBase
     {
         [HttpGet]
         [Authorize]
@@ -25,12 +22,12 @@ namespace UniUnboxdAPI.Controllers
             if (! await courseService.DoesCourseExist(courseId))
                 return BadRequest($"A course with id {courseId} does not exist.");
 
-            CourseRetrievalModel model = await courseService.GetCourseRetrievalModelById(courseId, numOfReviews);
+            CourseRetrievalModel model = await courseService.GetCourseRetrievalModelById(courseId);
             
             if (role == "Student")
             {
                 int userId = JWTValidation.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
-                model.FriendReviews = await reviewService.GetAllFriendsThatReviewed(userId, courseId);
+                model.FriendReviews = await courseService.GetAllFriendsThatReviewed(userId, courseId);
                 model.YourReview = await courseService.GetCourseReviewByStudent(courseId, userId);
             }
 
@@ -141,7 +138,7 @@ namespace UniUnboxdAPI.Controllers
                             await DismissProfessor(x.ProfessorId, x.CourseId);
                     }
                 
-                await courseService.UpdateCourse(course, model);
+                courseService.UpdateCourse(course, model);
                 await courseService.PutCourse(course);
                 foreach (var x in model.AssignedProfessors)
                 {

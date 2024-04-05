@@ -10,16 +10,8 @@ namespace UniUnboxdAPI.Services
     /// Service for the AuthenticationController.
     /// Handles the authentication logic.
     /// </summary>
-    public class AuthenticationService
+    public class AuthenticationService(UserManager<User> userManager, UserRepository userRepository)
     {
-        private readonly UserManager<User> userManager;
-        private readonly UserRepository userRepository;
-
-        public AuthenticationService(UserManager<User> userManager, UserRepository userRepository)
-        {
-            this.userManager = userManager;
-            this.userRepository = userRepository;
-        }
 
         /// <summary>
         /// Check whether there exists a user in the database with the provided email.

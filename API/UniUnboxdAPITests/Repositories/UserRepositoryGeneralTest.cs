@@ -1,6 +1,4 @@
-﻿using UniUnboxdAPITests.TestUtilities;
-
-namespace UniUnboxdAPITests.Repositories
+﻿namespace UniUnboxdAPITests.Repositories
 {
     [TestClass]
     public class UserRepositoryGeneralTest
@@ -18,12 +16,9 @@ namespace UniUnboxdAPITests.Repositories
         {
             var dbContext = DatabaseUtil.CreateDbContext("UserRepositoryGeneral");
 
-            var student = new Student() { Id = 1, Email = "student@gmail.com", 
-                Following = new List<Follow>(), Followers = new List<Follow>(), 
-                NotificationSettings = new NotificationSettings(),
-                Reviews = new List<Review>() };
+            var user = new User() { Id = 1, Email = "student@gmail.com" };
 
-            dbContext.Users.Add(student);
+            dbContext.Users.Add(user);
             dbContext.SaveChanges();
         }
 
@@ -34,7 +29,7 @@ namespace UniUnboxdAPITests.Repositories
             var user = await userRepository.GetUser(id);
 
             Assert.IsNotNull(user);
-            Assert.IsInstanceOfType(user, typeof(Student));
+            Assert.IsInstanceOfType(user, typeof(User));
             Assert.AreEqual(id, user.Id);
             Assert.AreEqual("student@gmail.com", user.Email);
         }
@@ -46,7 +41,7 @@ namespace UniUnboxdAPITests.Repositories
             var user = await userRepository.GetUser(email);
 
             Assert.IsNotNull(user);
-            Assert.IsInstanceOfType(user, typeof(Student));
+            Assert.IsInstanceOfType(user, typeof(User));
             Assert.AreEqual(1, user.Id);
             Assert.AreEqual(email, user.Email);
         }
@@ -60,28 +55,6 @@ namespace UniUnboxdAPITests.Repositories
             await userRepository.SetVerificationStatus(user, verificationStatus);
 
             Assert.AreEqual(verificationStatus, user.VerificationStatus);
-        }
-
-        [TestMethod]
-        public async Task GetFollowersTest()
-        {
-            var id = 1;
-            var student = await userRepository.GetStudent(id);
-            var followers = await userRepository.GetFollowers(id);
-
-            Assert.IsNotNull(followers);
-            Assert.IsTrue(followers.All(x => student.Followers!.Any(y => y.FollowingStudentId == x.Id)));
-        }
-
-        [TestMethod]
-        public async Task GetFollowingTest()
-        {
-            var id = 1;
-            var student = await userRepository.GetStudent(id);
-            var following = await userRepository.GetFollowing(id);
-
-            Assert.IsNotNull(following);
-            Assert.IsTrue(following.All(x => student.Following!.Any(y => y.FollowedStudentId == x.Id)));
         }
     }
 }

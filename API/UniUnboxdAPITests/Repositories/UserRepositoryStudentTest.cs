@@ -1,6 +1,4 @@
-﻿using UniUnboxdAPITests.TestUtilities;
-
-namespace UniUnboxdAPITests.Repositories
+﻿namespace UniUnboxdAPITests.Repositories
 {
     [TestClass]
     public class UserRepositoryStudentTest
@@ -216,6 +214,28 @@ namespace UniUnboxdAPITests.Repositories
             student = await userRepository.GetStudent(id);
 
             Assert.AreEqual("student", student.UserName);
+        }
+
+        [TestMethod]
+        public async Task GetFollowersTest()
+        {
+            var id = 1;
+            var student = await userRepository.GetStudent(id);
+            var followers = await userRepository.GetFollowers(id);
+
+            Assert.IsNotNull(followers);
+            Assert.IsTrue(followers.All(x => student.Followers!.Any(y => y.FollowingStudentId == x.Id)));
+        }
+
+        [TestMethod]
+        public async Task GetFollowingTest()
+        {
+            var id = 1;
+            var student = await userRepository.GetStudentAndConnectedData(id);
+            var following = await userRepository.GetFollowing(id);
+
+            Assert.IsNotNull(following);
+            Assert.IsTrue(following.All(x => student.Following!.Any(y => y.FollowedStudentId == x.Id)));
         }
     }
 }
