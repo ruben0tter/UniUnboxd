@@ -123,6 +123,7 @@ namespace UniUnboxdAPITests.Controllers
             dbContext.Users.Add(student);
             dbContext.Users.Add(student1);
             dbContext.Users.Add(student2);
+            dbContext.Users.Add(student3);
             dbContext.Users.Add(professor);
             dbContext.Users.Add(professor1);
             dbContext.Courses.Add(course);
@@ -134,7 +135,7 @@ namespace UniUnboxdAPITests.Controllers
         {
             ConfigurationUtil.SetHttpContext(userController, 4, UserType.Student);
             var userId = 4;
-            ObjectResult result = (ObjectResult)await userController.GetStudent(userId);
+            ObjectResult result = (ObjectResult) await userController.GetStudent(userId);
             var student = (StudentProfileModel) result.Value;
 
             Assert.IsNotNull(student); 
@@ -159,7 +160,7 @@ namespace UniUnboxdAPITests.Controllers
         public async Task GetUniversities()
         {
             ObjectResult result = (ObjectResult) await userController.GetUniversities();
-            var universities = (List<UniversityNameModel> )result.Value;
+            var universities = (List<UniversityNameModel>) result.Value;
             foreach (UniversityNameModel university in universities)
             {
                 Assert.IsNotNull(university);
@@ -175,6 +176,7 @@ namespace UniUnboxdAPITests.Controllers
             var email = "professor@gmail.com";
             ObjectResult result = (ObjectResult) await userController.GetAssignedProfessorByEmail(email);
             var professor = (AssignedProfessorModel) result.Value;
+
             Assert.IsNotNull(professor);
             Assert.AreEqual(professor.Email, email);
             Assert.AreEqual(200, result.StatusCode);
@@ -214,7 +216,7 @@ namespace UniUnboxdAPITests.Controllers
         public async Task GetFollowers()
         {
             ConfigurationUtil.SetHttpContext(userController, 4, UserType.Student);
-            ObjectResult result = (ObjectResult)await userController.GetFollowers();
+            ObjectResult result = (ObjectResult) await userController.GetFollowers();
             var students = (List<StudentGridModel>) result.Value;
             foreach (StudentGridModel student in students)
             {
@@ -284,7 +286,7 @@ namespace UniUnboxdAPITests.Controllers
         public async Task UnFollow()
         {
             ConfigurationUtil.SetHttpContext(userController, 5, UserType.Student);
-            OkResult result = (OkResult)await userController.Unfollow(4);
+            OkResult result = (OkResult) await userController.Unfollow(4);
 
             Assert.IsFalse(dbContext.Follows.Any(i => i.FollowedStudentId == 4 && i.FollowingStudentId == 5));
             Assert.AreEqual(200, result.StatusCode);
