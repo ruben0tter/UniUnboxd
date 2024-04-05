@@ -17,7 +17,7 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FriendReview implements View.OnClickListener {
+public class FriendReview {
     public final int Id;
     public final String CourseName;
     public final String CourseImage;
@@ -43,15 +43,18 @@ public class FriendReview implements View.OnClickListener {
 
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.course_name_image_review_item, container, false);
+        view.setOnClickListener(v -> {
+            if (v.getId() == R.id.courseName || v.getId() == R.id.courseImage) {
+                ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
+            } else if (v.getId() == R.id.studentName || v.getId() == R.id.studentImage) {
+                ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(StudentId), true);
+            }
+        });
 
         TextView courseName = view.findViewById(R.id.courseName);
-        courseName.setOnClickListener(this);
         ImageView courseImage = view.findViewById(R.id.courseImage);
-        courseImage.setOnClickListener(this);
         TextView studentName = view.findViewById(R.id.studentName);
-        studentName.setOnClickListener(this);
         ImageView studentImage = view.findViewById(R.id.studentImage);
-        studentImage.setOnClickListener(this);
         RatingBar rating = view.findViewById(R.id.ratingBar);
 
         courseName.setText(CourseName);
@@ -67,15 +70,5 @@ public class FriendReview implements View.OnClickListener {
         fragment = f;
 
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-        int test = v.getId();
-        if (v.getId() == R.id.courseName || v.getId() == R.id.courseImage) {
-            ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
-        } else if (v.getId() == R.id.studentName || v.getId() == R.id.studentImage) {
-            ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(StudentId), true);
-        }
     }
 }

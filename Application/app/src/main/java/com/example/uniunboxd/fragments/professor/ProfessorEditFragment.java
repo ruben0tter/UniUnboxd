@@ -48,7 +48,7 @@ public class ProfessorEditFragment extends Fragment {
         if (Professor == null)
             return null;
 
-        View v = Professor.createView(inflater, container, savedInstanceState);
+        View v = Professor.createView(inflater, container);
 
         TextView name = v.findViewById(R.id.professorNameEdit);
         ImageButton editImageBtn = v.findViewById(R.id.professorImageEditButton);

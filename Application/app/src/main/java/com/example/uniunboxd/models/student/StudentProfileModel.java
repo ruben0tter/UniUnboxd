@@ -1,7 +1,6 @@
 package com.example.uniunboxd.models.student;
 
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +50,7 @@ public class StudentProfileModel {
         this.VerificationStatus = VerificationStatus;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f) {
+    public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.fragment_student_profile_page, container, false);
 
         ImageView image = view.findViewById(R.id.image);
@@ -86,7 +85,7 @@ public class StudentProfileModel {
 
         if (!Reviews.isEmpty())
             for (StudentReviewListItem x : Reviews) {
-                reviews.addView(x.createView(inflater, container, savedInstanceState, f));
+                reviews.addView(x.createView(inflater, container, f));
             }
 
 

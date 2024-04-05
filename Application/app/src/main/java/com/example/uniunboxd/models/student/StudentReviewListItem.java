@@ -1,6 +1,5 @@
 package com.example.uniunboxd.models.student;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,7 @@ public class StudentReviewListItem {
         this.Course = course;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f) {
+    public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.profile_review_item, container, false);
         RatingBar rating = view.findViewById(R.id.ratingBar);
         TextView courseCode = view.findViewById(R.id.courseCode);

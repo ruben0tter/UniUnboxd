@@ -1,6 +1,5 @@
 package com.example.uniunboxd.models.professor;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,7 @@ public class AssignedCourseModel {
         this.Image = Image;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f) {
+    public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.search_result_course, container, false);
 
         TextView courseName = view.findViewById(R.id.course);
@@ -61,9 +60,8 @@ public class AssignedCourseModel {
             courseImage.setImageBitmap(ImageHandler.decodeImageString(Image));
         else
             courseImage.setImageResource(R.drawable.app_logo);
-        view.setOnClickListener(v -> {
-            ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id), true);
-        });
+
+        view.setOnClickListener(v -> ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id), true));
         return view;
     }
 }

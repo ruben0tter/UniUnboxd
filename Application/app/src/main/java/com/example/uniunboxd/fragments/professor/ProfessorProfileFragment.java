@@ -48,7 +48,7 @@ public class ProfessorProfileFragment extends Fragment {
         if (ID == 0)
             return null;
 
-        View view = null;
+        View view;
         GetProfessorInformationAsyncTask asyncGetTask = new GetProfessorInformationAsyncTask(ID, NUM_COURSES_TO_LOAD);
         try {
             Professor = asyncGetTask.execute(getActivity()).get();
@@ -56,9 +56,11 @@ public class ProfessorProfileFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        if (Professor != null) {
-            view = Professor.createView(inflater, container, savedInstanceState, this);
+        if (Professor == null) {
+            return null;
         }
+
+        view = Professor.createView(inflater, container, this);
 
         ImageButton editBtn = view.findViewById(R.id.editButton);
         TextView signOutBtn = view.findViewById(R.id.signOut);

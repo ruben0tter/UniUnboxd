@@ -38,5 +38,8 @@ public class CourseSearchResultTest {
 
         CourseSearchResult a = new CourseSearchResult(123, "Algo", "2222", "tue", 123, "Bart", IMAGE, 4, 5);
         a.createView(act.getLayoutInflater(), act);
+
+        CourseSearchResult b = new CourseSearchResult(123, "Algo", "2222", "tue", 123, "Bart", null, 4, 5);
+        b.createView(act.getLayoutInflater(), act);
     }
 }

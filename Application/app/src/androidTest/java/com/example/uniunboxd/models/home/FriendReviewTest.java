@@ -1,12 +1,17 @@
-package com.example.uniunboxd.models;
+package com.example.uniunboxd.models.home;
 
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.MainActivity;
+import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,7 +20,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class UserSearchResultTest {
+public class FriendReviewTest {
     private Activity getActivityInstance() {
         return activityRule.launchActivity(null);
     }
@@ -36,11 +41,18 @@ public class UserSearchResultTest {
     public void mainTest() {
         assertTrue(true);
 
-        UserSearchResult a = new UserSearchResult(123, "martin", IMAGE, 0);
-        a.createView(act.getLayoutInflater(), act);
+        LayoutInflater inflater = act.getLayoutInflater();
+        View listView = inflater.inflate(R.layout.fragment_profile_uni, null, false);
+        LinearLayout layout = listView.findViewById(R.id.applications_list);
 
-        UserSearchResult b = new UserSearchResult(123, "martin", null, 0);
-        a.createView(act.getLayoutInflater(), act);
+        CreateCourseFragment f = new CreateCourseFragment();
 
+
+        FriendReview a = new FriendReview(123, "Algo", IMAGE, 234, "martin", IMAGE, 4.3);
+        a.createView(inflater, layout, f);
+
+
+        a = new FriendReview(123, "Algo", null, 234, "martin", null, 4.3);
+        a.createView(inflater, layout, f);
     }
 }

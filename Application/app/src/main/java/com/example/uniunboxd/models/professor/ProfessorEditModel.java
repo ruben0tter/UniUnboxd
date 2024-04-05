@@ -1,7 +1,6 @@
 package com.example.uniunboxd.models.professor;
 
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +26,13 @@ public class ProfessorEditModel {
         //TODO: Add assigned Courses
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+    public View createView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.fragment_profile_page_professor_edit, container, false);
         TextView name = view.findViewById(R.id.professorNameEdit);
         ImageView image = view.findViewById(R.id.professorImage);
 
         name.setText(Name);
-        if(Image != null && !Image.equals("")){
+        if (Image != null && !Image.equals("")) {
             Bitmap imageBitmap = ImageHandler.decodeImageString(Image);
             image.setImageBitmap(imageBitmap);
         }

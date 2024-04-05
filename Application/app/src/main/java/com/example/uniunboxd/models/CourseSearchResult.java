@@ -16,7 +16,7 @@ import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CourseSearchResult extends SearchResult{
+public class CourseSearchResult extends SearchResult {
     public final int Id;
     public final String Name;
     public final String Code;
@@ -53,9 +53,7 @@ public class CourseSearchResult extends SearchResult{
     public View createView(LayoutInflater inflater, Activity activity) {
         View view = inflater.inflate(R.layout.search_result_course, null);
 
-        view.setOnClickListener(l -> {
-            ((IActivity) activity).replaceFragment(new CourseFragment(Id), true);
-        });
+        view.setOnClickListener(l -> ((IActivity) activity).replaceFragment(new CourseFragment(Id), true));
 
         ((TextView) view.findViewById(R.id.course)).setText(Name);
         ((TextView) view.findViewById(R.id.code)).setText(Code);

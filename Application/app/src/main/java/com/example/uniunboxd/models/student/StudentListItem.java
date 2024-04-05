@@ -38,9 +38,7 @@ public class StudentListItem {
 
         name.setText(Name);
 
-        image.setOnClickListener(v -> {
-            ((IActivity) a).replaceFragment(new StudentProfileFragment(ID), true);
-        });
+        image.setOnClickListener(v -> ((IActivity) a).replaceFragment(new StudentProfileFragment(ID), true));
 
         return view;
     }

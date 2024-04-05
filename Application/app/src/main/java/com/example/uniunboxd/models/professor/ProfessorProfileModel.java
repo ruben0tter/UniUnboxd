@@ -1,7 +1,6 @@
 package com.example.uniunboxd.models.professor;
 
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ public class ProfessorProfileModel {
     public final String Name;
     public final String UniversityName;
     public final List<AssignedCourseModel> AssignedCourses;
+
     @JsonCreator
     public ProfessorProfileModel(@JsonProperty("id") int id, @JsonProperty("profilePic") String image,
                                  @JsonProperty("name") String name, @JsonProperty("universityName") String universityName,
@@ -36,8 +36,7 @@ public class ProfessorProfileModel {
         AssignedCourses = assignedCourses;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState, Fragment f) {
+    public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.fragment_profile_page_professor, container, false);
         TextView name = view.findViewById(R.id.professorName);
         ImageView image = view.findViewById(R.id.professorImage);
@@ -46,7 +45,7 @@ public class ProfessorProfileModel {
         name.setText(Name);
         universityName.setText("Works at: " + UniversityName);
 
-        if(Image != null && !Image.equals("")){
+        if (Image != null && !Image.equals("")) {
             Bitmap imageBitmap = ImageHandler.decodeImageString(Image);
             image.setImageBitmap(imageBitmap);
         } else {
@@ -59,8 +58,8 @@ public class ProfessorProfileModel {
             ConstraintLayout coursesHeaderWrapper = view.findViewById(R.id.coursesHeaderWrapper);
             coursesHeaderWrapper.setVisibility(View.GONE);
         } else {
-            for(AssignedCourseModel x : AssignedCourses) {
-                listAssignedCourses.addView(x.createView(inflater, container, savedInstanceState, f));
+            for (AssignedCourseModel x : AssignedCourses) {
+                listAssignedCourses.addView(x.createView(inflater, container, f));
             }
         }
         return view;

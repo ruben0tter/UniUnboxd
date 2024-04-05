@@ -1,4 +1,4 @@
-package com.example.uniunboxd.models;
+package com.example.uniunboxd.models.course;
 
 import static org.junit.Assert.assertTrue;
 
@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class UserSearchResultTest {
+public class FriendReviewModelTest {
     private Activity getActivityInstance() {
         return activityRule.launchActivity(null);
     }
@@ -36,11 +36,14 @@ public class UserSearchResultTest {
     public void mainTest() {
         assertTrue(true);
 
-        UserSearchResult a = new UserSearchResult(123, "martin", IMAGE, 0);
-        a.createView(act.getLayoutInflater(), act);
-
-        UserSearchResult b = new UserSearchResult(123, "martin", null, 0);
-        a.createView(act.getLayoutInflater(), act);
+//        LayoutInflater inflater = act.getLayoutInflater();
+//        View listView = inflater.inflate(R.layout.fragment_profile_uni, null, false);
+//        LinearLayout layout = listView.findViewById(R.id.applications_list);
+//
+//        CreateCourseFragment f = new CreateCourseFragment();
+//
+//        FriendReviewModel a = new FriendReviewModel(123, 4.7f, "Bart", IMAGE, true);
+//        a.createView(inflater, layout, f.getActivity());
 
     }
 }

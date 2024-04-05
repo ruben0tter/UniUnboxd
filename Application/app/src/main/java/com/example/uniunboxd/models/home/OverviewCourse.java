@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.uniunboxd.R;
@@ -15,7 +16,7 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OverviewCourse implements View.OnClickListener {
+public class OverviewCourse {
     public final int Id;
     public final String Name;
     public final String Code;
@@ -36,15 +37,12 @@ public class OverviewCourse implements View.OnClickListener {
 
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.fragment_uni_home_page_courses, container, false);
+        view.setOnClickListener(l -> ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true));
 
         TextView courseName = view.findViewById(R.id.courseName_text);
-        courseName.setOnClickListener(this);
         TextView courseCode = view.findViewById(R.id.courseCode_text);
-        courseName.setOnClickListener(this);
         TextView professorText = view.findViewById(R.id.professor_text);
-        courseName.setOnClickListener(this);
         ImageView courseImage = view.findViewById(R.id.courseImage);
-        courseImage.setOnClickListener(this);
 
         courseName.setText("Course: " + Name);
         courseCode.setText("Code: " + Code);
@@ -55,11 +53,5 @@ public class OverviewCourse implements View.OnClickListener {
 
         fragment = f;
         return view;
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true);
     }
 }

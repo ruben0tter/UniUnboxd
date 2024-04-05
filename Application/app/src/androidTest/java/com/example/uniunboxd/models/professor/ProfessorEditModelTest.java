@@ -1,11 +1,15 @@
-package com.example.uniunboxd.models;
+package com.example.uniunboxd.models.professor;
 
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.MainActivity;
 
 import org.junit.Before;
@@ -15,7 +19,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class UserSearchResultTest {
+public class ProfessorEditModelTest {
     private Activity getActivityInstance() {
         return activityRule.launchActivity(null);
     }
@@ -36,11 +40,12 @@ public class UserSearchResultTest {
     public void mainTest() {
         assertTrue(true);
 
-        UserSearchResult a = new UserSearchResult(123, "martin", IMAGE, 0);
-        a.createView(act.getLayoutInflater(), act);
+        LayoutInflater inflater = act.getLayoutInflater();
+        View listView = inflater.inflate(R.layout.fragment_profile_uni, null, false);
+        LinearLayout layout = listView.findViewById(R.id.applications_list);
 
-        UserSearchResult b = new UserSearchResult(123, "martin", null, 0);
-        a.createView(act.getLayoutInflater(), act);
+        ProfessorEditModel a = new ProfessorEditModel(123, IMAGE, "Algo");
+        a.createView(inflater, layout);
 
     }
 }

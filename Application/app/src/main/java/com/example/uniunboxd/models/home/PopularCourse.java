@@ -15,7 +15,7 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PopularCourse implements View.OnClickListener {
+public class PopularCourse {
     public final int Id;
     public final String CourseImage;
     public final String CourseName;
@@ -32,11 +32,10 @@ public class PopularCourse implements View.OnClickListener {
 
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.course_name_image_item, container, false);
+        view.setOnClickListener(l -> ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true));
 
         TextView courseName = view.findViewById(R.id.courseName);
-        courseName.setOnClickListener(this);
         ImageView courseImage = view.findViewById(R.id.courseImage);
-        courseImage.setOnClickListener(this);
 
         courseName.setText(CourseName);
         if (CourseImage != null) {
@@ -46,10 +45,5 @@ public class PopularCourse implements View.OnClickListener {
         fragment = f;
 
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true);
     }
 }

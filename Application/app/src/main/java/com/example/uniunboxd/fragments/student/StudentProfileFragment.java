@@ -54,7 +54,7 @@ public class StudentProfileFragment extends Fragment {
             return view;
         }
 
-        view = Student.createView(inflater, container, savedInstanceState, this);
+        view = Student.createView(inflater, container, this);
         ImageButton editBtn = view.findViewById(R.id.editButton);
 
         editBtn.setOnClickListener(v -> {

@@ -55,9 +55,7 @@ public class ReviewListItem {
         }
         ratingBar.setRating(Rating);
         String role = JWTValidation.getTokenProperty(view.getContext(), "typ");
-        comment.setOnClickListener(v -> {
-            ((IActivity) v.getContext()).replaceFragment(new ReviewFragment(Id), true);
-        });
+        comment.setOnClickListener(v -> ((IActivity) v.getContext()).replaceFragment(new ReviewFragment(Id), true));
         if (role.equals("University"))
             comment.setClickable(false);
         return view;
