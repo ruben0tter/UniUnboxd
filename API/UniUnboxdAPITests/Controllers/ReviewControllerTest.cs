@@ -60,6 +60,16 @@ namespace UniUnboxdAPITests.Controllers
                 Reviews = [],
                 University = university
             };
+            var course3 = new Course()
+            {
+                Id = 4,
+                Name = "course",
+                Code = "code",
+                Description = "description",
+                Professor = "professor",
+                Reviews = [],
+                University = university
+            };
             var review = new Review()
             {
                 Id = 1,
@@ -93,6 +103,17 @@ namespace UniUnboxdAPITests.Controllers
                 Likes = new List<Like>(),
                 Replies = new List<Reply>()
             };
+            var review3 = new Review()
+            {
+                Id = 4,
+                Rating = 5,
+                Comment = "test",
+                IsAnonymous = false,
+                Course = course3,
+                Student = friend,
+                Likes = new List<Like>(),
+                Replies = new List<Reply>()
+            };
 
             var follow = new Follow() { FollowingStudent = student, FollowedStudent = friend };
             student.Following.Add(follow);
@@ -109,9 +130,11 @@ namespace UniUnboxdAPITests.Controllers
             dbContext.Courses.Add(course);
             dbContext.Courses.Add(course1);
             dbContext.Courses.Add(course2);
+            dbContext.Courses.Add(course3);
             dbContext.Reviews.Add(review);
             dbContext.Reviews.Add(review1);
             dbContext.Reviews.Add(review2);
+            dbContext.Reviews.Add(review3);
             dbContext.SaveChanges();
         }
 
@@ -366,11 +389,11 @@ namespace UniUnboxdAPITests.Controllers
         }
 
         [TestMethod]
-        public async Task UnlikeReviewTestWithAlreadyLiked()
+        public async Task UnlikeReviewTestWithNotAlreadyLiked()
         {
             ConfigurationUtil.SetHttpContext(reviewController, 1, UserType.Student);
 
-            var result = (ObjectResult)await reviewController.UnlikeReview(2);
+            var result = (ObjectResult)await reviewController.UnlikeReview(4);
 
             Assert.AreEqual(400, result.StatusCode);
             Assert.AreEqual("Given review is not liked.", result.Value);

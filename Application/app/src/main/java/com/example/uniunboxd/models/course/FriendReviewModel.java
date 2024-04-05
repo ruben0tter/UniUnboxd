@@ -17,6 +17,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.android.material.imageview.ShapeableImageView;
 
+/**
+ * FriendReviewModel class that represents a friend review model.
+ */
 public class FriendReviewModel implements View.OnClickListener {
     public int Id;
     public double Rating;
@@ -26,6 +29,15 @@ public class FriendReviewModel implements View.OnClickListener {
 
     private FragmentActivity activity;
 
+    /**
+     * Constructor for the FriendReviewModel class.
+     *
+     * @param Id         The review's ID.
+     * @param Rating     The review's rating.
+     * @param Name       The review's name.
+     * @param Image      The review's image.
+     * @param HasComment Whether the review has a comment.
+     */
     @JsonCreator
     public FriendReviewModel(@JsonProperty("id") int Id, @JsonProperty("rating") double Rating,
                              @JsonProperty("name") String Name, @JsonProperty("image") String Image,
@@ -37,11 +49,22 @@ public class FriendReviewModel implements View.OnClickListener {
         this.HasComment = HasComment;
     }
 
+    /**
+     * Creates a view for the friend review model.
+     *
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @param f         The fragment activity.
+     * @return The view for the friend review model.
+     */
     public View createView(LayoutInflater inflater, ViewGroup container, FragmentActivity f) {
         View view = inflater.inflate(R.layout.friends_course_page_item, container, false);
 
+        // Set the image, name, and rating.с
         ShapeableImageView image = view.findViewById(R.id.image);
         image.setOnClickListener(this);
+
+        // Set the comment icon if the review has a comment.
         ImageView hasComment = view.findViewById(R.id.hasComment);
         if (HasComment) {
             hasComment.setVisibility(View.VISIBLE);
@@ -54,6 +77,7 @@ public class FriendReviewModel implements View.OnClickListener {
         RatingBar rating = view.findViewById(R.id.rating);
         rating.setOnClickListener(this);
 
+        // Set the image, name, and rating of the review.
         if(Image != null) {
             image.setImageBitmap(ImageHandler.decodeImageString(Image));
         }
@@ -65,8 +89,14 @@ public class FriendReviewModel implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Handles the click event for the friend review model.
+     *
+     * @param v The view.
+     */
     @Override
     public void onClick(View v) {
+        // Go to the review fragment.
         ((IActivity) activity).replaceFragment(new ReviewFragment(Id), true);
     }
 }
