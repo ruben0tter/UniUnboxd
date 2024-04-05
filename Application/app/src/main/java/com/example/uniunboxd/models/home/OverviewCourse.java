@@ -16,6 +16,9 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * OverviewCourse class that represents an overview course.
+ */
 public class OverviewCourse {
     public final int Id;
     public final String Name;
@@ -24,6 +27,15 @@ public class OverviewCourse {
     public final String Image;
     private Fragment fragment;
 
+    /**
+     * Constructor for the OverviewCourse class.
+     *
+     * @param id        The course's ID.
+     * @param name      The course's name.
+     * @param code      The course's code.
+     * @param professor The course's professor.
+     * @param image     The course's image.
+     */
     @JsonCreator
     public OverviewCourse(@JsonProperty("id") int id, @JsonProperty("name") String name,
                           @JsonProperty("code") String code, @JsonProperty("professor") String professor,
@@ -35,6 +47,14 @@ public class OverviewCourse {
         Image = image;
     }
 
+    /**
+     * Creates a view for the overview course.
+     *
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @param f         The fragment.
+     * @return The view for the overview course.
+     */
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.fragment_uni_home_page_courses, container, false);
         view.setOnClickListener(l -> ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true));

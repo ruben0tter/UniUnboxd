@@ -15,6 +15,18 @@ public class CourseEditModel {
     public final String Banner;
     public List<AssignedProfessorModel> AssignedProfessors;
 
+    /**
+     * Constructor for the CourseEditModel class.
+     *
+     * @param id                 The course's ID.
+     * @param name               The course's name.
+     * @param code               The course's code.
+     * @param description        The course's description.
+     * @param professor          The course's professor.
+     * @param image              The course's image.
+     * @param banner             The course's banner.
+     * @param assignedProfessors The course's assigned professors.
+     */
     public CourseEditModel(int id, String name, String code,
                            String description, String professor,
                            String image, String banner, List<AssignedProfessorModel> assignedProfessors) {

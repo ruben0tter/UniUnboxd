@@ -16,6 +16,9 @@ import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * CourseSearchResult class that represents a course search result.
+ */
 public class CourseSearchResult extends SearchResult {
     public final int Id;
     public final String Name;
@@ -28,6 +31,19 @@ public class CourseSearchResult extends SearchResult {
     public final double NonaRating;
 
 
+    /**
+     * Constructor for the CourseSearchResult class.
+     *
+     * @param id          The course's ID.
+     * @param name        The course's name.
+     * @param code        The course's code.
+     * @param university  The course's university.
+     * @param universityId The course's university ID.
+     * @param professor   The course's professor.
+     * @param image       The course's image.
+     * @param anonRating  The course's anonymous rating.
+     * @param nonaRating  The course's non-anonymous rating.
+     */
     @JsonCreator
     public CourseSearchResult(@JsonProperty("id") int id,
                               @JsonProperty("name") String name,
@@ -50,9 +66,17 @@ public class CourseSearchResult extends SearchResult {
     }
 
 
+    /**
+     * Creates a view for the course search result.
+     *
+     * @param inflater The layout inflater.
+     * @param activity The activity.
+     * @return The view for the course search result.
+     */
     public View createView(LayoutInflater inflater, Activity activity) {
         View view = inflater.inflate(R.layout.search_result_course, null);
 
+        // Set the on click listener for the view to redirect to the course fragment.
         view.setOnClickListener(l -> ((IActivity) activity).replaceFragment(new CourseFragment(Id), true));
 
         ((TextView) view.findViewById(R.id.course)).setText(Name);
@@ -61,6 +85,7 @@ public class CourseSearchResult extends SearchResult {
         ((RatingBar) view.findViewById(R.id.anonRating)).setRating((float) AnonRating);
         ((RatingBar) view.findViewById(R.id.nonAnonRating)).setRating((float) NonaRating);
 
+        // Set the image if it exists.
         if (Image != null) {
             ImageView image = view.findViewById(R.id.image);
 

@@ -33,6 +33,19 @@ public class StudentProfileModel {
     public int VerificationStatus;
     private boolean isFollowing = false;
 
+    /**
+     * Constructor for the StudentProfileModel class.
+     *
+     * @param Id                  The student's ID.
+     * @param Name                The student's name.
+     * @param UniversityName      The student's university name.
+     * @param Image               The student's image.
+     * @param Following           The student's following list.
+     * @param Followers           The student's followers list.
+     * @param Reviews             The student's reviews list.
+     * @param NotificationSettings The student's notification settings.
+     * @param VerificationStatus   The student's verification status.
+     */
     @JsonCreator
     public StudentProfileModel(@JsonProperty("id") int Id, @JsonProperty("name") String Name, @JsonProperty("universityName") String UniversityName,
                                @JsonProperty("profilePic") String Image, @JsonProperty("following") List<StudentListItem> Following,
@@ -50,6 +63,14 @@ public class StudentProfileModel {
         this.VerificationStatus = VerificationStatus;
     }
 
+    /**
+     * Creates a view for the student profile page.
+     *
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @param f         The fragment.
+     * @return The view for the student profile page.
+     */
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.fragment_student_profile_page, container, false);
 
@@ -58,6 +79,7 @@ public class StudentProfileModel {
         TextView universityName = view.findViewById(R.id.universityName);
         Button followAction = view.findViewById(R.id.followActionButton);
 
+        // Linear layouts where we will put the users the user follows, their followers, and reviews.
         LinearLayout following = view.findViewById(R.id.listFollowingLinear);
         LinearLayout followers = view.findViewById(R.id.listFollowersLinear);
         LinearLayout reviews = view.findViewById(R.id.listReviewsLinear);
@@ -67,10 +89,14 @@ public class StudentProfileModel {
                 "[not verified]"
                 : UniversityName));
 
+        // Set the student's image if it exists.
         if (Image != null)
             image.setImageBitmap(ImageHandler.decodeImageString(Image));
 
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(f.getActivity(), "sub"));
+
+        // Add the users the user follows, their followers, and reviews to the linear layouts.
+
         if (!Following.isEmpty())
             for (StudentListItem x : Following) {
                 following.addView(x.createView(inflater, container, f.getActivity()));
@@ -94,13 +120,18 @@ public class StudentProfileModel {
         } else {
             followAction.setText("Follow");
         }
+
+        // Set the on click listener for the follow action button.
         followAction.setOnClickListener(v -> AsyncTask.execute(() -> {
             if (isFollowing) {
                 try {
+                    // Send and unfollow request to the API.
                     UserController.unfollow(Id, f.getActivity());
                     isFollowing = false;
                     StudentListItem followingUser = Followers.stream().filter(x -> x.ID == userId).findFirst().get();
                     Followers.remove(followingUser);
+
+                    // Update the UI.
                     f.getActivity().runOnUiThread(() -> {
                         followAction.setText("Follow");
                         followers.removeAllViews();
@@ -118,10 +149,13 @@ public class StudentProfileModel {
                 }
             } else {
                 try {
+                    // Send a follow request to the API.
                     UserController.follow(Id, f.getActivity());
                     isFollowing = true;
                     StudentListItem user = UserController.getStudentListItem(userId, f.getActivity());
                     Followers.add(user);
+
+                    // Update the UI.
                     f.getActivity().runOnUiThread(() -> {
                         followAction.setText("Unfollow");
                         followers.addView(user.createView(inflater, container, f.getActivity()));
@@ -134,6 +168,8 @@ public class StudentProfileModel {
                 }
             }
         }));
+        
+        // Hide the follow action button if the user is viewing their own profile.
         if (userId == Id)
             followAction.setVisibility(View.GONE);
         return view;
