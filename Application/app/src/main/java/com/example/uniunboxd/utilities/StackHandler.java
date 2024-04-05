@@ -11,7 +11,8 @@ public class StackHandler {
 
     public Stack<Fragment> stack;
 
-    private StackHandler(){}
+    private StackHandler() {
+    }
 
     public static synchronized StackHandler getInstance() {
         if (stackHandler == null)
