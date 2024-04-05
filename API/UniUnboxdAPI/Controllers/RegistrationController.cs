@@ -14,6 +14,7 @@ namespace UniUnboxdAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Registrate([FromBody] RegisterModel model)
         {
+         
             if (!ModelState.IsValid)
                 return BadRequest("Not all required fields have been filled in.");
             
