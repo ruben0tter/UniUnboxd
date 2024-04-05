@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Text;
 using UniUnboxdAPI.Data;
-using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
@@ -22,9 +21,14 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// Add swagger,
+// to test API
 builder.Services.AddSwaggerGen(opt =>
 {
+    // Swagger version
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "UniUnboxd", Version = "v1" });
+    // Add authorization swagger
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -51,14 +55,17 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+// Setup database
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 builder.Services.AddDbContext<UniUnboxdDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+// Add Microsoft Identity
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 {
+    // Set password requirements
     options.Password.RequiredLength = 1;
     options.Password.RequiredUniqueChars = 0;
     options.Password.RequireDigit = false;
@@ -101,6 +108,7 @@ builder.Services.AddTransient<SearchService>();
 builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<MailService>();
 builder.Services.AddTransient<PushNotificationService>();
+
 // Repositories
 builder.Services.AddTransient<VerificationRepository>();
 builder.Services.AddTransient<ReviewRepository>();
@@ -115,6 +123,7 @@ FirebaseApp.Create(new AppOptions()
     Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "firebasesettings.json")),
 });
 
+// Build app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -124,14 +133,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Allows emulator usage
 #if !DEBUG
 app.UseHttpsRedirection();
 #endif
 
+// Add authentication
 app.UseAuthentication();
 
+// Add authorization
 app.UseAuthorization();
 
 app.MapControllers();
 
+// Run the API
 app.Run();

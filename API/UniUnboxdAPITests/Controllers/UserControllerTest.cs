@@ -1,19 +1,5 @@
-﻿using Castle.Core.Configuration;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Crypto;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using UniUnboxdAPI.Controllers;
-using UniUnboxdAPI.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using UniUnboxdAPI.Models.DataTransferObjects.Notifications;
-using UniUnboxdAPI.Services;
 
 namespace UniUnboxdAPITests.Controllers
 {
