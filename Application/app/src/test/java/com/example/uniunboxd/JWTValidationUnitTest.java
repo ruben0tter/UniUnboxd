@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import android.content.Context;
 
@@ -43,6 +44,24 @@ public class JWTValidationUnitTest {
         assertEquals(TOKEN, JWTValidation.getToken(ctx));
         assertEquals("1234567890", JWTValidation.getTokenProperty(ctx, "sub"));
         assertEquals("John Doe", JWTValidation.getTokenProperty(ctx, "name"));
+    }
+
+    @Test
+    public void parseInvalid() {
+        JWTValidation.placeToken("a.a.a", ctx);
+
+        try {
+            JWTValidation.getTokenProperty(ctx, "sub");
+            fail();
+        } catch (Exception e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void readInvalid() {
+        JWTValidation.placeToken(TOKEN, ctx);
+        assertNull(JWTValidation.getTokenProperty(ctx, "thisPropertyDoesntExist"));
     }
 
     @Test

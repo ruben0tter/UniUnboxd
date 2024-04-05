@@ -1,6 +1,7 @@
 package com.example.uniunboxd;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -43,7 +44,15 @@ public class StackHandlerUnitTest {
         } catch (Exception e) {
             // expected
         }
+
+        s.push(f1);
+        s.push(f1);
+        s.push(f1);
+        s.push(f1);
+        assertEquals(s.size(), 4);
+        assertFalse(s.empty());
+        s.clear();
+        assertEquals(s.size(), 0);
+        assertTrue(s.empty());
     }
-
-
 }

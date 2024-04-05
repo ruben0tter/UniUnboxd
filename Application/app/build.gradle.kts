@@ -16,7 +16,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-//        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -53,12 +53,14 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.6.0")
     testImplementation("org.robolectric:robolectric:4.12")
-    androidTestImplementation("org.robolectric:robolectric:4.12")
+    testImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test:rules:1.5.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test:rules:1.5.0")
+    testImplementation("androidx.test:rules:1.5.0")
     val fragment_version = "1.6.2"
     debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
 }
