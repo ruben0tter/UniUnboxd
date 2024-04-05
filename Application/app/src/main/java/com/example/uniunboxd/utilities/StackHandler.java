@@ -9,19 +9,36 @@ public class StackHandler {
     // of type Singleton
     private static StackHandler stackHandler = null;
 
-    public Stack<Fragment> stack;
+    private Stack<Fragment> stack;
 
-    private StackHandler() { }
+    private StackHandler() {
+        stack = new Stack<>();
+    }
 
-    public static synchronized StackHandler getInstance()
-    {
+    public static synchronized StackHandler getInstance() {
         if (stackHandler == null)
             stackHandler = new StackHandler();
 
         return stackHandler;
     }
 
-    public void setStack(Stack<Fragment> stack) {
-        this.stack = stack;
+    public void push(Fragment f) {
+        stack.push(f);
+    }
+
+    public Fragment pop() {
+        return stack.pop();
+    }
+
+    public int size() {
+        return stack.size();
+    }
+
+    public boolean empty() {
+        return stack.empty();
+    }
+
+    public void clear() {
+        stack.clear();
     }
 }

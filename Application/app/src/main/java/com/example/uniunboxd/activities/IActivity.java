@@ -14,7 +14,6 @@ import com.example.uniunboxd.utilities.Redirection;
 import com.example.uniunboxd.utilities.StackHandler;
 
 import java.util.List;
-import java.util.Stack;
 
 public abstract class IActivity extends AppCompatActivity {
 
@@ -24,6 +23,8 @@ public abstract class IActivity extends AppCompatActivity {
             goBack();
         }
     };
+
+    StackHandler fragmentHistory = StackHandler.getInstance();
 
     public void goBack() {
         if (fragmentHistory.empty()) {
@@ -35,11 +36,8 @@ public abstract class IActivity extends AppCompatActivity {
 
     public void replaceActivity(Class<? extends AppCompatActivity> activity) {
         Redirection.replaceActivity(this, activity);
-        StackHandler stackHandler = StackHandler.getInstance();
-        stackHandler.stack = null;
+        fragmentHistory = null;
     }
-
-    public Stack<Fragment> fragmentHistory = new Stack<>();
 
     public void replaceFragment(Fragment fragment, boolean remember) {
         if (remember) {
@@ -73,8 +71,5 @@ public abstract class IActivity extends AppCompatActivity {
         if (f != null) {
             fragmentHistory.push(f);
         }
-
-        StackHandler stackHandler = StackHandler.getInstance();
-        stackHandler.setStack(fragmentHistory);
     }
 }

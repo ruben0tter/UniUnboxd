@@ -39,6 +39,13 @@ public class JWTValidation {
         return null;
     }
 
+    public static void placeToken(String token, Context c) throws NullPointerException {
+        SharedPreferences prefs = c.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("token", token);
+        edit.apply();
+    }
+
     public static void deleteToken(Context c) {
         SharedPreferences prefs = c.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         prefs.edit().remove("token").apply();

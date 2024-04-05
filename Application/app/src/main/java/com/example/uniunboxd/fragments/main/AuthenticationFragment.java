@@ -1,7 +1,5 @@
 package com.example.uniunboxd.fragments.main;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -73,7 +71,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         AsyncTask.execute(() -> {
             try {
                 String token = AuthenticationController.authenticate(model);
-                placeToken(token);
+                JWTValidation.placeToken(token, getActivity());
                 Log.i("JWT", token);
                 redirectToHomePage();
             } catch (Exception e) {
@@ -86,14 +84,6 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         return new AuthenticationModel(
                 email.getText().toString(),
                 password.getText().toString());
-    }
-
-    private void placeToken(String token) throws NullPointerException {
-        SharedPreferences prefs = getActivity()
-                .getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("token", token);
-        edit.apply();
     }
 
     private void redirectToHomePage() {

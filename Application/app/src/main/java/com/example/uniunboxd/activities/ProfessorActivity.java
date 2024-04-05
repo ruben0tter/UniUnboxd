@@ -27,8 +27,8 @@ public class ProfessorActivity extends IActivity {
         setNavigationMenu();
 
         StackHandler stackHandler = StackHandler.getInstance();
-        if(stackHandler.stack != null && !stackHandler.stack.empty()) {
-            fragmentHistory = stackHandler.stack;
+        if (stackHandler.empty()) {
+            fragmentHistory = stackHandler;
             goBack();
         } else {
             int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
@@ -40,6 +40,7 @@ public class ProfessorActivity extends IActivity {
     public void replaceActivity(Class<? extends AppCompatActivity> activity) {
         Redirection.replaceActivity(this, activity);
     }
+
     public void setNavigationMenu() {
         binding.bottomNavigationViewProfessor.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
