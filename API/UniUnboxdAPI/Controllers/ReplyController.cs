@@ -12,6 +12,11 @@ namespace UniUnboxdAPI.Controllers
     [ApiController]
     public class ReplyController(ReplyService replyService) : ControllerBase
     {
+        /// <summary>
+        /// Creates a reply to a review.
+        /// </summary>
+        /// <param name="model">The reply model containing the details of the reply.</param>
+        /// <returns>Returns a HTTP response with the result of the operation.</returns>
         [HttpPost]
         [Authorize(Roles = "Student, Professor")]
         public async Task<IActionResult> PostReply([FromBody] ReplyModel model)
