@@ -35,9 +35,6 @@ namespace UniUnboxdAPI.Controllers
                 result = await verificationService.RequestUniversityVerification(request, userID);
             }
 
-            if (result == null)
-                return BadRequest();
-
             return Ok(result);
         }
 
@@ -82,9 +79,6 @@ namespace UniUnboxdAPI.Controllers
                 result = await verificationService.AcceptApplication(request, userId);
             else
                 result = await verificationService.RejectApplication(request, userId);
-
-            if (result == false)
-                return BadRequest();
 
             return Ok(result);
         }
