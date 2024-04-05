@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
-using UniUnboxdAPI.Models;
 
 namespace UniUnboxdAPITests.TestUtilities
 {

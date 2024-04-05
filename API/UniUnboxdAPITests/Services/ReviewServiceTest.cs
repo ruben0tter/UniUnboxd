@@ -286,7 +286,7 @@
             await reviewService.PutReview(review);
             var updatedReview = await reviewService.GetReview(review.Id);
 
-            Assert.AreEqual("Updated Review Content", updatedReview.Comment);
+            Assert.AreEqual("Updated Review Content", updatedReview!.Comment);
         }
 
         [TestMethod]

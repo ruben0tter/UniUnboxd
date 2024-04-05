@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using UniUnboxdAPI.Controllers;
 
 namespace UniUnboxdAPITests.Controllers
 {
@@ -27,7 +20,7 @@ namespace UniUnboxdAPITests.Controllers
         }
 
         [TestMethod]
-        public async Task isModelValidTest()
+        public async Task RegistrateTestWithnInvalidEmail()
         {
             var invalidEmailModel = new RegisterModel() { Email = "studentgmail.com", Password = "test", Type = UserType.Student };
             ObjectResult result = (ObjectResult)await registrationController.Registrate(invalidEmailModel);
@@ -37,7 +30,7 @@ namespace UniUnboxdAPITests.Controllers
         }
         
         [TestMethod]
-        public async Task emailAlreadyExistsTest()
+        public async Task RegistrateTestWithAlreadyExistingEmail()
         {
             var model = new RegisterModel() { Email = "student@gmail.com", Password = "test", Type = UserType.Student };
             var user = registrationService.CreateUser(model);
@@ -50,7 +43,7 @@ namespace UniUnboxdAPITests.Controllers
         }
         
         [TestMethod]
-        public async Task SuccsfulAccountCreationTest()
+        public async Task RegistrateTestSuccessful()
         {
             
             var creatingModel = new RegisterModel() { Email = "student2@gmail.com", Password = "test", Type = UserType.Student };

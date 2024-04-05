@@ -1,6 +1,4 @@
-﻿using UniUnboxdAPI.Repositories;
-
-namespace UniUnboxdAPITests.Services
+﻿namespace UniUnboxdAPITests.Services
 {
     [TestClass]
     public class UserServiceProfessorTest

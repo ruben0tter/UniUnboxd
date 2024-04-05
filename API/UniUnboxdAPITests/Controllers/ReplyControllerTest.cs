@@ -1,12 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using UniUnboxdAPI.Controllers;
 using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 
 namespace UniUnboxdAPITests.Controllers
@@ -91,7 +83,7 @@ namespace UniUnboxdAPITests.Controllers
         }
         
         [TestMethod]
-        public async Task PostReplyTestWithGucci()
+        public async Task PostReplyTestSuccessful()
         {
             ConfigurationUtil.SetHttpContext(replyController, 1, UserType.Student);
             var model = new ReplyModel() { Text = "new reply", ReviewId = 1 };

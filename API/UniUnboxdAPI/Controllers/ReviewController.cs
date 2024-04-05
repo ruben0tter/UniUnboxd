@@ -20,7 +20,7 @@ namespace UniUnboxdAPI.Controllers
         public async Task<IActionResult> GetReview([FromQuery(Name = "id")] int id)
         {
             if (!await reviewService.DoesReviewExist(id))
-                return BadRequest("Given review does nto exist.");
+                return BadRequest("Given review does not exist.");
 
             var review = await reviewService.GetReviewPageModel(id);
 

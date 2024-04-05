@@ -23,10 +23,8 @@ namespace UniUnboxdAPI.Controllers
         [Route("Course")]
         public async Task<IActionResult> SearchCourses([FromQuery] SearchOptions query)
         {
-            Console.WriteLine("\n\n\n\n\nSearching for courses\n\n\n\n\n");
-            if (query.Search == "") {
+            if (query.Search == string.Empty)
                 return BadRequest("Search query cannot be empty");
-            }
 
             string role = JWTValidation.GetRole(HttpContext.User.Identity as ClaimsIdentity);
 
@@ -37,10 +35,6 @@ namespace UniUnboxdAPI.Controllers
 
             var courses = await searchService.GetCourses(query);
 
-            if (courses == null) {
-                return BadRequest();
-            }
-
             return Ok(courses);
         }
 
@@ -49,9 +43,9 @@ namespace UniUnboxdAPI.Controllers
         [Route("User")]
         public async Task<IActionResult> SearchUsers([FromQuery] SearchOptions query)
         {
-            if (query.Search == "") {
+            if (query.Search == string.Empty)
                 return BadRequest("Search query cannot be empty");
-            }
+
             var users = await searchService.GetUsers(query);
 
             return Ok(users);
