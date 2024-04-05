@@ -17,6 +17,9 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * FriendReview class that represents a friend review.
+ */
 public class FriendReview {
     public final int Id;
     public final String CourseName;
@@ -27,6 +30,17 @@ public class FriendReview {
     public final double Rating;
     private Fragment fragment;
 
+    /**
+     * Constructor for the FriendReview class.
+     *
+     * @param id          The review's ID.
+     * @param courseName  The review's course name.
+     * @param courseImage The review's course image.
+     * @param studentId   The review's student ID.
+     * @param studentName The review's student name.
+     * @param studentImage The review's student image.
+     * @param rating      The review's rating.
+     */
     @JsonCreator
     public FriendReview(@JsonProperty("id") int id, @JsonProperty("courseName") String courseName,
                         @JsonProperty("courseImage") String courseImage, @JsonProperty("studentId") int studentId,
@@ -41,6 +55,14 @@ public class FriendReview {
         Rating = rating;
     }
 
+    /**
+     * Creates a view for the friend review.
+     *
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @param f         The fragment.
+     * @return The view for the friend review.
+     */
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.course_name_image_review_item, container, false);
         view.setOnClickListener(v -> {
@@ -58,6 +80,8 @@ public class FriendReview {
         RatingBar rating = view.findViewById(R.id.ratingBar);
 
         courseName.setText(CourseName);
+
+        // Set the course's image and the student's name and image if they exist.
         if (CourseImage != null) {
             courseImage.setImageBitmap(ImageHandler.decodeImageString(CourseImage));
         }
