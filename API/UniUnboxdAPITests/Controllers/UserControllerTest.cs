@@ -243,9 +243,8 @@ namespace UniUnboxdAPITests.Controllers
             StudentEditModel model = new StudentEditModel() { Id = 4, Name = "Lebron", NotificationSettings = new NotificationSettingsModel() { StudentId=4},
                 VerificationStatus = VerificationStatus.Verified};
             ObjectResult result = (ObjectResult) await userController.PutStudent(model);
-            var response = result.Value;
 
-            Assert.AreEqual("Student successfully updated", response);
+            Assert.AreEqual("Student successfully updated", result.Value);
             Assert.AreEqual(200, result.StatusCode);
 
         }
@@ -266,9 +265,8 @@ namespace UniUnboxdAPITests.Controllers
             ConfigurationUtil.SetHttpContext(userController, 8, UserType.Professor);
             ProfessorEditModel model = new ProfessorEditModel() { Id = 8, Name = "Messi" };
             ObjectResult result = (ObjectResult) await userController.PutProfessor(model);
-            var response = result.Value;
 
-            Assert.AreEqual("Professor was updated successfully.", response);
+            Assert.AreEqual("Professor was updated successfully.", result.Value);
             Assert.AreEqual(200, result.StatusCode);
         }
 
