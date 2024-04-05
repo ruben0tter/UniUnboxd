@@ -27,7 +27,6 @@ import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.fragments.university.CreateCourseFragment;
 import com.example.uniunboxd.fragments.university.HomeSubmittedFragment;
 import com.example.uniunboxd.fragments.university.HomeUnverifiedFragment;
-import com.example.uniunboxd.fragments.university.HomeVerifiedFragment;
 import com.example.uniunboxd.fragments.university.SearchUniversityFragment;
 import com.example.uniunboxd.fragments.university.UniversityHomeFragment;
 import com.example.uniunboxd.models.course.CourseEditModel;
@@ -87,7 +86,6 @@ public class FragmentTest {
         replaceFragment(new CreateCourseFragment(new CourseEditModel(1234, "Algo", "22222", "based course", "bart", IMAGE, IMAGE, new ArrayList<>())));
         replaceFragment(new HomeSubmittedFragment());
         replaceFragment(new HomeUnverifiedFragment());
-        replaceFragment(new HomeVerifiedFragment());
         replaceFragment(new SearchUniversityFragment());
         replaceFragment(new UniversityHomeFragment());
     }

@@ -3,16 +3,29 @@ package com.example.uniunboxd.models.course;
 import static org.junit.Assert.assertTrue;
 
 import android.app.Activity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.MainActivity;
+import com.example.uniunboxd.fragments.main.AuthenticationFragment;
+import com.example.uniunboxd.models.ReviewListItem;
+import com.example.uniunboxd.models.ReviewPoster;
+import com.example.uniunboxd.utilities.JWTValidation;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.ArrayList;
 
 @RunWith(JUnit4.class)
 public class CourseRetrievalModelTest {
@@ -38,24 +51,29 @@ public class CourseRetrievalModelTest {
     @Test
     public void mainTest() {
         assertTrue(true);
-//
-//
-//        LayoutInflater inflater = act.getLayoutInflater();
-//        View listView = inflater.inflate(R.layout.fragment_profile_uni, null, false);
-//        LinearLayout layout = listView.findViewById(R.id.applications_list);
-//
-//        CreateCourseFragment f = new CreateCourseFragment();
-//        FragmentManager fragmentManager = ((AppCompatActivity) act).getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.frame_layout, f);
-//        fragmentTransaction.commit();
-//
-//        JWTValidation.placeToken(TOKEN, act);
-//
-//        CourseRetrievalModel c = new CourseRetrievalModel(123, "Algo", "2222", 4.1f, 4.3f, "based course", "Bart", IMAGE, IMAGE, 5, new ArrayList<>(), "tue", new ArrayList<>(), new ArrayList<>(), new ReviewListItem(123, 4.6f, "based", true, 123, new ReviewPoster(123, "martin", IMAGE)));
-//        c.createView(inflater, layout, f.getActivity());
-//
-//        JWTValidation.deleteToken(act);
+
+        LayoutInflater inflater = act.getLayoutInflater();
+        View listView = inflater.inflate(R.layout.fragment_profile_uni, null, false);
+        LinearLayout layout = listView.findViewById(R.id.applications_list);
+
+        AuthenticationFragment f = new AuthenticationFragment();
+        FragmentManager fragmentManager = ((AppCompatActivity) act).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, f);
+        fragmentTransaction.commit();
+
+        JWTValidation.placeToken(TOKEN, act);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            // nothing
+        }
+
+        CourseRetrievalModel c = new CourseRetrievalModel(123, "Algo", "2222", 4.1f, 4.3f, "based course", "Bart", IMAGE, IMAGE, 5, new ArrayList<>(), "tue", new ArrayList<>(), new ArrayList<>(), new ReviewListItem(123, 4.6f, "based", true, 123, new ReviewPoster(123, "martin", IMAGE)));
+        c.createView(inflater, layout, f.getActivity());
+
+        JWTValidation.deleteToken(act);
 
     }
 }
