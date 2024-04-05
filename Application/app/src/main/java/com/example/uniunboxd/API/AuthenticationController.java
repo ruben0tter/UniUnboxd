@@ -29,6 +29,8 @@ public class AuthenticationController {
         json.put("password", model.password);
 
         HttpURLConnection con = APIClient.post("Authentication", json.toString(), null);
+        if(con.getResponseCode() != 200)
+            throw new Exception(APIClient.readStream(con.getErrorStream()));
         return APIClient.processResponse(con, new TypeReference<AuthenticationResult>() {
         }).token;
 

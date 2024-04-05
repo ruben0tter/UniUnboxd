@@ -35,7 +35,7 @@ public class StackHandler {
     }
 
     public boolean empty() {
-        return stack.empty();
+        return stack.isEmpty();
     }
 
     public void clear() {

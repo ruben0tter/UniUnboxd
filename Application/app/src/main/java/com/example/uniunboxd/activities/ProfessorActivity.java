@@ -2,14 +2,11 @@ package com.example.uniunboxd.activities;
 
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.uniunboxd.R;
 import com.example.uniunboxd.databinding.ActivityProfessorBinding;
 import com.example.uniunboxd.fragments.professor.ProfessorProfileFragment;
 import com.example.uniunboxd.fragments.professor.SearchProfessorFragment;
 import com.example.uniunboxd.utilities.JWTValidation;
-import com.example.uniunboxd.utilities.Redirection;
 import com.example.uniunboxd.utilities.StackHandler;
 
 public class ProfessorActivity extends IActivity {
@@ -34,11 +31,6 @@ public class ProfessorActivity extends IActivity {
             int id = Integer.parseInt(JWTValidation.getTokenProperty(this, "sub"));
             replaceFragment(new ProfessorProfileFragment(id), false);
         }
-    }
-
-    @Override
-    public void replaceActivity(Class<? extends AppCompatActivity> activity) {
-        Redirection.replaceActivity(this, activity);
     }
 
     public void setNavigationMenu() {

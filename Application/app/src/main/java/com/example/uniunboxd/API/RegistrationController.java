@@ -18,6 +18,8 @@ public class RegistrationController {
         json.put("type", model.userType);
 
         HttpURLConnection con = APIClient.post("Registration", json.toString(), null);
+        if(con.getResponseCode() != 200)
+            throw new Exception(APIClient.readStream(con.getErrorStream()));
         APIClient.processResponse(con, null);
     }
 }

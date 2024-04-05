@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -65,7 +66,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         }
     }
 
-    private void signIn() throws Exception {
+    private void signIn() {
         AuthenticationModel model = createAuthenticationModel();
 
         AsyncTask.execute(() -> {
@@ -75,7 +76,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
                 Log.i("JWT", token);
                 redirectToHomePage();
             } catch (Exception e) {
-                Log.e("APP", "Failed to authenticate user: " + e);
+                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), e.getMessage().replace("\"", ""), Toast.LENGTH_LONG).show());
             }
         });
     }

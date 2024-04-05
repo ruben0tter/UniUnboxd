@@ -2,7 +2,6 @@ package com.example.uniunboxd.fragments.main;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +81,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
         userType.setAdapter(adapter);
     }
 
-    private void signUp() throws Exception {
+    private void signUp() {
         if (!arePasswordsEqual()) {
             sendNotification("Passwords are not equal.");
             return;
@@ -95,7 +94,7 @@ public class RegistrationFragment extends Fragment implements View.OnClickListen
                 RegistrationController.register(model);
                 redirectToSignIn();
             } catch (Exception e) {
-                Log.e("APP", "Failed to register user: " + e);
+                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), e.getMessage().replace("\"", ""), Toast.LENGTH_LONG).show());
             }
         });
     }

@@ -1,5 +1,6 @@
 package com.example.uniunboxd.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -10,7 +11,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.uniunboxd.R;
-import com.example.uniunboxd.utilities.Redirection;
 import com.example.uniunboxd.utilities.StackHandler;
 
 import java.util.List;
@@ -35,7 +35,8 @@ public abstract class IActivity extends AppCompatActivity {
     }
 
     public void replaceActivity(Class<? extends AppCompatActivity> activity) {
-        Redirection.replaceActivity(this, activity);
+        Intent i = new Intent(this.getApplicationContext(), activity);
+        this.startActivity(i);
         fragmentHistory = null;
     }
 
