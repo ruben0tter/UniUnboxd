@@ -9,8 +9,6 @@ def testExecutionFile = "/outputs/unit_test_code_coverage/debugUnitTest/testDebu
 //List of files that can be ignored for test coverage
 ext {
     coverageExclusions = [
-            '**/*Activity*.*',
-            '**/*Fragment*.*',
             '**/R.class',
             '**/R$*.class',
             '**/BuildConfig.*',

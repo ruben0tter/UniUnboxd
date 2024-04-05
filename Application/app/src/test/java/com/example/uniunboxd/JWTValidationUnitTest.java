@@ -13,15 +13,20 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import com.example.uniunboxd.utilities.JWTValidation;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
-public class JWTValidationUnitTest {
-    private Context ctx;
+@RunWith(RobolectricTestRunner.class)
+public class JWTValidationUnitTest
+{
+    private static Context ctx;
 
     static final String TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
-    @Before
-    public void setup() {
+    @BeforeClass
+    public static void setup() {
         ctx = InstrumentationRegistry.getInstrumentation().getContext();
     }
 
@@ -36,9 +41,9 @@ public class JWTValidationUnitTest {
 
     @Test
     public void useToken() {
-        assertEquals(JWTValidation.getToken(ctx), TOKEN);
-        assertEquals(JWTValidation.getTokenProperty(ctx, "sub"), "1234567890");
-        assertEquals(JWTValidation.getTokenProperty(ctx, "name"), "John Doe");
+        assertEquals(TOKEN, JWTValidation.getToken(ctx));
+        assertEquals( "1234567890", JWTValidation.getTokenProperty(ctx, "sub"));
+        assertEquals("John Doe", JWTValidation.getTokenProperty(ctx, "name"));
     }
 
     @Test
