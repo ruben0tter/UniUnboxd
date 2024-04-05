@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPITests.Services
 {
@@ -304,7 +303,7 @@ namespace UniUnboxdAPITests.Services
         [TestMethod]
         public async Task DoesProfessorExistTestWithExistingProfessor()
         {
-            var id = 1;
+            var id = 4;
             var result = await courseService.DoesProfessorExist(id);
 
             Assert.IsTrue(result);
@@ -313,7 +312,7 @@ namespace UniUnboxdAPITests.Services
         [TestMethod]
         public async Task DoesProfessorExistTestWithNonExistingProfessor()
         {
-            var id = 4;
+            var id = 999;
             var result = await courseService.DoesProfessorExist(id);
 
             Assert.IsFalse(result);

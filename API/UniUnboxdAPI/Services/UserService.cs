@@ -215,34 +215,34 @@ namespace UniUnboxdAPI.Services
             };
             
         public async Task<ProfessorProfileModel> GetProfessorAndConnectedData(int id)
-            {
-                var professor = await userRepository.GetProfessorAndConnectedData(id);
+        {
+            var professor = await userRepository.GetProfessorAndConnectedData(id);
 
-                var professorProfileModel = CreateProfessorProfileModel(professor);
+            var professorProfileModel = CreateProfessorProfileModel(professor);
                 
-                foreach (var course in await courseRepository.GetAssignedCourses(id))
-                {
-                    professorProfileModel.UniversityName = course.University.UserName;
-                    professorProfileModel.Courses.Add(MakeAssignedCourseModel(course));
-                }
-
-                return professorProfileModel;
+            foreach (var course in await courseRepository.GetAssignedCourses(id))
+            {
+                professorProfileModel.UniversityName = course.University.UserName;
+                professorProfileModel.Courses.Add(MakeAssignedCourseModel(course));
             }
 
-            private AssignedCourseModel MakeAssignedCourseModel(Course course)
-                => new()
-                {
-                    Id = course.Id,
-                    AnonymousRating = course.AnonymousRating,
-                    NonanonymousRating = course.NonanonymousRating,
-                    Name = course.Name,
-                    Code = course.Code,
-                    University = course.University.UserName,
-                    Image = course.Image
-                };
+            return professorProfileModel;
+        }
+
+        private AssignedCourseModel MakeAssignedCourseModel(Course course)
+            => new()
+            {
+                Id = course.Id,
+                AnonymousRating = course.AnonymousRating,
+                NonanonymousRating = course.NonanonymousRating,
+                Name = course.Name,
+                Code = course.Code,
+                University = course.University.UserName,
+                Image = course.Image
+            };
                 
 
-            public void UpdateProfessor(Professor professor, ProfessorEditModel model)
+        public void UpdateProfessor(Professor professor, ProfessorEditModel model)
         {
             professor.UserName = model.Name;
             professor.Image = model.Image;
@@ -268,7 +268,7 @@ namespace UniUnboxdAPI.Services
         public async Task PutStudent(Student student)
             => await userRepository.PutStudent(student);
 
-        public async Task<AssignedProfessorModel> getAssignedProfessor(string email)
+        public async Task<AssignedProfessorModel> GetAssignedProfessor(string email)
         {
             var professor = await userRepository.GetProfessor(email);
             return MakeAssignedProfessorModel(professor);

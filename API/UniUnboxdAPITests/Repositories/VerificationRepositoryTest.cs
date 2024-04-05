@@ -50,7 +50,7 @@
 
             await verificationRepository.AddApplication(application);
 
-            Assert.IsTrue(dbContext.Applications.Any(i => i.Id == 3 && i.VerificationData.Contains("test")));
+            Assert.IsTrue(dbContext.Applications.Any(i => i.UserId == application.UserId && i.VerificationData.Contains("test")));
         }
 
         [TestMethod]

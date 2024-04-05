@@ -1,7 +1,4 @@
-﻿using UniUnboxdAPI.Models;
-using UniUnboxdAPI.Repositories;
-
-namespace UniUnboxdAPITests.Services
+﻿namespace UniUnboxdAPITests.Services
 {
     [TestClass]
     public class ReviewServiceTest

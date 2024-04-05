@@ -54,7 +54,7 @@ namespace UniUnboxdAPI.Controllers
         {
             if (!await userService.DoesProfessorExist(email)) 
                 return BadRequest("Professor does not exist.");
-            AssignedProfessorModel model = await userService.getAssignedProfessor(email);
+            AssignedProfessorModel model = await userService.GetAssignedProfessor(email);
             return Ok(model);
         }
         

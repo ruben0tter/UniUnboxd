@@ -47,8 +47,6 @@ namespace UniUnboxdAPITests.Services
             Assert.IsNotNull(user.LastModificationTime);
         }
 
-        // TODO: Implement Professor Creation.
-        /**
         [TestMethod]
         public void CreateProfessorUserTest()
         {
@@ -63,7 +61,6 @@ namespace UniUnboxdAPITests.Services
             Assert.IsNotNull(user.CreationTime);
             Assert.IsNotNull(user.LastModificationTime);
         }
-        */
 
         [TestMethod]
         public void IsEmailValidTestValid()
