@@ -1,6 +1,5 @@
 package com.example.uniunboxd.models.course;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,7 @@ public class AssignedProfessorModel {
         Email = email;
     }
 
-    public View CreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, CreateCourseFragment f) {
+    public View CreateView(LayoutInflater inflater, ViewGroup container, CreateCourseFragment f) {
         View view = inflater.inflate(R.layout.selected_professors_item, container, false);
         TextView name = view.findViewById(R.id.ProfName);
         TextView email = view.findViewById(R.id.ProfEmail);

@@ -20,6 +20,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            isTestCoverageEnabled = true
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -27,6 +32,7 @@ android {
                 "proguard-rules.pro"
             )
         }
+
     }
 
     buildFeatures {

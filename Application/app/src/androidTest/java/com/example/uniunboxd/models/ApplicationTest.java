@@ -1,4 +1,4 @@
-package com.example.uniunboxd;
+package com.example.uniunboxd.models;
 
 import static org.junit.Assert.assertTrue;
 
@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.uniunboxd.R;
 import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.models.Application;
 

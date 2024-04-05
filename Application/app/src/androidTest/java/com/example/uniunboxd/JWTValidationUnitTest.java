@@ -16,9 +16,9 @@ import com.example.uniunboxd.utilities.JWTValidation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.junit.runners.JUnit4;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(JUnit4.class)
 public class JWTValidationUnitTest {
     private Context ctx;
 
@@ -31,6 +31,8 @@ public class JWTValidationUnitTest {
 
     @Test
     public void login() {
+        JWTValidation.deleteToken(ctx);
+
         assertFalse(JWTValidation.isUserLoggedIn(ctx));
         assertNull(JWTValidation.getToken(ctx));
         JWTValidation.placeToken(TOKEN, ctx);

@@ -104,7 +104,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                         assignedProfessors = UserController.getAssignedProfessors(Course.Id, getActivity());
                         getActivity().runOnUiThread(() -> {
                             for (AssignedProfessorModel x : assignedProfessors) {
-                                View v = x.CreateView(inflater, container, savedInstanceState, f);
+                                View v = x.CreateView(inflater, container, f);
                                 assignedProfessorsList.addView(v);
                                 Course.AssignedProfessors.add(x);
                             }
@@ -160,7 +160,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                     }
                     assignedProfessors.add(assignedProfessorModel);
                     LinearLayout assignedProfessorsList = ((LinearLayout) layout.getParent()).findViewById(R.id.assignedProfessorsList);
-                    assignedProfessorsList.addView(assignedProfessorModel.CreateView(inflater, container, savedInstanceState, (CreateCourseFragment) f));
+                    assignedProfessorsList.addView(assignedProfessorModel.CreateView(inflater, container, (CreateCourseFragment) f));
                 });
             } catch (IOException e) {
                 Log.e("ERR", "Could not get assigned professor model.");

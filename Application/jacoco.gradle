@@ -1,4 +1,3 @@
-
 //List of modules that don't require Jacoco
 def ignoredByJacoco = []
 def fileFilter = []
@@ -9,6 +8,7 @@ def testExecutionFile = "/outputs/unit_test_code_coverage/debugUnitTest/testDebu
 //List of files that can be ignored for test coverage
 ext {
     coverageExclusions = [
+            '**/databinding/*',
             '**/R.class',
             '**/R$*.class',
             '**/BuildConfig.*',
@@ -40,7 +40,7 @@ subprojects { project ->
 
         }
 
-        task jacocoReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
+        task jacocoReport(type: JacocoReport, dependsOn: 'connectedAndroidTest') {
             group = 'Reporting'
             description = 'Generate Jacoco coverage reports after running tests.'
 
@@ -50,7 +50,7 @@ subprojects { project ->
                               "$projectBuildFolder" + "$buildJavaClasses"]
 
             buildDebug.each { classPath ->
-                debugTree += fileTree(dir: classPath, includes: fileFilter,  excludes: coverageExclusions)
+                debugTree += fileTree(dir: classPath, includes: fileFilter, excludes: coverageExclusions)
             }
 
             def mainSrc = "$projectFolder/src/main/java"
