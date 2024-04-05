@@ -20,6 +20,9 @@ import com.example.uniunboxd.activities.MainActivity;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 import com.example.uniunboxd.utilities.JWTValidation;
 
+/**
+ * HomeUnverifiedFragment class that represents the home unverified screen.
+ */
 public class HomeUnverifiedFragment extends Fragment {
     
     /**

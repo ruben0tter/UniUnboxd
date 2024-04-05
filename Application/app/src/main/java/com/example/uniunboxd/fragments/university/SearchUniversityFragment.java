@@ -22,6 +22,9 @@ import com.example.uniunboxd.models.CourseSearchResult;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SearchUniversityFragment class that represents the search university screen.
+ */
 public class SearchUniversityFragment extends Fragment {
 
     private final List<CourseSearchResult> results = new ArrayList<>();
