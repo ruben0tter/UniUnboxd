@@ -44,14 +44,21 @@ import java.util.List;
  */
 public class StudentEditFragment extends Fragment {
 
+    // Constants for camera, image picker, and file picker codes
     private static final int CAMERA_CODE = 1;
     private static final int IMAGE_PICKER_CODE = 2;
     private static final int FILE_PICKER_CODE = 3;
 
+    // ArrayList to store university names
     private final ArrayList<String> UniversityNames = new ArrayList<>();
+
+    // Model for student edit
     private StudentEditModel Model;
+
+    // List to store files
     private List<byte[]> file = new ArrayList<>();
 
+    // List to store university models
     private List<UniversityNameModel> Universities;
 
     public StudentEditFragment() {
@@ -61,13 +68,21 @@ public class StudentEditFragment extends Fragment {
         Model = studentEditModel;
     }
 
+    /**
+     * Called when the fragment is being created.
+     *
+     * @param savedInstanceState The saved instance state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Check if camera and image read permissions are granted
         if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED)
+                ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            // Request camera and image read permissions
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
+        }
     }
 
     /**
@@ -85,8 +100,10 @@ public class StudentEditFragment extends Fragment {
         if (Model == null)
             return null;
 
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_student_profile_page_edit, container, false);
 
+        // Find views by their IDs
         ImageView image = view.findViewById(R.id.image);
         EditText name = view.findViewById(R.id.name);
         ImageView editImageBtn = view.findViewById(R.id.editImageBtn);
@@ -114,41 +131,53 @@ public class StudentEditFragment extends Fragment {
 
         name.setText(Model.Name);
 
+        // Set the image if it exists.
         if (Model.Image != null) image.setImageBitmap(ImageHandler.decodeImageString(Model.Image));
 
+        // Check if file system permissions are granted
         int fileSystemPermission = ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE);
         if (fileSystemPermission != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
 
+        // Create a popup menu for the edit image button
         PopupMenu dropDownMenu = new PopupMenu(getActivity(), editImageBtn);
         Menu menu = dropDownMenu.getMenu();
         menu.add(0, 0, 0, "Camera");
         menu.add(0, 1, 0, "Files");
 
+        // Set the on click listener for the edit image button
         Fragment f = this;
         dropDownMenu.setOnMenuItemClickListener(item -> {
             switch (item.getItemId()) {
                 case 0:
+                    // Check if camera permissions are granted
                     if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.CAMERA)
                             != PackageManager.PERMISSION_DENIED) {
+                            // Open the camera.
                         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraIntent, CAMERA_CODE);
                     }
                     return true;
                 case 1:
+                    // Open the file system chooser.
                     FileSystemChooser.ChooseImage(f, IMAGE_PICKER_CODE);
                     return true;
             }
             return false;
         });
 
+        // Set the on click listener for the edit image button
         editImageBtn.setOnClickListener(v -> dropDownMenu.show());
 
         saveChangesBtn.setOnClickListener(v -> AsyncTask.execute(() -> {
             try {
+                // Set the student's name.
                 Model.Name = name.getText().toString();
+                // Update the student's notification settings.
                 UpdateNotificationSettings(view);
+                // Send the student's information to the API.
                 UserController.putStudent(Model, getActivity());
+                // Replace the fragment with the student profile fragment.
                 ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(Model.Id), true);
             } catch (Exception e) {
                 Log.e("ERR", e.toString());
@@ -181,6 +210,7 @@ public class StudentEditFragment extends Fragment {
 
                 Model.VerificationStatus = 1;
                 getActivity().runOnUiThread(() -> {
+                    // Hide the verification button and box.
                     view.findViewById(R.id.verification).setVisibility(View.GONE);
                     view.findViewById(R.id.verificationBox).setVisibility(View.GONE);
                 });
@@ -190,9 +220,11 @@ public class StudentEditFragment extends Fragment {
             }
         }));
 
+        // Set up the notification settings.
         SetUpNotificationSettings(view);
 
         if (Model.VerificationStatus != 0) {
+            // Hide the verification button and box.
             view.findViewById(R.id.verification).setVisibility(View.GONE);
             view.findViewById(R.id.verificationBox).setVisibility(View.GONE);
         }
@@ -211,15 +243,19 @@ public class StudentEditFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         ImageView image = this.getView().findViewById(R.id.image);
+        //  Check if the request code is for the camera.
         if (requestCode == CAMERA_CODE) {
+            // Get the image from the camera.
             Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
             image.setImageBitmap(cameraImage);
 
+            // Convert the image to a byte array.
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             cameraImage.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             Model.Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
         } else if (requestCode == FILE_PICKER_CODE) {
+            // Get the file from the file picker.
             Uri uri = data.getData();
             try {
                 // null file, so that it only keeps the most recent.
@@ -229,24 +265,32 @@ public class StudentEditFragment extends Fragment {
                 throw new RuntimeException(e);
             }
         } else if (requestCode == IMAGE_PICKER_CODE) {
+            // Get the image from the image picker.
             Uri uri = data.getData();
-
+            
             byte[] bitmapdata = null;
             try {
                 bitmapdata = FileSystemChooser.readTextFromUri(uri, getActivity());
             } catch (IOException e) {
                 Log.e("ERR", e.toString());
             }
+            // Convert the image to a byte array.
             Model.Image = Base64.encodeToString(bitmapdata, Base64.DEFAULT);
+            // Decode the image.
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+            // Set the image.
             image.setImageBitmap(bitmap);
         }
 
     }
 
-    // Set up the notification settings.
+    /**
+     * Handles the permission request result.
+     * @param view The view.
+     */
     private void SetUpNotificationSettings(View view) {
 
+        // Get references to the notification settings checkboxes
         CheckBox followerMail = view.findViewById(R.id.follower_mail);
         CheckBox followerPush = view.findViewById(R.id.follower_push);
         CheckBox replyMail = view.findViewById(R.id.reply_mail);
@@ -254,6 +298,7 @@ public class StudentEditFragment extends Fragment {
         CheckBox activityMail = view.findViewById(R.id.activity_mail);
         CheckBox activityPush = view.findViewById(R.id.activity_push);
 
+        // Set the notification settings checkboxes based on the student's notification settings
         if (Model.NotificationSettings.ReceivesNewFollowerMail)
             followerMail.setChecked(true);
 
@@ -273,7 +318,10 @@ public class StudentEditFragment extends Fragment {
             activityPush.setChecked(true);
     }
 
-    // Update the notification settings.
+    /**
+     * Updates the notification settings.
+     * @param view The view.
+     */
     private void UpdateNotificationSettings(View view) {
         CheckBox followerMail = view.findViewById(R.id.follower_mail);
         CheckBox followerPush = view.findViewById(R.id.follower_push);
@@ -282,6 +330,7 @@ public class StudentEditFragment extends Fragment {
         CheckBox activityMail = view.findViewById(R.id.activity_mail);
         CheckBox activityPush = view.findViewById(R.id.activity_push);
 
+        // Update the notification settings.
         Model.NotificationSettings.ReceivesFollowersReviewMail = activityMail.isChecked();
         Model.NotificationSettings.ReceivesFollowersReviewPush = activityPush.isChecked();
         Model.NotificationSettings.ReceivesNewReplyMail = replyMail.isChecked();

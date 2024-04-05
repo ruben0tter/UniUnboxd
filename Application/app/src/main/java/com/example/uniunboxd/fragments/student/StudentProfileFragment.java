@@ -70,11 +70,14 @@ public class StudentProfileFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
+        // If the student is null, return the view.
         if (Student == null) {
             return view;
         }
 
+        // Create the view.
         view = Student.createView(inflater, container, this);
+        // Edit button.
         ImageButton editBtn = view.findViewById(R.id.editButton);
 
         // Edit button.
@@ -84,6 +87,7 @@ public class StudentProfileFragment extends Fragment {
         });
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
         if (userId != ID) {
+            // If the user is not the owner of the profile, hide the edit button.
             editBtn.setVisibility(View.GONE);
         }
 
@@ -102,20 +106,36 @@ public class StudentProfileFragment extends Fragment {
     }
 }
 
+/**
+ * GetStudentInformationAsyncTask class that represents the async task to get student information.
+ */
 class GetStudentInformationAsyncTask extends AsyncTask<FragmentActivity, Void, StudentProfileModel> {
 
     private final int ID;
     private final int NUM_OF_REVIEWS_TO_LOAD;
 
+    /**
+     * Constructor for the GetStudentInformationAsyncTask class.
+     *
+     * @param id                The student's ID.
+     * @param numCoursesToLoad The number of courses to load.
+     */
     public GetStudentInformationAsyncTask(int id, int numCoursesToLoad) {
         ID = id;
         NUM_OF_REVIEWS_TO_LOAD = numCoursesToLoad;
     }
 
+    /**
+     * Gets the student information in the background.
+     *
+     * @param fragments The fragments.
+     * @return The student information.
+     */
     @Override
     protected StudentProfileModel doInBackground(FragmentActivity... fragments) {
         StudentProfileModel student = null;
         try {
+            // Get the student information.
             student = UserController.getStudent(ID, fragments[0]);
         } catch (Exception ioe) {
             Log.e("ERR", "Couldn't get course" + ioe);

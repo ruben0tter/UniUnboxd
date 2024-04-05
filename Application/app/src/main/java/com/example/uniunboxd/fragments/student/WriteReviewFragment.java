@@ -103,15 +103,30 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
+    /**
+     * Handles the click event for the post and delete buttons.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.postButton) {
+            // Post review
             postReview();
         } else {
+            // Delete or cancel review
             deleteReview();
         }
     }
 
+
+    /**
+     * Sets the course information.
+     *
+     * @param name  The course name.
+     * @param code  The course code.
+     * @param image The course image.
+     */
     private void setCourseInfo(TextView name, TextView code, ImageView image) {
         name.setText(course.name);
         code.setText(course.code);
@@ -121,19 +136,28 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    /**
+     * Sets the review information.
+     */
     private void setReviewInfo() {
         comment.setText(review.comment);
         rating.setRating((float) review.rating);
         isAnonymous.setChecked(review.isAnonymous);
     }
 
+    /**
+     * Posts the review.
+     */
     private void postReview() {
+        // If the review is null, create a new review model.
         if (review == null) {
             ReviewModel model = createReviewModel();
 
             AsyncTask.execute(() -> {
                 try {
+                    // Post the review.
                     ReviewController.postReview(model, getActivity());
+                    // Go to course fragment.
                     ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                 } catch (Exception e) {
                     Log.e("APP", "Failed to post review: " + e);
@@ -141,31 +165,42 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
 
             });
         } else {
+            // Update the review.
             putReview();
         }
     }
 
+    /**
+     * Updates the review model.
+     */
     private void putReview() {
         updateReviewModel();
 
         AsyncTask.execute(() -> {
             try {
+                // Update the review.
                 ReviewController.putReview(review, getActivity());
+                // Go to course fragment.
                 ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
             } catch (Exception e) {
                 Log.e("APP", "Failed to put review: " + e);
             }
-
         });
     }
 
+    /**
+     * Deletes the review.
+     */
     private void deleteReview() {
+        // If the review is null, go to course fragment.
         if (review == null) {
             ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
         } else {
+            // Confirm the deletion.
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
             builder.setTitle("Are you sure you want to delete the review?");
-
+            
+            // If the user confirms the deletion, delete the review.
             builder.setPositiveButton("Yes", (dialog, which) -> AsyncTask.execute(() -> {
                 try {
                     ReviewController.deleteReview(review.id, getActivity());
@@ -175,11 +210,16 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                 }
 
             }));
+            // If the user cancels the deletion, close the dialog.
             builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
             builder.show();
         }
     }
 
+    /**
+     * Creates a review model.
+     * @return The review model.
+     */
     private ReviewModel createReviewModel() {
         return new ReviewModel(
                 rating.getRating(),
@@ -188,6 +228,9 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                 course.id);
     }
 
+    /**
+     * Updates the review model.
+     */
     private void updateReviewModel() {
         review.rating = rating.getRating();
         review.comment = comment.getText().toString();

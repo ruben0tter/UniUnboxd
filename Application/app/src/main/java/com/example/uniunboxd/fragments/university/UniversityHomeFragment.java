@@ -51,11 +51,13 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         CoursesInformation coursesInformation = new CoursesInformation();
 
         try {
+            // Get the courses information
             overviewCourses = coursesInformation.execute(getActivity()).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
+        // Add the courses to the layout
         if (overviewCourses != null) {
             for (OverviewCourse c : overviewCourses) {
                 coursesLayout.addView(c.createView(inflater, container, this));
@@ -72,6 +74,7 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.signOut) {
+            // Sign out
             JWTValidation.deleteToken(getActivity());
             ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         } else if (v.getId() == R.id.addCourses) {
