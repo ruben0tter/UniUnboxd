@@ -28,13 +28,17 @@ import java.util.concurrent.ExecutionException;
  * HomeFragment class that represents the home screen.
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    LinearLayout popularCoursesLayout;
-    LinearLayout newFromFriendsLayout;
-    LinearLayout popularCoursesWithFriendsLayout;
 
-    List<PopularCourse> popularCourses;
-    List<FriendReview> newFromFriends;
-    List<PopularCourse> popularCoursesWithFriends;
+    // Define layout variables
+    LinearLayout popularCoursesLayout; // Layout for popular courses
+    LinearLayout newFromFriendsLayout; // Layout for new reviews from friends
+    LinearLayout popularCoursesWithFriendsLayout; // Layout for popular courses with friends
+
+    // Define data variables
+    List<PopularCourse> popularCourses; // List of popular courses
+    List<FriendReview> newFromFriends; // List of new reviews from friends
+    List<PopularCourse> popularCoursesWithFriends; // List of popular courses with friends
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
 
         try {
+            // Execute the async tasks to get popular courses, new reviews from friends, and popular courses with friends.
             popularCourses = popularCoursesInformation.execute(getActivity()).get();
             newFromFriends = newFromFriendsInformation.execute(getActivity()).get();
             popularCoursesWithFriends = popularCoursesByFriendsInformation.execute(getActivity()).get();
@@ -91,13 +96,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 popularCoursesLayout.addView(c.createView(inflater, container, this));
             }
         }
-
+        // Add new reviews from friends to the layout.
         if (newFromFriends != null) {
             for (FriendReview r : newFromFriends) {
                 newFromFriendsLayout.addView(r.createView(inflater, container, this));
             }
         }
-
+        // Add popular courses with friends to the layout.
         if (popularCoursesWithFriends != null) {
             for (PopularCourse c : popularCoursesWithFriends) {
                 popularCoursesWithFriendsLayout.addView(c.createView(inflater, container, this));
@@ -125,6 +130,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<PopularCourse>> {
     private final int id;
 
+    // Constructor
     public PopularCoursesInformation() {
         this.id = 0;
     }
@@ -133,15 +139,18 @@ class PopularCoursesInformation extends AsyncTask<FragmentActivity, Void, List<P
         this.id = id;
     }
 
+    // Get popular courses.
     @Override
     protected List<PopularCourse> doInBackground(FragmentActivity... fragmentActivities) {
+        // Get popular courses.
         try {
             if (id == 0) {
+                // Get popular courses from all universities.
                 return CourseController.getPopularCourses(fragmentActivities[0]);
             } else {
+                // Get popular courses from a specific university.
                 return CourseController.getPopularCoursesByUniversity(id, fragmentActivities[0]);
             }
-
         } catch (Exception e) {
             Log.e("ERR", "Couldn't get review" + e);
             return null;
@@ -154,8 +163,8 @@ class LatestReviewsByFriendsInformation extends AsyncTask<FragmentActivity, Void
     @Override
     protected List<FriendReview> doInBackground(FragmentActivity... fragmentActivities) {
         try {
+            // Get the latest reviews from friends.
             return ReviewController.getLatestReviewsByFriends(fragmentActivities[0]);
-
         } catch (Exception e) {
             Log.e("ERR", "Couldn't get review" + e);
             return null;
@@ -168,8 +177,8 @@ class PopularCoursesByFriendsInformation extends AsyncTask<FragmentActivity, Voi
     @Override
     protected List<PopularCourse> doInBackground(FragmentActivity... fragmentActivities) {
         try {
+            // Get popular courses with friends.
             return CourseController.getPopularCoursesByFriends(fragmentActivities[0]);
-
         } catch (Exception e) {
             Log.e("ERR", "Couldn't get review" + e);
             return null;

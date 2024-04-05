@@ -54,10 +54,11 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         email = view.findViewById(R.id.email_input);
         password = view.findViewById(R.id.password_input);
 
-        // Buttons
+        // Sign In Button
         Button signIn = view.findViewById(R.id.sign_in_button);
         signIn.setOnClickListener(this);
 
+        // Sign Up Button
         Button signUp = view.findViewById(R.id.sign_up_button);
         signUp.setOnClickListener(this);
 
