@@ -12,6 +12,8 @@ import com.example.uniunboxd.utilities.StackHandler;
 
 import org.junit.Test;
 
+import java.util.Stack;
+
 public class StackHandlerUnitTest {
     @Test
     public void testSingleton() {
@@ -23,6 +25,7 @@ public class StackHandlerUnitTest {
     @Test
     public void testStack() {
         StackHandler s = StackHandler.getInstance();
+        s.stack = new Stack<>();
         assertEquals(s.size(), 0);
 
         Fragment f1 = new Fragment();

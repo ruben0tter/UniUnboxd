@@ -136,7 +136,7 @@ namespace UniUnboxdAPITests.Controllers
             ConfigurationUtil.SetHttpContext(userController, 4, UserType.Student);
             var userId = 4;
             ObjectResult result = (ObjectResult) await userController.GetStudent(userId);
-            var student = (StudentProfileModel) result.Value;
+            var student = result.Value as StudentProfileModel;
 
             Assert.IsNotNull(student); 
             Assert.AreEqual(200, result.StatusCode);
@@ -149,7 +149,7 @@ namespace UniUnboxdAPITests.Controllers
             ConfigurationUtil.SetHttpContext(userController, 8, UserType.Professor);
             var userId = 8;
             ObjectResult result = (ObjectResult) await userController.GetProfessor(userId);
-            var professor = (ProfessorProfileModel) result.Value;
+            var professor = result.Value as ProfessorProfileModel;
 
             Assert.IsNotNull(professor);
             Assert.AreEqual(200, result.StatusCode);
@@ -160,7 +160,8 @@ namespace UniUnboxdAPITests.Controllers
         public async Task GetUniversities()
         {
             ObjectResult result = (ObjectResult) await userController.GetUniversities();
-            var universities = (List<UniversityNameModel>) result.Value;
+            var universities = result.Value as List<UniversityNameModel>;
+            Assert.IsNotNull(universities);
             foreach (UniversityNameModel university in universities)
             {
                 Assert.IsNotNull(university);
@@ -175,7 +176,7 @@ namespace UniUnboxdAPITests.Controllers
             ConfigurationUtil.SetHttpContext(userController, 8, UserType.Professor);
             var email = "professor@gmail.com";
             ObjectResult result = (ObjectResult) await userController.GetAssignedProfessorByEmail(email);
-            var professor = (AssignedProfessorModel) result.Value;
+            var professor = result.Value as AssignedProfessorModel;
 
             Assert.IsNotNull(professor);
             Assert.AreEqual(professor.Email, email);
@@ -188,7 +189,8 @@ namespace UniUnboxdAPITests.Controllers
             ConfigurationUtil.SetHttpContext(userController, 1, UserType.University);
             var courseId = 1;
             ObjectResult result = (ObjectResult) await userController.GetAssignedProfessors(courseId);
-            var professors = (List<AssignedProfessorModel>) result.Value;
+            var professors = result.Value as List<AssignedProfessorModel>;
+            Assert.IsNotNull(professors);
             foreach (AssignedProfessorModel professor in professors)
             {
                 Assert.IsNotNull(professor);
@@ -202,7 +204,8 @@ namespace UniUnboxdAPITests.Controllers
         {
             ConfigurationUtil.SetHttpContext(userController, 7, UserType.Student);
             ObjectResult result = (ObjectResult) await userController.GetFollowedStudents();
-            var students = (List<StudentGridModel>) result.Value;
+            var students = result.Value as List<StudentGridModel>;
+            Assert.IsNotNull(students);
             foreach (StudentGridModel student in students)
             {
                 Assert.IsNotNull(student);
@@ -217,7 +220,8 @@ namespace UniUnboxdAPITests.Controllers
         {
             ConfigurationUtil.SetHttpContext(userController, 4, UserType.Student);
             ObjectResult result = (ObjectResult) await userController.GetFollowers();
-            var students = (List<StudentGridModel>) result.Value;
+            var students = result.Value as List<StudentGridModel>;
+            Assert.IsNotNull(students);
             foreach (StudentGridModel student in students)
             {
                 Assert.IsNotNull(student);
@@ -232,8 +236,8 @@ namespace UniUnboxdAPITests.Controllers
             ConfigurationUtil.SetHttpContext(userController, 4, UserType.Student);
             var iD = 4;
             ObjectResult result = (ObjectResult) await userController.GetStudentListItem(iD);
-            var student = (StudentGridModel) result.Value;
-
+            var student = result.Value as StudentGridModel;
+            Assert.IsNotNull(student);
             Assert.AreEqual(student.Id, iD);
             Assert.AreEqual(200, result.StatusCode);
         }

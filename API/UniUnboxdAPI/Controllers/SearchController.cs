@@ -18,6 +18,11 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class SearchController(SearchService searchService) : ControllerBase
     {
+        /// <summary>
+        /// Searches for courses based on the provided search options.
+        /// </summary>
+        /// <param name="query">Search options including keywords and filters.</param>
+        /// <returns>A list of courses that match the search criteria.</returns>
         [HttpGet]
         [Authorize]
         [Route("Course")]
@@ -38,6 +43,11 @@ namespace UniUnboxdAPI.Controllers
             return Ok(courses);
         }
 
+        /// <summary>
+        /// Searches for users based on the provided search options. Only accessible by users with Student or Professor roles.
+        /// </summary>
+        /// <param name="query">Search options including keywords and filters.</param>
+        /// <returns>A list of users that match the search criteria.</returns>
         [HttpGet]
         [Authorize(Roles = "Student, Professor")]
         [Route("User")]
