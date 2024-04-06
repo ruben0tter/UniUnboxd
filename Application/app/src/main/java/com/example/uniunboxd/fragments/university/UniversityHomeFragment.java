@@ -23,8 +23,10 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class UniversityHomeFragment extends Fragment implements View.OnClickListener {
+    // Define layout variables
     LinearLayout coursesLayout;
 
+    // Define data variables
     List<OverviewCourse> overviewCourses;
 
     /**
@@ -38,9 +40,10 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         // The course layout
         coursesLayout = view.findViewById(R.id.linearLayoutforCourses);
 
-        // Buttons
+        // Sign out button
         TextView signOut = view.findViewById(R.id.signOut);
         signOut.setOnClickListener(this);
+        // Add courses button
         TextView addCourses = view.findViewById(R.id.addCourses);
         addCourses.setOnClickListener(this);
 

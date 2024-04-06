@@ -99,6 +99,12 @@ public class CourseFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Loads the reviews.
+     * @param reviewListView The review list view.
+     * @param inflater The layout inflater.
+     * @param container The parent layout.
+    */
     private void load(LinearLayout reviewListView, LayoutInflater inflater, ViewGroup container) {
         AsyncTask.execute(() -> {
             int lastID = 0;
@@ -115,6 +121,12 @@ public class CourseFragment extends Fragment {
         });
     }
 
+    /**
+     * Visualises the reviews.
+     * @param inflater The layout inflater.
+     * @param container The parent layout.
+     * @param reviewListView The review list view.
+     */
     private void visualiseReviews(LayoutInflater inflater, ViewGroup container, LinearLayout reviewListView) {
         for (ReviewListItem item : Course.Reviews) {
             getActivity().runOnUiThread(() -> {
@@ -124,16 +136,31 @@ public class CourseFragment extends Fragment {
         }
     }
 
+    /**
+     * AsyncTask to get course information.
+     */
     class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel> {
 
         private final int ID;
         private final int NUM_OF_REVIEWS_TO_LOAD;
 
+        /**
+         * Constructor for the GetCourseInformationAsyncTask class.
+         *
+         * @param id The course's ID.
+         * @param numReviewsToLoad The number of reviews to load.
+         */
         public GetCourseInformationAsyncTask(int id, int numReviewsToLoad) {
             ID = id;
             NUM_OF_REVIEWS_TO_LOAD = numReviewsToLoad;
         }
 
+        /**
+         * Gets the course information.
+         *
+         * @param fragments The fragments.
+         * @return The course information.
+         */
         @Override
         protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
             CourseRetrievalModel course = null;
