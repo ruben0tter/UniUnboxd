@@ -47,6 +47,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
     private final int imageCode = 1;
     private final int bannerCode = 2;
 
+    // Define data variables
     private String imageEnc = null;
     private String bannerEnc = null;
     protected final CourseEditModel Course;
@@ -87,6 +88,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         this.savedInstanceState = savedInstanceState;
         View view = inflater.inflate(R.layout.fragment_course_page_setup, container, false);
 
+        // Define layout variables
         Button saveChangesBtn = view.findViewById(R.id.saveChanges);
         ImageButton imageBtn = view.findViewById(R.id.courseImage_edit);
         ImageButton bannerBtn = view.findViewById(R.id.courseBanner_edit);
@@ -96,6 +98,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         CreateCourseFragment f = this;
         // If the course is not null, set the course information.
         if (Course != null) {
+            // Set the course information.
             ImageView image = view.findViewById(R.id.courseImage_image_courseSetup);
             ImageView banner = view.findViewById(R.id.courseBanner_image_courseSetup);
             EditText name = view.findViewById(R.id.courseName_courseName_edit);
@@ -112,18 +115,22 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             description.setText(Course.Description);
             professor.setText(Course.Professor);
         }
+        // Set on click listeners for the buttons.
         saveChangesBtn.setOnClickListener(this);
         imageBtn.setOnClickListener(this);
         bannerBtn.setOnClickListener(this);
         searchBtn.setOnClickListener(this);
+
         // If the user is a university, get the assigned professors.
         if (JWTValidation.getTokenProperty(this.getActivity(), "typ").equals("University")) {
             LinearLayout assignedProfessorsList = view.findViewById(R.id.assignedProfessorsList);
             AsyncTask.execute(() -> {
                 try {
                     if (Course != null) {
+                        // Get the assigned professors for the course.
                         assignedProfessors = UserController.getAssignedProfessors(Course.Id, getActivity());
                         getActivity().runOnUiThread(() -> {
+                            // Add the assigned professors to the assigned professors list.
                             for (AssignedProfessorModel x : assignedProfessors) {
                                 View v = x.CreateView(inflater, container, f);
                                 assignedProfessorsList.addView(v);
@@ -137,6 +144,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
             });
             deleteBtn.setOnClickListener(this);
         } else {
+            // If the user is not a university, hide the delete button and the search button.
             view.findViewById(R.id.deleteWrapper).setVisibility(View.GONE);
             view.findViewById(R.id.searchButton).setVisibility(View.GONE);
             view.findViewById(R.id.SelectedProf).setVisibility(View.GONE);
@@ -168,7 +176,11 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    
+    /**
+     * Handles the search button logic.
+     * @param view The view.
+     * @param f The fragment.
+     */
     private void searchButtonLogic(View view, Fragment f) {
         LinearLayout layout = (LinearLayout) view.getParent();
         EditText professorToAssign = layout.findViewById(R.id.SelectedProf);
@@ -181,6 +193,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                     getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), "Could not find a professor user with this email.", Toast.LENGTH_SHORT).show());
                     return;
                 }
+                // If the professor is already assigned, show a toast message.
                 getActivity().runOnUiThread(() -> {
                     if (assignedProfessors.stream().anyMatch(professorModel -> professorModel.Id == assignedProfessorModel.Id)) {
                         Toast.makeText(getActivity(), "Professor is already assigned.", Toast.LENGTH_SHORT).show();
@@ -198,8 +211,14 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         professorToAssign.setText("");
     }
 
-    // Save changes button logic
+    /**
+     * Handles the save changes button logic.
+     *
+     * @param view The view.
+     * @param f    The fragment.
+     */
     private void saveChangesButtonLogic(View view, Fragment f) {
+        // Get the course information.
         LinearLayout layout = (LinearLayout) view.getParent();
         EditText name = layout.findViewById(R.id.courseName_courseName_edit);
         EditText code = layout.findViewById(R.id.courseName_courseCode_edit);
@@ -234,7 +253,11 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         });
     }
 
-    // Build confirmation popup
+    /**
+     * Builds the confirmation popup.
+     *
+     * @param message The message.
+     */
     private void buildConfirmationPopup(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(true);
@@ -248,6 +271,9 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         dialog.show();
     }
 
+    /**
+     * Deletes the course logic.
+     */
     private void deleteCourseLogic() {
         if (Course != null) {
             AsyncTask.execute(() -> {
