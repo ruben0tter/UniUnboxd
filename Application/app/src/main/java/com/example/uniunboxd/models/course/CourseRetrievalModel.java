@@ -43,6 +43,25 @@ public class CourseRetrievalModel {
     public final List<FriendReviewModel> FriendReviews;
     public final ReviewListItem YourReview;
 
+    /**
+     * Constructor for the CourseRetrievalModel class.
+     *
+     * @param id                The course's ID.
+     * @param name              The course's name.
+     * @param code              The course's code.
+     * @param anonymousRating   The course's anonymous rating.
+     * @param nonanonymousRating The course's non-anonymous rating.
+     * @param description       The course's description.
+     * @param professor         The course's professor.
+     * @param image             The course's image.
+     * @param banner            The course's banner.
+     * @param universityId       The course's university ID.
+     * @param reviews           The course's reviews.
+     * @param universityName     The course's university name.
+     * @param assignedProfessors The course's assigned professors.
+     * @param friendReviews      The course's friend reviews.
+     * @param yourReview         The course's your review.
+     */
     @JsonCreator
     public CourseRetrievalModel(@JsonProperty("id") int id, @JsonProperty("name") String name,
                                 @JsonProperty("code") String code, @JsonProperty("anonymousRating") float anonymousRating,
@@ -52,7 +71,7 @@ public class CourseRetrievalModel {
                                 @JsonProperty("reviews") List<ReviewListItem> reviews, @JsonProperty("universityName") String universityName,
                                 @JsonProperty("assignedProfessors") List<Integer> assignedProfessors,
                                 @JsonProperty("friendReviews") List<FriendReviewModel> friendReviews,
-                                @JsonProperty("yourReview") ReviewListItem yourReview){
+                                @JsonProperty("yourReview") ReviewListItem yourReview) {
         Id = id;
         Name = name;
         Code = code;
@@ -70,6 +89,14 @@ public class CourseRetrievalModel {
         YourReview = yourReview;
     }
 
+    /**
+     * Creates a view for the course retrieval model.
+     *
+     * @param inflater   The layout inflater.
+     * @param container  The parent layout.
+     * @param activity   The activity.
+     * @return The view for the course retrieval model.
+     */
     public View createView(LayoutInflater inflater, ViewGroup container, FragmentActivity activity) {
         View view = inflater.inflate(R.layout.fragment_course, container, false);
         TextView name = view.findViewById(R.id.courseName);
@@ -86,13 +113,15 @@ public class CourseRetrievalModel {
 
         anonRatingBar.setRating(AnonymousRating);
         nonanonRatingBar.setRating(NonanonymousRating);
-        anonRatingNum.setText("" + AnonymousRating);
-        nonanonRatingNum.setText("" + NonanonymousRating);
+        anonRatingNum.setText(String.valueOf(AnonymousRating));
+        nonanonRatingNum.setText(String.valueOf(NonanonymousRating));
         name.setText(Name);
         code.setText(Code);
         professor.setText(Professor);
         description.setText(Description);
         universityName.setText(UniversityName);
+
+        // Set the course's image and banner if they exist.
         if (Image != null && !Image.equals("")) {
             Bitmap imageBitmap = ImageHandler.decodeImageString(Image);
             image.setImageBitmap(imageBitmap);
@@ -101,6 +130,8 @@ public class CourseRetrievalModel {
             Bitmap bannerBitmap = ImageHandler.decodeImageString(Banner);
             banner.setImageBitmap(bannerBitmap);
         }
+
+        // Linear layout for putting reviews's views.
         LinearLayout reviews = view.findViewById(R.id.reviewList);
         loadInitialReviews(reviews, inflater, container);
 
@@ -108,6 +139,8 @@ public class CourseRetrievalModel {
         TextView everyone = view.findViewById(R.id.everyone);
         everyone.setTypeface(Typeface.DEFAULT_BOLD);
         yourReview.setTypeface(Typeface.DEFAULT);
+
+        // Set the on click listeners for the "Your Review" and "Everyone" buttons to load the respective reviews.
 
         yourReview.setOnClickListener(v -> {
             if (yourReview.getTypeface() == Typeface.DEFAULT) {
@@ -125,9 +158,10 @@ public class CourseRetrievalModel {
             }
         });
 
+        // Linear layout for putting friend reviews's views.
         LinearLayout friendReviewsWrapper = view.findViewById(R.id.friendReviewsWrapper);
 
-        if(FriendReviews == null || FriendReviews.size() == 0) {
+        if (FriendReviews == null || FriendReviews.size() == 0) {
             friendReviewsWrapper.setVisibility(View.GONE);
         } else {
             friendReviewsWrapper.setVisibility(View.VISIBLE);
@@ -143,6 +177,7 @@ public class CourseRetrievalModel {
 
         LinearLayout reviewHeaders = view.findViewById(R.id.reviewHeaders);
 
+        // If the user is not attached to the university, hide the review headers.
         if (attachedUniversity == null || UniversityId != Integer.parseInt(attachedUniversity)) {
             reviewHeaders.setVisibility(View.GONE);
         } else {
@@ -150,6 +185,7 @@ public class CourseRetrievalModel {
 
             Button writeReview = view.findViewById(R.id.writeReview);
 
+            // If the user has not written a review, set the button to write a review, else set it to edit the review.
             if (YourReview == null) {
                 yourReview.setVisibility(View.INVISIBLE);
                 writeReview.setText("Write Review");
@@ -160,7 +196,7 @@ public class CourseRetrievalModel {
                 writeReview.setText("Edit Review");
                 writeReview.setOnClickListener(v -> ((IActivity) activity).replaceFragment(
                         new WriteReviewFragment(new CourseModel(Id, Name, Code, Image),
-                                new ReviewModel(YourReview.Id, YourReview.Rating , YourReview.Comment, YourReview.IsAnonymous, Id)),
+                                new ReviewModel(YourReview.Id, YourReview.Rating, YourReview.Comment, YourReview.IsAnonymous, Id)),
                         true));
             }
         }
@@ -168,11 +204,25 @@ public class CourseRetrievalModel {
         return view;
     }
 
+    /**
+     * Loads the user's review.
+     *
+     * @param reviews    The linear layout for the reviews.
+     * @param inflater   The layout inflater.
+     * @param container  The parent layout.
+     */
     private void loadYourReview(LinearLayout reviews, LayoutInflater inflater, ViewGroup container) {
         reviews.removeAllViews();
         reviews.addView(YourReview.createView(inflater, container));
     }
 
+    /**
+     * Loads the initial reviews.
+     *
+     * @param reviews    The linear layout for the reviews.
+     * @param inflater   The layout inflater.
+     * @param container  The parent layout.
+     */
     private void loadInitialReviews(LinearLayout reviews, LayoutInflater inflater, ViewGroup container) {
         reviews.removeAllViews();
         for (ReviewListItem i : Reviews) {

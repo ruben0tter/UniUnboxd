@@ -33,29 +33,44 @@ import com.example.uniunboxd.models.review.Reply;
 import com.example.uniunboxd.models.review.Review;
 import com.example.uniunboxd.utilities.JWTValidation;
 
-import java.net.HttpURLConnection;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * ReviewFragment class that represents the review screen.
+ */
 public class ReviewFragment extends Fragment implements View.OnClickListener {
-    private int id;
-    private Review review;
-    private boolean isReviewTabActive = false;
-    private boolean isReviewLiked = false;
 
-    private NestedScrollView reviewPage;
-    private ConstraintLayout repliesPage;
-    private LinearLayout replies;
+    // Variables
+    private int id; // The review's ID
+    private Review review; // The review object
+    private boolean isReviewTabActive = false; // Flag indicating if the review tab is active
+    private boolean isReviewLiked = false; // Flag indicating if the review is liked
 
-    private TextView reviewTab;
-    private TextView repliesTab;
-    private EditText replyInput;
+    // UI elements
+    private NestedScrollView reviewPage; // The review page layout
+    private ConstraintLayout repliesPage; // The replies page layout
+    private LinearLayout replies; // The container for replies
 
-    private ImageView likeReview;
-    private TextView likeText;
-    private TextView likeCount;
+    private TextView reviewTab; // The review tab
+    private TextView repliesTab; // The replies tab
+    private EditText replyInput; // The input field for replying
 
-    public ReviewFragment() {}
+    private ImageView likeReview; // The like button for the review
+    private TextView likeText; // The text indicating the like status
+    private TextView likeCount; // The count of likes
 
+
+    /**
+     * Necessary empty constructor.
+     */
+    public ReviewFragment() {
+    }
+
+    /**
+     * Constructor for the ReviewFragment class.
+     *
+     * @param id The review's ID.
+     */
     public ReviewFragment(int id) {
         this.id = id;
     }
@@ -65,6 +80,14 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the review fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the review fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -121,12 +144,15 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
             throw new RuntimeException(e);
         }
 
+        // Set review information.
         if (review != null) {
             review.createView(view, inflater, container, this);
 
+            // Set review likes.
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
             String userType = JWTValidation.getTokenProperty(getActivity(), "typ");
 
+            // If the user is not the author of the review, hide the edit button and show the flag button.
             if (review.Student.Id != userId) {
                 editReview.setVisibility(View.GONE);
                 flagReview.setVisibility(View.VISIBLE);
@@ -135,14 +161,17 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
                 flagReview.setVisibility(View.GONE);
             }
 
+            // If the user is a student and not the author of the review, show the like button.
             if (userType.equals("Student") && userId != review.Student.Id) {
                 likeReview.setOnClickListener(this);
                 if (review.StudentLikes.contains(userId)) {
+                    // If the user has liked the review, show the filled like button.
                     isReviewLiked = true;
                     likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
                     likeText.setText("Liked");
                 }
             } else {
+                // If the user is not a student or the author of the review, hide the like button.
                 likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
 
                 likeText.setVisibility(View.GONE);
@@ -154,6 +183,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    /**
+     * Handles the click events for the review fragment.
+     *
+     * @param v The view.
+     */
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -177,6 +211,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Changes the tab to the replies tab.
+     *
+     * @param view The view.
+     */
     private void goToRepliesTab(View view) {
         if (isReviewTabActive) {
             reviewPage.setVisibility(View.GONE);
@@ -187,6 +226,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Changes the tab to the review tab.
+     * 
+     * @param view The view.
+     */
     private void goToReviewTab(View view) {
         if (!isReviewTabActive) {
             repliesPage.setVisibility(View.GONE);
@@ -197,17 +241,22 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Posts a reply to the review.
+     */
     private void postReply() {
         ReplyModel model = createReplyModel();
         ReplyPost postReply = new ReplyPost(model);
         Reply reply;
 
         try {
+            // Post the reply.
             reply = postReply.execute(getActivity()).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
+        // If the reply is not null, add the reply to the view.
         if (reply != null) {
             addReply(reply);
             replyInput.setText("");
@@ -216,12 +265,22 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * Creates a reply model.
+     * 
+     * @return The reply model.
+     */
     private ReplyModel createReplyModel() {
         return new ReplyModel(
                 replyInput.getText().toString(),
                 review.Id);
     }
 
+    /**
+     * Adds a reply to the view.
+     * 
+     * @param reply The reply to add.
+     */
     private void addReply(Reply reply) {
         // Replace bottom reply divider.
         if (replies.getChildCount() != 0) {
@@ -235,39 +294,64 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         replies.addView(reply.createView(inflater, null, this, true));
     }
 
+    /**
+     * Redirects to the student's profile.
+     */
     private void redirectToProfile() {
+        // If the review is not anonymous, redirect to the student's profile.
         if (!review.IsAnonymous) {
             ((IActivity) getActivity()).replaceFragment(new StudentProfileFragment(review.Student.Id), true);
         }
     }
 
+    /**
+     * Redirects to the course.
+     */
     private void redirectToCourse() {
         ((IActivity) getActivity()).replaceFragment(new CourseFragment(review.Course.Id), true);
     }
 
+    /**
+     * Redirects to the edit review screen.
+     */
     private void redirectToEditReview() {
         ReviewModel r = createReviewModel();
         CourseModel c = createCourseModel();
         ((IActivity) getActivity()).replaceFragment(new WriteReviewFragment(c, r), true);
     }
 
+    /**
+     * Creates a review model.
+     * 
+     * @return The review model.
+     */
     private ReviewModel createReviewModel() {
         return new ReviewModel(review.Id, review.Rating,
                 review.Comment, review.IsAnonymous, review.Course.Id);
     }
 
+    /**
+     * Creates a course model.
+     * 
+     * @return The course model.
+     */
     private CourseModel createCourseModel() {
         return new CourseModel(review.Course.Id, review.Course.Name,
                 review.Course.Code, review.Course.Image);
     }
 
+    /**
+     * Changes the like status of the review.
+     */
     private void changeLikeStatus() {
         if (isReviewLiked) {
+            // If the review is liked, unlike the review.
             likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_open));
             likeText.setText("Like?");
             review.LikeCount--;
             likeCount.setText(String.format("%d likes", review.LikeCount));
         } else {
+            // If the review is not liked, like the review.
             likeReview.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.like_filled));
             likeText.setText("Liked");
             review.LikeCount++;
@@ -281,17 +365,11 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     private void applyLikeStatus() {
         AsyncTask.execute(() -> {
             try {
-                if (isReviewLiked) {
-                    ReviewController.like(review.Id, getActivity());
-                } else {
-                    HttpURLConnection con = ReviewController.unlike(review.Id, getActivity());
-
-                    Log.i("LIKE", con.getResponseMessage());
-                }
+                if (isReviewLiked) ReviewController.like(review.Id, getActivity());
+                else ReviewController.unlike(review.Id, getActivity());
             } catch (Exception e) {
-                Log.e("APP", "Failed to register like change: " + e.toString());
+                Log.e("APP", "Failed to register like change: " + e);
             }
-
         });
     }
 
@@ -299,19 +377,17 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
         builder.setTitle("Flag Review");
 
-        View viewInflated= LayoutInflater.from(getContext()).inflate(R.layout.flag_review_message_pop_up, (ViewGroup) getView(), false);
-// Set up the input
+        View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.flag_review_message_pop_up, (ViewGroup) getView(), false);
+        // Set up the input
         final EditText message = viewInflated.findViewById(R.id.messageInput);
         builder.setView(viewInflated);
 
-// Set up the buttons
+        // Set up the buttons
         builder.setPositiveButton("OK", (dialog, which) -> AsyncTask.execute(() -> {
             try {
-                HttpURLConnection con = ReviewController.flagReview(new FlagReviewModel(review.Id, message.getText().toString()), getActivity());
-
-                Log.i("Flag Review", "Code: " + con.getResponseCode());
+                ReviewController.flagReview(new FlagReviewModel(review.Id, message.getText().toString()), getActivity());
             } catch (Exception e) {
-                Log.e("APP", "Failed to register like change: " + e.toString());
+                Log.e("APP", "Failed to register like change: " + e);
             }
 
         }));
@@ -320,6 +396,9 @@ public class ReviewFragment extends Fragment implements View.OnClickListener {
     }
 }
 
+/**
+ * Async task to get the review.
+ */
 class ReviewInformation extends AsyncTask<FragmentActivity, Void, Review> {
 
     private final int id;
@@ -328,18 +407,27 @@ class ReviewInformation extends AsyncTask<FragmentActivity, Void, Review> {
         this.id = id;
     }
 
+    /**
+     * Gets the review.
+     *
+     * @param fragmentActivities The fragment activities.
+     * @return The review.
+     */
     @Override
     protected Review doInBackground(FragmentActivity... fragmentActivities) {
         Review review = null;
         try {
             review = ReviewController.getReview(id, fragmentActivities[0]);
         } catch (Exception e) {
-            Log.e("ERR", "Couldn't get review" + e.toString());
+            Log.e("ERR", "Couldn't get review" + e);
         }
         return review;
     }
 }
 
+/**
+ * Async task to post a reply.
+ */
 class ReplyPost extends AsyncTask<FragmentActivity, Void, Reply> {
 
     private final ReplyModel model;
@@ -348,13 +436,19 @@ class ReplyPost extends AsyncTask<FragmentActivity, Void, Reply> {
         this.model = model;
     }
 
+    /**
+     * Posts a reply.
+     *
+     * @param fragmentActivities The fragment activities.
+     * @return The reply.
+     */
     @Override
     protected Reply doInBackground(FragmentActivity... fragmentActivities) {
         Reply reply = null;
         try {
             reply = ReplyController.postReply(model, fragmentActivities[0]);
         } catch (Exception e) {
-            Log.e("ERR", "Couldn't get reply" + e.toString());
+            Log.e("ERR", "Couldn't get reply" + e);
         }
         return reply;
     }

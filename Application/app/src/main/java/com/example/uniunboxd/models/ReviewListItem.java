@@ -17,6 +17,9 @@ import com.example.uniunboxd.utilities.JWTValidation;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * ReviewListItem class that represents a review list item.
+ */
 public class ReviewListItem {
     public int Id;
     public float Rating;
@@ -25,6 +28,16 @@ public class ReviewListItem {
     public int CourseId;
     public ReviewPoster Poster;
 
+    /**
+     * Constructor for the ReviewListItem class.
+     *
+     * @param id          The review's ID.
+     * @param rating      The review's rating.
+     * @param comment     The review's comment.
+     * @param isAnonymous Whether the review is anonymous.
+     * @param courseId    The review's course ID.
+     * @param poster      The review's poster.
+     */
     @JsonCreator
     public ReviewListItem(@JsonProperty("id") int id, @JsonProperty("rating") float rating, @JsonProperty("comment") String comment,
                           @JsonProperty("isAnonymous") boolean isAnonymous, @JsonProperty("courseId") int courseId,
@@ -37,6 +50,13 @@ public class ReviewListItem {
         Poster = poster;
     }
 
+    /**
+     * Creates a view for the review list item.
+     *
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @return The view for the review list item.
+     */
     public View createView(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.review_list_item, container, false);
         TextView comment = view.findViewById(R.id.ReviewListItem_Comment);
@@ -45,6 +65,8 @@ public class ReviewListItem {
         ImageView posterIcon = view.findViewById(R.id.ReviewListItem_PosterIcon);
 
         comment.setText(Comment);
+
+        // Set the poster's name and icon of the review.
         if (Poster != null) {
             posterName.setText(Poster.UserName);
             if (Poster.Image != null && !Poster.Image.equals("")) {
@@ -54,10 +76,12 @@ public class ReviewListItem {
             }
         }
         ratingBar.setRating(Rating);
+
+        // Get the role of the user from the JWT token.
         String role = JWTValidation.getTokenProperty(view.getContext(), "typ");
-        comment.setOnClickListener(v -> {
-            ((IActivity) v.getContext()).replaceFragment(new ReviewFragment(Id), true);
-        });
+
+        // Set the on click listener for the view to redirect to the review fragment.
+        comment.setOnClickListener(v -> ((IActivity) v.getContext()).replaceFragment(new ReviewFragment(Id), true));
         if (role.equals("University"))
             comment.setClickable(false);
         return view;

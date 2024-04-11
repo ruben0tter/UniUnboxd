@@ -25,30 +25,44 @@ import com.example.uniunboxd.models.professor.ProfessorEditModel;
 import com.example.uniunboxd.utilities.FileSystemChooser;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 
+/**
+ * ProfessorEditFragment class that represents the professor edit screen.
+ */
 public class ProfessorEditFragment extends Fragment {
     private ProfessorEditModel Professor;
 
-    public ProfessorEditFragment() {}
+    // Necessary empty constructor.
+    public ProfessorEditFragment() {
+    }
 
+    // Constructor for the ProfessorEditFragment class.
     public ProfessorEditFragment(ProfessorEditModel professor) {
         Professor = professor;
     }
 
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Creates the view for the professor edit fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the professor edit fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (Professor == null)
             return null;
 
-        View v = Professor.createView(inflater, container, savedInstanceState);
+        View v = Professor.createView(inflater, container);
 
         TextView name = v.findViewById(R.id.professorNameEdit);
         ImageButton editImageBtn = v.findViewById(R.id.professorImageEditButton);
@@ -58,22 +72,27 @@ public class ProfessorEditFragment extends Fragment {
         saveChangesBtn.setOnClickListener(v1 -> AsyncTask.execute(() -> {
             Professor.Name = name.getText().toString();
             try {
-                HttpURLConnection response = UserController.putProfessor(Professor, getActivity());
-                if (response.getResponseCode() == 200) {
-                    // TODO: Show notification with "Review successfully created."
-                    ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id), true);
-                } else {
-                    // TODO: Show notification with error message.
-                }
+                // Update the professor with the new information.
+                UserController.putProfessor(Professor, getActivity());
+                // Replace the fragment with the professor's profile.
+                ((IActivity) getActivity()).replaceFragment(new ProfessorProfileFragment(Professor.Id), true);
             } catch (Exception e) {
                 Log.e("APP", "Failed to post review: " + e);
             }
         }));
+        // Set the on click listener to choose an image.
         editImageBtn.setOnClickListener(v12 -> FileSystemChooser.ChooseImage(f, 1));
 
         return v;
     }
 
+    /**
+     * Handles the result of the file system chooser.
+     *
+     * @param requestCode The request code.
+     * @param resultCode  The result code.
+     * @param data        The data.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -83,6 +102,7 @@ public class ProfessorEditFragment extends Fragment {
 
         byte[] bitmapdata = null;
         try {
+            // Read the image from the URI.
             bitmapdata = FileSystemChooser.readTextFromUri(uri, getActivity());
         } catch (IOException e) {
             Log.e("ERR", e.toString());
@@ -92,5 +112,4 @@ public class ProfessorEditFragment extends Fragment {
         Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
         image.setImageBitmap(bitmap);
     }
-
 }

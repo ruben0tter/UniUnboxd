@@ -8,7 +8,6 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Text;
 using UniUnboxdAPI.Data;
-using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
@@ -18,13 +17,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-});;
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+// Add swagger,
+// to test API
 builder.Services.AddSwaggerGen(opt =>
 {
+    // Swagger version
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "UniUnboxd", Version = "v1" });
+    // Add authorization for Swagger
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -35,6 +39,7 @@ builder.Services.AddSwaggerGen(opt =>
         Scheme = "bearer"
     });
 
+    // Add security requirements
     opt.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -51,14 +56,20 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+// Setup database
+/// <summary>
+/// Retrieves the connection string from the configuration file.
+/// </summary>
 var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
 builder.Services.AddDbContext<UniUnboxdDbContext>(options =>
 {
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
+// Add Microsoft Identity
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
 {
+    // Set password requirements
     options.Password.RequiredLength = 1;
     options.Password.RequiredUniqueChars = 0;
     options.Password.RequireDigit = false;
@@ -90,23 +101,35 @@ builder.Services.AddAuthentication(x => {
 JWTConfiguration.Init(builder.Configuration);
 
 // Services
+// Add Verification Service
 builder.Services.AddTransient<VerificationService>();
+// Add Registration Service
 builder.Services.AddTransient<RegistrationService>();
+// Add Authentication Service
 builder.Services.AddTransient<AuthenticationService>();
+// Add Review Service
 builder.Services.AddTransient<ReviewService>();
+// Add Course Service
 builder.Services.AddTransient<CourseService>();
+// Add User Service
 builder.Services.AddTransient<UserService>();
+// Add Reply Service
 builder.Services.AddTransient<ReplyService>();
+// Add Search Service
 builder.Services.AddTransient<SearchService>();
-builder.Services.AddTransient<UserService>();
-builder.Services.AddTransient<MailService>();
-builder.Services.AddTransient<PushNotificationService>();
+
 // Repositories
+// Add Verification Repository
 builder.Services.AddTransient<VerificationRepository>();
+// Add Registration Repository
 builder.Services.AddTransient<ReviewRepository>();
+// Add Course Repository
 builder.Services.AddTransient<CourseRepository>();
+// Add User Repository
 builder.Services.AddTransient<UserRepository>();
+// Add Reply Repository
 builder.Services.AddTransient<ReplyRepository>();
+// Add Search Repository
 builder.Services.AddTransient<SearchRepository>();
 
 // Push Notifications Dependency
@@ -115,6 +138,7 @@ FirebaseApp.Create(new AppOptions()
     Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "firebasesettings.json")),
 });
 
+// Build app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -124,14 +148,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Allows emulator usage
 #if !DEBUG
 app.UseHttpsRedirection();
 #endif
 
+// Add authentication
 app.UseAuthentication();
 
+// Add authorization
 app.UseAuthorization();
 
+//Map the Controller routes
 app.MapControllers();
 
+// Run the API
 app.Run();

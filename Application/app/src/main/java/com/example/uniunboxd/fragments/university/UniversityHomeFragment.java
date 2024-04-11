@@ -23,15 +23,15 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class UniversityHomeFragment extends Fragment implements View.OnClickListener {
+    // Define layout variables
     LinearLayout coursesLayout;
 
+    // Define data variables
     List<OverviewCourse> overviewCourses;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Necessary empty constructor.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,9 +40,10 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         // The course layout
         coursesLayout = view.findViewById(R.id.linearLayoutforCourses);
 
-        // Buttons
+        // Sign out button
         TextView signOut = view.findViewById(R.id.signOut);
         signOut.setOnClickListener(this);
+        // Add courses button
         TextView addCourses = view.findViewById(R.id.addCourses);
         addCourses.setOnClickListener(this);
 
@@ -53,11 +54,13 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         CoursesInformation coursesInformation = new CoursesInformation();
 
         try {
+            // Get the courses information
             overviewCourses = coursesInformation.execute(getActivity()).get();
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
 
+        // Add the courses to the layout
         if (overviewCourses != null) {
             for (OverviewCourse c : overviewCourses) {
                 coursesLayout.addView(c.createView(inflater, container, this));
@@ -66,9 +69,15 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         return view;
     }
 
+    /**
+     * Handles the sign out and add courses button click event.
+     *
+     * @param v The view.
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.signOut) {
+            // Sign out
             JWTValidation.deleteToken(getActivity());
             ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         } else if (v.getId() == R.id.addCourses) {
@@ -76,13 +85,17 @@ public class UniversityHomeFragment extends Fragment implements View.OnClickList
         }
     }
 
+    /**
+     * AsyncTask to get the courses information.
+     */
     class CoursesInformation extends AsyncTask<FragmentActivity, Void, List<OverviewCourse>> {
         @Override
         protected List<OverviewCourse> doInBackground(FragmentActivity... fragmentActivities) {
             try {
+                // Get the last edited courses by university from the API.
                 return CourseController.getLastEditedCoursesByUniversity(fragmentActivities[0]);
             } catch (Exception e) {
-                Log.e("ERR", "Couldn't get review" + e.toString());
+                Log.e("ERR", "Couldn't get review" + e);
                 return null;
             }
         }

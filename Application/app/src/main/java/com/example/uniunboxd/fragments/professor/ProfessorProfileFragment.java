@@ -22,13 +22,25 @@ import com.example.uniunboxd.utilities.JWTValidation;
 
 import java.util.concurrent.ExecutionException;
 
+/**
+ * ProfessorProfileFragment class that represents the professor profile screen.
+ */
 public class ProfessorProfileFragment extends Fragment {
     private int ID;
     private final int NUM_COURSES_TO_LOAD = 5;
     protected ProfessorProfileModel Professor;
 
-    public ProfessorProfileFragment() {}
+    /**
+     * Necessary empty constructor.
+     */
+    public ProfessorProfileFragment() {
+    }
 
+    /**
+     * Constructor for the ProfessorProfileFragment class.
+     *
+     * @param id The professor's ID.
+     */
     public ProfessorProfileFragment(int id) {
         ID = id;
     }
@@ -39,6 +51,14 @@ public class ProfessorProfileFragment extends Fragment {
 
     }
 
+    /**
+     * Creates the view for the professor profile fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the professor profile fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,7 +67,9 @@ public class ProfessorProfileFragment extends Fragment {
         if (ID == 0)
             return null;
 
-        View view = null;
+        View view;
+
+        // Get professor information.
         GetProfessorInformationAsyncTask asyncGetTask = new GetProfessorInformationAsyncTask(ID, NUM_COURSES_TO_LOAD);
         try {
             Professor = asyncGetTask.execute(getActivity()).get();
@@ -55,19 +77,24 @@ public class ProfessorProfileFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        if (Professor != null) {
-            view = Professor.createView(inflater, container, savedInstanceState, this);
+        if (Professor == null) {
+            return null;
         }
+
+        view = Professor.createView(inflater, container, this);
 
         ImageButton editBtn = view.findViewById(R.id.editButton);
         TextView signOutBtn = view.findViewById(R.id.signOut);
 
+        // Set the click listeners for the edit and sign out buttons.
         editBtn.setOnClickListener(v -> {
             ProfessorEditModel professorEditModel = MakeProfessorEditModel(Professor);
+            // Replace the fragment with the professor edit fragment.
             ((IActivity) getActivity()).replaceFragment(new ProfessorEditFragment(professorEditModel), true);
         });
         signOutBtn.setOnClickListener(v -> {
             JWTValidation.deleteToken(getActivity());
+            // Replace the activity with the main activity.
             ((IActivity) getActivity()).replaceActivity(MainActivity.class);
         });
         int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
@@ -83,7 +110,7 @@ public class ProfessorProfileFragment extends Fragment {
     }
 }
 
-
+// AsyncTask class to get the professor information.
 class GetProfessorInformationAsyncTask extends AsyncTask<FragmentActivity, Void, ProfessorProfileModel> {
 
     private final int ID;
@@ -94,13 +121,14 @@ class GetProfessorInformationAsyncTask extends AsyncTask<FragmentActivity, Void,
         NUM_OF_REVIEWS_TO_LOAD = numCoursesToLoad;
     }
 
+    // Get the professor information.
     @Override
     protected ProfessorProfileModel doInBackground(FragmentActivity... fragments) {
         ProfessorProfileModel professor = null;
         try {
             professor = UserController.getProfessorProfile(ID, fragments[0]);
         } catch (Exception ioe) {
-            Log.e("ERR", "Couldn't get course" + ioe.toString());
+            Log.e("ERR", "Couldn't get course" + ioe);
         }
         return professor;
     }

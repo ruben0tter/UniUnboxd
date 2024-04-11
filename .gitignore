@@ -10,3 +10,4 @@ Thumbs.db
 # General
 log/
 *.log
+API/coverage.xml

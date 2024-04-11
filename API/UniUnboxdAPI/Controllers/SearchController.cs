@@ -18,15 +18,18 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class SearchController(SearchService searchService) : ControllerBase
     {
+        /// <summary>
+        /// Searches for courses based on the provided search options.
+        /// </summary>
+        /// <param name="query">Search options including keywords and filters.</param>
+        /// <returns>A list of courses that match the search criteria.</returns>
         [HttpGet]
         [Authorize]
         [Route("Course")]
         public async Task<IActionResult> SearchCourses([FromQuery] SearchOptions query)
         {
-            Console.WriteLine("\n\n\n\n\nSearching for courses\n\n\n\n\n");
-            if (query.Search == "") {
+            if (query.Search == string.Empty)
                 return BadRequest("Search query cannot be empty");
-            }
 
             string role = JWTValidation.GetRole(HttpContext.User.Identity as ClaimsIdentity);
 
@@ -37,21 +40,22 @@ namespace UniUnboxdAPI.Controllers
 
             var courses = await searchService.GetCourses(query);
 
-            if (courses == null) {
-                return BadRequest();
-            }
-
             return Ok(courses);
         }
 
+        /// <summary>
+        /// Searches for users based on the provided search options. Only accessible by users with Student or Professor roles.
+        /// </summary>
+        /// <param name="query">Search options including keywords and filters.</param>
+        /// <returns>A list of users that match the search criteria.</returns>
         [HttpGet]
         [Authorize(Roles = "Student, Professor")]
         [Route("User")]
         public async Task<IActionResult> SearchUsers([FromQuery] SearchOptions query)
         {
-            if (query.Search == "") {
+            if (query.Search == string.Empty)
                 return BadRequest("Search query cannot be empty");
-            }
+
             var users = await searchService.GetUsers(query);
 
             return Ok(users);

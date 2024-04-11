@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Services;
 using UniUnboxdAPI.Utilities;
@@ -10,10 +8,20 @@ using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 
 namespace UniUnboxdAPI.Controllers
 {
+    /// <summary>
+    /// Controller to create replies within the database,
+    /// this can be done by both a student and a professor user.
+    /// </summary>
+    /// <param name="replyService"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class ReplyController(ReplyService replyService) : ControllerBase
     {
+        /// <summary>
+        /// Creates a reply to a review.
+        /// </summary>
+        /// <param name="model">The reply model containing the details of the reply.</param>
+        /// <returns>Returns a HTTP response with the result of the operation.</returns>
         [HttpPost]
         [Authorize(Roles = "Student, Professor")]
         public async Task<IActionResult> PostReply([FromBody] ReplyModel model)

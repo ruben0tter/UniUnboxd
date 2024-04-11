@@ -11,6 +11,12 @@ namespace UniUnboxdAPI.Controllers
     [ApiController]
     public class AuthenticationController(AuthenticationService authenticationService) : ControllerBase
     {
+
+        /// <summary>
+        /// Authenticates a user based on email and password.
+        /// </summary>
+        /// <param name="model">The authentication model containing the email and password.</param>
+        /// <returns>A JWT token if authentication is successful; otherwise, an error message.</returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticationModel model)
@@ -29,6 +35,10 @@ namespace UniUnboxdAPI.Controllers
             return Ok(new { Token = token });
         }
 
+        /// <summary>
+        /// Updates the JWT token for an authenticated user.
+        /// </summary>
+        /// <returns>A new JWT token if the user exists; otherwise, an error message.</returns>
         [HttpGet("update")]
         [Authorize]
         public async Task<IActionResult> UpdateToken()

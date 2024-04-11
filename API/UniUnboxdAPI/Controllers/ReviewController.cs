@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
@@ -17,12 +15,17 @@ namespace UniUnboxdAPI.Controllers
     [Authorize]
     public class ReviewController(ReviewService reviewService) : ControllerBase
     {
+        /// <summary>
+        /// Retrieves a review by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the review to retrieve.</param>
+        /// <returns>An IActionResult containing the review if found, or an error message.</returns>
         [HttpGet]
         [Authorize(Roles = "Student, Professor")]
         public async Task<IActionResult> GetReview([FromQuery(Name = "id")] int id)
         {
             if (!await reviewService.DoesReviewExist(id))
-                return BadRequest("Given review does nto exist.");
+                return BadRequest("Given review does not exist.");
 
             var review = await reviewService.GetReviewPageModel(id);
 
@@ -32,17 +35,28 @@ namespace UniUnboxdAPI.Controllers
             return Ok(review);
         }
 
+        /// <summary>
+        /// Fetches the next set of reviews for a course, starting from a specified review ID.
+        /// </summary>
+        /// <param name="id">The starting review ID.</param>
+        /// <param name="courseId">The ID of the course.</param>
+        /// <param name="n">The number of reviews to retrieve.</param>
+        /// <returns>An IActionResult containing the list of reviews or an error message.</returns>
         [HttpGet("get-next-reviews")]
-        public async Task<IActionResult> GetNextReviewsForCourse([FromQuery(Name = "id")] int id, [FromQuery(Name="courseId")] int courseId, [FromQuery(Name="numReviews")] int n)
+        public async Task<IActionResult> GetNextReviewsForCourse([FromQuery(Name = "id")] int id, [FromQuery(Name = "courseId")] int courseId, [FromQuery(Name = "numReviews")] int n)
         {
             var models = await reviewService.GetNextReviewsForCourse(id, courseId, n);
-            
-            if (models.IsNullOrEmpty()) 
+
+            if (models.IsNullOrEmpty())
                 return BadRequest($"No review with id bigger than {id} exists");
-            
+
             return Ok(models);
         }
 
+        /// <summary>
+        /// Retrieves the latest reviews made by friends.
+        /// </summary>
+        /// <returns>An IActionResult containing the reviews or an error message.</returns>
         [HttpGet("latest-by-friends")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetLatestReviewsByFriends()
@@ -54,7 +68,11 @@ namespace UniUnboxdAPI.Controllers
             return Ok(reviews);
         }
 
-
+        /// <summary>
+        /// Submits a new review.
+        /// </summary>
+        /// <param name="model">The review model to post.</param>
+        /// <returns>An IActionResult indicating success or failure.</returns>
         [HttpPost]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> PostReview([FromBody] ReviewModel model)
@@ -83,14 +101,19 @@ namespace UniUnboxdAPI.Controllers
 
                 reviewService.NotifyFollowers(review);
 
-                return Ok("Succesfully created review.");
-            } 
-            catch (Exception ex) 
+                return Ok("Successfully created review.");
+            }
+            catch (Exception ex)
             {
                 return BadRequest("Something went wrong when creating a review.\nThe following exception was thrown:\n" + ex.Message);
             }
         }
 
+        /// <summary>
+        /// Flags a review based on the provided model.
+        /// </summary>
+        /// <param name="model">The model containing the review ID to flag.</param>
+        /// <returns>An IActionResult indicating success or failure.</returns>
         [HttpPost("flag-review")]
         [Authorize(Roles = "Student, Professor")]
         public async Task<IActionResult> FlagReview([FromBody] FlagReviewModel model)
@@ -101,9 +124,15 @@ namespace UniUnboxdAPI.Controllers
                 return BadRequest("Given review does not exist.");
 
             reviewService.FlagReview(model, userId);
-            return Ok("Succesfully flagged review");
+            return Ok("Successfully flagged review");
         }
 
+        /// <summary>
+        /// Updates an existing review.
+        /// </summary>
+        /// <param name="id">The ID of the review to update.</param>
+        /// <param name="model">The updated review model.</param>
+        /// <returns>An IActionResult indicating success or failure.</returns>
         [HttpPut]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> PutReview([FromQuery(Name = "id")] int id, [FromBody] ReviewModel model)
@@ -146,6 +175,11 @@ namespace UniUnboxdAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Likes a specified review.
+        /// </summary>
+        /// <param name="reviewId">The ID of the review to like.</param>
+        /// <returns>An IActionResult indicating success or failure.</returns>
         [HttpPut("like")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> LikeReview([FromQuery(Name = "review")] int reviewId)
@@ -169,6 +203,11 @@ namespace UniUnboxdAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Unlikes a specified review.
+        /// </summary>
+        /// <param name="reviewId">The ID of the review to unlike.</param>
+        /// <returns>An IActionResult indicating success or failure.</returns>
         [HttpPut("unlike")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> UnlikeReview([FromQuery(Name = "review")] int reviewId)
@@ -192,6 +231,11 @@ namespace UniUnboxdAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Deletes a review based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of the review to delete.</param>
+        /// <returns>An IActionResult indicating success or failure.</returns>
         [HttpDelete]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> DeleteReview([FromQuery(Name = "id")] int id)

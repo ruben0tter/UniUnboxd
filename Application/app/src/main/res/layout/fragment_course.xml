@@ -274,8 +274,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:id="@+id/friendReviews">
-            </LinearLayout>
+                android:id="@+id/friendReviews" />
         </LinearLayout>
 
 
@@ -335,7 +334,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/writeReview"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="60dp"
                 android:background="@drawable/button_red"
                 android:padding="5dp"

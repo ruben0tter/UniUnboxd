@@ -1,8 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using UniUnboxdAPI.Models;
+﻿using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
-using UniUnboxdAPI.Models.DataTransferObjects.CoursePage;
 using UniUnboxdAPI.Models.DataTransferObjects.ReviewPage;
 using UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage;
 using UniUnboxdAPI.Repositories;
@@ -13,22 +10,8 @@ namespace UniUnboxdAPI.Services
     /// Service for the ReviewController.
     /// Handles the review logic.
     /// </summary>
-    public class ReviewService
+    public class ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService)
     {
-        private readonly ReviewRepository reviewRepository;
-        private readonly CourseRepository courseRepository;
-        private readonly UserRepository userRepository;
-        private readonly MailService mailService;
-        private readonly PushNotificationService pushNotificationService;
-
-        public ReviewService(ReviewRepository reviewRepository, CourseRepository courseRepository, UserRepository userRepository, MailService mailService, PushNotificationService pushNotificationService)
-        {
-            this.reviewRepository = reviewRepository;
-            this.courseRepository = courseRepository;
-            this.userRepository = userRepository;
-            this.mailService = mailService;
-            this.pushNotificationService = pushNotificationService;
-        }
 
         /// <summary>
         /// Check whether there exists a review with the provided id.
@@ -62,13 +45,6 @@ namespace UniUnboxdAPI.Services
         {
             ICollection<Review> reviews = await reviewRepository.GetLatestReviewsByFriends(id);
             return CreateReviewGridModelCollection(reviews);
-        }
-
-        //TODO: Move to CourseService
-        public async Task<ICollection<FriendReview>> GetAllFriendsThatReviewed(int userId, int courseId)
-        {
-            var friendReviews = await reviewRepository.GetAllFriendsThatReviewed(userId, courseId);
-            return CreateFriendReviewModelCollection(friendReviews);
         }
 
         /// <summary>
@@ -321,16 +297,6 @@ namespace UniUnboxdAPI.Services
                 StudentName = i.Student.UserName!,
                 StudentImage = i.Student.Image!,
                 Rating = i.Rating
-            }).ToList();
-
-        private static ICollection<FriendReview> CreateFriendReviewModelCollection(ICollection<Review> reviews)
-            => reviews.Select(i => new FriendReview()
-            {
-                Id = i.Id,
-                Rating = i.Rating,
-                Name = i.Student.UserName!,
-                Image = i.Student.Image,
-                HasComment = !i.Comment.IsNullOrEmpty()
             }).ToList();
     }
 }

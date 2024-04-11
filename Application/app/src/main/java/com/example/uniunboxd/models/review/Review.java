@@ -20,6 +20,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Review class that represents a review.
+ */
 public class Review {
     public final int Id;
     public final Date Date;
@@ -32,6 +35,20 @@ public class Review {
     public int LikeCount;
     public final List<Integer> StudentLikes;
 
+    /**
+     * Constructor for the Review class.
+     *
+     * @param id          The review's ID.
+     * @param date        The review's date.
+     * @param rating      The review's rating.
+     * @param comment     The review's comment.
+     * @param isAnonymous Whether the review is anonymous.
+     * @param course      The review's course header.
+     * @param student     The review's student header.
+     * @param replies     The review's replies.
+     * @param likeCount   The review's like count.
+     * @param studentLikes The review's student likes.
+     */
     @JsonCreator
     public Review(@JsonProperty("id") int id, @JsonProperty("date") Date date,
                   @JsonProperty("rating") double rating, @JsonProperty("comment") String comment,
@@ -50,6 +67,14 @@ public class Review {
         StudentLikes = studentLikes;
     }
 
+    /**
+     * Creates a view for the review.
+     *
+     * @param view      The view.
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @param f         The fragment.
+     */
     public void createView(View view, LayoutInflater inflater, ViewGroup container, Fragment f) {
         TextView reviewHeader = view.findViewById(R.id.reviewHeader);
         ImageView courseBanner = view.findViewById(R.id.courseBanner);
@@ -62,11 +87,16 @@ public class Review {
         TextView reviewComment = view.findViewById(R.id.reviewComment);
         TextView likeCount = view.findViewById(R.id.likeCount);
 
+        
         if (IsAnonymous) {
+            // Set the review header to anonymous review if the review is anonymous.
             reviewHeader.setText("Anonymous review");
             profileName.setText("Unknown");
         } else {
+            // Set the review header to the student's review if the review is not anonymous.s
             reviewHeader.setText(String.format("%s's review", Student.Name));
+
+            // Set the student's profile image and name.
             if (Student.Image != null) {
                 profileImage.setImageBitmap((ImageHandler.decodeImageString(Student.Image)));
                 profileImage.setBackground(null);
@@ -74,6 +104,7 @@ public class Review {
             profileName.setText(Student.Name);
         }
 
+        // Set the course banner, image, name, rating, review date, comment, and like count.
         if (Course.Banner != null) {
             courseBanner.setImageBitmap(ImageHandler.decodeImageString(Course.Banner));
             courseBanner.setBackground(null);
