@@ -117,6 +117,10 @@ builder.Services.AddTransient<UserService>();
 builder.Services.AddTransient<ReplyService>();
 // Add Search Service
 builder.Services.AddTransient<SearchService>();
+// Add Search Service
+builder.Services.AddTransient<MailService>();
+// Add Search Service
+builder.Services.AddTransient<PushNotificationService>();
 
 // Repositories
 // Add Verification Repository
