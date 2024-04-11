@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * PopularCourse class that represents a popular course.
  */
-public class PopularCourse {
+public class PopularCourse implements View.OnClickListener {
     public final int Id;
     public final String CourseImage;
     public final String CourseName;
@@ -53,7 +53,9 @@ public class PopularCourse {
         view.setOnClickListener(l -> ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true));
 
         TextView courseName = view.findViewById(R.id.courseName);
+        courseName.setOnClickListener(this);
         ImageView courseImage = view.findViewById(R.id.courseImage);
+        courseImage.setOnClickListener(this);
 
         courseName.setText(CourseName);
 
@@ -65,5 +67,10 @@ public class PopularCourse {
         fragment = f;
 
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        ((IActivity) fragment.getActivity()).replaceFragment(new CourseFragment(Id), true);
     }
 }

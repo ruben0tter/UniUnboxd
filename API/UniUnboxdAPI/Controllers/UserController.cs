@@ -82,7 +82,7 @@ namespace UniUnboxdAPI.Controllers
         /// <param name="id">The course ID.</param>
         /// <returns>A list of assigned professors.</returns>
         [HttpGet("get-assigned-professors")]
-        [Authorize(Roles = "University")]
+        [Authorize(Roles = "University, Professor")]
         public async Task<IActionResult> GetAssignedProfessors([FromQuery(Name = "id")] int courseId)
         {
             if (!await userService.DoesCourseExist(courseId))

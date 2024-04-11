@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * FriendReview class that represents a friend review.
  */
-public class FriendReview {
+public class FriendReview implements View.OnClickListener{
     public final int Id;
     public final String CourseName;
     public final String CourseImage;
@@ -74,10 +74,15 @@ public class FriendReview {
         });
 
         TextView courseName = view.findViewById(R.id.courseName);
+        courseName.setOnClickListener(this);
         ImageView courseImage = view.findViewById(R.id.courseImage);
+        courseImage.setOnClickListener(this);
         TextView studentName = view.findViewById(R.id.studentName);
+        studentName.setOnClickListener(this);
         ImageView studentImage = view.findViewById(R.id.studentImage);
+        studentImage.setOnClickListener(this);
         RatingBar rating = view.findViewById(R.id.ratingBar);
+        rating.setOnClickListener(this);
 
         courseName.setText(CourseName);
 
@@ -94,5 +99,10 @@ public class FriendReview {
         fragment = f;
 
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
     }
 }

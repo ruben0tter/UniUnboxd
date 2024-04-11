@@ -122,7 +122,6 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
         searchBtn.setOnClickListener(this);
 
         // If the user is a university, get the assigned professors.
-        if (JWTValidation.getTokenProperty(this.getActivity(), "typ").equals("University")) {
             LinearLayout assignedProfessorsList = view.findViewById(R.id.assignedProfessorsList);
             AsyncTask.execute(() -> {
                 try {
@@ -133,7 +132,9 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                             // Add the assigned professors to the assigned professors list.
                             for (AssignedProfessorModel x : assignedProfessors) {
                                 View v = x.CreateView(inflater, container, f);
-                                assignedProfessorsList.addView(v);
+                                if (JWTValidation.getTokenProperty(this.getActivity(), "typ").equals("University")) {
+                                    assignedProfessorsList.addView(v);
+                                }
                                 Course.AssignedProfessors.add(x);
                             }
                         });
@@ -143,7 +144,7 @@ public class CreateCourseFragment extends Fragment implements View.OnClickListen
                 }
             });
             deleteBtn.setOnClickListener(this);
-        } else {
+        if (!JWTValidation.getTokenProperty(this.getActivity(), "typ").equals("University")) {
             // If the user is not a university, hide the delete button and the search button.
             view.findViewById(R.id.deleteWrapper).setVisibility(View.GONE);
             view.findViewById(R.id.searchButton).setVisibility(View.GONE);
