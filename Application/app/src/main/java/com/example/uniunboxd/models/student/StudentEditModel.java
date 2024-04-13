@@ -1,5 +1,8 @@
 package com.example.uniunboxd.models.student;
 
+/**
+ * The StudentEditModel class is a model for a student edit.
+ */
 public class StudentEditModel {
     public final int Id;
     public String Name;
@@ -7,6 +10,11 @@ public class StudentEditModel {
     public NotificationSettings NotificationSettings;
     public int VerificationStatus;
 
+    /**
+     * Constructor for the StudentEditModel class.
+     *
+     * @param student The student's profile model.
+     */
     public StudentEditModel(StudentProfileModel student) {
         Id = student.Id;
         Image = student.Image;

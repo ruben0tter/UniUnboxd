@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Net.Mail;
-using UniUnboxdAPI.Migrations;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
-using UniUnboxdAPI.Repositories;
 
 namespace UniUnboxdAPI.Services
 {
@@ -11,16 +9,8 @@ namespace UniUnboxdAPI.Services
     /// Service for the RegistrationController.
     /// Handles the registration logic.
     /// </summary>
-    public class RegistrationService
+    public class RegistrationService(UserManager<User> userManager, MailService mailService)
     {
-        private readonly UserManager<User> userManager;
-        private readonly MailService mailService;
-
-        public RegistrationService(UserManager<User> userManager, MailService mailService)
-        {
-            this.userManager = userManager; 
-            this.mailService = mailService;
-        }
 
         /// <summary>
         /// Creates a User object with the given RegisterModel, 

@@ -17,7 +17,10 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FriendReview implements View.OnClickListener {
+/**
+ * FriendReview class that represents a friend review.
+ */
+public class FriendReview implements View.OnClickListener{
     public final int Id;
     public final String CourseName;
     public final String CourseImage;
@@ -27,6 +30,17 @@ public class FriendReview implements View.OnClickListener {
     public final double Rating;
     private Fragment fragment;
 
+    /**
+     * Constructor for the FriendReview class.
+     *
+     * @param id          The review's ID.
+     * @param courseName  The review's course name.
+     * @param courseImage The review's course image.
+     * @param studentId   The review's student ID.
+     * @param studentName The review's student name.
+     * @param studentImage The review's student image.
+     * @param rating      The review's rating.
+     */
     @JsonCreator
     public FriendReview(@JsonProperty("id") int id, @JsonProperty("courseName") String courseName,
                         @JsonProperty("courseImage") String courseImage, @JsonProperty("studentId") int studentId,
@@ -41,8 +55,23 @@ public class FriendReview implements View.OnClickListener {
         Rating = rating;
     }
 
+    /**
+     * Creates a view for the friend review.
+     *
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @param f         The fragment.
+     * @return The view for the friend review.
+     */
     public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.course_name_image_review_item, container, false);
+        view.setOnClickListener(v -> {
+            if (v.getId() == R.id.courseName || v.getId() == R.id.courseImage) {
+                ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
+            } else if (v.getId() == R.id.studentName || v.getId() == R.id.studentImage) {
+                ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(StudentId), true);
+            }
+        });
 
         TextView courseName = view.findViewById(R.id.courseName);
         courseName.setOnClickListener(this);
@@ -53,8 +82,11 @@ public class FriendReview implements View.OnClickListener {
         ImageView studentImage = view.findViewById(R.id.studentImage);
         studentImage.setOnClickListener(this);
         RatingBar rating = view.findViewById(R.id.ratingBar);
+        rating.setOnClickListener(this);
 
         courseName.setText(CourseName);
+
+        // Set the course's image and the student's name and image if they exist.
         if (CourseImage != null) {
             courseImage.setImageBitmap(ImageHandler.decodeImageString(CourseImage));
         }
@@ -71,11 +103,6 @@ public class FriendReview implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        int test = v.getId();
-        if (v.getId() == R.id.courseName || v.getId() == R.id.courseImage) {
-            ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
-        } else if (v.getId() == R.id.studentName || v.getId() == R.id.studentImage) {
-            ((IActivity) fragment.getActivity()).replaceFragment(new StudentProfileFragment(StudentId), true);
-        }
+        ((IActivity) fragment.getActivity()).replaceFragment(new ReviewFragment(Id), true);
     }
 }

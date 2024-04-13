@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
 using UniUnboxdAPI.Utilities;
@@ -10,18 +9,8 @@ namespace UniUnboxdAPI.Services
     /// Service for the AuthenticationController.
     /// Handles the authentication logic.
     /// </summary>
-    public class AuthenticationService
+    public class AuthenticationService(UserManager<User> userManager, UserRepository userRepository)
     {
-        private readonly UserManager<User> userManager;
-        private readonly SignInManager<User> signInManager;
-        private readonly UserRepository userRepository;
-
-        public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, UserRepository userRepository)
-        {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
-            this.userRepository = userRepository;
-        }
 
         /// <summary>
         /// Check whether there exists a user in the database with the provided email.
@@ -40,10 +29,10 @@ namespace UniUnboxdAPI.Services
         public async Task<string?> Authenticate(AuthenticationModel model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
-            var result = await signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            var isPasswordCorrect = await userManager.CheckPasswordAsync(user!, model.Password);
 
-            if (result.Succeeded)
-                return JWTConfiguration.GenerateJWT(user);
+            if (isPasswordCorrect)
+                return JWTConfiguration.GenerateJWT(user!);
 
             return null;
         }

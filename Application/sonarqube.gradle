@@ -1,0 +1,24 @@
+apply plugin: "org.sonarqube"
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "UniUnboxd")
+        property("sonar.projectName", "UniUnboxd")
+        property("sonar.host.url", "http://localhost:9000")
+        property("sonar.token", "sqp_6b7bfd263242294d7c79c73af016abe56effb808")
+        property("sonar.tests", "src/androidTest/java")
+        property "sonar.test.inclusions", "**/*Test*/**"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sources", "src/main/java"
+        property "sonar.exclusions", '**/*Test*/**,' +
+                'build/**' +
+                '*.json,' +
+                '**/*test*/**,' +
+                '**/.gradle/**,' +
+                '**/R.class,' +
+                '*.xml'
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.junit.reportPaths", "**/test-results/**/*.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${projectDir}/app/build/reports/coverage/androidTest/debug/connected/report.xml"
+    }
+}

@@ -24,8 +24,9 @@ import com.example.uniunboxd.activities.IActivity;
 import com.example.uniunboxd.fragments.university.CourseFragment;
 import com.example.uniunboxd.utilities.ImageHandler;
 
-import java.net.HttpURLConnection;
-
+/**
+ * WriteReviewFragment class that represents the write review screen.
+ */
 public class WriteReviewFragment extends Fragment implements View.OnClickListener {
     private EditText comment;
     private RatingBar rating;
@@ -33,45 +34,63 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
     private CourseModel course;
     private ReviewModel review;
 
-    public WriteReviewFragment() {}
+    /**
+     * Necessary empty constructor.
+     */
+    public WriteReviewFragment() {
+    }
 
+    /**
+     * Constructor for the WriteReviewFragment class.
+     *
+     * @param course The course model.
+     */
     public WriteReviewFragment(CourseModel course) {
         this.course = course;
     }
 
+    /**
+     * Constructor for the WriteReviewFragment class.
+     *
+     * @param course The course model.
+     * @param review The review model.
+     */
     public WriteReviewFragment(CourseModel course, ReviewModel review) {
         this.course = course;
         this.review = review;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Creates the view for the write review fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the write review fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if(course == null)
+        if (course == null)
             return null;
 
         View view = inflater.inflate(R.layout.fragment_write_review, container, false);
 
         // Course Info
-        TextView courseName = (TextView) view.findViewById(R.id.courseName);
-        TextView courseCode = (TextView) view.findViewById(R.id.courseCode);
-        ImageView courseImage = (ImageView) view.findViewById(R.id.courseImage);
+        TextView courseName = view.findViewById(R.id.courseName);
+        TextView courseCode = view.findViewById(R.id.courseCode);
+        ImageView courseImage = view.findViewById(R.id.courseImage);
         setCourseInfo(courseName, courseCode, courseImage);
 
         // Inputs
-        comment = (EditText) view.findViewById(R.id.comment);
-        rating = (RatingBar) view.findViewById(R.id.rating);
-        isAnonymous = (CheckBox) view.findViewById(R.id.isAnonymous);
+        comment = view.findViewById(R.id.comment);
+        rating = view.findViewById(R.id.rating);
+        isAnonymous = view.findViewById(R.id.isAnonymous);
 
         // Buttons
-        Button post = (Button) view.findViewById(R.id.postButton);
+        Button post = view.findViewById(R.id.postButton);
         post.setOnClickListener(this);
-        Button delete = (Button) view.findViewById(R.id.searchButton);
+        Button delete = view.findViewById(R.id.searchButton);
         delete.setOnClickListener(this);
 
         if (review == null) {
@@ -84,15 +103,30 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
+    /**
+     * Handles the click event for the post and delete buttons.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.postButton) {
+            // Post review
             postReview();
         } else {
+            // Delete or cancel review
             deleteReview();
         }
     }
 
+
+    /**
+     * Sets the course information.
+     *
+     * @param name  The course name.
+     * @param code  The course code.
+     * @param image The course image.
+     */
     private void setCourseInfo(TextView name, TextView code, ImageView image) {
         name.setText(course.name);
         code.setText(course.code);
@@ -102,80 +136,90 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
         }
     }
 
+    /**
+     * Sets the review information.
+     */
     private void setReviewInfo() {
         comment.setText(review.comment);
         rating.setRating((float) review.rating);
         isAnonymous.setChecked(review.isAnonymous);
     }
 
+    /**
+     * Posts the review.
+     */
     private void postReview() {
+        // If the review is null, create a new review model.
         if (review == null) {
             ReviewModel model = createReviewModel();
 
             AsyncTask.execute(() -> {
                 try {
-                    HttpURLConnection response = ReviewController.postReview(model, getActivity());
-                    if (response.getResponseCode() == 200) {
-                        // TODO: Show notification with "Review successfully created."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                    } else {
-                        // TODO: Show notification with error message.
-                    }
+                    // Post the review.
+                    ReviewController.postReview(model, getActivity());
+                    // Go to course fragment.
+                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                 } catch (Exception e) {
                     Log.e("APP", "Failed to post review: " + e);
                 }
 
             });
         } else {
+            // Update the review.
             putReview();
         }
     }
 
+    /**
+     * Updates the review model.
+     */
     private void putReview() {
         updateReviewModel();
 
         AsyncTask.execute(() -> {
             try {
-                HttpURLConnection response = ReviewController.putReview(review, getActivity());
-                if (response.getResponseCode() == 200) {
-                    // TODO: Show notification with "Review successfully updated."
-                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                } else {
-                    // TODO: Show notification with error message.
-                }
+                // Update the review.
+                ReviewController.putReview(review, getActivity());
+                // Go to course fragment.
+                ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
             } catch (Exception e) {
                 Log.e("APP", "Failed to put review: " + e);
             }
-
         });
     }
 
+    /**
+     * Deletes the review.
+     */
     private void deleteReview() {
+        // If the review is null, go to course fragment.
         if (review == null) {
             ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
         } else {
+            // Confirm the deletion.
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.FlagReview);
             builder.setTitle("Are you sure you want to delete the review?");
-
+            
+            // If the user confirms the deletion, delete the review.
             builder.setPositiveButton("Yes", (dialog, which) -> AsyncTask.execute(() -> {
                 try {
-                    HttpURLConnection response = ReviewController.deleteReview(review.id, getActivity());
-                    if (response.getResponseCode() == 200) {
-                        // TODO: Show notification with "Review successfully deleted."
-                        ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
-                    } else {
-                        // TODO: Show notification with error message.
-                    }
+                    ReviewController.deleteReview(review.id, getActivity());
+                    ((IActivity) getActivity()).replaceFragment(new CourseFragment(course.id), true);
                 } catch (Exception e) {
                     Log.e("APP", "Failed to delete review: " + e);
                 }
 
             }));
+            // If the user cancels the deletion, close the dialog.
             builder.setNegativeButton("No", (dialog, which) -> dialog.cancel());
             builder.show();
         }
     }
 
+    /**
+     * Creates a review model.
+     * @return The review model.
+     */
     private ReviewModel createReviewModel() {
         return new ReviewModel(
                 rating.getRating(),
@@ -184,6 +228,9 @@ public class WriteReviewFragment extends Fragment implements View.OnClickListene
                 course.id);
     }
 
+    /**
+     * Updates the review model.
+     */
     private void updateReviewModel() {
         review.rating = rating.getRating();
         review.comment = comment.getText().toString();

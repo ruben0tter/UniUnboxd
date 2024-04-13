@@ -3,26 +3,15 @@ using System.Security.Claims;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
-using System.Collections.Generic;
-using Microsoft.Extensions.Azure;
 using UniUnboxdAPI.Utilities;
 using UniUnboxdAPI.Models.DataTransferObjects.StudentHomePage;
 using UniUnboxdAPI.Models.DataTransferObjects.UniversityHomePage;
+using UniUnboxdAPI.Models.DataTransferObjects.CoursePage;
 
 namespace UniUnboxdAPI.Services
 {
-    public class CourseService
+    public class CourseService(CourseRepository courseRepository, UserRepository userRepository, ReviewRepository reviewRepository)
     {
-        private readonly CourseRepository courseRepository;
-        private readonly UserRepository userRepository;
-        private readonly ReviewRepository reviewRepository;
-
-        public CourseService(CourseRepository courseRepository, UserRepository userRepository, ReviewRepository reviewRepository)
-        {
-            this.courseRepository = courseRepository;
-            this.userRepository = userRepository;
-            this.reviewRepository = reviewRepository;
-        }
 
         /// <summary>
         /// Checks whether the id contained in the JWT ligns up with the provided id.
@@ -73,21 +62,21 @@ namespace UniUnboxdAPI.Services
         /// </summary>
         /// <param name="id"> The id of the course to be adapted and returned.</param>
         /// <returns>An adapted object, corresponding to the course id provided.</returns>
-        public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id, int numOfReviews)
+        public async Task<CourseRetrievalModel> GetCourseRetrievalModelById(int id)
         {
-            var course = await courseRepository.GetCourseAndConnectedData(id, numOfReviews);
+            var course = await courseRepository.GetCourseAndConnectedData(id);
 
             var courseRetrievalModel = CreateCourseRetrievalModel(course);
 
             if (course.Reviews.IsNullOrEmpty()) return courseRetrievalModel;
             
             foreach (var review in course.Reviews)
-                courseRetrievalModel.Reviews.Add(CreateCourseReviewModel(review, course.Id));
+                courseRetrievalModel.Reviews!.Add(CreateCourseReviewModel(review, course.Id));
 
             return courseRetrievalModel;
         }
 
-        public async Task<CourseReviewModel> GetCourseReviewByStudent(int courseId, int studentId)
+        public async Task<CourseReviewModel?> GetCourseReviewByStudent(int courseId, int studentId)
         {
             var review = await reviewRepository.GetCourseReviewByStudent(courseId, studentId);
             return review != null ? CreateCourseReviewModel(review, courseId) : null;
@@ -100,7 +89,7 @@ namespace UniUnboxdAPI.Services
         /// <returns>The popular courses of last week of all universities.</returns>
         public async Task<ICollection<CourseGridModel>> GetPopularCoursesOfLastWeek()
         {
-            ICollection<Course> courses = await courseRepository.GetPopularCourseOfLastWeek();
+            ICollection<Course> courses = await courseRepository.GetPopularCoursesOfLastWeek();
             return CreateCourseGridModelCollection(courses);
         }
 
@@ -196,7 +185,13 @@ namespace UniUnboxdAPI.Services
         public async Task<Course> GetCourse(int id)
             => await courseRepository.GetCourse(id);
 
-        public async Task UpdateCourse(Course course, CourseEditModel model)
+        public async Task<ICollection<FriendReview>> GetAllFriendsThatReviewed(int userId, int courseId)
+        {
+            var friendReviews = await reviewRepository.GetAllFriendsThatReviewed(userId, courseId);
+            return CreateFriendReviewModelCollection(friendReviews);
+        }
+
+        public void UpdateCourse(Course course, CourseEditModel model)
         {
             course.Name = model.Name;
             course.Code = model.Code;
@@ -229,7 +224,7 @@ namespace UniUnboxdAPI.Services
             }).ToList();
 
         public async Task<bool> DoesProfessorAssignmentExist(int courseId, int professorId)
-            => await courseRepository.DoesProfessorAssignmentExist(courseId, professorId);
+            => await userRepository.DoesCourseProfessorAssignmentExist(courseId, professorId);
         
         public async Task AssignProfessor(Professor professor, Course course)
         {
@@ -251,5 +246,15 @@ namespace UniUnboxdAPI.Services
                 Professor = professor,
                 Course = course
             };
+
+        private static ICollection<FriendReview> CreateFriendReviewModelCollection(ICollection<Review> reviews)
+            => reviews.Select(i => new FriendReview()
+            {
+                Id = i.Id,
+                Rating = i.Rating,
+                Name = i.Student.UserName!,
+                Image = i.Student.Image,
+                HasComment = !i.Comment.IsNullOrEmpty()
+            }).ToList();
     }
 }

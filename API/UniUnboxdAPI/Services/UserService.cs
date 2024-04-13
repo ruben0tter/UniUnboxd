@@ -1,4 +1,3 @@
-using Microsoft.IdentityModel.Tokens;
 using UniUnboxdAPI.Models;
 using UniUnboxdAPI.Models.DataTransferObjects;
 using UniUnboxdAPI.Repositories;
@@ -73,43 +72,64 @@ namespace UniUnboxdAPI.Services
             await userRepository.UnfollowStudent(unfollowingStudent.Id, unfollowedStudent.Id);
         }
 
-        private static Follow CreateFollow(Student followingStudent, Student followedStudent)
-            => new ()
-            {
-                FollowingStudent = followingStudent,
-                FollowedStudent = followedStudent
-            };
+        /// <summary>
+        /// Creates a follow relationship between two students.
+        /// </summary>
+        private static Follow CreateFollow(Student followingStudent, Student followedStudent) => new Follow
+        {
+            FollowingStudent = followingStudent,
+            FollowedStudent = followedStudent
+        };
 
-        public async Task<bool> DoesProfessorExist(int id)
-            => await userRepository.DoesProfessorExist(id);
+        /// <summary>
+        /// Checks if a professor exists by their ID.
+        /// </summary>
+        public async Task<bool> DoesProfessorExist(int id) => await userRepository.DoesProfessorExist(id);
 
-        public async Task<bool> DoesCourseExist(int courseId)
-            => await courseRepository.DoesCourseExist(courseId);
+        /// <summary>
+        /// Checks if a course exists by its ID.
+        /// </summary>
+        public async Task<bool> DoesCourseExist(int courseId) => await courseRepository.DoesCourseExist(courseId);
 
-        public async Task<Course> GetCourse(int courseId)
-            => await courseRepository.GetCourse(courseId);
+        /// <summary>
+        /// Retrieves a course by its ID.
+        /// </summary>
+        public async Task<Course> GetCourse(int courseId) => await courseRepository.GetCourse(courseId);
 
+        /// <summary>
+        /// Retrieves a professor by their ID.
+        /// </summary>
+        public async Task<Professor> GetProfessor(int professorId) => await userRepository.GetProfessor(professorId);
 
-        public async Task<Professor> GetProfessor(int professorId)
-            => await userRepository.GetProfessor(professorId);
-
+        /// <summary>
+        /// Assigns a professor to a course.
+        /// </summary>
         public async Task AssignProfessor(Professor professor, Course course)
         {
-            var courseProfessorAssignment = CreateCourseProfessorAssignment(professor, course);
-            await userRepository.AssignProfessorToCourse(courseProfessorAssignment);
+            var assignment = CreateCourseProfessorAssignment(professor, course);
+            await userRepository.AssignProfessorToCourse(assignment);
         }
 
-        private CourseProfessorAssignment CreateCourseProfessorAssignment(Professor professor, Course course)
-            => new()
+        /// <summary>
+        /// Creates a course-professor assignment.
+        /// </summary>
+        private CourseProfessorAssignment CreateCourseProfessorAssignment(Professor professor, Course course) 
+            => new CourseProfessorAssignment
             {
                 Professor = professor,
                 Course = course
             };
 
-        public async Task<bool> DoesCourseProfessorAssignmentExist(int courseId, int professorId)
-            => await userRepository.CourseProfessorAssignmentExist(courseId, professorId);
+        /// <summary>
+        /// Checks if a course-professor assignment already exists.
+        /// </summary>
+        public async Task<bool> DoesCourseProfessorAssignmentExist(int courseId, int professorId) 
+            => await userRepository.DoesCourseProfessorAssignmentExist(courseId, professorId);
 
-        public async  Task<List<AssignedProfessorModel>> GetAssignedProfessors(int courseId)
+        /// <summary>
+        /// Gets a list of professors assigned to a course.
+        /// </summary>
+        public async Task<List<AssignedProfessorModel>> GetAssignedProfessors(int courseId)
         {
             List<Professor> professors = await userRepository.GetAssignedProfessors(courseId);
             List<AssignedProfessorModel> models = new List<AssignedProfessorModel>();
@@ -120,6 +140,9 @@ namespace UniUnboxdAPI.Services
             return models;
         }
 
+        /// <summary>
+        /// Creates a model for an assigned professor.
+        /// </summary>
         private AssignedProfessorModel MakeAssignedProfessorModel(Professor professor)
             => new()
             {
@@ -138,8 +161,6 @@ namespace UniUnboxdAPI.Services
                 university = await userRepository.GetUniversity(student.UniversityId);
             if(university != null)
                 studentProfileModel.UniversityName = university.UserName;
-            
-            // if (student.Reviews.IsNullOrEmpty()) return studentProfileModel;
 
             foreach (var review in student.Reviews.OrderByDescending(i => i.LastModificationTime))
                 studentProfileModel.Reviews.Add(CreateStudentProfileReview(review));
@@ -150,7 +171,7 @@ namespace UniUnboxdAPI.Services
                 studentProfileModel.Followers.Add(new StudentGridModel
                 {
                     Id = x.Id,
-                    Name = x.UserName,
+                    Name = x.UserName!,
                     Image = x.Image
                 });
             
@@ -159,7 +180,7 @@ namespace UniUnboxdAPI.Services
                 studentProfileModel.Following.Add(new StudentGridModel
                 {
                     Id = x.Id,
-                    Name = x.UserName,
+                    Name = x.UserName!,
                     Image = x.Image
                 });
             
@@ -171,7 +192,7 @@ namespace UniUnboxdAPI.Services
             {
                 Id = student.Id,
                 ProfilePic = student.Image,
-                Name = student.UserName,
+                Name = student.UserName!,
                 UniversityName = "",
                 Reviews = new List<StudentProfileReview>(),
                 NotificationSettings = MakeNotificationSettingsModel(student.NotificationSettings, student.Id),
@@ -218,34 +239,34 @@ namespace UniUnboxdAPI.Services
             };
             
         public async Task<ProfessorProfileModel> GetProfessorAndConnectedData(int id)
-            {
-                var professor = await userRepository.GetProfessorAndConnectedData(id);
+        {
+            var professor = await userRepository.GetProfessorAndConnectedData(id);
 
-                var professorProfileModel = CreateProfessorProfileModel(professor);
+            var professorProfileModel = CreateProfessorProfileModel(professor);
                 
-                foreach (var course in await courseRepository.GetAssignedCourses(id))
-                {
-                    professorProfileModel.UniversityName = course.University.UserName;
-                    professorProfileModel.Courses.Add(MakeAssignedCourseModel(course));
-                }
-
-                return professorProfileModel;
+            foreach (var course in await courseRepository.GetAssignedCourses(id))
+            {
+                professorProfileModel.UniversityName = course.University.UserName;
+                professorProfileModel.Courses.Add(MakeAssignedCourseModel(course));
             }
 
-            private AssignedCourseModel MakeAssignedCourseModel(Course course)
-                => new()
-                {
-                    Id = course.Id,
-                    AnonymousRating = course.AnonymousRating,
-                    NonanonymousRating = course.NonanonymousRating,
-                    Name = course.Name,
-                    Code = course.Code,
-                    University = course.University.UserName,
-                    Image = course.Image
-                };
+            return professorProfileModel;
+        }
+
+        private AssignedCourseModel MakeAssignedCourseModel(Course course)
+            => new()
+            {
+                Id = course.Id,
+                AnonymousRating = course.AnonymousRating,
+                NonanonymousRating = course.NonanonymousRating,
+                Name = course.Name,
+                Code = course.Code,
+                University = course.University.UserName,
+                Image = course.Image
+            };
                 
 
-            public void UpdateProfessor(Professor professor, ProfessorEditModel model)
+        public void UpdateProfessor(Professor professor, ProfessorEditModel model)
         {
             professor.UserName = model.Name;
             professor.Image = model.Image;
@@ -271,7 +292,7 @@ namespace UniUnboxdAPI.Services
         public async Task PutStudent(Student student)
             => await userRepository.PutStudent(student);
 
-        public async Task<AssignedProfessorModel> getAssignedProfessor(string email)
+        public async Task<AssignedProfessorModel> GetAssignedProfessor(string email)
         {
             var professor = await userRepository.GetProfessor(email);
             return MakeAssignedProfessorModel(professor);

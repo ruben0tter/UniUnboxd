@@ -1,6 +1,5 @@
 package com.example.uniunboxd.models.professor;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,9 @@ import com.example.uniunboxd.utilities.ImageHandler;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The AssignedCourseModel class is a model for an assigned course.
+ */
 public class AssignedCourseModel {
     public final int Id;
     public final float AnonymousRating;
@@ -26,6 +28,17 @@ public class AssignedCourseModel {
     public final String University;
     public final String Image;
 
+    /**
+     * Constructor for the AssignedCourseModel class.
+     *
+     * @param Id               The course's ID.
+     * @param AnonymousRating  The course's anonymous rating.
+     * @param NonAnonymousRating The course's non-anonymous rating.
+     * @param Name             The course's name.
+     * @param Code             The course's code.
+     * @param University       The course's university.
+     * @param Image            The course's image.
+     */
     @JsonCreator
     public AssignedCourseModel(@JsonProperty("id") int Id,
                                @JsonProperty("anonymousRating") float AnonymousRating,
@@ -43,7 +56,15 @@ public class AssignedCourseModel {
         this.Image = Image;
     }
 
-    public View createView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState, Fragment f) {
+    /**
+     * Creates a view for the assigned course.
+     *
+     * @param inflater  The layout inflater.
+     * @param container The parent layout.
+     * @param f         The fragment.
+     * @return The view for the assigned course.
+     */
+    public View createView(LayoutInflater inflater, ViewGroup container, Fragment f) {
         View view = inflater.inflate(R.layout.search_result_course, container, false);
 
         TextView courseName = view.findViewById(R.id.course);
@@ -57,13 +78,13 @@ public class AssignedCourseModel {
         courseCode.setText(Code);
         university.setText(University);
 
+        // Set the image if it exists else set the default image.
         if (Image != null && !Image.equals("string"))
             courseImage.setImageBitmap(ImageHandler.decodeImageString(Image));
         else
             courseImage.setImageResource(R.drawable.app_logo);
-        view.setOnClickListener(v -> {
-            ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id), true);
-        });
+
+        view.setOnClickListener(v -> ((IActivity) f.getActivity()).replaceFragment(new CourseFragment(Id), true));
         return view;
     }
 }

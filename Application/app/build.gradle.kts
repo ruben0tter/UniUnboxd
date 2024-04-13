@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("org.sonarqube") version "3.5.0.2730"
 }
 
 android {
@@ -19,6 +20,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            isTestCoverageEnabled = true
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -26,6 +32,7 @@ android {
                 "proguard-rules.pro"
             )
         }
+
     }
 
     buildFeatures {
@@ -33,8 +40,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
@@ -50,7 +57,16 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-messaging:23.4.1")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.6.0")
+    testImplementation("org.robolectric:robolectric:4.12")
+    testImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation("androidx.test:rules:1.5.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    testImplementation("androidx.test:rules:1.5.0")
+    val fragment_version = "1.6.2"
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
 }

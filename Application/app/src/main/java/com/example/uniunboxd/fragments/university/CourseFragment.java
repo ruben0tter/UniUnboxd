@@ -28,23 +28,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * CourseFragment class that represents the course screen.
+ */
 public class CourseFragment extends Fragment {
 
     private int ID;
     private final int NUM_REVIEWS_TO_LOAD = 5;
     public CourseRetrievalModel Course = null;
 
-    public CourseFragment() {}
+    /**
+     * Necessary empty constructor.
+     */
+    public CourseFragment() {
+    }
 
+    /**
+     * Constructor for the CourseFragment class.
+     *
+     * @param id The course's ID.
+     */
     public CourseFragment(int id) {
         this.ID = id;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
+    /**
+     * Creates the view for the course fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the course fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,10 +73,11 @@ public class CourseFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
+        // If the course is not null, create the view.
         if (Course != null) {
             view = Course.createView(inflater, container, getActivity());
 
-            Button loadBtn = (Button) view.findViewById(R.id.load);
+            Button loadBtn = view.findViewById(R.id.load);
             LinearLayout reviewList = view.findViewById(R.id.reviewList);
 
             ImageButton editBtn = view.findViewById(R.id.editButton);
@@ -72,15 +88,23 @@ public class CourseFragment extends Fragment {
                 ((IActivity) getActivity()).replaceFragment(new CreateCourseFragment(editModel), true);
             });
 
+            // Get role and user id from token.
             String role = JWTValidation.getTokenProperty(getActivity(), "typ");
             int userId = Integer.parseInt(JWTValidation.getTokenProperty(getActivity(), "sub"));
 
+            // If the user is a student or a professor who is not assigned to the course, hide the edit button.
             if (role.equals("Student") || (role.equals("Professor") && !Course.AssignedProfessors.contains(userId)))
                 editBtn.setVisibility(GONE);
         }
         return view;
     }
 
+    /**
+     * Loads the reviews.
+     * @param reviewListView The review list view.
+     * @param inflater The layout inflater.
+     * @param container The parent layout.
+    */
     private void load(LinearLayout reviewListView, LayoutInflater inflater, ViewGroup container) {
         AsyncTask.execute(() -> {
             int lastID = 0;
@@ -97,6 +121,12 @@ public class CourseFragment extends Fragment {
         });
     }
 
+    /**
+     * Visualises the reviews.
+     * @param inflater The layout inflater.
+     * @param container The parent layout.
+     * @param reviewListView The review list view.
+     */
     private void visualiseReviews(LayoutInflater inflater, ViewGroup container, LinearLayout reviewListView) {
         for (ReviewListItem item : Course.Reviews) {
             getActivity().runOnUiThread(() -> {
@@ -106,23 +136,38 @@ public class CourseFragment extends Fragment {
         }
     }
 
+    /**
+     * AsyncTask to get course information.
+     */
     class GetCourseInformationAsyncTask extends AsyncTask<FragmentActivity, Void, CourseRetrievalModel> {
 
         private final int ID;
         private final int NUM_OF_REVIEWS_TO_LOAD;
 
+        /**
+         * Constructor for the GetCourseInformationAsyncTask class.
+         *
+         * @param id The course's ID.
+         * @param numReviewsToLoad The number of reviews to load.
+         */
         public GetCourseInformationAsyncTask(int id, int numReviewsToLoad) {
             ID = id;
             NUM_OF_REVIEWS_TO_LOAD = numReviewsToLoad;
         }
 
+        /**
+         * Gets the course information.
+         *
+         * @param fragments The fragments.
+         * @return The course information.
+         */
         @Override
         protected CourseRetrievalModel doInBackground(FragmentActivity... fragments) {
             CourseRetrievalModel course = null;
             try {
                 course = CourseController.getCourseById(ID, NUM_OF_REVIEWS_TO_LOAD, fragments[0]);
             } catch (Exception ioe) {
-                Log.e("ERR", "Couldn't get course" + ioe.toString());
+                Log.e("ERR", "Couldn't get course" + ioe);
             }
 
             Course = course;

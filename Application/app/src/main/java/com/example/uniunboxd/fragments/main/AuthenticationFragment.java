@@ -1,7 +1,5 @@
 package com.example.uniunboxd.fragments.main;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,19 +22,13 @@ import com.example.uniunboxd.activities.ProfessorActivity;
 import com.example.uniunboxd.activities.StudentActivity;
 import com.example.uniunboxd.activities.UniversityActivity;
 import com.example.uniunboxd.utilities.JWTValidation;
-import com.example.uniunboxd.utilities.MessageHandler;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+/**
+ * AuthenticationFragment class that represents the authentication screen.
+ */
 public class AuthenticationFragment extends Fragment implements View.OnClickListener {
-
     private EditText email;
     private EditText password;
 
@@ -44,27 +37,42 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Creates the view for the authentication fragment.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent layout.
+     * @param savedInstanceState The saved instance state.
+     * @return The view for the authentication fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_authentication, container, false);
 
         // Inputs
-        email = (EditText) view.findViewById(R.id.email_input);
-        password = (EditText) view.findViewById(R.id.password_input);
+        email = view.findViewById(R.id.email_input);
+        password = view.findViewById(R.id.password_input);
 
-        // Buttons
-        Button signIn = (Button) view.findViewById(R.id.sign_in_button);
+        // Sign In Button
+        Button signIn = view.findViewById(R.id.sign_in_button);
         signIn.setOnClickListener(this);
 
-        Button signUp = (Button) view.findViewById(R.id.sign_up_button);
+        // Sign Up Button
+        Button signUp = view.findViewById(R.id.sign_up_button);
         signUp.setOnClickListener(this);
 
         return view;
     }
 
+    /**
+     * Handles the click event for the sign in and sign up buttons.
+     *
+     * @param view The view.
+     */
     @Override
     public void onClick(View view) {
+        // Sign in.
         if (view.getId() == R.id.sign_in_button) {
             try {
                 signIn();
@@ -76,65 +84,38 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         }
     }
 
-    private void signIn() throws Exception {
+    // Sign in the user.
+    private void signIn() {
         AuthenticationModel model = createAuthenticationModel();
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection response = AuthenticationController.authenticate(model);
-                    if (response.getResponseCode() == 200) {
-                        String json = readMessage(response.getInputStream());
-                        String token = getToken(json);
-                        placeToken(token);
-                        Log.i("JWT", token);
-                        redirectToHomePage();
-                    } else {
-                        MessageHandler.showToastFromBackground(getActivity(), response.getErrorStream());
-                    }
-                } catch (Exception e) {
-                    Log.e("APP", "Failed to authenticate user: " + e.toString());
-                }
+        // Authenticate the user.
+        AsyncTask.execute(() -> {
+            try {
+                // Get the token from the API.
+                String token = AuthenticationController.authenticate(model);
+                
+                // Place the token in the shared preferences.
+                JWTValidation.placeToken(token, getActivity());
+                Log.i("JWT", token);
+                redirectToHomePage();
+            } catch (Exception e) {
+                getActivity().runOnUiThread(() -> Toast.makeText(getActivity(), e.getMessage().replace("\"", ""), Toast.LENGTH_LONG).show());
             }
         });
     }
 
+    // Create the authentication model.
     private AuthenticationModel createAuthenticationModel() {
         return new AuthenticationModel(
                 email.getText().toString(),
                 password.getText().toString());
     }
 
-    private String readMessage(InputStream content) throws IOException {
-        StringBuilder textBuilder = new StringBuilder();
-        try (Reader reader = new BufferedReader(new InputStreamReader
-                (content, StandardCharsets.UTF_8))) {
-            int c = 0;
-            while ((c = reader.read()) != -1) {
-                textBuilder.append((char) c);
-            }
-        }
-
-        return textBuilder.toString().replace("\"", "");
-    }
-
-    private String getToken(String json) {
-        json = json.substring(json.indexOf(":") + 1);
-        return json.substring(0, json.indexOf("}"));
-    }
-
-    private void placeToken(String token) throws NullPointerException {
-        SharedPreferences prefs = getActivity()
-                .getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("token", token);
-        edit.apply();
-    }
-
+    // Redirect to the home page.
     private void redirectToHomePage() {
         String userType = JWTValidation.getTokenProperty(getActivity(), "typ");
 
+        // Redirect to the appropriate home page.
         if (Objects.equals(userType, "Student")) {
             ((IActivity) getActivity()).replaceActivity(StudentActivity.class);
         } else if (Objects.equals(userType, "University")) {
@@ -144,6 +125,7 @@ public class AuthenticationFragment extends Fragment implements View.OnClickList
         }
     }
 
+    // Replace the fragment.
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
